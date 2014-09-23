@@ -13,14 +13,14 @@ gulp.task('html', function() {
 
 gulp.task('jest', function() {
   return gulp.src('spec').pipe(jest({
-    scriptPreprocessor: "./spec/preprocessor.js",
+    scriptPreprocessor: "preprocessor.js",
     unmockedModulePathPatterns: [
       "node_modules/react"
     ],
     testDirectoryName: "spec",
     testPathIgnorePatterns: [
       "node_modules",
-      "spec/preprocessor.js"
+      "preprocessor.js"
     ],
     moduleFileExtensions: [
       "js",
