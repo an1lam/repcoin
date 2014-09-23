@@ -1,0 +1,18 @@
+/** @jsx React.DOM */
+
+var React = require('react');
+var FeedItem = require('./FeedItem.react');
+var FeedHeader = require('./FeedHeader.react');
+
+var Feed = React.createClass({
+  render: function() {
+    return (
+      <div className="feed">
+        <FeedHeader />
+        <FeedItem />
+      </div>
+    );
+  }
+});
+
+module.exports = Feed;
