@@ -9,7 +9,9 @@ var Feed = React.createClass({
     return (
       <div className="feed">
         <FeedHeader />
-        <FeedItem />
+        <FeedItem transaction="Johnny gave Stephen 100 reps for coding." />
+        <FeedItem transaction="Bill gave Will 32 reps for dance." />
+        <FeedItem transaction="Jane gave Bob 41 reps for reading." />
       </div>
     );
   }

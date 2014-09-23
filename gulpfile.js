@@ -6,6 +6,11 @@ var gulp = require('gulp'),
     connect = require('gulp-connect'),
     jest = require('gulp-jest');
 
+gulp.task('style', function() {
+  gulp.src('css/app.css')
+    .pipe(gulp.dest('build/css'));
+});
+
 gulp.task('html', function() {
   gulp.src('index.html')
       .pipe(gulp.dest('build'));
@@ -29,7 +34,7 @@ gulp.task('jest', function() {
   }));
 });
 
-gulp.task('build', ['html'], function() {
+gulp.task('build', ['html', 'style'], function() {
   // Single entry to browserify
   gulp.src('js/app.react')
       .pipe(browserify({
