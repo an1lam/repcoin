@@ -3,11 +3,30 @@ var gulp = require('gulp'),
     browserify = require('gulp-browserify'),
     reactify = require('reactify'),
     rename = require('gulp-rename'),
-    connect = require('gulp-connect');
+    connect = require('gulp-connect'),
+    jest = require('gulp-jest');
 
 gulp.task('html', function() {
   gulp.src('index.html')
       .pipe(gulp.dest('build'));
+});
+
+gulp.task('jest', function() {
+  return gulp.src('spec').pipe(jest({
+    scriptPreprocessor: "./spec/preprocessor.js",
+    unmockedModulePathPatterns: [
+      "node_modules/react"
+    ],
+    testDirectoryName: "spec",
+    testPathIgnorePatterns: [
+      "node_modules",
+      "spec/preprocessor.js"
+    ],
+    moduleFileExtensions: [
+      "js",
+      "react"
+    ]
+  }));
 });
 
 gulp.task('build', ['html'], function() {
@@ -30,4 +49,4 @@ gulp.task('frontendServer', ['build'], function() {
   });
 });
 
-gulp.task('default', ['build', 'frontendServer']);
+gulp.task('default', ['jest', 'build', 'frontendServer']);

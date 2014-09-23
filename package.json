@@ -5,7 +5,9 @@
   "dependencies": {
     "flux": "latest",
     "react": "latest",
-    "express": "~4.9.4"
+    "react-tools": "*",
+    "express": "~4.9.4",
+    "gulp-jest": "~0.2.1"
   },
   "devDependencies": {
     "gulp": "~3.8.8",
