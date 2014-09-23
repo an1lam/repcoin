@@ -11,6 +11,11 @@ gulp.task('style', function() {
     .pipe(gulp.dest('build/css'));
 });
 
+var paths = {
+  js: ['js/**/*.react'],
+  html: ['index.html']
+};
+
 gulp.task('html', function() {
   gulp.src('index.html')
       .pipe(gulp.dest('build'));
@@ -34,7 +39,12 @@ gulp.task('jest', function() {
   }));
 });
 
-gulp.task('build', ['html', 'style'], function() {
+gulp.task('watch', function() {
+  gulp.watch(paths.js, ['build']);
+  gulp.watch(paths.html, ['html']);
+});
+
+gulp.task('build', ['jest', 'html', 'style'], function() {
   // Single entry to browserify
   gulp.src('js/app.react')
       .pipe(browserify({
@@ -54,4 +64,4 @@ gulp.task('frontendServer', ['build'], function() {
   });
 });
 
-gulp.task('default', ['jest', 'build', 'frontendServer']);
+gulp.task('default', ['watch', 'jest', 'build', 'frontendServer']);
