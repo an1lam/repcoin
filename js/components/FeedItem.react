@@ -1,0 +1,15 @@
+/** @jsx React.DOM */
+
+var React = require('react');
+
+var FeedItem = React.createClass({
+  render: function() {
+    return (
+      <div className="feedItem">
+        <div>Johny gave Stephen 100 reps for coding</div>
+      </div>
+    );
+  }
+});
+
+module.exports = FeedItem;
