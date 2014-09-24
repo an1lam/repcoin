@@ -2,10 +2,7 @@
 var React = require('react');
 var Login = require('./Login.react');
 var Router = require('react-router');
-var Route = Router.Route;
-var Routes = Router.Routes;
 var Link = Router.Link;
-var DefaultRoute = Router.DefaultRoute;
 
 var LoginPage = React.createClass({
   render: function() {
