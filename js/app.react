@@ -27,6 +27,7 @@ var RepsApp = React.createClass({
   }
 });
 
+// TODO: Make multiple top level routes (Feed, Profile, About, etc.)
 var routes = (
   <Routes>
     <Route handler={RepsApp}>
