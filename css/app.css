@@ -1,6 +1,24 @@
 /* Feed Items */
+* {
+  background-color: #afeeee;
+}
+
 .feedItem {
     border: 1px solid;
 }
 
+.header {
+  text-align: center;
+  position: absolute;
+  top: 20%;
+  width: 100%;
+}
 
+.logo {
+  font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;
+  font-size: 200px;
+}
+
+.slogan {
+  text-align: center;
+}
