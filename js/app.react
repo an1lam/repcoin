@@ -6,6 +6,7 @@ var Router = require('react-router');
 var Route = Router.Route;
 var Routes = Router.Routes;
 var Link = Router.Link;
+var DefaultRoute = Router.DefaultRoute;
 
 var RepsApp = React.createClass({
   render: function() {
@@ -30,9 +31,8 @@ var RepsApp = React.createClass({
 // TODO: Make multiple top level routes (Feed, Profile, About, etc.)
 var routes = (
   <Routes>
-    <Route handler={RepsApp}>
-      <Route name="feed" handler={Feed} />
-    </Route>
+    <DefaultRoute handler={RepsApp} />
+    <Route name="feed" handler={Feed} />
   </Routes>
 );
 
