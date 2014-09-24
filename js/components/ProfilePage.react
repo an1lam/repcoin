@@ -1,0 +1,16 @@
+/** @jsx React.DOM */
+var React = require('react');
+var Toolbar = require('./Toolbar.react');
+
+var ProfilePage = React.createClass({
+  render: function() {
+    return (
+      <div className="profilePage">
+        <Toolbar />
+        <h1>I am a profile page!</h1>
+      </div>
+    );
+  }
+});
+
+module.exports = ProfilePage;

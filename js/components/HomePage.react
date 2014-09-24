@@ -1,0 +1,17 @@
+/** @jsx React.DOM */
+var React = require('react');
+var Toolbar = require('./Toolbar.react');
+var Feed = require('./Feed.react');
+
+var HomePage = React.createClass({
+  render: function() {
+    return (
+      <div className="homePage">
+        <Toolbar />
+        <Feed />
+      </div>
+    );
+  }
+});
+
+module.exports = HomePage;

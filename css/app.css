@@ -22,3 +22,12 @@
 .slogan {
   text-align: center;
 }
+
+/* Toolbar Items */
+.toolbarHomeLink {
+	float:left;
+	padding-right:30px;
+}
+
+.toolbarSearch {
+}

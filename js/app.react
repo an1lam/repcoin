@@ -1,7 +1,9 @@
 /** @jsx React.DOM */
 var React = require('react');
-var Feed = require('./components/Feed.react');
-var Login = require('./components/Login.react');
+var LoginPage = require('./components/LoginPage.react');
+var HomePage = require('./components/HomePage.react');
+var ProfilePage = require('./components/ProfilePage.react');
+
 var Router = require('react-router');
 var Route = Router.Route;
 var Routes = Router.Routes;
@@ -12,16 +14,6 @@ var RepsApp = React.createClass({
   render: function() {
     return (
       <div className="repsApp">
-        <div className="header">
-          <span className="logo">
-            Reps
-          </span>
-          <span className="slogan">
-            <h1>Reputation for the digital age</h1>
-          </span>
-          <Login />
-        </div>
-        <Link to="feed">Feed</Link>
         {this.props.activeRouteHandler()}
       </div>
     );
@@ -31,8 +23,10 @@ var RepsApp = React.createClass({
 // TODO: Make multiple top level routes (Feed, Profile, About, etc.)
 var routes = (
   <Routes>
-    <DefaultRoute handler={RepsApp} />
-    <Route name="feed" handler={Feed} />
+    <DefaultRoute handler={LoginPage} />
+    <Route name="login" handler={LoginPage} />
+    <Route name="home" handler={HomePage} />
+    <Route name="profile" path="/home/:userId" handler={ProfilePage}/>
   </Routes>
 );
 
