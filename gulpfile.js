@@ -6,14 +6,15 @@ var gulp = require('gulp'),
     connect = require('gulp-connect'),
     jest = require('gulp-jest');
 
-gulp.task('style', function() {
+gulp.task('css', function() {
   gulp.src('css/app.css')
-    .pipe(gulp.dest('build/css'));
+      .pipe(gulp.dest('build/css'));
 });
 
 var paths = {
   js: ['js/**/*.react'],
-  html: ['index.html']
+  html: ['index.html'],
+  css: ['css/*.css']
 };
 
 gulp.task('html', function() {
@@ -42,9 +43,10 @@ gulp.task('jest', function() {
 gulp.task('watch', function() {
   gulp.watch(paths.js, ['build']);
   gulp.watch(paths.html, ['html']);
+  gulp.watch(paths.css, ['css']);
 });
 
-gulp.task('build', ['jest', 'html', 'style'], function() {
+gulp.task('build', ['jest', 'html', 'css'], function() {
   // Single entry to browserify
   gulp.src('js/app.react')
       .pipe(browserify({

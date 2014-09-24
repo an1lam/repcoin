@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react');
 var Feed = require('./components/Feed.react');
+var Login = require('./components/Login.react');
 var Router = require('react-router');
 var Route = Router.Route;
 var Routes = Router.Routes;
@@ -10,7 +11,15 @@ var RepsApp = React.createClass({
   render: function() {
     return (
       <div className="repsApp">
-        <h1>The first and best reputation platform.</h1>
+        <div className="header">
+          <span className="logo">
+            Reps
+          </span>
+          <span className="slogan">
+            <h1>Reputation for the digital age</h1>
+          </span>
+          <Login />
+        </div>
         <Link to="feed">Feed</Link>
         {this.props.activeRouteHandler()}
       </div>
