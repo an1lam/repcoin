@@ -2,9 +2,9 @@
 "use strict";
 
 var React = require('react');
-var LoginPage = require('./components/LoginPage.react');
-var HomePage = require('./components/HomePage.react');
-var ProfilePage = require('./components/ProfilePage.react');
+var LoginPage = require('./components/LoginPage.jsx');
+var HomePage = require('./components/HomePage.jsx');
+var ProfilePage = require('./components/ProfilePage.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;

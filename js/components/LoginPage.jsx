@@ -2,7 +2,7 @@
 "use strict";
 
 var React = require('react');
-var Login = require('./Login.react');
+var Login = require('./Login.jsx');
 var Router = require('react-router');
 var Link = Router.Link;
 
