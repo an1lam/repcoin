@@ -2,9 +2,11 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     browserify = require('gulp-browserify'),
     reactify = require('reactify'),
+    react = require('gulp-react'),
     rename = require('gulp-rename'),
     connect = require('gulp-connect'),
-    jest = require('gulp-jest');
+    jest = require('gulp-jest'),
+    jshint = require('gulp-jshint');
 
 gulp.task('css', function() {
   gulp.src('css/app.css')
@@ -22,7 +24,14 @@ gulp.task('html', function() {
       .pipe(gulp.dest('build'));
 });
 
-gulp.task('jest', function() {
+gulp.task('jshint', function() {
+  gulp.src('js/**/*.react')
+      .pipe(react())
+      .pipe(jshint({ newcap: false, node: true, browser: true }))
+      .pipe(jshint.reporter('default'));
+});
+
+gulp.task('jest', ['jshint'], function() {
   return gulp.src('spec').pipe(jest({
     scriptPreprocessor: "preprocessor.js",
     unmockedModulePathPatterns: [

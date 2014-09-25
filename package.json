@@ -8,7 +8,8 @@
     "react-tools": "~0.11.2",
     "express": "~4.9.4",
     "gulp-jest": "~0.2.1",
-    "react-router": "~0.7.0"
+    "react-router": "~0.7.0",
+    "jsxhint": "~0.4.14"
   },
   "devDependencies": {
     "gulp": "^3.8.8",
@@ -17,6 +18,8 @@
     "gulp-rename": "~1.2.0",
     "gulp-util": "~3.0.1",
     "jshint": "~2.5.6",
-    "reactify": "~0.14.0"
+    "reactify": "~0.14.0",
+    "gulp-react": "~1.0.2",
+    "gulp-jshint": "~1.8.4"
   }
 }
