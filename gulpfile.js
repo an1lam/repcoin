@@ -60,7 +60,7 @@ gulp.task('build', ['jest', 'html', 'css'], function() {
   gulp.src('js/app.jsx')
       .pipe(browserify({
         insertGlobals: true,
-        debug: !gulp.env.production,
+        debug: true,
         extensions: ['.jsx'],
         transform: [reactify]
       }))

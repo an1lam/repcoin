@@ -1,6 +1,8 @@
 /* Feed Items */
-* {
+.repsApp {
   background-color: #afeeee;
+  width: 100%;
+  height: 100%;
 }
 
 .feedItem {
@@ -30,4 +32,23 @@
 }
 
 .toolbarSearch {
+}
+
+.profilePage {
+  background-color: #afeeee;
+  width: 100%;
+  height: 100%;
+}
+.profileBox {
+  background-color: white;
+  overflow: hidden;
+  width: 23%;
+}
+
+.profilePicture {
+  float: left;
+}
+
+.profileData {
+  float: right;
 }
