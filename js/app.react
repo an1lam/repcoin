@@ -1,4 +1,6 @@
 /** @jsx React.DOM */
+"use strict";
+
 var React = require('react');
 var LoginPage = require('./components/LoginPage.react');
 var HomePage = require('./components/HomePage.react');
@@ -29,5 +31,6 @@ var routes = (
     <Route name="profile" path="/home/:userId" handler={ProfilePage}/>
   </Routes>
 );
+
 
 React.renderComponent(routes, document.getElementById('repsapp'));
