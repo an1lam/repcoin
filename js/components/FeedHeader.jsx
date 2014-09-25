@@ -2,7 +2,7 @@
 "use strict";
 
 var React = require('react');
-var Feed = require('./Feed.react');
+var Feed = require('./Feed.jsx');
 
 var FeedHeader = React.createClass({
   render: function() {

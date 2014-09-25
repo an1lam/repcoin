@@ -2,8 +2,8 @@
 "use strict";
 
 var React = require('react');
-var Toolbar = require('./Toolbar.react');
-var Feed = require('./Feed.react');
+var Toolbar = require('./Toolbar.jsx');
+var Feed = require('./Feed.jsx');
 
 var HomePage = React.createClass({
   render: function() {

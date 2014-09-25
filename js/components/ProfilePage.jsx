@@ -2,7 +2,7 @@
 "use strict";
 
 var React = require('react');
-var Toolbar = require('./Toolbar.react');
+var Toolbar = require('./Toolbar.jsx');
 
 var ProfilePage = React.createClass({
   render: function() {

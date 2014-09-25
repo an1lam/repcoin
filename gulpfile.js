@@ -14,7 +14,7 @@ gulp.task('css', function() {
 });
 
 var paths = {
-  js: ['js/**/*.react'],
+  js: ['js/**/*.jsx'],
   html: ['index.html'],
   css: ['css/*.css']
 };
@@ -25,7 +25,7 @@ gulp.task('html', function() {
 });
 
 gulp.task('jshint', function() {
-  gulp.src('js/**/*.react')
+  gulp.src('js/**/*.jsx')
       .pipe(react())
       .pipe(jshint({ newcap: false, node: true, browser: true }))
       .pipe(jshint.reporter('default'));
@@ -57,11 +57,11 @@ gulp.task('watch', function() {
 
 gulp.task('build', ['jest', 'html', 'css'], function() {
   // Single entry to browserify
-  gulp.src('js/app.react')
+  gulp.src('js/app.jsx')
       .pipe(browserify({
         insertGlobals: true,
         debug: !gulp.env.production,
-        extensions: ['.react'],
+        extensions: ['.jsx'],
         transform: [reactify]
       }))
       .pipe(rename('app.js'))
