@@ -4,6 +4,7 @@
 var React = require('react');
 var Toolbar = require('./Toolbar.jsx');
 var Feed = require('./Feed.jsx');
+var CategoriesTable = require('./CategoriesTable.jsx');
 
 var HomePage = React.createClass({
   render: function() {
@@ -11,6 +12,7 @@ var HomePage = React.createClass({
       <div className="homePage">
         <Toolbar />
         <Feed />
+        <CategoriesTable />
       </div>
     );
   }
