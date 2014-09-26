@@ -1,4 +1,4 @@
-/* Feed Items */
+/* Feed Items ////////////////////////////////////// */
 .repsApp {
   background-color: #afeeee;
   width: 100%;
@@ -7,8 +7,54 @@
 
 .feedItem {
     border: 1px solid;
+    display: inline-block;
 }
 
+.donorName {
+  float: left;
+  padding-right: 5px;
+}
+
+.receiverName {
+  float: left;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.amount {
+  margin: 0;
+  float: left;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+.category {
+  margin: 0;
+  float: left;
+  padding-left:5px;
+}
+
+.gave {
+  margin: 0;
+  float: left;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+.repsFor {
+  margin: 0;
+  float: left;
+  padding-left:5px;
+  padding-right:5px;
+}
+
+.period {
+  margin: 0;
+  float: left;
+  padding-right:5px;
+}
+
+/* Header /////////////////////////////////////////// */
 .header {
   text-align: center;
   position: absolute;
@@ -25,7 +71,7 @@
   text-align: center;
 }
 
-/* Toolbar Items */
+/* Toolbar Items /////////////////////////////////// */
 .toolbarHomeLink {
 	float:left;
 	padding-right:30px;
@@ -34,6 +80,7 @@
 .toolbarSearch {
 }
 
+/* Profile Page Items ////////////////////////////// */
 .profilePage {
   background-color: #afeeee;
   width: 100%;
