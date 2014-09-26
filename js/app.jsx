@@ -28,7 +28,7 @@ var routes = (
     <DefaultRoute handler={LoginPage} />
     <Route name="login" handler={LoginPage} />
     <Route name="home" handler={HomePage} />
-    <Route name="profile" path="/home/:userId" handler={ProfilePage}/>
+    <Route name="profile" path=":userId" handler={ProfilePage}/>
   </Routes>
 );
 
