@@ -9,15 +9,26 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     jshint = require('gulp-jshint');
 
+gulp.task('fonts', function() {
+  gulp.src('fonts/*')
+      .pipe(gulp.dest('build/fonts'));
+});
+
+gulp.task('bootstrapjs', function() {
+  gulp.src('bootstrapjs/*')
+      .pipe(gulp.dest('build/bootstrapjs'));
+});
+
 gulp.task('css', function() {
-  gulp.src('css/app.css')
+  gulp.src('css/')
       .pipe(gulp.dest('build/css'));
 });
 
 var paths = {
   js: ['js/**/*.jsx'],
   html: ['index.html'],
-  css: ['css/*.css']
+  css: ['css/*.css'],
+  bootstrapjs: ['bootstrapjs/*.js']
 };
 
 gulp.task('html', function() {
@@ -57,7 +68,7 @@ gulp.task('watch', function() {
   gulp.watch(paths.css, ['css']);
 });
 
-gulp.task('build', ['jest', 'html', 'css'], function() {
+gulp.task('build', ['jest', 'html', 'css', 'bootstrapjs', 'fonts'], function() {
   // Single entry to browserify
   gulp.src('js/app.jsx')
       .pipe(plumber())

@@ -4,13 +4,13 @@
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
-
+var SearchBar = require('./SearchBar.jsx');
 var Toolbar = React.createClass({
   render: function() {
     return (
-      <div className="toolbar">
-        <div className="toolbarHomeLink"><Link to="home">Home</Link></div>
-        <h3 className="toolbarSearch">Search Bar!</h3>
+      <div className="toolbar navbar navbar-default" role="navigation">
+        <div className="toolbarHomeLink navbar-brand"><Link to="home">Reps</Link></div>
+        <SearchBar />
       </div>
     );
   }
