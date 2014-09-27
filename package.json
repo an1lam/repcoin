@@ -3,13 +3,14 @@
   "description": "The first and best reputation market.",
   "author": "Stephen Malina and Matt Ritter",
   "dependencies": {
-    "flux": "latest",
-    "react": "latest",
-    "react-tools": "~0.11.2",
     "express": "~4.9.4",
+    "flux": "latest",
     "gulp-jest": "~0.2.1",
+    "jquery-browserify": "^1.8.1",
+    "jsxhint": "~0.4.14",
+    "react": "latest",
     "react-router": "~0.7.0",
-    "jsxhint": "~0.4.14"
+    "react-tools": "~0.11.2"
   },
   "devDependencies": {
     "gulp": "^3.8.8",
