@@ -31,7 +31,7 @@ var routes = (
     <Route name="home" handler={HomePage} />
     <Route name="categories" handler={CategoriesPage} />
     <Route name="profile" path=":userId" handler={ProfilePage} />
-    {/* TODO: Make this not link to itsself */}
+    {/* TODO: Make this not link to itself */}
     <Route name="category" path="/category/:category" handler={CategoriesPage}/>
   </Routes>
 );
