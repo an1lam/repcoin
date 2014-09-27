@@ -73,8 +73,8 @@
 
 /* Toolbar Items /////////////////////////////////// */
 .toolbarHomeLink {
-	float:left;
-	padding-right:30px;
+  float:left;
+  padding-right:30px;
 }
 
 .toolbarSearch {
@@ -99,3 +99,5 @@
 .profileData {
   float: right;
 }
+/* Category Items /////////////////////////////////// */
+
