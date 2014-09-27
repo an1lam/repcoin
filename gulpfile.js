@@ -19,7 +19,7 @@ gulp.task('bootstrapjs', function() {
 });
 
 gulp.task('css', function() {
-  gulp.src('css/')
+  gulp.src('css/*')
       .pipe(gulp.dest('build/css'));
 });
 
