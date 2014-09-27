@@ -20,6 +20,7 @@
     "jshint": "~2.5.6",
     "reactify": "~0.14.0",
     "gulp-react": "~1.0.2",
-    "gulp-jshint": "~1.8.4"
+    "gulp-jshint": "~1.8.4",
+    "gulp-plumber": "~0.6.5"
   }
 }

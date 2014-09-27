@@ -5,6 +5,7 @@ var React = require('react');
 var LoginPage = require('./components/LoginPage.jsx');
 var HomePage = require('./components/HomePage.jsx');
 var ProfilePage = require('./components/ProfilePage.jsx');
+var CategoriesPage = require('./components/CategoriesPage.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -28,7 +29,10 @@ var routes = (
     <DefaultRoute handler={LoginPage} />
     <Route name="login" handler={LoginPage} />
     <Route name="home" handler={HomePage} />
-    <Route name="profile" path=":userId" handler={ProfilePage}/>
+    <Route name="categories" handler={CategoriesPage} />
+    <Route name="profile" path=":userId" handler={ProfilePage} />
+    {/* TODO: Make this not link to itsself */}
+    <Route name="category" path="/category/:category" handler={CategoriesPage}/>
   </Routes>
 );
 

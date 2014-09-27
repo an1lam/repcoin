@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     connect = require('gulp-connect'),
     jest = require('gulp-jest'),
+    plumber = require('gulp-plumber'),
     jshint = require('gulp-jshint');
 
 gulp.task('css', function() {
@@ -26,6 +27,7 @@ gulp.task('html', function() {
 
 gulp.task('jshint', function() {
   gulp.src('js/**/*.jsx')
+      .pipe(plumber())
       .pipe(react())
       .pipe(jshint({ newcap: false, node: true, browser: true }))
       .pipe(jshint.reporter('default'));
@@ -58,6 +60,7 @@ gulp.task('watch', function() {
 gulp.task('build', ['jest', 'html', 'css'], function() {
   // Single entry to browserify
   gulp.src('js/app.jsx')
+      .pipe(plumber())
       .pipe(browserify({
         insertGlobals: true,
         // TODO: Switch this to another env CLI
@@ -65,6 +68,7 @@ gulp.task('build', ['jest', 'html', 'css'], function() {
         extensions: ['.jsx'],
         transform: [reactify]
       }))
+      .on('error', gutil.log)
       .pipe(rename('app.js'))
       .pipe(gulp.dest('./build'))
 });
