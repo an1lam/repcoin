@@ -14,9 +14,9 @@ gulp.task('fonts', function() {
       .pipe(gulp.dest('build/fonts'));
 });
 
-gulp.task('bootstrapjs', function() {
-  gulp.src('bootstrapjs/*')
-      .pipe(gulp.dest('build/bootstrapjs'));
+gulp.task('lib', function() {
+  gulp.src('js/lib/**/*')
+      .pipe(gulp.dest('build/js/lib'));
 });
 
 gulp.task('css', function() {
@@ -28,7 +28,7 @@ var paths = {
   js: ['js/**/*.jsx'],
   html: ['index.html'],
   css: ['css/*.css'],
-  bootstrapjs: ['bootstrapjs/*.js']
+  lib: ['lib/**/*.js']
 };
 
 gulp.task('html', function() {
@@ -68,7 +68,7 @@ gulp.task('watch', function() {
   gulp.watch(paths.css, ['css']);
 });
 
-gulp.task('build', ['jest', 'html', 'css', 'bootstrapjs', 'fonts'], function() {
+gulp.task('build', ['jest', 'html', 'css', 'lib', 'fonts'], function() {
   // Single entry to browserify
   gulp.src('js/app.jsx')
       .pipe(plumber())
