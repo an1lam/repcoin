@@ -66,8 +66,6 @@ var mockFeedItems = [
 ];
 
 var Feed = React.createClass({
-  // TODO (ritterm): Feed should eventually take some kind of user in props
-  // TODO (ritterm): Feed should not call fake data in initial function 
   getIntialState: function() {
     return { feedItems: [] };
   },
