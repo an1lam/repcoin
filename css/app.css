@@ -6,8 +6,11 @@
 }
 
 .feedItem {
-    border: 1px solid;
-    display: inline-block;
+  display:inline-block;
+}
+
+.list-group-item {
+  padding: 5px 10px;
 }
 
 .donorName {
@@ -17,34 +20,29 @@
 
 .receiverName {
   float: left;
-  padding-left: 5px;
   padding-right: 5px;
 }
 
 .amount {
   margin: 0;
   float: left;
-  padding-left:5px;
   padding-right:5px;
 }
 
 .category {
   margin: 0;
   float: left;
-  padding-left:5px;
 }
 
 .gave {
   margin: 0;
   float: left;
-  padding-left:5px;
   padding-right:5px;
 }
 
 .repsFor {
   margin: 0;
   float: left;
-  padding-left:5px;
   padding-right:5px;
 }
 
@@ -75,9 +73,6 @@
 .toolbarHomeLink {
 	float:left;
 	padding-right:30px;
-}
-
-.toolbarSearch {
 }
 
 /* Profile Page Items ////////////////////////////// */

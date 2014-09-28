@@ -8,13 +8,13 @@ var SearchBar = React.createClass({
     return (
       <div className="searchBar">
         <form className="navbar-form navbar-left" role="search">
-          <div className="form-group">
+          <div className="input-group">
             <input type="text" className="form-control" placeholder="Search" />
-            <button type="submit" className="btn btn-default">
-              <span className="glyphicon glyphicon-search"></span>
-            </button>
+            <div className="input-group-btn">
+              <button type="submit" className="btn btn-default"><span className="glyphicon glyphicon-search"></span></button>  
+            </div>
           </div>
-         </form>
+        </form>
       </div>
     );
   }
