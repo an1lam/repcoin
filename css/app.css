@@ -96,3 +96,30 @@
 }
 /* Category Items /////////////////////////////////// */
 
+
+/* Footer Items ///////////////////////////////////// */
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  position:relative;
+}
+
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#content {
+  padding-bottom:60px; /* Height of footer element */
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 60px;
+  width:100%;
+  position:absolute;
+  bottom:0;
+  left:0;
+}
