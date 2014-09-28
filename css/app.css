@@ -6,8 +6,11 @@
 }
 
 .feedItem {
-    border: 1px solid;
-    display: inline-block;
+  display:inline-block;
+}
+
+.list-group-item {
+  padding: 5px 10px;
 }
 
 .donorName {
@@ -17,34 +20,29 @@
 
 .receiverName {
   float: left;
-  padding-left: 5px;
   padding-right: 5px;
 }
 
 .amount {
   margin: 0;
   float: left;
-  padding-left:5px;
   padding-right:5px;
 }
 
 .category {
   margin: 0;
   float: left;
-  padding-left:5px;
 }
 
 .gave {
   margin: 0;
   float: left;
-  padding-left:5px;
   padding-right:5px;
 }
 
 .repsFor {
   margin: 0;
   float: left;
-  padding-left:5px;
   padding-right:5px;
 }
 
@@ -77,9 +75,6 @@
   padding-right:30px;
 }
 
-.toolbarSearch {
-}
-
 /* Profile Page Items ////////////////////////////// */
 .profilePage {
   background-color: #afeeee;
@@ -101,3 +96,30 @@
 }
 /* Category Items /////////////////////////////////// */
 
+
+/* Footer Items ///////////////////////////////////// */
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  position:relative;
+}
+
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#content {
+  padding-bottom:60px; /* Height of footer element */
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 60px;
+  width:100%;
+  position:absolute;
+  bottom:0;
+  left:0;
+}

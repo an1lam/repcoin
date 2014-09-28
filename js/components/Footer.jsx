@@ -8,8 +8,8 @@ var Link = Router.Link;
 var Footer = React.createClass({
   render: function() {
     return (
-      <div className="footerbar">
-        <Link to="home">Home</Link>
+      <div id="footer">
+        <p>Footer</p>
       </div>
     );
   }

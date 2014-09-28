@@ -7,11 +7,11 @@ var Feed = require('./Feed.jsx');
 var FeedHeader = React.createClass({
   render: function() {
     return (
-      <div className = "feedHeader">
-        <input type="button" value="All"/>
-        <input type="button" value="To"/>
-        <input type="button" value="From"/>
-        <input type="button" value = "Us"/>
+      <div className = "feedHeader btn-group">
+        <button type="button" className="btn btn-default">All</button>
+        <button type="button" className="btn btn-default">To</button>
+        <button type="button" className="btn btn-default">From</button>
+        <button type="button" className="btn btn-default">Us</button>
       </div>
     );
   }

@@ -18,10 +18,14 @@ var ProfilePage = React.createClass({
   render: function() {
     return (
       <div className="profilePage">
-        <Toolbar />
-        <ProfileBox user={mockedUpUser} />
+        <div id="header">
+          <Toolbar />
+        </div>
+        <div id="content">
+          <ProfileBox user={mockedUpUser} />
+        </div>        
         <Footer />
-      </div>
+    </div>
     );
   }
 });
