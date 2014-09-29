@@ -10,14 +10,16 @@ var LoginPage = React.createClass({
   render: function() {
     return (
       <div className="loginPage">
-        <div className="header">
+        <div className="loginHeader">
+          <Link to="home">Feed</Link>
+        </div>
+        <div className="loginBody">
           <span className="logo">Reps</span>
           <span className="slogan">
             <h1>Reputation for the digital age</h1>
           </span>
           <Login />
         </div>
-        <Link to="home">Feed</Link>
       </div>
     );
   }
