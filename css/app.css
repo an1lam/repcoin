@@ -90,24 +90,26 @@
 }
 
 /* Profile Page Items ////////////////////////////// */
-.profilePage {
-  background-color: #afeeee;
-  width: 100%;
-  height: 100%;
-}
 .profileBox {
   background-color: white;
   overflow: hidden;
-  width: 23%;
 }
 
 .profilePicture {
   float: left;
+  min-width:180px;
+  min-height:180px;
+  margin:5px;
+}
+
+.profileUsername {
+  margin-bottom:20px;
 }
 
 .profileData {
-  float: right;
+  position: relative;
 }
+
 /* Category Items /////////////////////////////////// */
 
 

@@ -5,6 +5,8 @@ var React = require('react');
 var Toolbar = require('./Toolbar.jsx');
 var ProfileBox = require('./ProfileBox.jsx');
 var Footer = require('./Footer.jsx');
+var Feed = require('./Feed.jsx');
+var CategoriesTable = require('./CategoriesTable.jsx');
 
 var mockedUpUser = {
   "name": "Stephen Malina",
@@ -17,15 +19,26 @@ var mockedUpUser = {
 var ProfilePage = React.createClass({
   render: function() {
     return (
-      <div className="profilePage">
+      <div className="profilePage container-fluid">
         <div id="header">
           <Toolbar />
         </div>
         <div id="content">
-          <ProfileBox user={mockedUpUser} />
-        </div>        
-        <Footer />
-    </div>
+          <div className="row">
+            <ProfileBox user={mockedUpUser} />
+          </div>
+          <div className="row">
+            <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable /></div>
+            <div className="col-md-7 profilePageFeed">
+              <div className="profileDonationBox">Give to Meeee</div>
+              <Feed />
+            </div>
+          </div>
+          <div className="row">      
+            <div className="profilePageFooter"><Footer /></div>
+          </div>  
+        </div>
+      </div>
     );
   }
 });
