@@ -13,10 +13,6 @@
   padding: 5px 10px;
 }
 
-.feedList {
-  width:auto;
-}
-
 .donorName {
   float: left;
   padding-right: 5px;
@@ -80,7 +76,6 @@
 }
 
 /* Profile Page Items ////////////////////////////// */
-
 .profileBox {
   background-color: white;
   overflow: hidden;
