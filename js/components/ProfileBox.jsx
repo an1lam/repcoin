@@ -2,7 +2,7 @@
 "use strict";
 
 var React = require('react');
-var Feed = require('./Feed');
+var Feed = require('./Feed.jsx');
 
 var ProfileBox = React.createClass({
   render: function() {
