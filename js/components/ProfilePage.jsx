@@ -7,6 +7,7 @@ var ProfileBox = require('./ProfileBox.jsx');
 var Footer = require('./Footer.jsx');
 var Feed = require('./Feed.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
+var DonationBox = require('./DonationBox.jsx');
 
 var mockedUpUser = {
   "name": "Stephen Malina",
@@ -30,7 +31,7 @@ var ProfilePage = React.createClass({
           <div className="row">
             <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable /></div>
             <div className="col-md-7 profilePageFeed">
-              <div className="profileDonationBox">Give to Meeee</div>
+              <div className="profileDonationBox"><DonationBox user={mockedUpUser} /></div>
               <Feed />
             </div>
           </div>

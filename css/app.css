@@ -110,6 +110,21 @@
   position: relative;
 }
 
+.donationText {
+  float:left;
+  padding-right:5px; 
+}
+
+.donationAmount {
+  float:left;
+  width:50px;
+}
+
+.donationDropdown {
+  float:left;
+  width:auto;
+}
+
 /* Category Items /////////////////////////////////// */
 
 
