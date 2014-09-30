@@ -79,7 +79,6 @@ gulp.task('build', ['jest', 'html', 'css', 'lib', 'fonts'], function() {
         extensions: ['.jsx'],
         transform: [reactify]
       }))
-      .on('error', gutil.log)
       .pipe(rename('app.js'))
       .pipe(gulp.dest('./build'))
 });
