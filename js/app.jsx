@@ -6,6 +6,7 @@ var LoginPage = require('./components/LoginPage.jsx');
 var HomePage = require('./components/HomePage.jsx');
 var ProfilePage = require('./components/ProfilePage.jsx');
 var CategoriesPage = require('./components/CategoriesPage.jsx');
+var AboutPage = require('./components/AboutPage.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -33,6 +34,7 @@ var routes = (
     {/* TODO: Make this not link to itself */}
     <Route name="category" path="/category/:category" handler={CategoriesPage}/>
     <Route name="profile" path="/user/:userId" handler={ProfilePage}/>
+    <Route name="about" handler={AboutPage} />
   </Routes>
 );
 
