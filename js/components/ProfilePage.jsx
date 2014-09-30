@@ -31,7 +31,7 @@ var ProfilePage = React.createClass({
           <div className="row">
             <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable /></div>
             <div className="col-md-7 profilePageFeed">
-              <div className="row profileDonationBox"><DonationBox user={mockedUpUser} /></div>  
+              <div className="profileDonationBox"><DonationBox user={mockedUpUser} /></div>  
             <Feed />
             </div>
           </div>

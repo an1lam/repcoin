@@ -9,7 +9,9 @@ var Toolbar = React.createClass({
   render: function() {
     return (
       <div className="toolbar navbar navbar-default" role="navigation">
-        <div className="toolbarHomeLink navbar-brand"><Link to="home">Reps</Link></div>
+        <div className="navbar-header">
+          <div className="toolbarHomeLink navbar-brand"><Link to="home">Reps</Link></div>
+        </div>
         <SearchBar />
       </div>
     );
