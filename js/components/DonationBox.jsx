@@ -7,9 +7,10 @@ var DonationBox = React.createClass({
   render: function() {
     return (
       <div className="donationBox">
+        <div className="navbar navbar-default">
         <form className="navbar-form">
-          <p className="navbar-text">Give</p>
-          <p className="navbar-text">{this.props.user.name}</p>
+          <p className="give navbar-text">Give</p>
+          <p className="user navbar-text">{this.props.user.name}</p>
           <input type="text" className="donationAmount form-control" placeholder="10"></input>
             <p className="navbar-text">Reps for</p>
             <select className="form-control donationCategories">
@@ -18,8 +19,9 @@ var DonationBox = React.createClass({
               <option>Jazz</option>
               <option>Skiing</option>
             </select>
-            <button type="submit" className="btn btn-default">Give</button>
+            <button type="submit" className="donationButton btn btn-lg btn-primary">Give</button>
           </form>
+          </div>
         </div>
       );
   }
