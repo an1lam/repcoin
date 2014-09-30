@@ -110,6 +110,10 @@
   position: relative;
 }
 
+.donationAmount {
+  float:left;
+}
+
 /* Category Items /////////////////////////////////// */
 
 
