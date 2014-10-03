@@ -159,6 +159,11 @@ html, body {
   padding-bottom:60px; /* Height of footer element */
 }
 
+/* About Page /////////////////////////////////// */
+.aboutContent {
+  align: center;
+}
+
 /* Set the fixed height of the footer here */
 #footer {
   height: 60px;
