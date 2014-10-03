@@ -172,3 +172,24 @@ html, body {
   bottom:0;
   left:0;
 }
+
+/* Categories Table ////////////////////////////// */
+.table-striped>tbody>tr:nth-child(odd)>td {
+   background-color:#D18E4D;
+}
+
+.table-striped>tbody>tr:nth-child(even)>td {
+   background-color:#E8C6A6;
+}
+
+.table-striped>tbody>tr:hover:nth-child(odd)>td {
+    background-color: #BC8045;
+}
+
+.table-striped>tbody>tr:hover:nth-child(even)>td {
+    background-color: #D1B295;
+}
+
+.table-striped {
+  border-radius:4px;
+}
