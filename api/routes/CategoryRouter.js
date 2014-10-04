@@ -15,7 +15,7 @@ module.exports = function(router) {
             res.send(err);
           }
           res.json(categories);
-          });
+        });
       });
 };
 
