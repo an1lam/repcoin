@@ -11,9 +11,10 @@ module.exports = function(router) {
     // Get all the categories
       .get(function(req, res) {
         Category.find(function(err, categories) {
-          if (err)
+          if (err) {
             res.send(err);
-              res.json(categories);
+          }
+          res.json(categories);
           });
       });
 };
