@@ -7,7 +7,8 @@ var gulp = require('gulp'),
     connect = require('gulp-connect'),
     jest = require('gulp-jest'),
     plumber = require('gulp-plumber'),
-    jshint = require('gulp-jshint');
+    jshint = require('gulp-jshint'),
+    server = require('gulp-express');
 
 gulp.task('fonts', function() {
   gulp.src('fonts/*')
@@ -83,11 +84,11 @@ gulp.task('build', ['jest', 'html', 'css', 'lib', 'fonts'], function() {
       .pipe(gulp.dest('./build'))
 });
 
-gulp.task('frontendServer', ['build'], function() {
-  connect.server({
-    root: 'build',
-    livereload: true
+gulp.task('express', ['build'], function() {
+  // start the server at the beginning of the task
+  server.run({
+    file: 'server.js'
   });
 });
 
-gulp.task('default', ['watch', 'jest', 'build', 'frontendServer']);
+gulp.task('default', ['watch', 'jest', 'build', 'express']);

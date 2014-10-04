@@ -14,7 +14,7 @@ var DonationBox = React.createClass({
           <input type="text" className="donationAmount form-control" placeholder="10"></input>
             <p className="navbar-text">Reps for</p>
             <select className="form-control donationCategories">
-              <option selected="selected">Category</option>
+              <option>Category</option>
               <option>Coding</option>
               <option>Jazz</option>
               <option>Skiing</option>
