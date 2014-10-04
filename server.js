@@ -6,7 +6,8 @@ var port = process.env.PORT || 8080; // set up our port
 app.use(require('connect-livereload')());
 app.use(express.static('./build'));
 
-/* GET home page. */
+/* GET the starting page for our app. 
+  This is the bridge to all of the react component*/
 app.get('/', function(req, res) {
     res.render('index.html');
 });
