@@ -12,15 +12,17 @@
     "jsxhint": "~0.4.14"
   },
   "devDependencies": {
+    "connect-livereload": "^0.4.0",
     "gulp": "^3.8.8",
     "gulp-browserify": "latest",
     "gulp-connect": "~2.0.6",
+    "gulp-express": "^0.1.0",
+    "gulp-jshint": "~1.8.4",
+    "gulp-plumber": "~0.6.5",
+    "gulp-react": "~1.0.2",
     "gulp-rename": "~1.2.0",
     "gulp-util": "~3.0.1",
     "jshint": "~2.5.6",
-    "reactify": "~0.14.0",
-    "gulp-react": "~1.0.2",
-    "gulp-jshint": "~1.8.4",
-    "gulp-plumber": "~0.6.5"
+    "reactify": "~0.14.0"
   }
 }
