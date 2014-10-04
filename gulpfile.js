@@ -29,7 +29,7 @@ var paths = {
   js: ['js/**/*.jsx'],
   html: ['index.html'],
   css: ['css/*.css'],
-  lib: ['lib/**/*.js'],
+  lib: ['lib/**/*.js']
 };
 
 gulp.task('html', function() {
@@ -88,13 +88,6 @@ gulp.task('express', ['build'], function() {
   // start the server at the beginning of the task
   server.run({
     file: 'server.js'
-  });
-});
-
-gulp.task('frontendServer', ['build'], function() {
-  connect.server({
-    root: 'build',
-    livereload: true
   });
 });
 
