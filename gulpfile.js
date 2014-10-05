@@ -26,7 +26,7 @@ gulp.task('css', function() {
 });
 
 var paths = {
-  js: ['js/**/*.jsx'],
+  js: ['js/**/*.jsx', 'spec/**/*.js'],
   html: ['index.html'],
   css: ['css/*.css'],
   lib: ['lib/**/*.js']
@@ -49,7 +49,8 @@ gulp.task('jest', ['jshint'], function() {
   return gulp.src('spec').pipe(jest({
     scriptPreprocessor: "preprocessor.js",
     unmockedModulePathPatterns: [
-      "node_modules/react"
+      "node_modules/react",
+      "node_modules/superagent"
     ],
     testDirectoryName: "spec",
     testPathIgnorePatterns: [
