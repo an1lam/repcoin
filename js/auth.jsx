@@ -9,7 +9,7 @@ var auth = {
       return cb(true);
     }
     request
-     .post('/api/logIn')
+     .post('/api/login')
      .send({ username: username, password: password })
      .end(function(err, res) {
      if (err) {
