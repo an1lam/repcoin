@@ -1,5 +1,6 @@
 // Routes to manipulate Users
 
+// TODO: fix spacing and if (err) formatting
 var User = require('../models/User.js');
 // Routes that begin with '/users
 // ---------------------------------------------------------------------------
