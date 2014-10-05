@@ -12,7 +12,7 @@ describe('Authentication: Logging In', function() {
     mockLocalStorage = {"token": undefined}
   });
 
-  it('Doesn\' currently have a logged in user', function () {
+  it('Doesn\'t currently have a logged in user', function () {
     expect(auth.loggedIn(mockLocalStorage)).toEqual(false);
     mockLocalStorage.token = {
       "username": "krazemon",
