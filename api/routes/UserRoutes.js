@@ -24,9 +24,6 @@ module.exports = function(router) {
         password      : req.body.password,
         phoneNumber   : req.body.phoneNumber
       }).save( function(err) {
-        console.log(req.body.username);
-        console.log(req.body.password);
-        console.log(req.body.phoneNumber);
         if (err) {
           res.send(err);
         } else {
