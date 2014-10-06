@@ -11,8 +11,9 @@ module.exports = function(router) {
       User.find(function(err, users) {
         if (err) {
           res.send(err);
+        } else {
+          res.json(users);
         }
-        res.json(users);
       });
     })
 
@@ -27,7 +28,6 @@ module.exports = function(router) {
         console.log(req.body.password);
         console.log(req.body.phoneNumber);
         if (err) {
-          console.log("Error");
           res.send(err);
         } else {
           res.json({ message : 'User created' });

@@ -13,8 +13,9 @@ module.exports = function(router, isAuthenticated) {
       Category.find(function(err, categories) {
         if (err) {
           res.send(err);
+        } else {
+          res.json(categories);
         }
-        res.json(categories);
       });
     });
 };
