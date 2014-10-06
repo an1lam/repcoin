@@ -21,8 +21,8 @@ app.get('/', function(req, res) {
 
 // Routes
 var dataRouter = express.Router();
-var categoryRoutes = require('./api/routes/CategoryRouter.js')(dataRouter);
-var userRoutes = require('./api/routes/UserRouter.js')(dataRouter);
+var categoryRoutes = require('./api/routes/CategoryRoutes.js')(dataRouter);
+var userRoutes = require('./api/routes/UserRoutes.js')(dataRouter);
 
 app.listen(port); // startup our app at http://localhost:8080
 console.log('Listening at port ' + port); // shoutout to the user!
