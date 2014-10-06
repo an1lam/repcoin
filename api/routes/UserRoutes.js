@@ -19,15 +19,22 @@ module.exports = function(router) {
 
     // Create a new user
     .post(function(req, res) {
-      new User({
-        username      : req.body.username,
-        password      : req.body.password,
-        phoneNumber   : req.body.phoneNumber
-      }).save( function(err) {
+      var user = new User({
+          username    : req.body.username,
+          password    : req.body.password,
+          phoneNumber : req.body.phoneNumber
+      });
+      user.save( function(err) {
         if (err) {
           res.send(err);
         } else {
-          res.json({ message : 'User created' });
+          req.login(user, function(err) {
+            if (err) {
+              res.send(err);
+            } else {
+              res.send(user);
+            }
+          });
         }  
       });
     });

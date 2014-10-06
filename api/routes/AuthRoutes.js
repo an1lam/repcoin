@@ -2,6 +2,19 @@
 // Routes to login, logout, and signup
 
 module.exports = function(router, passport) {
+  /*
+  Passportjs automatically stores a user's session.
+  This is done via a cookie, and the result can be observed
+  in req.user or checked with req.isAuthenticated(). This means
+  that querying loggedin requires no data on the part of the client.
+  The incoming request to the middleware will inherently be signed
+  as loggedin or not.
+  */
+  router.route('/loggedin')
+    .get(function(req, res) {
+      res.send(req.isAuthenticated());
+    });
+
   router.route('/login')
     .post(passport.authenticate('local'), function(req, res) {
        var user = req.user || {};
