@@ -4,7 +4,7 @@
 var React = require('react');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
 var Router = require('react-router');
-var auth = require('../auth');
+var auth = require('../auth.jsx');
 
 var TestMixin = {
 
@@ -20,10 +20,12 @@ var Login = React.createClass({
     var email = this.refs.email.getDOMNode().value;
     var pass = this.refs.pass.getDOMNode().value;
     auth.logIn(email, pass, function(loggedIn) {
-      if (!loggedIn) {
+      if (loggedIn) {
+        Router.transitionTo('/home');
+      }
+      else {
         return this.setState({error: true});
       }
-      Router.transitionTo('/home');
     }.bind(this));
   },
 

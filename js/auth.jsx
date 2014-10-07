@@ -24,10 +24,23 @@ var auth = {
     });
   },
 
-  loggedIn: function() {
+  loggedIn: function(cb) {
     return $.ajax({
       url: 'api/loggedIn',
       type: 'GET',
+      error: function(xhr, status, err) {
+        console.log(err);
+      },
+      success: function(data) {
+        cb(data);
+      },
+    });
+  },
+
+  logOut: function() {
+    return $.ajax({
+      url: 'api/logout',
+      type: 'POST',
       error: function(xhr, status, err) {
         console.log(err);
         return false;
@@ -36,7 +49,7 @@ var auth = {
         return true;
       }.bind(this),
     });
-  },
+  }
 };
 
 module.exports = auth;
