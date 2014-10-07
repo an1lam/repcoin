@@ -8,6 +8,7 @@ var ProfilePage = require('./components/ProfilePage.jsx');
 var CategoriesPage = require('./components/CategoriesPage.jsx');
 var AboutPage = require('./components/AboutPage.jsx');
 var ContactUsPage = require('./components/ContactUsPage.jsx');
+var auth = require('./auth.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -16,6 +17,22 @@ var Link = Router.Link;
 var DefaultRoute = Router.DefaultRoute;
 
 var RepsApp = React.createClass({
+  getInitialState: function() {
+    return {
+      loggedIn: auth.loggedIn()
+    };
+  },
+
+  setStateOnAuth: function(loggedIn) {
+    this.setState({
+      loggedIn: loggedIn
+    });
+  },
+
+  componentWillMount: function() {
+    auth.onChange = this.setStateOnAuth;
+  },
+
   render: function() {
     return (
       <div className="repsApp">

@@ -50,7 +50,6 @@ gulp.task('jest', ['jshint'], function() {
     scriptPreprocessor: "preprocessor.js",
     unmockedModulePathPatterns: [
       "node_modules/react",
-      "node_modules/superagent"
     ],
     testDirectoryName: "spec",
     testPathIgnorePatterns: [
