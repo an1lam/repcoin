@@ -17,7 +17,6 @@ app.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-f
 // Configure ORM and database
 var db = require('./config/db');
 var port = process.env.PORT || 8080; // set up our port
-mongoose.connect(db.url)
 
 app.use(require('connect-livereload')());
 app.use(express.static('./build'));
@@ -54,6 +53,7 @@ app.use('/api', [authRouter, categoryRouter, userRouter]);
 
 // Start the server unless we are running a test
 if (!module.parent) {
+  mongoose.connect(db.url)
   console.log('Listening at port ' + port);
   app.listen(port); // startup our app at http://localhost:8080
 }
