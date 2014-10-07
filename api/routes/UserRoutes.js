@@ -1,6 +1,5 @@
 // Routes to manipulate Users
 
-// TODO: fix spacing and if (err) formatting
 var User = require('../models/User.js');
 // Routes that begin with '/users
 // ---------------------------------------------------------------------------
@@ -40,7 +39,7 @@ module.exports = function(router) {
     });
 
 /////// Routes that have /users/:user_id ///////////
-
+// TODO (ritterm) : Authenticate these routes before production!!!!
     // Get the user with the provided id
   router.route('/users/:user_id')
     .get(function(req, res) {
