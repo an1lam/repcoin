@@ -49,8 +49,7 @@ gulp.task('jest', ['jshint'], function() {
   return gulp.src('spec').pipe(jest({
     scriptPreprocessor: "preprocessor.js",
     unmockedModulePathPatterns: [
-      "node_modules/react",
-      "node_modules/superagent"
+      "react",
     ],
     testDirectoryName: "spec",
     testPathIgnorePatterns: [
@@ -58,6 +57,7 @@ gulp.task('jest', ['jshint'], function() {
       "preprocessor.js"
     ],
     moduleFileExtensions: [
+      "jsx",
       "js",
       "react"
     ]
