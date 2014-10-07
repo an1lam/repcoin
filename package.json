@@ -17,7 +17,6 @@
     "express-session": "~1.8.2",
     "passport": "~0.2.1",
     "passport-local": "~1.0.0",
-    "jquery-browserify": "~1.8.1",
     "jquery": "~2.1.1"
   },
   "devDependencies": {

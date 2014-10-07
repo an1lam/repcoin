@@ -18,7 +18,7 @@ module.exports = function(router, passport) {
   router.route('/login')
     .post(passport.authenticate('local'), function(req, res) {
        var user = req.user || {};
-       res.send(user); 
+       res.send(user);
     });
 
   router.route('/logout')

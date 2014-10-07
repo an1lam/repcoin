@@ -5,24 +5,27 @@ var $ = require('jquery');
 
 var auth = {
   logIn: function(username, password, cb) {
-    $.post({
+    return $.ajax({
+      type: 'POST',
       url: '/api/login',
       data: {
         username: username,
         password: password
       },
       success: function(data) {
+        cb(true);
         return true;
-      }.bind(this),
+      },
       error: function(xhr, status, err) {
         console.log(err);
+        cb(false);
         return false;
-      }.bind(this)
+      }
     });
   },
 
   loggedIn: function() {
-    $.ajax({
+    return $.ajax({
       url: 'api/loggedIn',
       type: 'GET',
       error: function(xhr, status, err) {
