@@ -52,7 +52,10 @@ var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
 
 app.use('/api', [authRouter, categoryRouter, userRouter]);
 
-// Start the server
-app.listen(port); // startup our app at http://localhost:8080
-console.log('Listening at port ' + port);
+// Start the server unless we are running a test
+if (!module.parent) {
+  console.log('Listening at port ' + port);
+  app.listen(port); // startup our app at http://localhost:8080
+}
+
 module.exports = app;
