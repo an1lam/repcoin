@@ -6,8 +6,10 @@ var Toolbar = require('./Toolbar.jsx');
 var Footer = require('./Footer.jsx');
 var Feed = require('./Feed.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
+var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 
 var HomePage = React.createClass({
+  mixins: [AuthenticatedRoute],
   render: function() {
     return (
       <div className="homePage">

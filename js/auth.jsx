@@ -1,28 +1,54 @@
 /** @jsx React.DOM */
 "use strict";
 var React = require('react');
-var request = require('superagent-browserify');
+var $ = require('jquery');
 
 var auth = {
-  logIn: function(username, password, storage, cb) {
-    if (storage.token) {
-      return cb(true);
-    }
-    request
-     .post('/api/login')
-     .send({ username: username, password: password })
-     .end(function(err, res) {
-     if (err) {
-       console.log(err);
-       return;
-     }
-     storage.token = res.token;
-     });
-
-    return ;
+  logIn: function(username, password, cb) {
+    return $.ajax({
+      type: 'POST',
+      url: '/api/login',
+      data: {
+        username: username,
+        password: password
+      },
+      success: function(data) {
+        cb(true);
+        return true;
+      },
+      error: function(xhr, status, err) {
+        console.log(err);
+        cb(false);
+        return false;
+      }
+    });
   },
-  loggedIn: function(storage) {
-    return !!storage.token;
+
+  loggedIn: function(cb) {
+    return $.ajax({
+      url: 'api/loggedIn',
+      type: 'GET',
+      error: function(xhr, status, err) {
+        console.log(err);
+      },
+      success: function(data) {
+        cb(data);
+      },
+    });
+  },
+
+  logOut: function() {
+    return $.ajax({
+      url: 'api/logout',
+      type: 'POST',
+      error: function(xhr, status, err) {
+        console.log(err);
+        return false;
+      }.bind(this),
+      success: function(data) {
+        return true;
+      }.bind(this),
+    });
   }
 };
 
