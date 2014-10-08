@@ -25,11 +25,11 @@ module.exports = function(router) {
       });
       user.save( function(err) {
         if (err) {
-          res.send(err);
+          res.status(400).send(err);
         } else {
           req.login(user, function(err) {
             if (err) {
-              res.send(err);
+              res.status(400).send(err);
             } else {
               res.send(user);
             }
@@ -79,7 +79,7 @@ module.exports = function(router) {
         if (err) {
           res.send(err);
         } else {
-          res.json({message: 'Successfully deleted user' });
+          res.send('Successfully deleted user');
         }
       });
    });
