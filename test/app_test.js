@@ -17,7 +17,7 @@ describe('app', function () {
     done();
   });
  
-  it('should reponse to a get request to home', function (done) {
+  it('should response to a get request to home', function (done) {
     request(app)
       .get('/')
       .expect(200, done);
