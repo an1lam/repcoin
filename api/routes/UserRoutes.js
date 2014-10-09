@@ -1,7 +1,7 @@
 // Routes to manipulate Users
 
 var User = require('../models/User.js');
-// Routes that begin with '/users
+// Routes that begin with /users
 // ---------------------------------------------------------------------------
 module.exports = function(router) {
   router.route('/users')
