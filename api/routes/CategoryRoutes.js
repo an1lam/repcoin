@@ -36,7 +36,7 @@ module.exports = function(router, isAuthenticated) {
       });  
     });
 
-///////// Routes taht have /categories/:category_id ////////
+///////// Routes thatt have /categories/:category_id ////////
   router.route('/categories/:category_id')
     // Get the category with this id
     .get(function(req, res) {
