@@ -7,7 +7,7 @@ var Category = require('./Category.jsx');
 var CategoriesList = React.createClass({
   render: function() {
     return (
-      <div className="categoriesList contianer-fluid">
+      <div className="categoriesList container-fluid">
         {this.generateCategories()}
       </div>
     );
