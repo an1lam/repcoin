@@ -49,7 +49,11 @@ var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, i
 var authRouter = express.Router();
 var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
 
-app.use('/api', [authRouter, categoryRouter, userRouter]);
+// Transactions
+var transactionRouter = express.Router();
+var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transactionRouter, isAuthenticated);
+
+app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter]);
 
 // Start the server unless we are running a test
 if (!module.parent) {

@@ -1,4 +1,4 @@
-// api/routes/CategoryRouter.js
+// api/routes/CategoryRoutes.js
 // Routes to manipulate categories
 
 var Category = require('../models/Category.js');
