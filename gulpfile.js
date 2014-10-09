@@ -8,7 +8,19 @@ var gulp = require('gulp'),
     jest = require('gulp-jest'),
     plumber = require('gulp-plumber'),
     jshint = require('gulp-jshint'),
+    mocha = require('gulp-mocha'),
     server = require('gulp-express');
+
+// Gulp setup to run mocha tests
+gulp.task('mocha', function() {
+  return gulp.src(['test/*.js'], { read: false })
+    .pipe(mocha({ reporter: 'spec' }))
+    .on('error', gutil.log); 
+});
+
+gulp.task('watch-mocha', function() {
+  gulp.watch(['test/**', 'api/**', 'js/**'], ['mocha']);
+});
 
 gulp.task('fonts', function() {
   gulp.src('fonts/*')
