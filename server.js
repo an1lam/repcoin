@@ -6,7 +6,11 @@ var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 require('./config/pass.js')(passport, LocalStrategy);
-var isAuthenticated = require('./config/auth.js');
+if (!module.parent) {
+ var isAuthenticated = require('./config/auth.js').isAuthenticated
+} else {
+ var isAuthenticated = function(req, res, next) { res.status(200).end() };
+}
 var app = express();
 
 // Configure bodyParser to parse post requests
@@ -29,7 +33,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-/* GET the starting page for our app. 
+/* GET the starting page for our app.
   This is the bridge to all of the react components */
 app.get('/', function(req, res) {
     res.render('index.html');

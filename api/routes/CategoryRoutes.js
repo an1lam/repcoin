@@ -33,7 +33,7 @@ module.exports = function(router, isAuthenticated) {
         } else {
           res.send(category);
         }
-      });  
+      });
     });
 
 ///////// Routes that have /categories/:category_id ////////
@@ -68,7 +68,7 @@ module.exports = function(router, isAuthenticated) {
           });
         }
       });
-    })      
+    })
 
    // Delete the category with this id
    .delete(function(req, res) {
