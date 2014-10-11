@@ -10,6 +10,9 @@ var UserSchema = new Schema({
   username: {type: String, required: true, index: { unique: true } },
   password: {type: String, required: true },
   phoneNumber: {type: String, required: true, unique: true },
+  categories: [{
+    name: String, id: Schema.Types.ObjectId, directScore: Number, crowdScore: Number, expertScore: Number
+  }],
   timeStamp : {type: Date, default: Date.now }
 });
 
