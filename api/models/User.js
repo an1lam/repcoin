@@ -11,9 +11,13 @@ var UserSchema = new Schema({
   password: {type: String, required: true },
   phoneNumber: {type: String, required: true, unique: true },
   categories: [{
-    name: String, id: Schema.Types.ObjectId, directScore: Number, crowdScore: Number, expertScore: Number
+    name: String,
+    id: Schema.Types.ObjectId,
+    directScore: Number,
+    crowdScore: Number,
+    expertScore: Number,
   }],
-  timeStamp : {type: Date, default: Date.now }
+  timeStamp : {type: Date, default: Date.now },
 });
 
 // TODO: Abstract this logic out into it's own function for testing purposes
