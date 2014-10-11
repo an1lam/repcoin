@@ -6,7 +6,14 @@ var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 require('./config/pass.js')(passport, LocalStrategy);
-var isAuthenticated = require('./config/auth.js');
+
+// Mock authentication if test environment
+if (!module.parent) {
+ var auth = require('./config/auth.js');
+} else {
+ var auth = function(req, res, next) { res.status(200).end() };
+}
+
 var app = express();
 
 // Configure bodyParser to parse post requests
@@ -29,7 +36,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-/* GET the starting page for our app. 
+/* GET the starting page for our app.
   This is the bridge to all of the react components */
 app.get('/', function(req, res) {
     res.render('index.html');
@@ -43,7 +50,7 @@ var userRoutes = require('./api/routes/UserRoutes.js')(userRouter);
 
 // Categories
 var categoryRouter = express.Router();
-var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, isAuthenticated);
+var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth);
 
 // Authentication
 var authRouter = express.Router();
@@ -51,7 +58,7 @@ var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
 
 // Transactions
 var transactionRouter = express.Router();
-var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transactionRouter, isAuthenticated);
+var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transactionRouter, auth);
 
 app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter]);
 
