@@ -4,7 +4,7 @@
 var React = require('react');
 var FeedItem = require('./FeedItem.jsx');
 var FeedHeader = require('./FeedHeader.jsx');
-
+var $ = require('jquery');
 var mockDonor = {
   "id": "123",
   "name": "Stephen Malina"
@@ -46,20 +46,20 @@ var mockCategory3 = "Skiing";
 
 var mockFeedItems = [
   {
-    "donor": mockDonor,
-    "receiver": mockReceiver,
+    "from": mockDonor,
+    "to": mockReceiver,
     "amount": mockAmount,
     "category": mockCategory
   },
   {
-    "donor": mockDonor2,
-    "receiver": mockReceiver2,
+    "from": mockDonor2,
+    "to": mockReceiver2,
     "amount": mockAmount2,
     "category": mockCategory2
   },
   {
-    "donor": mockDonor3,
-    "receiver": mockReceiver3,
+    "from": mockDonor3,
+    "to": mockReceiver3,
     "amount": mockAmount3,
     "category": mockCategory3
   }
@@ -71,7 +71,18 @@ var Feed = React.createClass({
   },
 
   componentDidMount: function() {
-    this.setState({ feedItems: mockFeedItems });
+    // TODO: Pagination?
+    $.ajax({
+      url: '/api/transactions',
+      dataType: 'json',
+      success: function(transactions) {
+        this.setState({ feedItems: transactions });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+
   },
 
   generateFeedItems: function() {
@@ -81,7 +92,7 @@ var Feed = React.createClass({
 
     var feedItems = this.state.feedItems.map(function(feedItem) {
       return (
-        <li className="list-group-item"><FeedItem donor={feedItem.donor} receiver={feedItem.receiver} amount={feedItem.amount} category={feedItem.category} /></li>
+        <li className="list-group-item"><FeedItem from={feedItem.from} to={feedItem.to} amount={feedItem.amount} category={feedItem.category} /></li>
       );
     });
 

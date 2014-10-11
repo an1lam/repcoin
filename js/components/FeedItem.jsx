@@ -7,11 +7,17 @@ var Link = Router.Link;
 
 var FeedItem = React.createClass({
   render: function() {
+    var from;
+    if (this.props.from) {
+      from = <p><Link className="fromName" to="profile" params={{userId: this.props.from.id}}>
+                   {this.props.from.name}</Link><p>gave</p></p>;
+    } else {
+      from = <p className="fromName">Anonymous gave</p>;
+    }
     return (
       <div className="feedItem">
-      	<Link className="donorName" to="profile" params={{userId: this.props.donor.id}}>{this.props.donor.name}</Link>
-      	<p className="gave">gave</p>
-      	<Link className="receiverName" to="profile" params={{userId: this.props.receiver.id}}>{this.props.receiver.name}</Link>
+        {from}
+        <Link className="toName" to="profile" params={{userId: this.props.to.id}}>{this.props.to.name}</Link>
       	<p className="amount">{this.props.amount}</p>
       	<p className="repsFor">reps for</p>
       	<p className="category">{this.props.category}</p>
