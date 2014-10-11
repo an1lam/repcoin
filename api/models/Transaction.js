@@ -5,8 +5,8 @@ var Schema = mongoose.Schema;
 
 var TransactionSchema = new Schema({
   to        : {
-   name: { type: String, required: true, default: 'Someone' },
-    id: { type: String, required: true, default: 123 }
+    name: { type: String, required: true },
+    id: { type: String, required: true }
   },
   from      : {
     name: { type: String, required: true, default: 'Someone' },
