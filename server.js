@@ -6,11 +6,14 @@ var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 require('./config/pass.js')(passport, LocalStrategy);
+
+// Mock authentication if test environment
 if (!module.parent) {
- var isAuthenticated = require('./config/auth.js').isAuthenticated
+ var auth = require('./config/auth.js');
 } else {
- var isAuthenticated = function(req, res, next) { res.status(200).end() };
+ var auth = function(req, res, next) { res.status(200).end() };
 }
+
 var app = express();
 
 // Configure bodyParser to parse post requests
@@ -47,7 +50,7 @@ var userRoutes = require('./api/routes/UserRoutes.js')(userRouter);
 
 // Categories
 var categoryRouter = express.Router();
-var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, isAuthenticated);
+var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth);
 
 // Authentication
 var authRouter = express.Router();
@@ -55,7 +58,7 @@ var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
 
 // Transactions
 var transactionRouter = express.Router();
-var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transactionRouter, isAuthenticated);
+var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transactionRouter, auth);
 
 app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter]);
 
