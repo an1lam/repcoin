@@ -7,12 +7,12 @@ var Link = Router.Link;
 
 var FeedItem = React.createClass({
   render: function() {
+    var from;
     if (this.props.from) {
-      var from = <p><Link className="fromName" to="profile" params={{userId: this.props.from.id}}>
+      from = <p><Link className="fromName" to="profile" params={{userId: this.props.from.id}}>
                    {this.props.from.name}</Link><p>gave</p></p>;
     } else {
-      //TODO: Make this not appear only on one line
-      var from = <p>Anonymous gave</p>;
+      from = <p className="fromName">Anonymous gave</p>;
     }
     return (
       <div className="feedItem">
