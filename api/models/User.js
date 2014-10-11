@@ -1,5 +1,4 @@
 // A User model with authentication
-// code used from MongoDB tutorial: http://blog.mongodb.org/post/32866457221/password-authentication-with-mongoose-part-1
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,

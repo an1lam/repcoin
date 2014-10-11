@@ -8,11 +8,11 @@ var Link = Router.Link;
 var FeedItem = React.createClass({
   render: function() {
     var from;
-    if (this.props.from.id) {
+    if (!this.props.from.anonymous) {
       from = <p><Link className="fromName" to="profile" params={{userId: this.props.from.id}}>
                    {this.props.from.name}</Link><p>gave</p></p>;
     } else {
-      from = <p className="fromName">{this.props.from.name} gave</p>;
+      from = <p className="fromName">Someone gave</p>;
     }
     return (
       <div className="feedItem">
