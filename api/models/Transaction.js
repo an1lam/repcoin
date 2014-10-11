@@ -4,8 +4,14 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var TransactionSchema = new Schema({
-  to        : { type: String, required: true, default: 'Someone' },
-  from      : { type: String },
+  to        : {
+    name: { type: String, required: true, default: 'Someone' },
+    id: { type: String, required: true, default: 'Someone' }
+  },
+  from      : {
+    name: { type: String },
+    id: { type: String }
+  },
   amount    : { type: Number },
   category  : { type: String, required: true }
 });
