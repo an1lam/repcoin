@@ -21,7 +21,7 @@ module.exports = function(router) {
       var user = new User({
           username    : req.body.username,
           password    : req.body.password,
-          phoneNumber : req.body.phoneNumber
+          phoneNumber : req.body.phoneNumber,
       });
       user.save( function(err) {
         if (err) {
@@ -34,7 +34,7 @@ module.exports = function(router) {
               res.send(user);
             }
           });
-        }  
+        }
       });
     });
 
@@ -61,6 +61,7 @@ module.exports = function(router) {
           user.username    = req.body.username;
           user.password    = req.body.password;
           user.phoneNumber = req.body.phoneNumber;
+          user.categories  = req.body.categories;
           user.save(function(err) {
             if (err) {
               res.send(err);
