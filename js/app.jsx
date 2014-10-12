@@ -51,10 +51,11 @@ var routes = (
     <Route name="categories" handler={CategoriesPage} />
     {/* TODO: Make this not link to itself */}
     <Route name="category" path="/category/:category" handler={CategoriesPage}/>
-    <Route name="profile" path="/users/:userId" handler={ProfilePage}/>
+    <Route name="profile" path="/user/:userId" handler={ProfilePage}/>
     <Route name="about" handler={AboutPage} />
     <Route name="contactUs" handler={ContactUsPage} />
   </Routes>
 );
+
 
 React.renderComponent(routes, document.getElementById('repsapp'));

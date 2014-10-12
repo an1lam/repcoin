@@ -80,11 +80,11 @@ module.exports = function(router, isAuthenticated) {
       });
    });
 
-// Routes that end in /transactions/users/:username/all
-  router.route('/transactions/users/:username/all')
+// Routes that end in /transactions/users/:userId/all
+  router.route('/transactions/users/:userId/all')
     // Get all of the transactions to or from a given user
     .get(function(req, res) {
-      Transaction.findByUsernameAll(req.params.username, function(err, transactions) {
+      Transaction.findByUserIdAll(req.params.userId, function(err, transactions) {
         if (err) {
           res.status(400).send(err);
         } else {
@@ -93,11 +93,11 @@ module.exports = function(router, isAuthenticated) {
       });
     });
 
-// Routes that end in /transactions/users/:username/to
+// Routes that end in /transactions/users/:userId/to
   // Get all of the transactions to a given user
-  router.route('/transactions/users/:username/to')
+  router.route('/transactions/users/:userId/to')
     .get(function(req, res) {
-      Transaction.findByUsernameAll(req.params.username, function(err, transactions) {
+      Transaction.findByUserIdAll(req.params.userId, function(err, transactions) {
         if (err) {
           res.status(400).send(err);
         } else {
@@ -106,11 +106,11 @@ module.exports = function(router, isAuthenticated) {
       });
     });
  
-// Routes that end in /transactions/users/:username/from
+// Routes that end in /transactions/users/:userId/from
   // Get all of the transactions from a given user
-  router.route('/transactions/users/:username/from')
+  router.route('/transactions/users/:userId/from')
     .get(function(req, res) {
-      Transaction.findByUsernameFrom(req.params.username, function(err, transactions) {
+      Transaction.findByUserIdFrom(req.params.userId, function(err, transactions) {
         if (err) {
           res.status(400).send(err);
         } else {
