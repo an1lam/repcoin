@@ -12,7 +12,6 @@ describe('app', function () {
   });
 
   after(function (done) {
-    mongoose.connection.db.dropDatabase();
     mongoose.disconnect();
     done();
   });

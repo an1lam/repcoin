@@ -12,7 +12,6 @@ describe('Authentication and Session Management', function () {
   });
 
   after(function (done) {
-    mongoose.connection.db.dropDatabase();
     mongoose.disconnect();
     done();
   });
