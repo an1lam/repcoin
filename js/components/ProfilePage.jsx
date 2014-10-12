@@ -19,7 +19,7 @@ var mockedUpUser = {
 
 var ProfilePage = React.createClass({
   render: function() {
-    var url = mockedUpUser.name;
+    var url = '/api/transactions/users/stephen/all';
     return (
       <div className="profilePage container-fluid">
         <div id="header">
