@@ -12,7 +12,7 @@ var $ = require('jquery');
 
 var ProfilePage = React.createClass({
   render: function() {
-    var url = '/api/transactions/users/' + this.props.params.userId + '/all';
+    var url = '/api/transactions/users/' + this.props.params.userId + '/all/public';
     return (
       <div className="profilePage container-fluid">
         <div id="header">
