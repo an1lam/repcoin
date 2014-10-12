@@ -97,7 +97,7 @@ module.exports = function(router, isAuthenticated) {
   // Get all of the transactions to a given user
   router.route('/transactions/users/:userId/to')
     .get(function(req, res) {
-      Transaction.findByUserIdAll(req.params.userId, function(err, transactions) {
+      Transaction.findByUserIdTo(req.params.userId, function(err, transactions) {
         if (err) {
           res.status(400).send(err);
         } else {
