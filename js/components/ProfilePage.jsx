@@ -20,7 +20,7 @@ var ProfilePage = React.createClass({
         </div>
         <div id="content">
           <div className="row">
-            <ProfileBox user={this.props.params.userId} />
+            <ProfileBox userId={this.props.params.userId} />
           </div>
           <div className="row">
             <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable /></div>
