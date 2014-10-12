@@ -8,7 +8,7 @@ var $ = require('jquery');
 
 var Feed = React.createClass({
   getInitialState: function() {
-    return { feedItems: [], transactions: [] };
+    return { transactions: [] };
   },
 
   componentDidMount: function() {
@@ -17,7 +17,7 @@ var Feed = React.createClass({
       url: this.props.url,
       dataType: 'json',
       success: function(transactions) {
-        this.setState({ feedItems: this.generateFeedItems(transactions) });
+        this.setState({ transactions : transactions });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -25,22 +25,14 @@ var Feed = React.createClass({
     });
   },
 
-  generateFeedItems: function(transactions) {
-    var feedItems = transactions.map(function(feedItem) {
-      return (
-        <li className="list-group-item"><FeedItem from={feedItem.from} to={feedItem.to} amount={feedItem.amount} category={feedItem.category} /></li>
-      );
-    });
-
-    return feedItems;
-  },
-
   render: function() {
     return (
       <div className="feed">
         <FeedHeader />
         <ul className="list-group">
-          { this.state.feedItems }
+          {this.state.transactions.map(function(transaction) {
+            return <li className="list-group-item"><FeedItem from={transaction.from} to={transaction.to} amount={transaction.amount} category={transaction.category} /></li>;
+          })}
         </ul>
       </div>
     );
