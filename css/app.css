@@ -97,8 +97,8 @@
 
 .profilePicture {
   float: left;
-  min-width:180px;
-  min-height:180px;
+  width:180px;
+  height:180px;
   margin:5px;
 }
 
