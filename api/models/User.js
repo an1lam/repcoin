@@ -16,6 +16,13 @@ var UserSchema = new Schema({
     crowdScore: Number,
     expertScore: Number,
   }],
+  links: [{ url: String,
+            title: String 
+         }],
+  picture: {
+    type: String,
+    default: "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
+  },
   timeStamp : {type: Date, default: Date.now },
 });
 
