@@ -17,7 +17,8 @@ var UserSchema = new Schema({
     expertScore: Number,
   }],
   links: [{ url: String,
-            title: String }],
+            title: String 
+         }],
   picture: {
     type: String,
     default: "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
