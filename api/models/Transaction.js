@@ -18,6 +18,7 @@ var TransactionSchema = new Schema({
   timeStamp : { type: Date, default: Date.now }, 
 });
 
+// Get all transactions involving a given user
 TransactionSchema.statics.findByUserIdAll = function(userId, cb) {
     return this.find( { $or: [ { "to.id" : userId }, { "from.id" : userId } ] }, cb);
 };
@@ -30,6 +31,16 @@ TransactionSchema.statics.findByUserIdFrom = function(userId, cb) {
 // Get all transactions to a given user
 TransactionSchema.statics.findByUserIdTo = function(userId, cb) {
     return this.find( { "to.id" : userId }, cb);
+};
+
+// Get all transactions involving a given user where the user is not anonymous
+TransactionSchema.statics.findByUserIdAllPublic = function(userId, cb) {
+    return this.find( { $or: [ { "to.id" : userId }, { "from.id" : userId, "from.anonymous" : false } ] }, cb);
+};
+
+// Get all transactions from a given user where the user is not anonymous
+TransactionSchema.statics.findByUserIdFromPublic = function(userId, cb) {
+    return this.find( { "from.id" : userId, "from.anonymous": false }, cb);
 };
 
 // Get all transactions for a given category

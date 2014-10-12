@@ -26,6 +26,7 @@ var Feed = React.createClass({
   },
 
   render: function() {
+      console.log(this.state.transactions);
     return (
       <div className="feed">
         <FeedHeader />
