@@ -42,6 +42,7 @@ describe('app', function () {
         .send(category)
         .expect(200, done)
     });
+
     it('should return all of the categories', function (done) {
       var categories = [];
       request(app)

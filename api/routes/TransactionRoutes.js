@@ -80,11 +80,37 @@ module.exports = function(router, isAuthenticated) {
       });
    });
 
-// Routes that end in /transactions/users/:username/to
+// Routes that end in /transactions/users/:username/all
   router.route('/transactions/users/:username/all')
     // Get all of the transactions to or from a given user
     .get(function(req, res) {
       Transaction.findByUsernameAll(req.params.username, function(err, transactions) {
+        if (err) {
+          res.status(400).send(err);
+        } else {
+          res.send(transactions);
+        }
+      });
+    });
+
+// Routes that end in /transactions/users/:username/to
+  // Get all of the transactions to a given user
+  router.route('/transactions/users/:username/to')
+    .get(function(req, res) {
+      Transaction.findByUsernameAll(req.params.username, function(err, transactions) {
+        if (err) {
+          res.status(400).send(err);
+        } else {
+          res.send(transactions);
+        }
+      });
+    });
+ 
+// Routes that end in /transactions/users/:username/from
+  // Get all of the transactions from a given user
+  router.route('/transactions/users/:username/from')
+    .get(function(req, res) {
+      Transaction.findByUsernameFrom(req.params.username, function(err, transactions) {
         if (err) {
           res.status(400).send(err);
         } else {
