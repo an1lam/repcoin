@@ -18,8 +18,23 @@ var TransactionSchema = new Schema({
   timeStamp : { type: Date, default: Date.now }, 
 });
 
-TransactionSchema.statics.findByUsernameAll = function(username, cb) {
-    return this.find( { $or: [ { to.name : username }, { from.name: username } ] }, cb);
+TransactionSchema.statics.findByUserIdAll = function(userId, cb) {
+    return this.find( { $or: [ { "to.id" : userId }, { "from.id" : userId } ] }, cb);
+};
+
+// Get all transactions from a given user
+TransactionSchema.statics.findByUserIdFrom = function(userId, cb) {
+    return this.find( { "from.id" : userId }, cb);
+};
+
+// Get all transactions to a given user
+TransactionSchema.statics.findByUserIdTo = function(userId, cb) {
+    return this.find( { "to.id" : userId }, cb);
+};
+
+// Get all transactions for a given category
+TransactionSchema.statics.findByCategory = function(category, cb) {
+  return this.find( { category : category }, cb);
 };
 
 module.exports = mongoose.model('Transaction', TransactionSchema);

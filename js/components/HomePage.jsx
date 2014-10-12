@@ -14,7 +14,7 @@ var HomePage = React.createClass({
     return (
       <div className="homePage">
         <Toolbar />
-        <Feed />
+        <Feed url='/api/transactions'/>
         <CategoriesTable />
         <Footer />
       </div>

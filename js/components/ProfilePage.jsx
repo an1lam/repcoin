@@ -19,6 +19,7 @@ var mockedUpUser = {
 
 var ProfilePage = React.createClass({
   render: function() {
+    var url = '/api/transactions/users/' + this.props.params.userId + '/all';
     return (
       <div className="profilePage container-fluid">
         <div id="header">
@@ -32,7 +33,7 @@ var ProfilePage = React.createClass({
             <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable /></div>
             <div className="col-md-7 profilePageFeed">
               <div className="profileDonationBox"><DonationBox user={mockedUpUser} /></div>  
-            <Feed />
+            <Feed url={url} />
             </div>
           </div>
           <div className="row">      
