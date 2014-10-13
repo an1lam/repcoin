@@ -10,7 +10,7 @@ var FeedItem = React.createClass({
     var from;
     if (!this.props.from.anonymous) {
       from = <Link className="fromName" to="profile" params={{userId: this.props.from.id}}>
-                   {this.props.from.name}</Link>
+                   {this.props.from.name}</Link>;
     } else {
       from = <p className="fromName">Someone</p>;
     }

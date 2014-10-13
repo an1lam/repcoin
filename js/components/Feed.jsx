@@ -12,9 +12,13 @@ var Feed = React.createClass({
   },
 
   componentDidMount: function() {
-    // TODO: Pagination?
+    this.setTransactions(this.props.url); 
+  },
+
+  setTransactions: function(url) {
+    // TODO : paginations
     $.ajax({
-      url: this.props.url,
+      url: url,
       dataType: 'json',
       success: function(transactions) {
         this.setState({ transactions : transactions });
@@ -23,6 +27,10 @@ var Feed = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    this.setTransactions(newProps.url);
   },
 
   render: function() {
