@@ -9,14 +9,15 @@ var FeedItem = React.createClass({
   render: function() {
     var from;
     if (!this.props.from.anonymous) {
-      from = <p><Link className="fromName" to="profile" params={{userId: this.props.from.id}}>
-                   {this.props.from.name}</Link><p>gave</p></p>;
+      from = <Link className="fromName" to="profile" params={{userId: this.props.from.id}}>
+                   {this.props.from.name}</Link>
     } else {
-      from = <p className="fromName">Someone gave</p>;
+      from = <p className="fromName">Someone</p>;
     }
     return (
       <div className="feedItem">
         {from}
+        <p className="gave">gave</p>
         <Link className="toName" to="profile" params={{userId: this.props.to.id}}>{this.props.to.name}</Link>
       	<p className="amount">{this.props.amount}</p>
       	<p className="repsFor">reps for</p>
