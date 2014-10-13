@@ -11,8 +11,16 @@ var ProfileBox = React.createClass({
   },
 
   componentDidMount: function() {
+    this.setUser('/api/users/' + this.props.userId);
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    this.setUser('/api/users/' + newProps.userId);
+  },
+
+  setUser: function(url) {
     $.ajax({
-      url: '/api/users/' + this.props.userId,
+      url: url,
       success: function(user) {
         this.setState({ user: user });
       }.bind(this),
@@ -21,6 +29,7 @@ var ProfileBox = React.createClass({
       }.bind(this)
     });
   },
+
   render: function() {
     var safeLinks = this.state.user.links ? this.state.user.links : [];
     var links = safeLinks.map(function(link) {
