@@ -4,7 +4,7 @@ var app = require('../server.js');
 var mongoose = require('mongoose');
 var db = require('../config/db');
 
-describe('Authentication and Session Management', function () {
+describe('User Routes and Authentication', function () {
   before (function (done) {
     mongoose.connect(db.test_url);
     mongoose.connection.db.dropDatabase();
@@ -12,8 +12,7 @@ describe('Authentication and Session Management', function () {
   });
 
   after(function (done) {
-    mongoose.disconnect();
-    done();
+    mongoose.disconnect(done);
   });
 
   describe('authentication routes', function() {

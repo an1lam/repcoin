@@ -8,7 +8,7 @@ var request = supertest;
 
 describe('app', function () {
   before (function (done) {
-    if (!mongoose.connection) mongoose.connect(db.test_url);
+    mongoose.connect(db.test_url);
     mongoose.connection.db.dropDatabase();
     app.use(function(req, res, next) {
       req.user = {
@@ -23,8 +23,7 @@ describe('app', function () {
   });
 
   after(function (done) {
-    mongoose.disconnect();
-    done();
+    mongoose.disconnect(done());
   });
 
   describe('Categories Routes', function () {
