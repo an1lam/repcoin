@@ -12,8 +12,7 @@ describe('app', function () {
   });
 
   after(function (done) {
-    mongoose.disconnect();
-    done();
+    mongoose.disconnect(done);
   });
 
   it('should response to a get request to home', function (done) {
