@@ -35,5 +35,10 @@
     "reactify": "~0.14.0",
     "should": "^4.0.4",
     "supertest": "^0.14.0"
+  },
+  "jshintConfig": {
+    "node": "true",
+    "browser": "true",
+    "newcap": "false"
   }
 }

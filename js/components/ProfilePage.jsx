@@ -25,7 +25,7 @@ var ProfilePage = React.createClass({
           <div className="row">
             <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable /></div>
             <div className="col-md-7 profilePageFeed">
-              <div className="profileDonationBox"><DonationBox user={this.props.params.userId} /></div>
+              <div className="profileDonationBox"><DonationBox userId={this.props.params.userId} /></div>
             <Feed url={url} />
             </div>
           </div>
