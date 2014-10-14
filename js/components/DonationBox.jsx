@@ -7,7 +7,7 @@ var $ = require('jquery');
 var DonationBox = React.createClass({
   getInitialState: function() {
     return {
-      error: "",
+      donationError: "",
       user: {
         categories: []
       }
