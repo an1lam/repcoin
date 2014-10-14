@@ -51,11 +51,12 @@ var DonationBox = React.createClass({
       console.log(category);
     }
   },
+
   handleSubmit: function(event) {
     event.preventDefault();
     var reps = parseInt(this.refs.reps.getDOMNode().value);
     var categoryName = this.refs.category.getDOMNode().value;
-    validateDonationAmountAndCreateTransaction(categoryName, reps);
+    this.validateDonationAmountAndCreateTransaction(categoryName, reps);
     this.refs.reps.getDOMNode().value = 0;
   },
 
