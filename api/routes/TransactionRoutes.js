@@ -19,6 +19,18 @@ module.exports = function(router, isAuthenticated) {
 
     // Create a new transaction
     .post(function(req, res) {
+
+      // Check that there is a user logged in
+      if (!req.user) {
+        res.status(400).send("No user logged in");
+        return;
+      }
+
+      // Check that the user is the same as from
+      if (req.user._id != req.body.from.id) {
+        res.status(400).send("Incorrect user");
+        return;
+      }
       var transaction = new Transaction({
         to          : req.body.to,
         from        : req.body.from,
