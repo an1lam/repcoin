@@ -8,7 +8,7 @@ var $ = require('jquery');
 
 var Feed = React.createClass({
   getInitialState: function() {
-    return { transactions: [], userId: "", filter: "all" };
+    return { transactions: [], filter: "all" };
   },
 
   componentDidMount: function() {
@@ -28,7 +28,7 @@ var Feed = React.createClass({
       url: url,
       dataType: 'json',
       success: function(transactions) {
-        this.setState({ transactions : transactions, filter: filter, userId: userId });
+        this.setState({ transactions : transactions, filter: filter });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -42,7 +42,7 @@ var Feed = React.createClass({
 
   handleClick: function(newFilter) {
     this.setState({ filter: newFilter });
-    this.setTransactions(this.state.userId, newFilter);
+    this.setTransactions(this.props.userId, newFilter);
   },
 
   render: function() {

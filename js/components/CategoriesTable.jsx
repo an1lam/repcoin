@@ -25,7 +25,6 @@ var CategoriesTable = React.createClass({
     $.ajax({
       url: '/api/users/' + userId,
       success: function(user) {
-        console.log(userId);
         this.setState({ categories: user.categories || [] });
       }.bind(this),
       error: function(xhr, status, err) {
