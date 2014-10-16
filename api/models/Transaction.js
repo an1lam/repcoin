@@ -43,6 +43,12 @@ TransactionSchema.statics.findByUserIdFromPublic = function(userId, cb) {
     return this.find( { "from.id" : userId, "from.anonymous": false }, cb);
 };
 
+// Get all public transactions between two users
+TransactionSchema.statics.findByUserIdUsPublic = function(userId1, userId2, cb) {
+    return this.find( { $or: [ { "from.id" : userId1, "from.anonymous": false, "to.id" : userId2 },
+      { "from.id": userId2, "from.anonymous": false, "to.id": userId1 } ] }, cb);
+};
+
 // Get all transactions for a given category
 TransactionSchema.statics.findByCategory = function(category, cb) {
   return this.find( { category : category }, cb);

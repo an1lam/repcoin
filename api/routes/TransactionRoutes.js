@@ -118,7 +118,7 @@ module.exports = function(router, isAuthenticated) {
 
 
   // Get all of the transactions to a given user
-  router.route('/transactions/users/:userId/to')
+  router.route('/transactions/users/:userId/to/public')
     .get(function(req, res) {
       Transaction.findByUserIdTo(req.params.userId, function(err, transactions) {
         if (err) {
@@ -145,6 +145,18 @@ module.exports = function(router, isAuthenticated) {
   router.route('/transactions/users/:userId/from/public')
     .get(function(req, res) {
       Transaction.findByUserIdFromPublic(req.params.userId, function(err, transactions) {
+        if (err) {
+          res.status(400).send(err);
+        } else {
+          res.send(transactions);
+        }
+      });
+    });
+ 
+  // Get all of the public transactions between users
+  router.route('/transactions/users/:userId/us/public')
+    .get(function(req, res) {
+      Transaction.findByUserIdUsPublic(req.params.userId, req.user._id, function(err, transactions) {
         if (err) {
           res.status(400).send(err);
         } else {

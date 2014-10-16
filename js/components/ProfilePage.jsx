@@ -12,7 +12,7 @@ var $ = require('jquery');
 
 var ProfilePage = React.createClass({
   render: function() {
-    var url = '/api/transactions/users/' + this.props.params.userId + '/all/public';
+    var filter = "all";
     return (
       <div className="profilePage container-fluid">
         <div id="header">
@@ -26,7 +26,7 @@ var ProfilePage = React.createClass({
             <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable userId={this.props.params.userId} /></div>
             <div className="col-md-7 profilePageFeed">
               <div className="profileDonationBox"><DonationBox userId={this.props.params.userId} /></div>
-            <Feed url={url} />
+            <Feed userId={this.props.params.userId} filter={filter} />
             </div>
           </div>
           <div className="row">
