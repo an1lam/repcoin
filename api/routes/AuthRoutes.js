@@ -15,6 +15,12 @@ module.exports = function(router, passport) {
       res.send(req.isAuthenticated());
     });
 
+  // Get the current user. Null if no user logged in
+  router.route('/user')
+    .get(function(req, res) {
+      res.send(req.user);
+    });
+
   router.route('/login')
     .post(passport.authenticate('local'), function(req, res) {
        var user = req.user || {};
