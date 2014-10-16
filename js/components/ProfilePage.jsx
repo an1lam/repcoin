@@ -9,8 +9,10 @@ var Feed = require('./Feed.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
 var DonationBox = require('./DonationBox.jsx');
 var $ = require('jquery');
+var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 
 var ProfilePage = React.createClass({
+  mixins: [AuthenticatedRoute],
   render: function() {
     var url = '/api/transactions/users/' + this.props.params.userId + '/all/public';
     return (
