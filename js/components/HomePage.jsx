@@ -14,8 +14,7 @@ var HomePage = React.createClass({
     return (
       <div className="homePage">
         <Toolbar />
-        <Feed />
-        <CategoriesTable />
+        <div className="col-md-8 col-md-offset-2"><Feed /></div>
         <Footer />
       </div>
     );
