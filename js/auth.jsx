@@ -58,6 +58,8 @@ var auth = {
   },
 
   loggedIn: function(cb) {
+    // TODO: Potentially also check local storage for an existing currentUser
+    // Need to look into security concerns
     return $.ajax({
       url: 'api/loggedIn',
       type: 'GET',
