@@ -13,6 +13,7 @@ var auth = {
         password: password
       },
       success: function(data) {
+        // Add token to localStorage that just stores the login response
         cb(true);
         return true;
       },
@@ -24,7 +25,41 @@ var auth = {
     });
   },
 
+  getCurrentUser: function(cb) {
+    function getCurrentUserLocal(cb) {
+      if (typeof window.localStorage === "undefined") {
+        return false;
+      }
+      var currentUser = JSON.parse(window.localStorage.getItem('currentUser'));
+      if (!currentUser) {
+        return false;
+      } else {
+        cb(currentUser);
+        return true;
+      }
+    }
+
+    function getCurrentUserRemote(cb) {
+      $.ajax({
+        url:  '/api/user',
+        success: function(user) {
+          window.localStorage.setItem('currentUser', user);
+          cb(JSON.parse(user));
+        },
+        error: function(xhr, status, err) {
+          console.error(this.props.userId, status, err.toString());
+          cb(null);
+        }
+      });
+    }
+    if (!getCurrentUserLocal(cb)) {
+      getCurrentUserRemote(cb);
+    }
+  },
+
   loggedIn: function(cb) {
+    // TODO: Potentially also check local storage for an existing currentUser
+    // Need to look into security concerns
     return $.ajax({
       url: 'api/loggedIn',
       type: 'GET',
