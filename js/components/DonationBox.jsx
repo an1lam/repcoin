@@ -3,7 +3,6 @@
 
 var React = require('react');
 var $ = require('jquery');
-var auth = require('../auth.jsx');
 
 var DonationBox = React.createClass({
   getInitialState: function() {
@@ -16,15 +15,23 @@ var DonationBox = React.createClass({
   },
 
   componentDidMount: function() {
-    auth.getCurrentUser.call(this, this.setUser);
+    this.setUser('/api/users/' + this.props.userId);
   },
 
   componentWillReceiveProps: function(newProps) {
-    auth.getCurrentUser.call(this, this.setUser);
+    this.setUser('/api/users/' + newProps.userId);
   },
 
-  setUser: function(user) {
-    this.setState({user: user});
+  setUser: function(url) {
+    $.ajax({
+      url: url,
+      success: function(user) {
+        this.setState({ user: user });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.userId, status, err.toString());
+      }.bind(this)
+    });
   },
 
   validateTransactions: function(categoryName, reps) {
