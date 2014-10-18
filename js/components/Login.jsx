@@ -9,6 +9,7 @@ var auth = require('../auth.jsx');
 var TestMixin = {
 
 };
+
 var Login = React.createClass({
   getInitialState: function() {
     return {
@@ -19,8 +20,8 @@ var Login = React.createClass({
   handleSubmit: function(event) {
     event.preventDefault();
     var email = this.refs.email.getDOMNode().value;
-    var pass = this.refs.pass.getDOMNode().value;
-    auth.logIn(email, pass, function(loggedIn) {
+    var password = this.refs.password.getDOMNode().value;
+    auth.logIn(email, password, function(loggedIn) {
       if (loggedIn) {
         Router.transitionTo('/home');
       }
@@ -31,15 +32,19 @@ var Login = React.createClass({
   },
 
   render: function() {
-    var errors = this.state.error ? <p>Bad Login Information</p> : '';
+    var errors = this.state.error ? <div className="alert alert-danger" role="alert"><strong>Invalid login credentials.</strong></div> : '';
     return (
-      <div className="login col-md-2 col-md-offset-5">
+      <div className="col-md-2 col-md-offset-10">
         <form onSubmit={this.handleSubmit}>
           <input type="text" ref="email" className="form-control" placeholder="Username"></input>
-          <input type="password" ref="pass" className="form-control" placeholder="Password"></input>
-          <button type="submit" className="loginSubmit btn btn-default">Login</button>
+          <div className="input-group">
+            <input type="password" ref="password" className="form-control" placeholder="Password"></input>
+            <span className="input-group-btn">
+              <button type="submit" className="btn btn-default">Login</button>
+            </span>
+          </div>
+          {errors}
         </form>
-        {errors}
       </div>
     );
   }
