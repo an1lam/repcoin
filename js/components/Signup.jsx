@@ -6,10 +6,7 @@ var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
 var Router = require('react-router');
 var auth = require('../auth.jsx');
 
-var TestMixin = {
-
-};
-var Login = React.createClass({
+var Signup = React.createClass({
   getInitialState: function() {
     return {
       error: false,
@@ -18,7 +15,9 @@ var Login = React.createClass({
 
   handleSubmit: function(event) {
     event.preventDefault();
+    var username = this.refs.username.getDOMNode().value;
     var email = this.refs.email.getDOMNode().value;
+    var phoneNumber = this.refs.phoneNumber.getDOMNode().value;
     var pass = this.refs.pass.getDOMNode().value;
     auth.logIn(email, pass, function(loggedIn) {
       if (loggedIn) {
@@ -31,18 +30,18 @@ var Login = React.createClass({
   },
 
   render: function() {
-    var errors = this.state.error ? <p>Bad Login Information</p> : '';
     return (
-      <div className="login col-md-2 col-md-offset-5">
+      <div className="signup">
         <form onSubmit={this.handleSubmit}>
-          <input type="text" ref="email" className="form-control" placeholder="Username"></input>
+          <input type="text" ref="username" className="form-control" placeholder="Username"></input>
+          <input type="text" ref="email" className="form-control" placeholder="Email"></input>
+          <input type="text" ref="phoneNumber" className="form-control" placeholder="Phone Number"></input>
           <input type="password" ref="pass" className="form-control" placeholder="Password"></input>
-          <button type="submit" className="loginSubmit btn btn-default">Login</button>
+          <button type="submit" className="loginSubmit btn btn-default">Sign Up</button>
         </form>
-        {errors}
       </div>
     );
   }
 });
 
-module.exports = Login;
+module.exports = Signup;

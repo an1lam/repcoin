@@ -73,15 +73,17 @@
   text-align: center;
 }
 
-.loginControl {
-  width:auto;
-  margin:0 auto;
-}
-
 .loginSubmit {
   margin-top:20px;
   margin-bottom:50px;
 }
+
+.toggle {
+  margin-top:20px;
+  margin-bottom:15px;
+  float:right;
+}
+
 
 /* Toolbar Items /////////////////////////////////// */
 .toolbarHomeLink {
