@@ -6,8 +6,11 @@ var React = require('react');
 var Feed = require('./feed.jsx');
 var Footer = require('./footer.jsx');
 var Toolbar = require('./toolbar.jsx');
+var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 
 var CategoryPage = React.createClass({
+  mixins: [AuthenticatedRoute],
+
   getInitialState: function() {
     return {};
   },
