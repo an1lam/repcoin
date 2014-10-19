@@ -2,7 +2,7 @@
   "_id": ObjectId("543acfa788257fca61ff521b"),
   "username": "testUser1",
   "password": "$2a$10$OP3vz4UeE8ZbNHpoxMBABueDVFZw66D273W1beJgqIdAtJiTUHZpW",
-  "phoneNumber": "9144200200",
+  "phoneNumber": "9144200201",
   "categories": [{
       "name": "Testing",
       "id": ObjectId("5434171b7f9bea5969085da1"),
