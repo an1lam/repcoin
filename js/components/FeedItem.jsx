@@ -21,7 +21,7 @@ var FeedItem = React.createClass({
         <Link className="toName" to="profile" params={{userId: this.props.to.id}}>{this.props.to.name}</Link>
       	<p className="amount">{this.props.amount}</p>
       	<p className="repsFor">reps for</p>
-      	<p className="category">{this.props.category}</p>
+      	<Link className="category" to="category" params={{category: this.props.category}}>{this.props.category}</Link>
       	<p className="period">.</p>
       </div>
     );
