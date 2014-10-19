@@ -23,7 +23,7 @@ var Feed = React.createClass({
     if (!userId && !category) {
       url = '/api/transactions';
     } else if (category) {
-      url = '/api/transactions/categories/' + category + '/public';
+      url = '/api/transactions/categories/' + category;
     } else if (userId) {
       url = '/api/transactions/users/' + userId + '/' + filter + '/public';
     }

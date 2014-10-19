@@ -50,8 +50,8 @@ TransactionSchema.statics.findByUserIdUsPublic = function(userId1, userId2, cb) 
 };
 
 // Get all transactions for a given category
-TransactionSchema.statics.findByCategoryPublic = function(category, cb) {
-  return this.find( { category : category, "from.anonymous": false }, cb);
+TransactionSchema.statics.findByCategory = function(category, cb) {
+  return this.find( { category : category }, cb);
 };
 
 module.exports = mongoose.model('Transaction', TransactionSchema);
