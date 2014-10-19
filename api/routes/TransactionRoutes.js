@@ -164,4 +164,16 @@ module.exports = function(router, isAuthenticated) {
         }
       });
     });
+
+  // Get all of the public transactions for a given category
+  router.route('/transactions/categories/:categoryName/public')
+    .get(function(req, res) {
+      Transaction.findByCategoryPublic(req.params.categoryName, function(err, transactions) {
+        if (err) {
+          res.status(400).send(err);
+        } else {
+          res.send(transactions);
+        }
+      });
+    });
 };

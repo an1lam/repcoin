@@ -12,15 +12,19 @@ var Feed = React.createClass({
   },
 
   componentDidMount: function() {
-    this.setTransactions(this.props.userId, this.props.filter); 
+    this.setTransactions(this.props.userId, this.props.category, this.props.filter); 
   },
 
-  setTransactions: function(userId, filter) {
+  setTransactions: function(userId, category, filter) {
     // TODO : paginations
     var url;
-    if (!userId) {
+
+    // TODO : Come up with a better flow for determing feed data
+    if (!userId && !category) {
       url = '/api/transactions';
-    } else {
+    } else if (category) {
+      url = '/api/transactions/categories/' + category + '/public';
+    } else if (userId) {
       url = '/api/transactions/users/' + userId + '/' + filter + '/public';
     }
 
@@ -37,12 +41,12 @@ var Feed = React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setTransactions(newProps.userId, newProps.filter);
+    this.setTransactions(newProps.userId, newProps.category, newProps.filter);
   },
 
   handleClick: function(newFilter) {
     this.setState({ filter: newFilter });
-    this.setTransactions(this.props.userId, newFilter);
+    this.setTransactions(this.props.userId, this.props.category, newFilter);
   },
 
   render: function() {

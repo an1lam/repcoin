@@ -5,7 +5,6 @@ var $ = require('jquery');
 var React = require('react');
 var CategoriesList = require('./CategoriesList.jsx');
 
-
 var CategoriesPage = React.createClass({
   getInitialState: function() {
     return { categories : [] };
