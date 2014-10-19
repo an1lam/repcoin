@@ -14,7 +14,7 @@
   "links": [{
     "url": "https://www.google.com",
     "title": "Google"
-   }],
+  }],
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "timeStamp": {"$date": 1413480832}
 },
@@ -45,12 +45,12 @@
   "phoneNumber": "0000000000",
   "timeStamp": "2014-10-11T21:58:58.692Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-   "links": [{
+  "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
    }],
   "categories": [{
-      "name": "Raggae",
+      "name": "Reggae",
       "id": ObjectId("6434171b7f9bea5969085da1"),
       "directScore": 101,
       "crowdScore": 1201,
@@ -70,7 +70,7 @@
     "title": "Facebook"
    }],
    "categories": [{
-      "name": "Raggae",
+      "name": "Reggae",
       "id": ObjectId("6434171b7f9bea5969085da1"),
       "directScore": 101,
       "crowdScore": 1201,
@@ -207,15 +207,15 @@
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
-   }],
- "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-   "categories": [{
-      "name": "Blues",
-      "id": ObjectId("5424171b7f9bea5969085da1"),
-      "directScore": 101,
-      "crowdScore": 1201,
-      "expertScore": 101,
-      "reps": 51
+  }],
+  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
+  "categories": [{
+    "name": "Blues",
+    "id": ObjectId("5424171b7f9bea5969085da1"),
+    "directScore": 101,
+    "crowdScore": 1201,
+    "expertScore": 101,
+    "reps": 51
   }]
 },
 {
@@ -228,14 +228,14 @@
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
-   }],
-    "categories": [{
-      "name": "Blues",
-      "id": ObjectId("5424171b7f9bea5969085da1"),
-      "directScore": 101,
-      "crowdScore": 1201,
-      "expertScore": 101,
-      "reps": 51
+  }],
+  "categories": [{
+    "name": "Blues",
+    "id": ObjectId("5424171b7f9bea5969085da1"),
+    "directScore": 101,
+    "crowdScore": 1201,
+    "expertScore": 101,
+    "reps": 51
   }]
 },
 {

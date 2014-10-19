@@ -22,8 +22,8 @@
     "name": "stephen",
     "id": ObjectId("5439a82b1e25afaf21b2adb4")
   },
- "amount": 11,
-  "category": "Raggae",
+  "amount": 11,
+  "category": "Reggae",
   "timeStamp": {"$date": 1413480939}
 },
 {
@@ -37,7 +37,7 @@
     "id": ObjectId("5439a8221e25afaf21b2adb3")
   },
   "amount": 20,
-  "category": "Raggae",
+  "category": "Reggae",
   "timeStamp": {"$date": 1413480939}
 },
 {

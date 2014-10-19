@@ -3,7 +3,7 @@
 #
 # Writes data from the mock json files in this directory to reps_development
 # To destroy existing data in reps_development, pass --destroy as an argument
-# ex: ./populatTestDB.sh --destroy
+# ex: ./populateTestDB.sh --destroy
 
 destroy=$1
 if [ "$destroy" = "--destroy" ];
