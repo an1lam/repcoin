@@ -11,4 +11,74 @@
   "amount": 10,
   "category": "Testing",
   "timeStamp": {"$date": 1413480939}
+},
+{
+  "to": {
+    "name": "matthew",
+    "id": ObjectId("5439a8221e25afaf21b2adb3")
+  },
+  "from": {
+    "anonymous": "false",
+    "name": "stephen",
+    "id": ObjectId("5439a82b1e25afaf21b2adb4")
+  },
+ "amount": 11,
+  "category": "Raggae",
+  "timeStamp": {"$date": 1413480939}
+},
+{
+  "to": {
+    "name": "stephen",
+    "id": ObjectId("5439a82b1e25afaf21b2adb4")
+  },
+  "from": {
+    "anonymous": "false",
+    "name": "matthew",
+    "id": ObjectId("5439a8221e25afaf21b2adb3")
+  },
+  "amount": 20,
+  "category": "Raggae",
+  "timeStamp": {"$date": 1413480939}
+},
+{
+  "to": {
+    "name": "tester",
+    "id": ObjectId("543a252acb4b5e50277998d6")
+  },
+  "from": {
+    "anonymous": "false",
+    "name": "robert",
+    "id": ObjectId("543a2533cb4b5e50277998d7")
+  },
+  "amount": 15,
+  "category": "Graffiti",
+  "timeStamp": {"$date": 1413480939}
+},
+{
+  "to": {
+    "name": "robert",
+    "id": ObjectId("543a2533cb4b5e50277998d7")
+  },
+  "from": {
+    "anonymous": "false",
+    "name": "tester",
+    "id": ObjectId("543a252acb4b5e50277998d6")
+  },
+  "amount": 5,
+  "category": "Graffiti",
+  "timeStamp": {"$date": 1413480939}
+},
+{
+  "to": {
+    "name": "john",
+    "id": ObjectId("543a2543cb4b5e50277998d9")
+  },
+  "from": {
+    "anonymous": "true",
+    "name": "sarah",
+    "id": ObjectId("543a253bcb4b5e50277998d8")
+  },
+  "amount": 100,
+  "category": "Sculpture",
+  "timeStamp": {"$date": 1413480939}
 }

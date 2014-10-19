@@ -45,8 +45,18 @@
   "phoneNumber": "0000000000",
   "timeStamp": "2014-10-11T21:58:58.692Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+   "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+  "categories": [{
+      "name": "Raggae",
+      "id": ObjectId("6434171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
   "_id": ObjectId("5439a82b1e25afaf21b2adb4"),
@@ -55,18 +65,38 @@
   "phoneNumber": "1111111111",
   "timeStamp": "2014-10-11T21:59:07.496Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+   "categories": [{
+      "name": "Raggae",
+      "id": ObjectId("6434171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
-  "_id": Object("543a252acb4b5e50277998d6"),
+  "_id": ObjectId("543a252acb4b5e50277998d6"),
   "username": "tester",
   "password": "$2a$10$LoPGjDlybblbRa8LVwHmsu9IErah6up78IyAhJQFEGvsoXN9Qmz7e",
   "phoneNumber": "1111111112",
   "timeStamp": "2014-10-12T06:52:26.059Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+   "categories": [{
+      "name": "Graffiti",
+      "id": ObjectId("3434171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
   "_id": ObjectId("543a2533cb4b5e50277998d7"),
@@ -75,8 +105,18 @@
   "phoneNumber": "3333333333",
   "timeStamp": "2014-10-12T06:52:35.722Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+   "categories": [{
+      "name": "Graffiti",
+      "id": ObjectId("3434171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
   "_id": ObjectId("543a253bcb4b5e50277998d8"),
@@ -85,8 +125,18 @@
   "phoneNumber": "4444444444",
   "timeStamp": "2014-10-12T06:52:43.105Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+   "categories": [{
+      "name": "Sculpture",
+      "id": ObjectId("2434171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
   "_id": ObjectId("543a2543cb4b5e50277998d9"),
@@ -95,8 +145,18 @@
   "phoneNumber": "5555555555",
   "timeStamp": "2014-10-12T06:52:51.775Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+   "categories": [{
+      "name": "Sculpture",
+      "id": ObjectId("2434171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
   "_id": ObjectId("543a254dcb4b5e50277998da"),
@@ -105,8 +165,18 @@
   "phoneNumber": "6666666666",
   "timeStamp": "2014-10-12T06:53:01.535Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+   "categories": [{
+      "name": "Hip Hope Dance",
+      "id": ObjectId("1434171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
   "_id": ObjectId("543a2555cb4b5e50277998db"),
@@ -115,8 +185,18 @@
   "phoneNumber": "7777777777",
   "timeStamp": "2014-10-12T06:53:09.540Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+   "categories": [{
+      "name": "Hip Hop Dance",
+      "id": ObjectId("1434171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
   "_id": ObjectId("543a255ccb4b5e50277998dc"),
@@ -124,9 +204,19 @@
   "password": "$2a$10$TyLFcYhQv/7espcOmc1YBejdrHrPP9VeYtlARp5AAX1GBlR6zfBQS",
   "phoneNumber": "8888888888",
   "timeStamp": "2014-10-12T06:53:16.300Z",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+ "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
+   "categories": [{
+      "name": "Blues",
+      "id": ObjectId("5424171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
   "_id": ObjectId("54428d1418c74ed07ec3e773"),
@@ -135,8 +225,18 @@
   "phoneNumber": "9999999999",
   "timeStamp": "2014-10-18T15:53:56.176Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+    "categories": [{
+      "name": "Blues",
+      "id": ObjectId("5424171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
   "_id": ObjectId("54428de218c74ed07ec3e774"),
@@ -145,8 +245,18 @@
   "phoneNumber": "foobar",
   "timeStamp": "2014-10-18T15:57:22.133Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+    "categories": [{
+      "name": "Blues",
+      "id": ObjectId("5424171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
   "_id": ObjectId("54428e2e18c74ed07ec3e776"),
@@ -155,16 +265,36 @@
   "phoneNumber": "michael",
   "timeStamp": "2014-10-18T15:58:38.658Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+    "categories": [{
+      "name": "Sculpture",
+      "id": ObjectId("2434171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 },
 {
-  "_id": ObjectId"54428e5618c74ed07ec3e777"),
+  "_id": ObjectId("54428e5618c74ed07ec3e777"),
   "username": "peter",
   "password": "$2a$10$LUNrnh5Rkyh0Igw3oO6tsu.f.HSuglkTDQRkvAecQFGpP1We20Of.",
   "phoneNumber": "peter",
   "timeStamp": "2014-10-18T15:59:18.982Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "links": [],
-  "categories": []
+  "links": [{
+    "url": "https://www.facebook.com",
+    "title": "Facebook"
+   }],
+     "categories": [{
+      "name": "Sculpture",
+      "id": ObjectId("2434171b7f9bea5969085da1"),
+      "directScore": 101,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 51
+  }]
 }
