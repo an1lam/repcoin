@@ -4,9 +4,11 @@
 var $ = require('jquery');
 var React = require('react');
 var CategoriesList = require('./CategoriesList.jsx');
-
+var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 
 var CategoriesPage = React.createClass({
+  mixins: [AuthenticatedRoute],
+  
   getInitialState: function() {
     return { categories : [] };
   },
