@@ -98,6 +98,21 @@
 }
 
 /* Profile Page Items ////////////////////////////// */
+.linksBox h4 {
+  display:inline-block;
+}
+
+.editBox {
+  float:right;
+}
+
+.linksBox .list-group-item {
+  border-left: none;
+  border-right: none;
+  border-radius: 0px;
+  padding-left:0px;
+}
+
 .profileBox {
   background-color: white;
   overflow: hidden;
@@ -200,4 +215,22 @@ html, body {
 
 .categoriesItem {
   border-radius:4px;
+}
+
+/* LinkInput ////////////////////// */
+.linkInput .form-control {
+  min-width:0px;
+  width:auto;
+  display:inline;
+  margin-bottom:5px;
+}
+
+.linkInput button {
+  margin-right:5px;
+  margin-bottom:5px;
+  margin-top:5px;
+}
+
+.linkInput p {
+  display:inline;
 }
