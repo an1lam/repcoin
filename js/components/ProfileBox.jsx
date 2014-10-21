@@ -3,6 +3,7 @@
 
 var React = require('react');
 var LinksBox = require('./LinksBox.jsx');
+var PubSub = require('pubsub-js');
 var $ = require('jquery');
 
 var ProfileBox = React.createClass({
@@ -10,16 +11,17 @@ var ProfileBox = React.createClass({
     return { user: {} };
   },
 
+  updateUser: function() {
+    this.setUser('/api/users/' + this.props.userId);
+  },
+
   componentDidMount: function() {
+    PubSub.subscribe('profileupdate', this.updateUser);
     this.setUser('/api/users/' + this.props.userId);
   },
 
   componentWillReceiveProps: function(newProps) {
     this.setUser('/api/users/' + newProps.userId);
-  },
-
-  updateUser: function() {
-    this.setUser('/api/users/' + this.props.userId);
   },
 
   setUser: function(url) {

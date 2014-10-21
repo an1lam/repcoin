@@ -2,6 +2,7 @@
 "use strict"; 
 var React = require('react');
 var auth = require('../auth.jsx');
+var PubSub = require('pubsub-js');
 var $ = require('jquery');
 
 var LinkInput = React.createClass({
@@ -29,7 +30,8 @@ var LinkInput = React.createClass({
         auth.storeCurrentUser(user, function(user) {
           return user;
         });
-        this.propogateReset();
+        PubSub.publish('profileupdate');
+        this.propagateReset();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
@@ -45,7 +47,7 @@ var LinkInput = React.createClass({
   render: function() {
     return(
       <div className="linkInput">
-        <form onSubmit={this.handleSubmit} onReset={this.propogateReset}>
+        <form onSubmit={this.handleSubmit} onReset={this.propagateReset}>
           <div>
             <input type="text" ref="description" className="form-control" placeholder="Description"></input>
             <p> : </p>
