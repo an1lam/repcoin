@@ -33,12 +33,12 @@ var LinkInput = React.createClass({
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-        this.propogateReset();
+        this.propagateReset();
       }.bind(this)
     });
   },
 
-  propogateReset: function() {
+  propagateReset: function() {
     this.props.onReset();
   },
 
