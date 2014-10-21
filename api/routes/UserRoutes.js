@@ -84,4 +84,15 @@ module.exports = function(router) {
         }
       });
    });
+
+  router.route('/users/:user_id/links')
+    .put(function(req, res) {
+      User.findOneAndUpdate({ _id: req.params.user_id }, { links : req.body }, { new: true }, function(err, user) {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(user);
+        }
+      }); 
+    });
 };

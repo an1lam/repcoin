@@ -18,6 +18,10 @@ var ProfileBox = React.createClass({
     this.setUser('/api/users/' + newProps.userId);
   },
 
+  updateUser: function() {
+    this.setUser('/api/users/' + this.props.userId);
+  },
+
   setUser: function(url) {
     $.ajax({
       url: url,
@@ -36,7 +40,7 @@ var ProfileBox = React.createClass({
         <img className="profilePicture img-responsive img-thumbnail col-md-2" src={this.state.user.picture}></img>
         <div className="profileData">
           <h3 className="profileUsername">{this.state.user.username}</h3>
-          <div><LinksBox links={this.state.user.links} /></div>
+          <div><LinksBox userId={this.props.userId} links={this.state.user.links} /></div>
         </div>
       </div>
     );
