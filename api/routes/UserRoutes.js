@@ -21,6 +21,7 @@ module.exports = function(router) {
       var user = new User({
           username    : req.body.username,
           password    : req.body.password,
+          email       : req.body.email,
           phoneNumber : req.body.phoneNumber,
       });
       user.save( function(err) {
@@ -62,6 +63,7 @@ module.exports = function(router) {
           user.password    = req.body.password;
           user.phoneNumber = req.body.phoneNumber;
           user.categories  = req.body.categories;
+          user.portfolio   = req.body.portfolio;
           user.save(function(err) {
             if (err) {
               res.send(err);
