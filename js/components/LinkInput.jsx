@@ -31,7 +31,7 @@ var LinkInput = React.createClass({
           return user;
         });
         PubSub.publish('profileupdate');
-        this.propogateReset();
+        this.propagateReset();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
