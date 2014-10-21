@@ -47,7 +47,7 @@ var LinkInput = React.createClass({
   render: function() {
     return(
       <div className="linkInput">
-        <form onSubmit={this.handleSubmit} onReset={this.propogateReset}>
+        <form onSubmit={this.handleSubmit} onReset={this.propagateReset}>
           <div>
             <input type="text" ref="description" className="form-control" placeholder="Description"></input>
             <p> : </p>
