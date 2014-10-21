@@ -27,10 +27,7 @@ var auth = {
 
   storeCurrentUser: function(user, cb) {
     window.localStorage.setItem('currentUser', JSON.stringify(user));
-    if (cb) {
-      cb();
-    }
-    return true;
+    cb(user);
   }, 
 
   getCurrentUser: function(cb) {

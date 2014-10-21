@@ -12,10 +12,8 @@ var LinkInput = React.createClass({
 
   handleSubmit: function(event) {
     event.preventDefault();
-    var title = this.refs.description.getDOMNode().value;
-    var url = this.refs.url.getDOMNode().value;
-    var link = { title: title, url: url };
-    this.addLink(this.props.user, link);
+    this.addLink(this.props.user,
+      { title: this.refs.description.getDOMNode().value, url: this.refs.url.getDOMNode().value });
   },
 
   addLink: function(user, link) {
@@ -29,18 +27,20 @@ var LinkInput = React.createClass({
       dataType: 'json',
       contentType: 'application/json',
       success: function(user) {
-        auth.storeCurrentUser(user);
+        auth.storeCurrentUser(user, function(user) {
+          return user;
+        });
         PubSub.publish('profileupdate');
         this.propogateReset();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-        this.propogateReset();
+        this.propagateReset();
       }.bind(this)
     });
   },
 
-  propogateReset: function() {
+  propagateReset: function() {
     this.props.onReset();
   },
 
