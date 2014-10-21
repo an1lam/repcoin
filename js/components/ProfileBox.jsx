@@ -2,7 +2,7 @@
 "use strict";
 
 var React = require('react');
-var Feed = require('./Feed.jsx');
+var LinksBox = require('./LinksBox.jsx');
 var $ = require('jquery');
 
 var ProfileBox = React.createClass({
@@ -18,6 +18,10 @@ var ProfileBox = React.createClass({
     this.setUser('/api/users/' + newProps.userId);
   },
 
+  updateUser: function() {
+    this.setUser('/api/users/' + this.props.userId);
+  },
+
   setUser: function(url) {
     $.ajax({
       url: url,
@@ -31,16 +35,12 @@ var ProfileBox = React.createClass({
   },
 
   render: function() {
-    var safeLinks = this.state.user.links ? this.state.user.links : [];
-    var links = safeLinks.map(function(link) {
-      return <div><strong>{link.title}</strong>: <a href={link.url}>{link.url}</a></div>;
-    });
     return (
       <div className="profileBox">
-        <img className="profilePicture img-responsive img-thumbnail" src={this.state.user.picture}></img>
+        <img className="profilePicture img-responsive img-thumbnail col-md-2" src={this.state.user.picture}></img>
         <div className="profileData">
           <h3 className="profileUsername">{this.state.user.username}</h3>
-          {links}
+          <div><LinksBox userId={this.props.userId} links={this.state.user.links} /></div>
         </div>
       </div>
     );
