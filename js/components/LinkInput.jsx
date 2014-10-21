@@ -2,6 +2,7 @@
 "use strict"; 
 var React = require('react');
 var auth = require('../auth.jsx');
+var PubSub = require('pubsub-js');
 var $ = require('jquery');
 
 var LinkInput = React.createClass({
@@ -29,6 +30,7 @@ var LinkInput = React.createClass({
       contentType: 'application/json',
       success: function(user) {
         auth.storeCurrentUser(user);
+        PubSub.publish('profileupdate');
         this.propogateReset();
       }.bind(this),
       error: function(xhr, status, err) {
