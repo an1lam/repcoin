@@ -8,16 +8,23 @@ var mongoose = require('mongoose'),
 var UserSchema = new Schema({
   username: {type: String, required: true, index: { unique: true } },
   password: {type: String, required: true },
+  email: {type: String, required: true},
   phoneNumber: {type: String, required: true, unique: true },
+  portfolio: [{
+    user: String, // Should this be a string?
+    category: String, // Should this be a string?
+    amount: Number,
+  }],
   categories: [{
     name: String,
     id: Schema.Types.ObjectId,
     directScore: Number,
     crowdScore: Number,
     expertScore: Number,
+    reps: Number,
   }],
   links: [{ url: String,
-            title: String 
+            title: String
          }],
   picture: {
     type: String,
