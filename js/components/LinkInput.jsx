@@ -29,16 +29,16 @@ var LinkInput = React.createClass({
       contentType: 'application/json',
       success: function(user) {
         auth.storeCurrentUser(user);
-        this.propogateReset();
+        this.propagateReset();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-        this.propogateReset();
+        this.propagateReset();
       }.bind(this)
     });
   },
 
-  propogateReset: function() {
+  propagateReset: function() {
     this.props.onReset();
   },
 
