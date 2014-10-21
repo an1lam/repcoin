@@ -11,8 +11,8 @@ var UserSchema = new Schema({
   email: {type: String, required: true},
   phoneNumber: {type: String, required: true, unique: true },
   portfolio: [{
-    user: Schema.Types.ObjectId, // Should this be a string?
-    category: Schema.Types.ObjectId, // Should this be a string?
+    user: String, // Should this be a string?
+    category: String, // Should this be a string?
     amount: Number,
   }],
   categories: [{
