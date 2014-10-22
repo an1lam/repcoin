@@ -16,11 +16,15 @@ var ProfilePage = React.createClass({
   mixins: [AuthenticatedRoute],
 
   getInitialState: function() {
-    return { user: {} };
+    return { user: { categories: [], links: [], username: '' } };
   },
 
   updateUser: function() {
     this.setUser('/api/users/' + this.props.params.userId);
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    this.setUser('/api/users/' + newProps.params.userId);
   },
 
   componentDidMount: function() {
@@ -52,9 +56,9 @@ var ProfilePage = React.createClass({
             <ProfileBox user={this.state.user} />
           </div>
           <div className="row">
-            <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable userId={this.props.params.userId} /></div>
+            <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable categories={this.state.user.categories} /></div>
             <div className="col-md-7 profilePageFeed">
-              <div className="profileDonationBox"><DonationBox userId={this.props.params.userId} /></div>
+              <div className="profileDonationBox"><DonationBox user={this.state.user} /></div>
             <Feed userId={this.props.params.userId} filter={filter} />
             </div>
           </div>

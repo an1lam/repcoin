@@ -6,38 +6,13 @@ var $ = require('jquery');
 
 var DonationBox = React.createClass({
   getInitialState: function() {
-    return {
-      donationError: "",
-      user: {
-        categories: []
-      }
-    };
-  },
-
-  componentDidMount: function() {
-    this.setUser('/api/users/' + this.props.userId);
-  },
-
-  componentWillReceiveProps: function(newProps) {
-    this.setUser('/api/users/' + newProps.userId);
-  },
-
-  setUser: function(url) {
-    $.ajax({
-      url: url,
-      success: function(user) {
-        this.setState({ user: user });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.userId, status, err.toString());
-      }.bind(this)
-    });
+    return { donationError: "" };
   },
 
   validateTransactions: function(categoryName, reps) {
     var category;
-    for (var i = 0; i < this.state.user.categories.length; i++) {
-      var currentCategory = this.state.user.categories[i];
+    for (var i = 0; i < this.props.user.categories.length; i++) {
+      var currentCategory = this.props.user.categories[i];
       if (currentCategory.name === categoryName) {
         category = currentCategory;
       }
@@ -67,10 +42,10 @@ var DonationBox = React.createClass({
         <div className="navbar navbar-default">
         <form onSubmit={this.handleSubmit} className="navbar-form">
           <p className="give navbar-text">Give</p>
-          <p className="user navbar-text">{this.state.user.username}</p>
+          <p className="user navbar-text">{this.props.user.username}</p>
           <input type="text" ref="reps" className="donationAmount form-control" placeholder="10"></input>
             <p className="navbar-text">Reps for</p>
-            <select ref="category" className="form-control donationCategories">            {this.state.user.categories.map(function(category) {
+            <select ref="category" className="form-control donationCategories">            {this.props.user.categories.map(function(category) {
                 return <option value={category.name}>{category.name}</option>;
               })}
             </select>
