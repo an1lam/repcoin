@@ -45,7 +45,7 @@ var ProfilePage = React.createClass({
   },
 
   render: function() {
-    var filter = "all";
+    var feed = this.state.user._id ? <Feed userId={this.state.user._id} filter={"all"} /> : '';
     return (
       <div className="profilePage container-fluid">
         <div id="header">
@@ -59,7 +59,7 @@ var ProfilePage = React.createClass({
             <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable categories={this.state.user.categories} /></div>
             <div className="col-md-7 profilePageFeed">
               <div className="profileDonationBox"><DonationBox user={this.state.user} /></div>
-            <Feed userId={this.props.params.userId} filter={filter} />
+            {feed}
             </div>
           </div>
           <div className="row">
