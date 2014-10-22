@@ -4,7 +4,7 @@
     "id": ObjectId("5434171b7f9bea5969085da1")
   },
   "from": {
-    "anonymous": "false",
+    "anonymous": false,
     "name": "testUser1",
     "id": ObjectId("543acfa788257fca61ff521b")
   },
@@ -18,7 +18,7 @@
     "id": ObjectId("5439a8221e25afaf21b2adb3")
   },
   "from": {
-    "anonymous": "false",
+    "anonymous": false,
     "name": "stephen",
     "id": ObjectId("5439a82b1e25afaf21b2adb4")
   },
@@ -32,7 +32,7 @@
     "id": ObjectId("5439a82b1e25afaf21b2adb4")
   },
   "from": {
-    "anonymous": "false",
+    "anonymous": false,
     "name": "matthew",
     "id": ObjectId("5439a8221e25afaf21b2adb3")
   },
@@ -46,7 +46,7 @@
     "id": ObjectId("543a252acb4b5e50277998d6")
   },
   "from": {
-    "anonymous": "false",
+    "anonymous": false,
     "name": "robert",
     "id": ObjectId("543a2533cb4b5e50277998d7")
   },
@@ -60,7 +60,7 @@
     "id": ObjectId("543a2533cb4b5e50277998d7")
   },
   "from": {
-    "anonymous": "false",
+    "anonymous": false,
     "name": "tester",
     "id": ObjectId("543a252acb4b5e50277998d6")
   },
@@ -74,7 +74,7 @@
     "id": ObjectId("543a2543cb4b5e50277998d9")
   },
   "from": {
-    "anonymous": "true",
+    "anonymous": true,
     "name": "sarah",
     "id": ObjectId("543a253bcb4b5e50277998d8")
   },
