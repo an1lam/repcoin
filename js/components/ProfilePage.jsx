@@ -19,17 +19,13 @@ var ProfilePage = React.createClass({
     return { user: {} };
   },
 
-  updateUser: function(userId) {
-    this.setUser('/api/users/' + userId);
+  updateUser: function() {
+    this.setUser('/api/users/' + this.props.params.userId);
   },
 
   componentDidMount: function() {
-    PubSub.subscribe('profileupdate', this.updateUser(this.props.params.userId));
-    this.updateUser(this.props.params.userId);
-  },
-
-  componentWillReceiveProps: function(newProps) {
-    this.updateUser(newProps.params.userId);
+    PubSub.subscribe('profileupdate', this.updateUser);
+    this.updateUser();
   },
 
   setUser: function(url) {
