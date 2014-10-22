@@ -12,7 +12,8 @@ var auth = {
         username: username,
         password: password
       },
-      success: function(data) {
+      success: function(user) {
+        window.localStorage.setItem('currentUser', JSON.stringify(user));
         // Add token to localStorage that just stores the login response
         cb(true);
         return true;
@@ -85,7 +86,8 @@ var auth = {
         console.log(err);
         return false;
       }.bind(this),
-      success: function(data) {
+      success: function(user) {
+        window.localStorage.removeItem('currentUser', JSON.stringify(user));
         return true;
       }.bind(this),
     });
