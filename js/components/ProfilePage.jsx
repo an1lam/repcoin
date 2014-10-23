@@ -7,6 +7,7 @@ var ProfileBox = require('./ProfileBox.jsx');
 var Footer = require('./Footer.jsx');
 var Feed = require('./Feed.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
+var PortfolioTable = require('./PortfolioTable.jsx');
 var DonationBox = require('./DonationBox.jsx');
 var $ = require('jquery');
 var PubSub = require('pubsub-js');
@@ -46,6 +47,7 @@ var ProfilePage = React.createClass({
 
   render: function() {
     var feed = this.state.user._id ? <Feed userId={this.state.user._id} filter={"all"} /> : '';
+    var portfolio = this.state.user._id ? <PortfolioTable user={this.state.user} /> : '';
     return (
       <div className="profilePage container-fluid">
         <div id="header">
@@ -54,6 +56,11 @@ var ProfilePage = React.createClass({
         <div id="content">
           <div className="row">
             <ProfileBox user={this.state.user} />
+          </div>
+          <div className="row">
+            <div className="col-md-5">
+              {portfolio}
+            </div>
           </div>
           <div className="row">
             <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable categories={this.state.user.categories} /></div>
