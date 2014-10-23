@@ -2,15 +2,10 @@
 "use strict";
 
 var React = require('react');
-var $ = require('jquery');
-var PubSub = require('pubsub-js');
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var PortfolioItem = require('./PortfolioItem.jsx');
 var PortfolioHeader = require('./PortfolioHeader.jsx');
 
 var PortfolioTable = React.createClass({
-  mixins: [AuthenticatedRoute],
-
   render: function() {
     return (
       <div className="categoriesTable panel panel-default">
