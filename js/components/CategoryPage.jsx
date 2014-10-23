@@ -3,9 +3,9 @@
 
 var $ = require('jquery');
 var React = require('react');
-var Feed = require('./feed.jsx');
-var Footer = require('./footer.jsx');
-var Toolbar = require('./toolbar.jsx');
+var Feed = require('./Feed.jsx');
+var Footer = require('./Footer.jsx');
+var Toolbar = require('./Toolbar.jsx');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 
 var CategoryPage = React.createClass({
