@@ -21,7 +21,7 @@ var CategoryPage = React.createClass({
         <div className="row categoryPageHeader">
           <Toolbar />
         </div>
-        <div className="col-md-6 col-md-offset-3"><Feed category={this.props.params.category}/></div>
+        <div className="col-md-6 col-md-offset-3"><Feed category={this.props.params.category} parent="CategoryPage" /></div>
         <div className="row">
           <div className="row categoryPageFooter">
             <Footer />

@@ -14,7 +14,7 @@ var HomePage = React.createClass({
     return (
       <div className="homePage">
         <Toolbar />
-        <div className="col-md-8 col-md-offset-2"><Feed /></div>
+        <div className="col-md-8 col-md-offset-2"><Feed parent="HomePage" /></div>
         <Footer />
       </div>
     );
