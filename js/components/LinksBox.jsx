@@ -20,18 +20,22 @@ var LinksBox = React.createClass({
     this.setState({ user: user });
   },
 
-  handleMouseChange: function() {
+  handleMouseOver: function() {
     if (!this.state.showInput) {
-      this.setState({ showEdit: !this.state.showEdit });
+      this.setState({ showEdit: true });
     }
   },
 
+  handleMouseLeave: function() {
+    this.setState({ showEdit: false }); 
+  },
+
   handleClick: function() {
-    this.setState({ showInput: true, showEdit: false });
+    this.setState({ showInput: true });
   },
 
   closeInputBox: function() {
-    this.setState({ showInput: false, showEdit: true });
+    this.setState({ showInput: false });
   },
 
   render: function() {
@@ -56,7 +60,7 @@ var LinksBox = React.createClass({
       return <li className="list-group-item"><LinkItem link={link} /></li>;
     });
     return(
-      <div className="linksBox col-md-4" onMouseEnter={this.handleMouseChange} onMouseLeave={this.handleMouseChange}>
+      <div className="linksBox col-md-4" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <h4>Links</h4>
         {edit}
         {linkInput}
