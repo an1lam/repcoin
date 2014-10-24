@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
+var agenda = require('agenda');
 var LocalStrategy = require('passport-local').Strategy;
 require('./config/pass.js')(passport, LocalStrategy);
 
@@ -11,7 +12,7 @@ require('./config/pass.js')(passport, LocalStrategy);
 if (!module.parent) {
  var auth = require('./config/auth.js');
 } else {
- var auth = function(req, res, next) { res.status(200).end() };
+ var auth = function(req, res, next) { res.status(200).end(); };
 }
 
 var app = express();
@@ -64,9 +65,15 @@ app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter]);
 
 // Start the server unless we are running a test
 if (!module.parent) {
-  mongoose.connect(db.url)
+  mongoose.connect(db.url);
   console.log('Listening at port ' + port);
   app.listen(port); // startup our app at http://localhost:8080
 }
+
+// Config scheduled jobs
+var Agenda = require('agenda');
+var agenda = new Agenda({db: {address: db.url}});
+require('./api/jobs/user.js')(agenda);
+agenda.start();
 
 module.exports = app;

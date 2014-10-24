@@ -24,7 +24,6 @@ var LoginPage = React.createClass({
     return (
       <div className="loginPage">
         <div className="loginHeader">
-          <Link to="home">Feed</Link>
           <div>
           <button onClick={this.handleClick} type="button" ref="login" className="loginButton btn btn-default">Log In</button>
           {login}
