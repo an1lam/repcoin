@@ -46,11 +46,20 @@ var ProfilePage = React.createClass({
   },
 
   render: function() {
-    var feed = this.state.user ? <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} /> : '';
-    var portfolio = this.state.user ? <PortfolioTable user={this.state.user} /> : '';
-    var categoriesTable = this.state.user ? <CategoriesTable categories={this.state.user.categories} /> : '';
-    var donationBox = this.state.user ? <DonationBox user={this.state.user} /> : '';
-    var profileBox = this.state.user ? <ProfileBox user={this.state.user} /> : '';
+    var feed = '';
+    var portfolio = '' ;
+    var categoriesTable = '';
+    var donationBox = '';
+    var profileBox = '';
+ 
+    if (this.state.user) {
+      feed =  <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} />;
+      portfolio = <PortfolioTable user={this.state.user} />;
+      categoriesTable = <CategoriesTable categories={this.state.user.categories} />;
+      donationBox = <DonationBox user={this.state.user} />;
+      profileBox = <ProfileBox user={this.state.user} />;
+    }
+
     return (
       <div className="profilePage container-fluid">
         <div id="header">
