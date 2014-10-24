@@ -12,20 +12,19 @@ var LinkInput = React.createClass({
 
   handleSubmit: function(event) {
     event.preventDefault();
-    this.addLink(this.props.user,
-      { title: this.refs.description.getDOMNode().value, url: this.refs.url.getDOMNode().value });
+    this.addLink({ title: this.refs.description.getDOMNode().value, url: this.refs.url.getDOMNode().value });
   },
 
-  addLink: function(user, link) {
-    var url = '/api/users/' + user._id + '/links';
-    var links = user.links;
+  addLink: function(link) {
+    var url = '/api/users/' + this.props.user._id;
+    var links = this.props.user.links;
     links.push(link);
+    var user = this.props.user;
+    user.links = links; 
     $.ajax({
       url: url,
       type: 'PUT',
-      data: JSON.stringify(links),
-      dataType: 'json',
-      contentType: 'application/json',
+      data: user,
       success: function(user) {
         auth.storeCurrentUser(user, function(user) {
           return user;

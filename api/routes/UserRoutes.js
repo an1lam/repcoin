@@ -59,11 +59,12 @@ module.exports = function(router) {
         if (err) {
           res.send(err);
         } else {
-          user.username    = req.body.username;
-          user.password    = req.body.password;
-          user.phoneNumber = req.body.phoneNumber;
-          user.categories  = req.body.categories;
-          user.portfolio   = req.body.portfolio;
+          user.username    = req.body.username || user.username;
+          user.password    = req.body.password || user.password;
+          user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
+          user.categories  = req.body.categories || user.categories;
+          user.portfolio   = req.body.portfolio || user.portfolio;
+          user.links       = req.body.links || user.links;
           user.save(function(err) {
             if (err) {
               res.send(err);
@@ -86,15 +87,4 @@ module.exports = function(router) {
         }
       });
    });
-
-  router.route('/users/:user_id/links')
-    .put(function(req, res) {
-      User.findOneAndUpdate({ _id: req.params.user_id }, { links : req.body }, { new: true }, function(err, user) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send(user);
-        }
-      }); 
-    });
 };
