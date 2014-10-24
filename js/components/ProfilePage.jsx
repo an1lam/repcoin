@@ -17,7 +17,7 @@ var ProfilePage = React.createClass({
   mixins: [AuthenticatedRoute],
 
   getInitialState: function() {
-    return { user: { categories: [], links: [], username: '' } };
+    return {};
   },
 
   updateUser: function() {
@@ -46,8 +46,11 @@ var ProfilePage = React.createClass({
   },
 
   render: function() {
-    var feed = this.state.user._id ? <Feed userId={this.state.user._id} filter={"all"} /> : '';
-    var portfolio = this.state.user._id ? <PortfolioTable user={this.state.user} /> : '';
+    var feed = this.state.user ? <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} /> : '';
+    var portfolio = this.state.user ? <PortfolioTable user={this.state.user} /> : '';
+    var categoriesTable = this.state.user ? <CategoriesTable categories={this.state.user.categories} /> : '';
+    var donationBox = this.state.user ? <DonationBox user={this.state.user} /> : '';
+    var profileBox = this.state.user ? <ProfileBox user={this.state.user} /> : '';
     return (
       <div className="profilePage container-fluid">
         <div id="header">
@@ -55,7 +58,7 @@ var ProfilePage = React.createClass({
         </div>
         <div id="content">
           <div className="row">
-            <ProfileBox user={this.state.user} />
+            {profileBox}
           </div>
           <div className="row">
             <div className="col-md-5">
@@ -63,9 +66,13 @@ var ProfilePage = React.createClass({
             </div>
           </div>
           <div className="row">
-            <div className="col-md-4 profilePageCategoriesTable"><CategoriesTable categories={this.state.user.categories} /></div>
+            <div className="col-md-4 profilePageCategoriesTable">
+              {categoriesTable}
+            </div>
             <div className="col-md-7 profilePageFeed">
-              <div className="profileDonationBox"><DonationBox user={this.state.user} /></div>
+              <div className="profileDonationBox">
+                {donationBox}
+              </div>
             {feed}
             </div>
           </div>

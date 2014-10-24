@@ -12,27 +12,29 @@ var Feed = React.createClass({
   },
 
   componentDidMount: function() {
-    this.setTransactions(this.props.userId, this.props.category, this.props.filter); 
+    this.setTransactions(); 
   },
 
-  setTransactions: function(userId, category, filter) {
-    // TODO : paginations
+  generateUrl: function() {
     var url;
-
-    // TODO : Come up with a better flow for determing feed data
-    if (!userId && !category) {
+    if (this.props.parent === "ProfilePage") {
+      url = '/api/transactions/users/' + this.props.userId + '/' + this.state.filter + '/public';
+    } else if (this.props.parent === "HomePage") {
       url = '/api/transactions';
-    } else if (category) {
-      url = '/api/transactions/categories/' + category;
-    } else if (userId) {
-      url = '/api/transactions/users/' + userId + '/' + filter + '/public';
+    } else if (this.props.parent === "CategoryPage") {
+      url = '/api/transactions/categories/' + this.props.category;
     }
+    return url;
+  },
 
+  setTransactions: function() {
+    var url = this.generateUrl();
+    // TODO : paginations
     $.ajax({
       url: url,
       dataType: 'json',
       success: function(transactions) {
-        this.setState({ transactions : transactions, filter: filter });
+        this.setState({ transactions : transactions });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -41,12 +43,15 @@ var Feed = React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setTransactions(newProps.userId, newProps.category, newProps.filter);
+    this.setState({ filter: newProps.filter });
+  },
+
+  componentWillUpdate: function() {
+    this.setTransactions();
   },
 
   handleClick: function(newFilter) {
     this.setState({ filter: newFilter });
-    this.setTransactions(this.props.userId, this.props.category, newFilter);
   },
 
   render: function() {
