@@ -59,7 +59,6 @@ module.exports = function(router) {
         if (err) {
           res.send(err);
         } else {
-          console.log("pictureLink is " + req.body.picture);
           user.username    = req.body.username || user.username;
           user.password    = req.body.password || user.password;
           user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
