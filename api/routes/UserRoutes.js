@@ -59,12 +59,14 @@ module.exports = function(router) {
         if (err) {
           res.send(err);
         } else {
+          console.log("pictureLink is " + req.body.picture);
           user.username    = req.body.username || user.username;
           user.password    = req.body.password || user.password;
           user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
           user.categories  = req.body.categories || user.categories;
           user.portfolio   = req.body.portfolio || user.portfolio;
           user.links       = req.body.links || user.links;
+          user.picture     = req.body.picture || user.picture;
           user.save(function(err) {
             if (err) {
               res.send(err);
