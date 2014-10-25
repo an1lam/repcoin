@@ -86,6 +86,7 @@ gulp.task('watch', function() {
   gulp.watch(paths.js, ['build']);
   gulp.watch(paths.html, ['html']);
   gulp.watch(paths.css, ['css']);
+  gulp.watch(paths.images, ['images']);
 });
 
 gulp.task('build', ['jest', 'html', 'css', 'lib', 'fonts', 'images'], function() {
