@@ -118,6 +118,10 @@
   position:relative;
 }
 
+.editPhotoForm {
+  display:none;
+}
+
 .pictureBox .editPhoto {
   position:absolute;
   bottom:0;
@@ -137,8 +141,8 @@
 .editPhoto .pictureEditText {
   color: white;
   float:right;
-  font-size: 14px;
-  padding-top: 10px;
+  font-size: 12px;
+  padding-top: 12px;
   padding-right: 15px;
 }
 

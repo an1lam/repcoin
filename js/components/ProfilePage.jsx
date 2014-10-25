@@ -37,7 +37,11 @@ var ProfilePage = React.createClass({
     $.ajax({
       url: url,
       success: function(user) {
-        this.setState({ user: user });
+        if (this.isMounted()) {
+          this.setState({ user: user });
+        } else {
+          console.log("ProfilePage not mounted.");
+        }  
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.userId, status, err.toString());

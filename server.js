@@ -61,7 +61,11 @@ var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
 var transactionRouter = express.Router();
 var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transactionRouter, auth);
 
-app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter]);
+// Uploads
+var uploadsRouter = express.Router();
+var uploadRoutes = require('./api/routes/UploadRoutes.js')(uploadsRouter);
+
+app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter, uploadsRouter ]);
 
 // Start the server unless we are running a test
 if (!module.parent) {

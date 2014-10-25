@@ -41,8 +41,14 @@ var paths = {
   js: ['js/**/*.jsx', 'spec/**/*.js'],
   html: ['index.html'],
   css: ['css/*.css'],
-  lib: ['lib/**/*.js']
+  lib: ['lib/**/*.js'],
+  images: ['images/**'],
 };
+
+gulp.task('images', function() {
+  gulp.src('images/**')
+      .pipe(gulp.dest('build/images'));
+});
 
 gulp.task('html', function() {
   gulp.src('index.html')
@@ -82,7 +88,7 @@ gulp.task('watch', function() {
   gulp.watch(paths.css, ['css']);
 });
 
-gulp.task('build', ['jest', 'html', 'css', 'lib', 'fonts'], function() {
+gulp.task('build', ['jest', 'html', 'css', 'lib', 'fonts', 'images'], function() {
   // Single entry to browserify
   gulp.src('js/app.jsx')
       .pipe(plumber())
