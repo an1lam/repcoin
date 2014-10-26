@@ -11,15 +11,7 @@ var LinksBox = React.createClass({
   getInitialState: function() {
     return { showEdit: false, showInput : false, user: null };
   },
-
-  componentDidMount: function() {
-    auth.getCurrentUser.call(this, this.setUser);
-  },
   
-  setUser: function(user) {
-    this.setState({ user: user });
-  },
-
   handleMouseOver: function() {
     if (!this.state.showInput) {
       this.setState({ showEdit: true });
@@ -38,10 +30,14 @@ var LinksBox = React.createClass({
     this.setState({ showInput: false });
   },
 
+  makeLinkItem: function(link) {
+    return <li className="list-group-item"><LinkItem link={link} currentUser={this.props.currentUser} user={this.props.user}/></li>;
+  },
+
   render: function() {
     var edit = '';
     var linkInput = '';
-    if (this.state.user && this.state.user._id == this.props.userId) {
+    if (this.props.currentUser._id == this.props.user._id) {
       if (this.state.showEdit) {
         edit = <div className="editBox" onClick={this.handleClick}>
                  <button className="btn btn-default btn-small">
@@ -51,15 +47,17 @@ var LinksBox = React.createClass({
       }
 
       if (this.state.showInput) {
-        linkInput = <LinkInput user={this.state.user} onReset={this.closeInputBox}/>;
+        linkInput = <LinkInput currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeInputBox}/>;
       }
-  }
+    }
 
     var safeLinks = this.props.links ? this.props.links : [];
-    var links = safeLinks.map(function(link) {
-      return <li className="list-group-item"><LinkItem link={link} /></li>;
-    });
-    return(
+    var links = '';
+    if (this.props.currentUser) {
+      links = safeLinks.map(this.makeLinkItem);
+    }
+
+   return(
       <div className="linksBox col-md-4" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <h4>Links</h4>
         {edit}

@@ -8,11 +8,7 @@ var PubSub = require('pubsub-js');
 
 var PictureBox = React.createClass({
   getInitialState: function() {
-    return { showEdit: false, currentUser: null };
-  },
-
-  componentDidMount: function() {
-    auth.getCurrentUser.call(this, this.setUser);
+    return { showEdit: false };
   },
 
   handleChange: function(e) {
@@ -56,10 +52,6 @@ var PictureBox = React.createClass({
     });  
   },
 
-  setUser: function(currentUser) {
-    this.setState({ currentUser: currentUser });
-  },
-
   handleMouseOver: function() {
     this.setState({ showEdit: true });
   },
@@ -74,7 +66,7 @@ var PictureBox = React.createClass({
 
   render: function() {
     var edit = '';
-    if (this.state.currentUser && this.state.currentUser._id == this.props.user._id) {
+    if (this.props.currentUser._id == this.props.user._id) {
       if (this.state.showEdit) {
         edit = <div className="editPhoto">
                  <div className="editPhotoForm">
