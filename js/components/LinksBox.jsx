@@ -58,7 +58,7 @@ var LinksBox = React.createClass({
     }
 
    return(
-      <div className="linksBox col-md-4" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
+      <div className="linksBox" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <h4>Links</h4>
         {edit}
         {linkInput}

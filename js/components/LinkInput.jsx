@@ -12,13 +12,24 @@ var LinkInput = React.createClass({
 
   handleSubmit: function(event) {
     event.preventDefault();
-    this.addLink({ title: this.refs.description.getDOMNode().value, url: this.refs.url.getDOMNode().value });
+    this.updateLinks({ title: this.refs.description.getDOMNode().value, url: this.refs.url.getDOMNode().value });
   },
 
-  addLink: function(link) {
+  getNewLinks: function(userLinks, link) {
+    for (var i = 0; i < userLinks.length; i++) {
+      var l = userLinks[i];
+      if (this.props.title == l.title && this.props.url == l.url) {
+        userLinks[i] = link;
+        return userLinks;
+      }
+    }
+    userLinks.push(link);
+    return userLinks; 
+  },
+
+  updateLinks: function(link) {
     var url = '/api/users/' + this.props.user._id;
-    var links = this.props.user.links;
-    links.push(link);
+    var links = this.getNewLinks(this.props.user.links, link);
     var user = this.props.user;
     user.links = links; 
     $.ajax({
@@ -44,13 +55,15 @@ var LinkInput = React.createClass({
   },
 
   render: function() {
+    var title = this.props.title || "Description";
+    var url = this.props.url || "URL";
     return(
       <div className="linkInput">
         <form onSubmit={this.handleSubmit} onReset={this.propagateReset}>
           <div>
-            <input type="text" ref="description" className="form-control" placeholder="Description"></input>
+            <input type="text" ref="description" className="form-control" placeholder={title}></input>
             <p> : </p>
-            <input type="text" ref="url" className="form-control" placeholder="URL"></input>
+            <input type="text" ref="url" className="form-control" placeholder={url}></input>
           </div>
           <button type="submit" className="btn btn-success">Save</button> 
           <button type="reset" className="btn btn-default">Cancel</button> 
