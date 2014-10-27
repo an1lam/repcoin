@@ -70,7 +70,7 @@ var ProfilePage = React.createClass({
     if (this.state.user && this.state.currentUser) {
       feed =  <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} />;
       portfolio = <PortfolioTable user={this.state.user} />;
-      categoriesTable = <CategoriesTable categories={this.state.user.categories} />;
+      categoriesTable = <CategoriesTable user={this.state.user} />;
       donationBox = <DonationBox user={this.state.user} />;
       profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
     }
@@ -85,23 +85,17 @@ var ProfilePage = React.createClass({
             {profileBox}
           </div>
           <div className="row">
-            <div className="col-md-5">
+            <div className="col-md-4">
+              {categoriesTable}
               {portfolio}
             </div>
-          </div>
-          <div className="row">
-            <div className="col-md-4 profilePageCategoriesTable">
-              {categoriesTable}
-            </div>
-            <div className="col-md-7 profilePageFeed">
-              <div className="profileDonationBox">
-                {donationBox}
-              </div>
-            {feed}
+            <div className="col-md-7">
+              {donationBox}
+              {feed}
             </div>
           </div>
           <div className="row">
-            <div className="profilePageFooter"><Footer /></div>
+            <Footer />
           </div>
         </div>
       </div>
