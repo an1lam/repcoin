@@ -19,7 +19,12 @@ var LinkInput = React.createClass({
     for (var i = 0; i < userLinks.length; i++) {
       var l = userLinks[i];
       if (this.props.title == l.title && this.props.url == l.url) {
-        userLinks[i] = link;
+        if (link.title.length !== 0) {
+          userLinks[i].title = link.title;
+        }
+        if (link.url.length !== 0) {
+          userLinks[i].url = link.url;
+        }
         return userLinks;
       }
     }
