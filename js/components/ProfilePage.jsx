@@ -85,23 +85,17 @@ var ProfilePage = React.createClass({
             {profileBox}
           </div>
           <div className="row">
-            <div className="col-md-5">
+            <div className="col-md-4">
+              {categoriesTable}
               {portfolio}
             </div>
-          </div>
-          <div className="row">
-            <div className="col-md-4 profilePageCategoriesTable">
-              {categoriesTable}
-            </div>
-            <div className="col-md-7 profilePageFeed">
-              <div className="profileDonationBox">
-                {donationBox}
-              </div>
-            {feed}
+            <div className="col-md-7">
+              {donationBox}
+              {feed}
             </div>
           </div>
           <div className="row">
-            <div className="profilePageFooter"><Footer /></div>
+            <Footer />
           </div>
         </div>
       </div>

@@ -6,11 +6,16 @@ var React = require('react');
 var PortfolioHeader = React.createClass({
   render: function() {
     return (
-      <tr className="PortfolioHeader">
-        <th>User</th>
-        <th>Category</th>
-        <th>Amount</th>
-      </tr>
+      <div className="PortfolioHeader">
+        <div className="portfolioTitle">
+          <strong>Portfolio</strong>
+        </div>
+        <tr className="PortfolioHeader">
+          <th>User</th>
+          <th>Category</th>
+          <th>Amount</th>
+        </tr>
+      </div>
     );
   }
 });
