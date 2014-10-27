@@ -28,7 +28,7 @@ module.exports = function(router, isAuthenticated) {
 
       // Check that the user is the same as from
       if (req.user._id != req.body.from.id) {
-        res.status(400).send("Incorrect user");
+        res.status(400).send("Incorrect user: " + req.body.from.name + "does not match " + req.user.username);
         return;
       }
       var transaction = new Transaction({
