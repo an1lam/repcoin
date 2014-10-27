@@ -20,7 +20,7 @@ var ProfileBox = React.createClass({
         </div>
         <div className="profileData">
           <h3 className="profileUsername">{this.props.user.username}</h3>
-          <div><LinksBox currentUser={this.props.currentUser} user={this.props.user} links={this.props.user.links} /></div>
+          <div className="col-md-6"><LinksBox currentUser={this.props.currentUser} user={this.props.user} links={this.props.user.links} /></div>
         </div>
       </div>
     );
