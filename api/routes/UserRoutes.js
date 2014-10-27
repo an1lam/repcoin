@@ -64,8 +64,16 @@ module.exports = function(router) {
           user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
           user.categories  = req.body.categories || user.categories;
           user.portfolio   = req.body.portfolio || user.portfolio;
-          user.links       = req.body.links || user.links;
           user.picture     = req.body.picture || user.picture;
+
+          if (req.body.links) {
+            if (req.body.links[0] == "EMPTY") {
+              user.links = [];
+            } else {
+              user.links = req.body.links;
+            }
+          }
+
           user.save(function(err) {
             if (err) {
               res.send(err);

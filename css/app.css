@@ -267,3 +267,25 @@ html, body {
 .linkInput p {
   display:inline;
 }
+
+/* LinkItem ///////////////////////// */
+.linkItem .edit {
+  display:inline;
+  float:right;
+}
+
+.linkItem .pencil {
+  margin-right:5px;
+}
+
+.linkItem .remove {
+  margin-left:5px;
+}
+
+.linkItem .divider {
+  display:inline;
+}
+
+.linkItem .text {
+  display:inline-block;
+}

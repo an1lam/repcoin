@@ -12,6 +12,7 @@ var DonationBox = require('./DonationBox.jsx');
 var $ = require('jquery');
 var PubSub = require('pubsub-js');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
+var auth = require('../auth.jsx');
 
 var ProfilePage = React.createClass({
   mixins: [AuthenticatedRoute],
@@ -24,12 +25,22 @@ var ProfilePage = React.createClass({
     this.setUser('/api/users/' + this.props.params.userId);
   },
 
+  setCurrentUser: function(currentUser) { 
+    this.setState({ currentUser: currentUser }); 
+  },
+
+  resetCurrentUser: function() {
+    auth.getCurrentUser.call(this, this.setCurrentUser);
+  },
+
   componentWillReceiveProps: function(newProps) {
     this.setUser('/api/users/' + newProps.params.userId);
   },
 
   componentDidMount: function() {
     PubSub.subscribe('profileupdate', this.updateUser);
+    PubSub.subscribe('profileupdate', this.resetCurrentUser);
+    this.resetCurrentUser();
     this.updateUser();
   },
 
@@ -56,12 +67,12 @@ var ProfilePage = React.createClass({
     var donationBox = '';
     var profileBox = '';
  
-    if (this.state.user) {
+    if (this.state.user && this.state.currentUser) {
       feed =  <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} />;
       portfolio = <PortfolioTable user={this.state.user} />;
       categoriesTable = <CategoriesTable categories={this.state.user.categories} />;
       donationBox = <DonationBox user={this.state.user} />;
-      profileBox = <ProfileBox user={this.state.user} />;
+      profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
     }
 
     return (
