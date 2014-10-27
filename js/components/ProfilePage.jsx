@@ -25,8 +25,8 @@ var ProfilePage = React.createClass({
     this.setUser('/api/users/' + this.props.params.userId);
   },
 
-  setCurrentUser: function(currentUser) { 
-    this.setState({ currentUser: currentUser }); 
+  setCurrentUser: function(currentUser) {
+    this.setState({ currentUser: currentUser });
   },
 
   resetCurrentUser: function() {
@@ -66,12 +66,12 @@ var ProfilePage = React.createClass({
     var categoriesTable = '';
     var donationBox = '';
     var profileBox = '';
- 
+
     if (this.state.user && this.state.currentUser) {
       feed =  <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} />;
       portfolio = <PortfolioTable user={this.state.user} />;
-      categoriesTable = <CategoriesTable user={this.state.user} />;
-      donationBox = <DonationBox user={this.state.user} />;
+      categoriesTable = <CategoriesTable categories={this.state.user.categories} />;
+      donationBox = <DonationBox user={this.state.user} currentUser={this.state.currentUser} />;
       profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
     }
 
