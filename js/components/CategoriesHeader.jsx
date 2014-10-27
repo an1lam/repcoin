@@ -7,14 +7,7 @@ var CategoriesHeader = React.createClass({
   render: function() {
     return (
       <div className="categoriesHeader">
-        <div className="categoriesTitle">
-          <strong>{this.props.user.username + '\'s Categories'}</strong>
-        </div>
-        <tr>
-          <th>{this.props.category}</th>
-          <th>{this.props.directRep}</th>
-          <th>{this.props.crowdRep}</th>
-        </tr>
+        <strong>{this.props.user.username + '\'s Categories'}</strong>
       </div>
     );
   }

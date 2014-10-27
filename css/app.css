@@ -246,13 +246,13 @@ html, body {
     background-color: #D1B295;
 }
 
-.categoriesTitle {
+.categoriesHeader {
   margin-top:10px;
   margin-bottom:10px;
   margin-left:10px;
 }
 
-.portfolioTitle {
+.portfolioHeader {
   margin-top:10px;
   margin-bottom:10px;
   margin-left:10px;
