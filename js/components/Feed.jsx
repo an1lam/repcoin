@@ -62,7 +62,8 @@ var Feed = React.createClass({
   render: function() {
     var feedHeader = this.props.userId ? <FeedHeader onClick={this.handleClick}/> : '';
     return (
-      <div className="feed">
+      <div className="feed panel panel-default">
+        <h3 className="feedTitle panel-title">Feed</h3>
         {feedHeader}
         <ul className="list-group">
           {this.state.transactions.map(function(transaction) {
