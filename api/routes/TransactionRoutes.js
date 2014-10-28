@@ -35,8 +35,10 @@ module.exports = function(router, isAuthenticated) {
         User.findById(req.body.from.id, function(err, user) {
           if (err) {
             //TODO: Remove transaction?
+            Transaction.findOneAndRemove({ "id": transaction.id });
             res.send(err);
           } else {
+            var fromUser = user;
             var categoryToUpdate = null;
             for (var i = 0; i < user.categories.length; i++) {
               if (user.categories[i].name === req.body.category) {
@@ -48,11 +50,15 @@ module.exports = function(router, isAuthenticated) {
               categoryToUpdate.reps -= req.body.amount;
               user.save(function(err) {
                 if (err) {
+                  Transaction.findOneAndRemove({ "id": transaction.id });
                   res.send(err);
                 } else {
                   // Deal with to user.
                   User.findById(req.body.to.id, function(err, user) {
                     if (err) {
+                      Transaction.findOneAndRemove({'id': transaction.id});
+                      fromUser.reps += amount;
+                      fromUser.save();
                       res.send(err);
                     } else {
                       var categoryToUpdate = null;
@@ -66,6 +72,9 @@ module.exports = function(router, isAuthenticated) {
                         categoryToUpdate.directScore = parseInt(categoryToUpdate.directScore) + parseInt(req.body.amount);
                         user.save(function(err) {
                           if (err) {
+                            Transaction.findOneAndRemove({'id': transaction.id});
+                            fromUser.reps += amount;
+                            fromUser.save();
                             res.send(err)
                           } else {
                             res.send(transaction);
