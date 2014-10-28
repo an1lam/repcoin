@@ -9,8 +9,13 @@ var PortfolioTable = React.createClass({
   render: function() {
     return (
       <div className="categoriesTable panel panel-default">
+        <PortfolioHeader />
         <table className="table table-bordered table-striped">
-          <PortfolioHeader />
+          <tr className="PortfolioHeader">
+            <th>User</th>
+            <th>Category</th>
+            <th>Amount</th>
+          </tr>
           <tbody>
           {this.props.user.portfolio.map(function(investment) {
             return <PortfolioItem user={investment.user} category={investment.category} amount={investment.amount} />;

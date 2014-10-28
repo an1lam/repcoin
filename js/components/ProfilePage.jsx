@@ -70,7 +70,7 @@ var ProfilePage = React.createClass({
     if (this.state.user && this.state.currentUser) {
       feed =  <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} />;
       portfolio = <PortfolioTable user={this.state.user} />;
-      categoriesTable = <CategoriesTable categories={this.state.user.categories} />;
+      categoriesTable = <CategoriesTable user={this.state.user} />;
       donationBox = <DonationBox user={this.state.user} currentUser={this.state.currentUser} />;
       profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
     }
