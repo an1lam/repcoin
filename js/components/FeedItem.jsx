@@ -4,8 +4,18 @@
 var Router = require('react-router');
 var React = require('react');
 var Link = Router.Link;
+var $ = require('jquery');
 
 var FeedItem = React.createClass({
+  getInitialState: function() {
+    return {};
+  },
+
+  componentDidMount: function() {
+    var color = this.props.amount < 0 ? "#BD362F" : "#51A351";
+    $(".gave").css("color", color);
+  },
+
   render: function() {
     var from;
     if (!this.props.from.anonymous) {
@@ -17,7 +27,7 @@ var FeedItem = React.createClass({
     return (
       <div className="feedItem">
         {from}
-        <p className="gave">gave</p>
+        <strong className="gave">gave</strong>
         <Link className="toName" to="profile" params={{userId: this.props.to.id}}>{this.props.to.name}</Link>
       	<p className="amount">{this.props.amount}</p>
       	<p className="repsFor">reps for</p>
