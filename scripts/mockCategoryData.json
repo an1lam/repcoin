@@ -1,33 +1,33 @@
 {
-  "name": "Testing",
+  "name": "Biology",
   "_id": ObjectId("5434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
-  "ownerName": "testUser1",
+  "ownerName": "Kanye West",
   "quotes": [ "I love testing!", "I hate making scripts!" ]
 },
 {
-  "name": "Blues",
+  "name": "Blue Grass",
   "_id": ObjectId("5424171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
-  "ownerName": "testUser1",
+  "ownerName": "Kanye West",
   "quotes": [ "I love testing!", "I hate making scripts!" ]
 },
 {
-  "name": "Reggae",
+  "name": "Hip Hop",
   "_id": ObjectId("6434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
-  "ownerName": "testUser1",
+  "ownerName": "Kanye West",
   "quotes": [ "I love testing!", "I hate making scripts!" ]
 },
 {
-  "name": "Graffiti",
+  "name": "Graphic Design",
   "_id": ObjectId("3434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
-  "ownerName": "testUser1",
+  "ownerName": "Kanye West",
   "quotes": [ "I love testing!", "I hate making scripts!" ]
 },
 {
@@ -35,14 +35,22 @@
   "_id": ObjectId("2434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
-  "ownerName": "testUser1",
+  "ownerName": "Kanye West",
   "quotes": [ "I love testing!", "I hate making scripts!" ]
 },
 {
-  "name": "Hip Hop Dance",
+  "name": "Ballet",
   "_id": ObjectId("1434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
-  "ownerName": "testUser1",
+  "ownerName": "Kanye West",
+  "quotes": [ "I love testing!", "I hate making scripts!" ]
+},
+{
+  "name": "Coding",
+  "_id": ObjectId("1434171b7f9cea5969085da1"),
+  "timeStamp": {"$date": 1413480132},
+  "color": "Blue",
+  "ownerName": "Kanye West",
   "quotes": [ "I love testing!", "I hate making scripts!" ]
 }

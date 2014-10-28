@@ -1,16 +1,16 @@
 {
   "_id": ObjectId("543acfa788257fca61ff521b"),
-  "username": "testUser1",
+  "username": "Kanye West",
   "password": "$2a$10$OP3vz4UeE8ZbNHpoxMBABueDVFZw66D273W1beJgqIdAtJiTUHZpW",
   "email": "tester@testing.com",
   "phoneNumber": "9144200201",
   "portfolio": [{
-    "user": "testUser2",
-    "category": "Testing",
+    "user": "Arnold Palmer",
+    "category": "Rap",
     "amount": 20
   }],
   "categories": [{
-      "name": "Testing",
+      "name": "Rap",
       "id": ObjectId("5434171b7f9bea5969085da1"),
       "directScore": 100,
       "crowdScore": 1200,
@@ -18,25 +18,25 @@
       "reps": 50
   }],
   "links": [{
-    "url": "https://www.google.com",
-    "title": "Google"
+    "url": "https://www.kanyewest.com",
+    "title": "Website"
   }],
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "timeStamp": {"$date": 1413480832}
 },
 {
-  "username": "testUser2",
+  "username": "Arnold Palmer",
   "password": "$2a$10$OP3vz4UeE8ZbNHpoxMBABueDVFZw66D273W1beJgqIdAtJiTUHZpW",
   "email": "tester@testing.com",
   "_id": ObjectId("5434171b7f9bea5969085da2"),
   "phoneNumber": "9144200200",
   "portfolio": [{
-    "user": "testUser1",
-    "category": "Testing",
+    "user": "Kanye West",
+    "category": "Rap",
     "amount": 20
   }],
   "categories": [{
-      "name": "Testing",
+      "name": "Rap",
       "id": ObjectId("5434171b7f9bea5969085da1"),
       "directScore": 88,
       "crowdScore": 100,
@@ -52,7 +52,7 @@
 },
 {
   "_id": ObjectId("5439a8221e25afaf21b2adb3"),
-  "username": "matthew",
+  "username": "Matt Ritter",
   "password": "$2a$10$xPIlbToLvX6SYjNujXVC.eh1VbG/.IPNl252KMONnMU3A1usFbdzu",
   "email": "tester@testing.com",
   "phoneNumber": "0000000000",
@@ -61,14 +61,27 @@
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
+   },
+   {
+    "url": "https://github.com/ritmatter",
+    "title": "Github"
+   },
+   {
+    "url": "www.linkedin.com/pub/matthew-ritter/46/b2a/b72/",
+    "title": "LinkedIn"
    }],
    "portfolio": [{
-     "user": "testUser1",
-     "category": "Testing",
+     "user": "Kanye West",
+     "category": "Rap",
      "amount": 20
+   },
+   {
+    "user": "Stephen Malina",
+    "category": "Coding",
+    "amount": 15
    }],
   "categories": [{
-      "name": "Reggae",
+      "name": "Rock and Roll",
       "id": ObjectId("6434171b7f9bea5969085da1"),
       "directScore": 101,
       "crowdScore": 1201,
@@ -78,7 +91,7 @@
 },
 {
   "_id": ObjectId("5439a82b1e25afaf21b2adb4"),
-  "username": "stephen",
+  "username": "Stephen Malina",
   "password": "$2a$10$cXG3vDhOFnyteqw.KY97beKZalr452Q1YowRTFoYbuoOLHMCc6fsu",
   "email": "tester@testing.com",
   "phoneNumber": "1111111111",
@@ -89,22 +102,30 @@
     "title": "Facebook"
    }],
    "portfolio": [{
-     "user": "testUser1",
-     "category": "Testing",
+     "user": "Kanye West",
+     "category": "Rap",
      "amount": 20
    }],
    "categories": [{
-      "name": "Reggae",
+      "name": "Rock and Roll",
       "id": ObjectId("6434171b7f9bea5969085da1"),
       "directScore": 101,
       "crowdScore": 1201,
       "expertScore": 101,
       "reps": 51
-  }]
+    },
+    {
+      "name": "Coding",
+      "id": ObjectId("6434171b7f9cea5969085da1"),
+      "directScore": 45,
+      "crowdScore": 97,
+      "expertScore": 67,
+      "reps": 27
+    }]
 },
 {
   "_id": ObjectId("543a252acb4b5e50277998d6"),
-  "username": "tester",
+  "username": "Sarah Rosenburg",
   "password": "$2a$10$LoPGjDlybblbRa8LVwHmsu9IErah6up78IyAhJQFEGvsoXN9Qmz7e",
   "email": "tester@testing.com",
   "phoneNumber": "1111111112",
@@ -115,12 +136,12 @@
     "title": "Facebook"
    }],
    "portfolio": [{
-     "user": "testUser1",
-     "category": "Testing",
+     "user": "Kanye West",
+     "category": "Rap",
      "amount": 20
    }],
    "categories": [{
-      "name": "Graffiti",
+      "name": "Graphic Design",
       "id": ObjectId("3434171b7f9bea5969085da1"),
       "directScore": 101,
       "crowdScore": 1201,
@@ -130,7 +151,7 @@
 },
 {
   "_id": ObjectId("543a2533cb4b5e50277998d7"),
-  "username": "robert",
+  "username": "Trent Thompson",
   "password": "$2a$10$4AHvVJrnOn/xD7n04MnYmeb9aY5WpBLWnd.jqTLZ395aefSDKASVy",
   "email": "tester@testing.com",
   "phoneNumber": "3333333333",
@@ -141,12 +162,12 @@
     "title": "Facebook"
    }],
    "portfolio": [{
-     "user": "testUser1",
-     "category": "Testing",
+     "user": "Kanye West",
+     "category": "Rap",
      "amount": 20
    }],
    "categories": [{
-      "name": "Graffiti",
+      "name": "Graphic Design",
       "id": ObjectId("3434171b7f9bea5969085da1"),
       "directScore": 101,
       "crowdScore": 1201,
@@ -156,7 +177,7 @@
 },
 {
   "_id": ObjectId("543a253bcb4b5e50277998d8"),
-  "username": "sarah",
+  "username": "Adam Baker",
   "password": "$2a$10$jN5VEPsBu/uErcuUwmoN6eRgf1kBcEGzKrFY6X5lvxqlkeh8lad8W",
   "email": "tester@testing.com",
   "phoneNumber": "4444444444",
@@ -167,8 +188,8 @@
     "title": "Facebook"
    }],
    "portfolio": [{
-     "user": "testUser1",
-     "category": "Testing",
+     "user": "Kanye West",
+     "category": "Rap",
      "amount": 20
    }],
    "categories": [{
@@ -182,7 +203,7 @@
 },
 {
   "_id": ObjectId("543a2543cb4b5e50277998d9"),
-  "username": "john",
+  "username": "John Randazzo",
   "password": "$2a$10$N3hJPJkV3qPFdl4OdsYoLO3.aiX3UL4Ge8QgHdJUzHtQf0aD4hj8S",
   "email": "tester@testing.com",
   "phoneNumber": "5555555555",
@@ -193,8 +214,8 @@
     "title": "Facebook"
    }],
    "portfolio": [{
-     "user": "testUser1",
-     "category": "Testing",
+     "user": "Kanye West",
+     "category": "Rap",
      "amount": 20
    }],
    "categories": [{
@@ -208,7 +229,7 @@
 },
 {
   "_id": ObjectId("543a254dcb4b5e50277998da"),
-  "username": "rachel",
+  "username": "Jean Walker",
   "password": "$2a$10$H89r2n7HnfKcXmjOa8wWLOHnaNKon.zZdg422xDzCnKILEl3w2yUi",
   "email": "tester@testing.com",
   "phoneNumber": "6666666666",
@@ -219,7 +240,7 @@
     "title": "Facebook"
    }],
    "categories": [{
-      "name": "Hip Hope Dance",
+      "name": "Ballet",
       "id": ObjectId("1434171b7f9bea5969085da1"),
       "directScore": 101,
       "crowdScore": 1201,
@@ -229,7 +250,7 @@
 },
 {
   "_id": ObjectId("543a2555cb4b5e50277998db"),
-  "username": "allison",
+  "username": "Sofia Cortez",
   "password": "$2a$10$tDtINOuHtvvt/aOx1rRlie4dhjxaMNX3xlcjgW/daOxAGXfFABiH6",
   "email": "tester@testing.com",
   "phoneNumber": "7777777777",
@@ -240,12 +261,12 @@
     "title": "Facebook"
    }],
    "portfolio": [{
-     "user": "testUser1",
-     "category": "Testing",
+     "user": "Kanye West",
+     "category": "Rap",
      "amount": 20
    }],
    "categories": [{
-      "name": "Hip Hop Dance",
+      "name": "Ballet",
       "id": ObjectId("1434171b7f9bea5969085da1"),
       "directScore": 101,
       "crowdScore": 1201,
@@ -255,7 +276,7 @@
 },
 {
   "_id": ObjectId("543a255ccb4b5e50277998dc"),
-  "username": "jen",
+  "username": "Jen Dalecki",
   "password": "$2a$10$TyLFcYhQv/7espcOmc1YBejdrHrPP9VeYtlARp5AAX1GBlR6zfBQS",
   "email": "tester@testing.com",
   "phoneNumber": "8888888888",
@@ -266,12 +287,12 @@
   }],
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "portfolio": [{
-    "user": "testUser1",
-    "category": "Testing",
+    "user": "Kanye West",
+    "category": "Rap",
     "amount": 20
   }],
   "categories": [{
-    "name": "Blues",
+    "name": "Blue Grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
     "directScore": 101,
     "crowdScore": 1201,
@@ -292,12 +313,12 @@
     "title": "Facebook"
   }],
   "portfolio": [{
-    "user": "testUser1",
-    "category": "Testing",
+    "user": "Kanye West",
+    "category": "Rap",
     "amount": 20
   }],
   "categories": [{
-    "name": "Blues",
+    "name": "Blue Grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
     "directScore": 101,
     "crowdScore": 1201,
@@ -307,10 +328,10 @@
 },
 {
   "_id": ObjectId("54428de218c74ed07ec3e774"),
-  "username": "foobar",
+  "username": "Brian Leventhal",
   "password": "$2a$10$mvJKBKh5Dm8nqYdW3W3g8eN1dAkI1BuHnZ9S9RTMgLxygtYIlvnNS",
   "email": "tester@testing.com",
-  "phoneNumber": "foobar",
+  "phoneNumber": "Brian Leventhal",
   "timeStamp": "2014-10-18T15:57:22.133Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -318,12 +339,12 @@
     "title": "Facebook"
   }],
   "portfolio": [{
-    "user": "testUser1",
-    "category": "Testing",
+    "user": "Kanye West",
+    "category": "Rap",
     "amount": 20
   }],
   "categories": [{
-    "name": "Blues",
+    "name": "Blue Grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
     "directScore": 101,
     "crowdScore": 1201,
@@ -333,10 +354,10 @@
 },
 {
   "_id": ObjectId("54428e2e18c74ed07ec3e776"),
-  "username": "michael",
+  "username": "Michaela Meyers",
   "password": "$2a$10$SOd5.ZwMaWAzb0J5AgaMPOfI00iLOqvY7IsrMRXzzeK9aN/udil7a",
   "email": "tester@testing.com",
-  "phoneNumber": "michael",
+  "phoneNumber": "Michaela Meyers",
   "timeStamp": "2014-10-18T15:58:38.658Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -344,8 +365,8 @@
     "title": "Facebook"
   }],
   "portfolio": [{
-    "user": "testUser1",
-    "category": "Testing",
+    "user": "Kanye West",
+    "category": "Rap",
     "amount": 20
   }],
   "categories": [{
@@ -359,10 +380,10 @@
 },
 {
   "_id": ObjectId("54428e5618c74ed07ec3e777"),
-  "username": "peter",
+  "username": "Peter Piper",
   "password": "$2a$10$LUNrnh5Rkyh0Igw3oO6tsu.f.HSuglkTDQRkvAecQFGpP1We20Of.",
   "email": "tester@testing.com",
-  "phoneNumber": "peter",
+  "phoneNumber": "Peter Piper",
   "timeStamp": "2014-10-18T15:59:18.982Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -370,8 +391,8 @@
     "title": "Facebook"
   }],
   "portfolio": [{
-    "user": "testUser1",
-    "category": "Testing",
+    "user": "Kanye West",
+    "category": "Rap",
     "amount": 20
   }],
   "categories": [{
