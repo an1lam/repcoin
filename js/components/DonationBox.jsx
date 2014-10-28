@@ -19,7 +19,6 @@ var DonationBox = React.createClass({
         transactionCategory = currentCategory;
       }
     }
-    console.log(transactionCategory.reps < reps);
     if (!transactionCategory || transactionCategory.reps < reps) {
       this.setState({donationError: true});
     } else {
@@ -108,7 +107,7 @@ var DonationBox = React.createClass({
     var donatableCategories = this.props.user.categories.map(function(category) {
       for (var i = 0; i < currentUserCategories.length; i++) {
         if (currentUserCategories[i].name === category.name) {
-          return <option value={category.name}>{category.name}</option>;
+          return <option key={category.id} value={category.name}>{category.name}</option>;
         }
       }
     });

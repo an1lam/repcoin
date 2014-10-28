@@ -18,8 +18,10 @@ var UserSchema = new Schema({
   categories: [{
     name: String,
     id: Schema.Types.ObjectId,
-    directScore: Number,
-    crowdScore: Number,
+    directScore: {type: Number, default: 0, required: true },
+    previousDirectScore: {type: Number, default: 0, required: true },
+    crowdScore: {type: Number, default: 0, required: true },
+    previousCrowdScore: {type: Number, default: 0, required: true },
     expertScore: Number,
     reps: Number,
   }],

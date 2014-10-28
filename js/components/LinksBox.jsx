@@ -31,7 +31,7 @@ var LinksBox = React.createClass({
   },
 
   makeLinkItem: function(link) {
-    return <li className="list-group-item"><LinkItem link={link} currentUser={this.props.currentUser} user={this.props.user}/></li>;
+    return <li key={link.title} className="list-group-item"><LinkItem link={link} currentUser={this.props.currentUser} user={this.props.user}/></li>;
   },
 
   render: function() {

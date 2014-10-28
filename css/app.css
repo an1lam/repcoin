@@ -1,4 +1,23 @@
 /* Feed Items ////////////////////////////////////// */
+.score {
+  height: 28px;
+  display:inline-block;
+  border-radius:2px;
+}
+
+.number {
+  margin-top:7px;
+  position:absolute;
+  margin-left:5px;
+  display:inline-block;
+  font-size:14px;
+}
+
+.feedTitle {
+  margin-top:15px;
+  margin-left:15px;
+  margin-bottom:15px;
+}
 
 .feedItem {
   display:inline-block;
@@ -228,23 +247,6 @@ html, body {
   position:absolute;
   bottom:0;
   left:0;
-}
-
-/* Categories Table ////////////////////////////// */
-.table-striped>tbody>tr:nth-child(odd)>td {
-   background-color:#D18E4D;
-}
-
-.table-striped>tbody>tr:nth-child(even)>td {
-   background-color:#E8C6A6;
-}
-
-.table-striped>tbody>tr:hover:nth-child(odd)>td {
-    background-color: #BC8045;
-}
-
-.table-striped>tbody>tr:hover:nth-child(even)>td {
-    background-color: #D1B295;
 }
 
 .categoriesHeader {

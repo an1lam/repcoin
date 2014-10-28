@@ -12,7 +12,8 @@
   "categories": [{
       "name": "Rap",
       "id": ObjectId("5434171b7f9bea5969085da1"),
-      "directScore": 100,
+      "directScore": 55,
+      "previousDirectScore": 58,
       "crowdScore": 1200,
       "expertScore": 100,
       "reps": 50
@@ -38,7 +39,8 @@
   "categories": [{
       "name": "Rap",
       "id": ObjectId("5434171b7f9bea5969085da1"),
-      "directScore": 88,
+      "directScore": 51,
+      "previousDirectScore": 49,
       "crowdScore": 100,
       "expertScore": 10,
       "reps": 20
@@ -57,7 +59,7 @@
   "email": "tester@testing.com",
   "phoneNumber": "0000000000",
   "timeStamp": "2014-10-11T21:58:58.692Z",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
+  "picture": "images/5439a8221e25afaf21b2adb3.jpg",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -83,7 +85,8 @@
   "categories": [{
       "name": "Rock and Roll",
       "id": ObjectId("6434171b7f9bea5969085da1"),
-      "directScore": 101,
+      "directScore": 72,
+      "previousDirectScore": 75,
       "crowdScore": 1201,
       "expertScore": 101,
       "reps": 51
@@ -109,7 +112,8 @@
    "categories": [{
       "name": "Rock and Roll",
       "id": ObjectId("6434171b7f9bea5969085da1"),
-      "directScore": 101,
+      "directScore": 27,
+      "previousDirectScore": 24,
       "crowdScore": 1201,
       "expertScore": 101,
       "reps": 51
@@ -117,7 +121,8 @@
     {
       "name": "Coding",
       "id": ObjectId("6434171b7f9cea5969085da1"),
-      "directScore": 45,
+      "directScore": 42,
+      "previousDirectScore": 39,
       "crowdScore": 97,
       "expertScore": 67,
       "reps": 27
@@ -143,7 +148,8 @@
    "categories": [{
       "name": "Graphic Design",
       "id": ObjectId("3434171b7f9bea5969085da1"),
-      "directScore": 101,
+      "directScore": 67,
+      "previousDirectScore": 64,
       "crowdScore": 1201,
       "expertScore": 101,
       "reps": 51
@@ -169,7 +175,8 @@
    "categories": [{
       "name": "Graphic Design",
       "id": ObjectId("3434171b7f9bea5969085da1"),
-      "directScore": 101,
+      "directScore": 82,
+      "previousDirectScore": 85,
       "crowdScore": 1201,
       "expertScore": 101,
       "reps": 51
@@ -195,7 +202,8 @@
    "categories": [{
       "name": "Sculpture",
       "id": ObjectId("2434171b7f9bea5969085da1"),
-      "directScore": 101,
+      "directScore": 16,
+      "previousDirectScore": 14,
       "crowdScore": 1201,
       "expertScore": 101,
       "reps": 51
@@ -221,7 +229,8 @@
    "categories": [{
       "name": "Sculpture",
       "id": ObjectId("2434171b7f9bea5969085da1"),
-      "directScore": 101,
+      "directScore": 59,
+      "previousDirectScore": 63,
       "crowdScore": 1201,
       "expertScore": 101,
       "reps": 51
@@ -242,7 +251,8 @@
    "categories": [{
       "name": "Ballet",
       "id": ObjectId("1434171b7f9bea5969085da1"),
-      "directScore": 101,
+      "directScore": 33,
+      "previousDirectScore": 36,
       "crowdScore": 1201,
       "expertScore": 101,
       "reps": 51
@@ -268,7 +278,8 @@
    "categories": [{
       "name": "Ballet",
       "id": ObjectId("1434171b7f9bea5969085da1"),
-      "directScore": 101,
+      "directScore": 50,
+      "previousDirectScore": 47,
       "crowdScore": 1201,
       "expertScore": 101,
       "reps": 51
@@ -294,7 +305,8 @@
   "categories": [{
     "name": "Blue Grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
-    "directScore": 101,
+    "directScore": 42,
+    "previousDirectScore": 44,
     "crowdScore": 1201,
     "expertScore": 101,
     "reps": 51
@@ -320,7 +332,8 @@
   "categories": [{
     "name": "Blue Grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
-    "directScore": 101,
+    "directScore": 6,
+    "previousDirectScore": 0,
     "crowdScore": 1201,
     "expertScore": 101,
     "reps": 51
@@ -346,7 +359,8 @@
   "categories": [{
     "name": "Blue Grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
-    "directScore": 101,
+    "directScore": 69,
+    "previousDirectScore": 70,
     "crowdScore": 1201,
     "expertScore": 101,
     "reps": 51
@@ -372,7 +386,8 @@
   "categories": [{
     "name": "Sculpture",
     "id": ObjectId("2434171b7f9bea5969085da1"),
-    "directScore": 101,
+    "directScore": 12,
+    "previousDirectScore": 11,
     "crowdScore": 1201,
     "expertScore": 101,
     "reps": 51
@@ -398,7 +413,8 @@
   "categories": [{
     "name": "Sculpture",
     "id": ObjectId("2434171b7f9bea5969085da1"),
-    "directScore": 101,
+    "directScore": 46,
+    "previousDirectScore": 42,
     "crowdScore": 1201,
     "expertScore": 101,
     "reps": 51

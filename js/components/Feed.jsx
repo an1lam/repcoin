@@ -62,11 +62,12 @@ var Feed = React.createClass({
   render: function() {
     var feedHeader = this.props.userId ? <FeedHeader onClick={this.handleClick}/> : '';
     return (
-      <div className="feed">
+      <div className="feed panel panel-default">
+        <h3 className="feedTitle panel-title">Feed</h3>
         {feedHeader}
         <ul className="list-group">
           {this.state.transactions.map(function(transaction) {
-            return <li className="list-group-item"><FeedItem from={transaction.from} to={transaction.to} amount={transaction.amount} category={transaction.category} /></li>;
+            return <li key={transaction._id} className="list-group-item"><FeedItem from={transaction.from} to={transaction.to} amount={transaction.amount} category={transaction.category} /></li>;
           })}
         </ul>
       </div>
