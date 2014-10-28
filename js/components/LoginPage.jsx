@@ -30,9 +30,9 @@ var LoginPage = React.createClass({
           </div>
         </div>
         <div className="loginBody">
-          <span className="logo">Reps</span>
+          <span className="logo">Repcoin</span>
           <span className="slogan">
-            <h1>Reputation for the digital age</h1>
+            <h1>Find your expert.</h1>
           </span>
           <Signup />
         </div>
