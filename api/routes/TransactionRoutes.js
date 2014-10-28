@@ -1,10 +1,91 @@
 // api/routes/TransactionRoutes.js
 
 var Transaction = require('../models/Transaction.js');
+var User = require('../models/User.js');
 
 // Routes that end in /transactions
 // TODO : ADD AUTHENTICATION INTO EACH ROUTE!!
 module.exports = function(router, isAuthenticated) {
+  function createTransaction(req, res) {
+    // Check that there is a user logged in
+    if (!req.user) {
+      res.status(400).send("No user logged in");
+      return;
+    }
+
+    // Check that the user is the same as from
+    if (req.user._id != req.body.from.id) {
+      res.status(400).send("Incorrect user: " + req.body.from.name + "does not match " + req.user.username);
+      return;
+    }
+
+    var transaction = new Transaction({
+      to          : req.body.to,
+      from        : req.body.from,
+      amount      : req.body.amount,
+      category    : req.body.category
+    });
+
+    // TODO: Update user's portfolio also.
+    transaction.save( function(err) {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        // Deal with from user
+        User.findById(req.body.from.id, function(err, user) {
+          if (err) {
+            //TODO: Remove transaction?
+            res.send(err);
+          } else {
+            var categoryToUpdate = null;
+            for (var i = 0; i < user.categories.length; i++) {
+              if (user.categories[i].name === req.body.category) {
+                categoryToUpdate = user.categories[i];
+              }
+            }
+
+            if (categoryToUpdate !== null) {
+              categoryToUpdate.reps -= req.body.amount;
+              user.save(function(err) {
+                if (err) {
+                  res.send(err);
+                } else {
+                  // Deal with to user.
+                  User.findById(req.body.to.id, function(err, user) {
+                    if (err) {
+                      res.send(err);
+                    } else {
+                      var categoryToUpdate = null;
+                      for (var i = 0; i < user.categories.length; i++) {
+                        if (user.categories[i].name === req.body.category) {
+                          categoryToUpdate = user.categories[i];
+                        }
+                      }
+
+                      if (categoryToUpdate !== null) {
+                        categoryToUpdate.directScore = parseInt(categoryToUpdate.directScore) + parseInt(req.body.amount);
+                        user.save(function(err) {
+                          if (err) {
+                            res.send(err)
+                          } else {
+                            res.send(transaction);
+                          }
+                        });
+                      } else {
+                        res.send("Unable to find corresponding category");
+                      }
+                    }
+                  });
+                }
+              });
+            } else {
+              res.send("Unable to find corresponding category");
+            }
+          }
+        });
+      }
+    });
+  }
   router.route('/transactions')
     // Get all the transactions
     .get(function(req, res) {
@@ -19,31 +100,7 @@ module.exports = function(router, isAuthenticated) {
 
     // Create a new transaction
     .post(function(req, res) {
-
-      // Check that there is a user logged in
-      if (!req.user) {
-        res.status(400).send("No user logged in");
-        return;
-      }
-
-      // Check that the user is the same as from
-      if (req.user._id != req.body.from.id) {
-        res.status(400).send("Incorrect user: " + req.body.from.name + "does not match " + req.user.username);
-        return;
-      }
-      var transaction = new Transaction({
-        to          : req.body.to,
-        from        : req.body.from,
-        amount      : req.body.amount,
-        category    : req.body.category
-      });
-      transaction.save( function(err) {
-        if (err) {
-          res.status(400).send(err);
-        } else {
-          res.send(transaction);
-        }
-      });  
+      createTransaction(req, res);
     });
 
 ///////// Routes that have /transcations/:transaction_id ////////
@@ -78,7 +135,7 @@ module.exports = function(router, isAuthenticated) {
           });
         }
       });
-    })      
+    })
 
    // Delete the transaction with this id
    .delete(function(req, res) {
@@ -128,7 +185,7 @@ module.exports = function(router, isAuthenticated) {
         }
       });
     });
- 
+
   // Get all of the transactions from a given user
   router.route('/transactions/users/:userId/from')
     .get(function(req, res) {
@@ -152,7 +209,7 @@ module.exports = function(router, isAuthenticated) {
         }
       });
     });
- 
+
   // Get all of the public transactions between users
   router.route('/transactions/users/:userId/us/public')
     .get(function(req, res) {
