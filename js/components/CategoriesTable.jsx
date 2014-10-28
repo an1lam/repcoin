@@ -20,7 +20,7 @@ var CategoriesTable = React.createClass({
           </tr>
           <tbody>
           {this.props.user.categories.map(function(category) {
-            return <CategoriesItem category={category.name} directRep={category.directScore} crowdRep={category.crowdScore} />;
+            return <CategoriesItem category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} crowdRep={category.crowdScore} />;
           })}
           </tbody>
         </table>
