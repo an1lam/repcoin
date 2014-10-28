@@ -6,11 +6,14 @@ var PubSub = require('pubsub-js');
 var $ = require('jquery');
 var auth = require('../auth.jsx');
 var LinkInput = require('./LinkInput.jsx');
+var LinkDelete = require('./LinkDelete.jsx');
 
 var LinkItem = React.createClass({
   getInitialState: function() {
     return { 
-      showEdit: false, showInput: false 
+      showEdit: false,
+      showInput: false,
+      showDelete: false
     }; 
   },
 
@@ -18,8 +21,12 @@ var LinkItem = React.createClass({
     this.setState({ showEdit: false, showInput: true });
   },
 
+  handleDeleteClick: function() {
+    this.setState({ showEdit: false, showInput: false, showDelete: true });
+  },
+
   handleMouseOver: function() {
-    if (!this.state.showInput) {
+    if (!this.state.showDelete && !this.state.showInput) {
       this.setState({ showEdit: true });
     }
   },
@@ -30,6 +37,10 @@ var LinkItem = React.createClass({
 
   closeInputBox: function() {
     this.setState({ showInput: false });
+  },
+
+  closeDeleteBox: function() {
+    this.setState({ showDelete: false });
   },
 
   deleteLinkItem: function() {
@@ -69,6 +80,7 @@ var LinkItem = React.createClass({
 
   render: function() {
     var edit = '';
+    var del = '';
     var linkPlace = 
         <div className="text">
           <strong>{this.props.link.title}</strong>: <a href={this.props.link.url}>{this.props.link.url}</a>
@@ -79,12 +91,16 @@ var LinkItem = React.createClass({
         edit = <div className="edit">
           <a onClick={this.handleEditClick}><span className="pencil glyphicon glyphicon-pencil"></span></a>
           <p className="divider"> | </p>
-          <a onClick={this.deleteLinkItem}><span className="remove glyphicon glyphicon-remove"></span></a>
+          <a onClick={this.handleDeleteClick}><span className="remove glyphicon glyphicon-remove"></span></a>
         </div>;
       }
 
       if (this.state.showInput) {
         linkPlace = <LinkInput currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeInputBox} title={this.props.link.title} url={this.props.link.url}/>;
+      }
+
+      if (this.state.showDelete) {
+        del = <LinkDelete currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeDeleteBox} onDelete={this.deleteLinkItem}/>; 
       }
     }
 
@@ -92,6 +108,7 @@ var LinkItem = React.createClass({
       <div className="linkItem" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         {linkPlace}
         {edit}
+        {del}
       </div> 
     );
   }
