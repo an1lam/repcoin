@@ -49,13 +49,19 @@
   float: left;
 }
 
-.gave {
+.action {
   margin: 0;
   float: left;
   padding-right:5px;
 }
 
-.repsFor {
+.for {
+  margin: 0;
+  float: left;
+  padding-right: 5px;
+}
+
+.repsPronoun {
   margin: 0;
   float: left;
   padding-right:5px;
