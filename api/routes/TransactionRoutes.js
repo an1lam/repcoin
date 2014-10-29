@@ -58,9 +58,11 @@ module.exports = function(router, isAuthenticated) {
             if (index != -1) {
               user.portfolio[index].amount -= req.body.amount;
             } else {
-              portfolioEntry = { user: req.body.to.name,
-                                 category: req.body.category,
-                                  amount: req.body.amount };
+              portfolioEntry = {
+                user: req.body.to.name,
+                category: req.body.category,
+                amount: req.body.amount,
+              };
               user.portfolio.push(portfolioEntry);
             } 
 
