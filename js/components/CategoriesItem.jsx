@@ -9,7 +9,7 @@ var CategoriesItem = React.createClass({
     return (
       <tr className="categoriesItem">
         <td>{this.props.category}</td>
-        <td><ScoreBar directRep={this.props.directRep} prevDirectRep={this.props.prevDirectRep} /></td>
+        <td><ScoreBar directRep={this.props.directRep} prevDirectRep={this.props.prevDirectRep} category={this.props.category}/></td>
         <td>{this.props.crowdRep}</td>
       </tr>
     );

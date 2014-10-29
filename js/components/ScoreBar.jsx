@@ -5,23 +5,33 @@ var React = require('react');
 var $ = require('jquery');
 
 var ScoreBar = React.createClass({
-  getIntitialState: function() {
+  getInitialState: function() {
     return {};
   },
 
   componentDidMount: function() {
-    var w = this.props.directRep + "%";
-    $(".score").width(w);
-    
-    var change = this.props.directRep - this.props.prevDirectRep;
+    this.updateDOM(this.props);
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    this.updateDOM(newProps);
+  },
+
+  updateDOM: function(props) {
+    var change = props.directRep - props.prevDirectRep;
     var color = change < 0 ? "#BD362F" : "#51A351";
-    $(".score").css("background-color", color);
+    var w = props.directRep + "%";
+    var id = props.category.split(' ').join('_');
+
+    $("." + id).width(w);
+    $("." + id).css("background-color", color);
   },
 
   render: function() {
+    var classes = "score " + this.props.category.split(' ').join('_');
     return (
       <div className="scoreBar">
-        <div className="score"></div>
+        <div className={classes}></div>
         <div className="number">{this.props.directRep}</div>
       </div>
     );
