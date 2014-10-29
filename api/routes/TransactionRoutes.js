@@ -56,7 +56,7 @@ module.exports = function(router, isAuthenticated) {
               }
             }
             if (index != -1) {
-              user.portfolio[index].amount -= req.body.amount;
+              user.portfolio[index].amount += req.body.amount;
             } else {
               portfolioEntry = {
                 user: req.body.to.name,
