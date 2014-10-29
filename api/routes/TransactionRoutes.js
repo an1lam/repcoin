@@ -26,7 +26,6 @@ module.exports = function(router, isAuthenticated) {
       category    : req.body.category
     });
 
-    // TODO: Update user's portfolio also.
     transaction.save( function(err) {
       if (err) {
         res.status(400).send(err);
@@ -38,12 +37,32 @@ module.exports = function(router, isAuthenticated) {
             res.send(err);
           } else {
             var fromUser = user;
+        
+            // Find the category that should be updated
             var categoryToUpdate = null;
             for (var i = 0; i < user.categories.length; i++) {
               if (user.categories[i].name === req.body.category) {
                 categoryToUpdate = user.categories[i];
               }
             }
+ 
+            // Find the portfolio entry that should be updated
+            var index = -1;
+            var portfolio = user.portfolio;
+            for (var i = 0; i < portfolio.length; i++) {
+              if (portfolio[i].user === req.body.to.name && 
+                  portfolio[i].category === req.body.category) {
+                index = i;
+              }
+            }
+            if (index != -1) {
+              user.portfolio[index].amount -= req.body.amount;
+            } else {
+              portfolioEntry = { user: req.body.to.name,
+                                 category: req.body.category,
+                                  amount: req.body.amount };
+              user.portfolio.push(portfolioEntry);
+            } 
 
             if (categoryToUpdate !== null) {
               categoryToUpdate.reps -= req.body.amount;
