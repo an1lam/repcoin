@@ -34,7 +34,6 @@ module.exports = function(router, isAuthenticated) {
         // Deal with from user
         User.findById(req.body.from.id, function(err, user) {
           if (err) {
-            //TODO: Remove transaction?
             Transaction.findOneAndRemove({ "id": transaction.id });
             res.send(err);
           } else {
