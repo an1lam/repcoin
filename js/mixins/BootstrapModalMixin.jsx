@@ -2,8 +2,8 @@
 "use strict";
 
 var React = require('react');
-var $ = require('jquery');
-require('bootstrap/dist/js/bootstrap');
+global.$ = global.jQuery = require('jquery');
+require('bootstrap');
  
 module.exports = function() {
   var handlerProps =
@@ -38,7 +38,6 @@ module.exports = function() {
     },
  
     componentDidMount: function() {
-      debugger;
       var $modal = $(this.getDOMNode()).modal({
         backdrop: this.props.backdrop,
         keyboard: this.props.keyboard,
