@@ -76,7 +76,7 @@ var ProfilePage = React.createClass({
         portfolio = <PortfolioTable user={this.state.user} />;
       }
 
-      if (this.state.currentUser._id != this.state.user._id) {
+      if (this.state.currentUser._id !== this.state.user._id) {
         donationBox = <DonationBox user={this.state.user} currentUser={this.state.currentUser} />;
       }
     }
