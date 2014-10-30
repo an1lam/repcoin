@@ -1,14 +1,16 @@
-/** @jsx React.DOM */
 "use strict";
 
 var React = require('react');
 var auth = require('../auth.jsx');
 var Router = require('react-router');
+var Navigation = Router.Navigation;
 
 var Logout = React.createClass({
+  mixins: [Navigation],
+
   handleClick: function() {
     auth.logOut();
-    Router.transitionTo("/");
+    this.transitionTo("/");
   },
   render: function() {
     return (

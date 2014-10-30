@@ -2,8 +2,12 @@
 "use strict";
 var React = require('react');
 var $ = require('jquery');
+var Router = require('react-router');
+var Navigation = Router.Navigation;
 
 var auth = {
+  mixins: [Navigation],
+
   logIn: function(username, password, cb) {
     return $.ajax({
       type: 'POST',
@@ -63,19 +67,8 @@ var auth = {
     }
   },
 
-  loggedIn: function(cb) {
-    // TODO: Potentially also check local storage for an existing currentUser
-    // Need to look into security concerns
-    return $.ajax({
-      url: 'api/loggedIn',
-      type: 'GET',
-      error: function(xhr, status, err) {
-        console.log(err);
-      },
-      success: function(data) {
-        cb(data);
-      },
-    });
+  loggedIn: function() {
+    return !!window.localStorage.getItem('currentUser'); 
   },
 
   logOut: function() {
