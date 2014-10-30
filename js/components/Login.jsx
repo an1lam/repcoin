@@ -4,13 +4,12 @@
 var React = require('react');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
 var Router = require('react-router');
+var Navigation = Router.Navigation;
 var auth = require('../auth.jsx');
 
-var TestMixin = {
-
-};
-
 var Login = React.createClass({
+  mixins: [Navigation],
+
   getInitialState: function() {
     return {
       error: false,
@@ -23,7 +22,7 @@ var Login = React.createClass({
     var password = this.refs.password.getDOMNode().value;
     auth.logIn(username, password, function(loggedIn) {
       if (loggedIn) {
-        Router.transitionTo('/home');
+        this.transitionTo('/home');
       }
       else {
         return this.setState({error: true});

@@ -1,11 +1,10 @@
-/** @jsx React.DOM */
 "use strict";
 
 var React = require('react');
-var Login = require('./Login.jsx');
+var Login = require('./Login');
 var Router = require('react-router');
 var Link = Router.Link;
-var Signup = require('./Signup.jsx');
+var Signup = require('./Signup');
 
 var LoginPage = React.createClass({
 

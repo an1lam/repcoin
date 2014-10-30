@@ -1,9 +1,8 @@
-/** @jsx React.DOM */
 "use strict";
 
 var React = require('react');
-var FeedItem = require('./FeedItem.jsx');
-var FeedHeader = require('./FeedHeader.jsx');
+var FeedItem = require('./FeedItem');
+var FeedHeader = require('./FeedHeader');
 var $ = require('jquery');
 
 var Feed = React.createClass({
