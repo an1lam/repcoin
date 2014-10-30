@@ -314,7 +314,7 @@
 },
 {
   "_id": ObjectId("54428d1418c74ed07ec3e773"),
-  "username": "Matt Ritter",
+  "username": "Bob Trenton",
   "password": "$2a$10$877Qq2T0IX1zKi9xHqKdSewY0Bxdiu5FvpuLshFiBpL..oL6HWFaq",
   "email": "tester@testing.com",
   "phoneNumber": "9999999999",

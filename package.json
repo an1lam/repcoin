@@ -16,7 +16,7 @@
     "passport-local": "~1.0.0",
     "pubsub-js": "^1.5.0",
     "react": "latest",
-    "react-router": "~0.7.0",
+    "react-router": "latest",
     "react-tools": "~0.11.2",
     "reduce": "~1.0.1"
   },

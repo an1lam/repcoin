@@ -9,7 +9,7 @@
     "id": ObjectId("543acfa788257fca61ff521b")
   },
   "amount": 10,
-  "category": "Biology",
+  "category": "Rap",
   "timeStamp": {"$date": 1413480939}
 },
 {
@@ -24,6 +24,20 @@
   },
   "amount": 11,
   "category": "Hip Hop",
+  "timeStamp": {"$date": 1413480939}
+},
+{
+  "to": {
+    "name": "Arnold Palmer",
+    "id": ObjectId("5434171b7f9bea5969085da2")
+  },
+  "from": {
+    "anonymous": false,
+    "name": "Kanye West",
+    "id": ObjectId("543acfa788257fca61ff521b")
+  },
+  "amount": -10,
+  "category": "Rap",
   "timeStamp": {"$date": 1413480939}
 },
 {
@@ -56,20 +70,6 @@
 },
 {
   "to": {
-    "name": "Trent Thompson",
-    "id": ObjectId("543a2533cb4b5e50277998d7")
-  },
-  "from": {
-    "anonymous": false,
-    "name": "Sarah Rosenburg",
-    "id": ObjectId("543a252acb4b5e50277998d6")
-  },
-  "amount": 5,
-  "category": "Graphic Design",
-  "timeStamp": {"$date": 1413480939}
-},
-{
-  "to": {
     "name": "John Randazzo",
     "id": ObjectId("543a2543cb4b5e50277998d9")
   },
@@ -93,6 +93,34 @@
     "id": ObjectId("5439a82b1e25afaf21b2adb4")
   },
   "amount": 15,
+  "category": "Coding",
+  "timeStamp": {"$date": 1413480939}
+},
+{
+  "to": {
+    "name": "Trent Thompson",
+    "id": ObjectId("543a2533cb4b5e50277998d7")
+  },
+  "from": {
+    "anonymous": false,
+    "name": "Sarah Rosenburg",
+    "id": ObjectId("543a252acb4b5e50277998d6")
+  },
+  "amount": 5,
+  "category": "Graphic Design",
+  "timeStamp": {"$date": 1413480939}
+},
+{
+  "to": {
+    "name": "Matt Ritter",
+    "id": ObjectId("5439a8221e25afaf21b2adb3")
+  },
+  "from": {
+    "anonymous": false,
+    "name": "Stephen Malina",
+    "id": ObjectId("5439a82b1e25afaf21b2adb4")
+  },
+  "amount": -20,
   "category": "Coding",
   "timeStamp": {"$date": 1413480939}
 }
