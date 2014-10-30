@@ -5,21 +5,30 @@ var gulp = require('gulp'),
     react = require('gulp-react'),
     rename = require('gulp-rename'),
     connect = require('gulp-connect'),
-    jest = require('gulp-jest'),
     plumber = require('gulp-plumber'),
     jshint = require('gulp-jshint'),
     mocha = require('gulp-mocha'),
     server = require('gulp-express');
 
 // Gulp setup to run mocha tests
-gulp.task('mocha', function() {
-  return gulp.src(['test/*.js'], { read: false })
+gulp.task('backend-tests', function() {
+  return gulp.src(['test/*.jsx'], { read: false })
+    .pipe(react())
     .pipe(mocha({ reporter: 'spec' }))
-    .on('error', gutil.log); 
+    .on('error', gutil.log);
+});
+
+gulp.task('frontend-tests', function() {
+  return gulp.src(['spec/**/*.jsx'])
+             .pipe(react())
+             .pipe(gulp.dest('build/spec/'))
+             .pipe(mocha({ reporter: 'spec' }))
+             .on('error', gutil.log);
 });
 
 gulp.task('watch-mocha', function() {
-  gulp.watch(['test/**', 'api/**', 'js/**'], ['mocha']);
+  //gulp.watch(['test/**', 'api/**'], ['backend-tests']);
+  gulp.watch(['spec/**/*.jsx', 'js/**'], ['frontend-tests']);
 });
 
 gulp.task('fonts', function() {
@@ -63,24 +72,6 @@ gulp.task('jshint', function() {
       .pipe(jshint.reporter('default'));
 });
 
-gulp.task('jest', ['jshint'], function() {
-  return gulp.src('spec').pipe(jest({
-    scriptPreprocessor: "preprocessor.js",
-    unmockedModulePathPatterns: [
-      "react",
-    ],
-    testDirectoryName: "spec",
-    testPathIgnorePatterns: [
-      "node_modules",
-      "preprocessor.js"
-    ],
-    moduleFileExtensions: [
-      "jsx",
-      "js",
-      "react"
-    ]
-  }));
-});
 
 gulp.task('watch', function() {
   gulp.watch(paths.js, ['build']);
@@ -89,7 +80,7 @@ gulp.task('watch', function() {
   gulp.watch(paths.images, ['images']);
 });
 
-gulp.task('build', ['jest', 'html', 'css', 'lib', 'fonts', 'images'], function() {
+gulp.task('build', ['html', 'css', 'lib', 'fonts', 'images'], function() {
   // Single entry to browserify
   gulp.src('js/app.jsx')
       .pipe(plumber())
@@ -111,4 +102,4 @@ gulp.task('express', ['build'], function() {
   });
 });
 
-gulp.task('default', ['watch', 'jest', 'build', 'express']);
+gulp.task('default', ['watch', 'watch-mocha', 'build', 'express']);
