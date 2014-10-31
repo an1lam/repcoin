@@ -1,14 +1,16 @@
 /** @jsx React.DOM */
+/* global jQuery */
+/* global $ */
 "use strict";
 
 var React = require('react');
-global.$ = global.jQuery = require('jquery');
+global.jQuery = global.$ = require('jquery');
 require('bootstrap');
- 
+
 module.exports = function() {
   var handlerProps =
     ['handleShow', 'handleShown', 'handleHide', 'handleHidden'];
- 
+
   var bsModalEvents = {
     handleShow: 'show.bs.modal',
     handleShown: 'shown.bs.modal',
