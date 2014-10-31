@@ -12,13 +12,16 @@ var PortfolioTable = React.createClass({
         <PortfolioHeader />
         <table className="table table-bordered table-striped">
           <tr className="PortfolioHeader">
-            <th>User</th>
             <th>Category</th>
-            <th>Amount</th>
+            <th>Reps Available</th>
+            <th>
+              <div>Investments</div>
+              <div className="subtitle">User / Amount / Valuation</div>
+            </th>
           </tr>
           <tbody>
-          {this.props.user.portfolio.map(function(investment) {
-            return <PortfolioItem key={investment.user + investment.category} user={investment.user} category={investment.category} amount={investment.amount} />;
+          {this.props.user.portfolio.map(function(category) {
+            return <PortfolioItem category={category} />;
           })}
           </tbody>
         </table>

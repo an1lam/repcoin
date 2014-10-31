@@ -4,11 +4,26 @@
   "password": "$2a$10$OP3vz4UeE8ZbNHpoxMBABueDVFZw66D273W1beJgqIdAtJiTUHZpW",
   "email": "tester@testing.com",
   "phoneNumber": "9144200201",
-  "portfolio": [{
-    "user": "Arnold Palmer",
-    "category": "Rap",
-    "amount": 20
-  }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
   "categories": [{
       "name": "Rap",
       "id": ObjectId("5434171b7f9bea5969085da1"),
@@ -31,11 +46,26 @@
   "email": "tester@testing.com",
   "_id": ObjectId("5434171b7f9bea5969085da2"),
   "phoneNumber": "9144200200",
-  "portfolio": [{
-    "user": "Kanye West",
-    "category": "Rap",
-    "amount": 20
-  }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
   "categories": [{
       "name": "Rap",
       "id": ObjectId("5434171b7f9bea5969085da1"),
@@ -72,16 +102,26 @@
     "url": "www.linkedin.com/pub/matthew-ritter/46/b2a/b72/",
     "title": "LinkedIn"
    }],
-   "portfolio": [{
-     "user": "Kanye West",
-     "category": "Rap",
-     "amount": 20
-   },
-   {
-    "user": "Stephen Malina",
-    "category": "Coding",
-    "amount": 15
-   }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
   "categories": [{
       "name": "Rock and Roll",
       "id": ObjectId("6434171b7f9bea5969085da1"),
@@ -104,11 +144,26 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
    }],
-   "portfolio": [{
-     "user": "Kanye West",
-     "category": "Rap",
-     "amount": 20
-   }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
    "categories": [{
       "name": "Rock and Roll",
       "id": ObjectId("6434171b7f9bea5969085da1"),
@@ -140,11 +195,26 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
    }],
-   "portfolio": [{
-     "user": "Kanye West",
-     "category": "Rap",
-     "amount": 20
-   }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
    "categories": [{
       "name": "Graphic Design",
       "id": ObjectId("3434171b7f9bea5969085da1"),
@@ -167,11 +237,26 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
    }],
-   "portfolio": [{
-     "user": "Kanye West",
-     "category": "Rap",
-     "amount": 20
-   }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
    "categories": [{
       "name": "Graphic Design",
       "id": ObjectId("3434171b7f9bea5969085da1"),
@@ -194,11 +279,26 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
    }],
-   "portfolio": [{
-     "user": "Kanye West",
-     "category": "Rap",
-     "amount": 20
-   }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
    "categories": [{
       "name": "Sculpture",
       "id": ObjectId("2434171b7f9bea5969085da1"),
@@ -221,11 +321,26 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
    }],
-   "portfolio": [{
-     "user": "Kanye West",
-     "category": "Rap",
-     "amount": 20
-   }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
    "categories": [{
       "name": "Sculpture",
       "id": ObjectId("2434171b7f9bea5969085da1"),
@@ -248,6 +363,26 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
    }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
    "categories": [{
       "name": "Ballet",
       "id": ObjectId("1434171b7f9bea5969085da1"),
@@ -270,19 +405,34 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
    }],
-   "portfolio": [{
-     "user": "Kanye West",
-     "category": "Rap",
-     "amount": 20
-   }],
-   "categories": [{
-      "name": "Ballet",
-      "id": ObjectId("1434171b7f9bea5969085da1"),
-      "directScore": 50,
-      "previousDirectScore": 47,
-      "crowdScore": 1201,
-      "expertScore": 101,
-      "reps": 51
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
+  "categories": [{
+    "name": "Ballet",
+    "id": ObjectId("1434171b7f9bea5969085da1"),
+    "directScore": 50,
+    "previousDirectScore": 47,
+    "crowdScore": 1201,
+    "expertScore": 101,
+    "reps": 51
   }]
 },
 {
@@ -297,11 +447,26 @@
     "title": "Facebook"
   }],
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-  "portfolio": [{
-    "user": "Kanye West",
-    "category": "Rap",
-    "amount": 20
-  }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
   "categories": [{
     "name": "Blue Grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
@@ -324,11 +489,26 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
   }],
-  "portfolio": [{
-    "user": "Kanye West",
-    "category": "Rap",
-    "amount": 20
-  }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
   "categories": [{
     "name": "Blue Grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
@@ -351,11 +531,26 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
   }],
-  "portfolio": [{
-    "user": "Kanye West",
-    "category": "Rap",
-    "amount": 20
-  }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
   "categories": [{
     "name": "Blue Grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
@@ -378,11 +573,26 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
   }],
-  "portfolio": [{
-    "user": "Kanye West",
-    "category": "Rap",
-    "amount": 20
-  }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
   "categories": [{
     "name": "Sculpture",
     "id": ObjectId("2434171b7f9bea5969085da1"),
@@ -405,11 +615,26 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
   }],
-  "portfolio": [{
-    "user": "Kanye West",
-    "category": "Rap",
-    "amount": 20
-  }],
+  "portfolio": [
+    {
+      "repsAvailable": 10,
+      "category": "Rap",
+      "investments": [{
+        "user": "Kanye West",
+        "amount": 20,
+        "valuation": 20
+      }]
+    },
+    {
+      "repsAvailable": 5,
+      "category": "Coding",
+      "investments": [{
+        "user": "Stephen Malina",
+        "amount": 15,
+        "valuation": 15
+      }]
+    }
+  ],
   "categories": [{
     "name": "Sculpture",
     "id": ObjectId("2434171b7f9bea5969085da1"),

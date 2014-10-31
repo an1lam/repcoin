@@ -13,7 +13,6 @@ var $ = require('jquery');
 var PubSub = require('pubsub-js');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var auth = require('../auth.jsx');
-var InvestmentButton = require('./InvestmentButton.jsx');
 
 var ProfilePage = React.createClass({
   mixins: [AuthenticatedRoute],
@@ -94,7 +93,6 @@ var ProfilePage = React.createClass({
               {portfolio}
             </div>
             <div className="col-md-7">
-              <InvestmentButton />
               {donationBox}
               {feed}
             </div>

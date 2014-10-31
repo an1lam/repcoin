@@ -11,9 +11,13 @@ var UserSchema = new Schema({
   email: {type: String, required: true},
   phoneNumber: {type: String, required: true, unique: true },
   portfolio: [{
-    user: String, // Should this be a string?
-    category: String, // Should this be a string?
-    amount: Number,
+    repsAvailable: Number,
+    category: String,
+    investments: [{
+      user: String,
+      amount: Number,
+      valuation: Number 
+    }],
   }],
   categories: [{
     name: String,
