@@ -37,7 +37,7 @@ module.exports = function(router, isAuthenticated) {
             res.send(err);
           } else {
             var fromUser = user;
-        
+
             // Find the category that should be updated
             var categoryToUpdate = null;
             for (var i = 0; i < user.categories.length; i++) {
@@ -45,14 +45,14 @@ module.exports = function(router, isAuthenticated) {
                 categoryToUpdate = user.categories[i];
               }
             }
- 
+
             // Find the portfolio entry that should be updated
             var index = -1;
             var portfolio = user.portfolio;
-            for (var i = 0; i < portfolio.length; i++) {
-              if (portfolio[i].user === req.body.to.name && 
-                  portfolio[i].category === req.body.category) {
-                index = i;
+            for (var j = 0; j < portfolio.length; j++) {
+              if (portfolio[j].user === req.body.to.name &&
+                  portfolio[j].category === req.body.category) {
+                index = j;
               }
             }
             if (index != -1) {
@@ -64,7 +64,7 @@ module.exports = function(router, isAuthenticated) {
                 amount: req.body.amount,
               };
               user.portfolio.push(portfolioEntry);
-            } 
+            }
 
             if (categoryToUpdate !== null) {
               categoryToUpdate.reps -= req.body.amount;
@@ -95,7 +95,7 @@ module.exports = function(router, isAuthenticated) {
                             Transaction.findOneAndRemove({'id': transaction.id});
                             fromUser.reps += amount;
                             fromUser.save();
-                            res.send(err)
+                            res.send(err);
                           } else {
                             res.send(transaction);
                           }
