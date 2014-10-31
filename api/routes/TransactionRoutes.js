@@ -47,23 +47,34 @@ module.exports = function(router, isAuthenticated) {
             }
 
             // Find the portfolio entry that should be updated
-            var index = -1;
+            var indexI = -1;
+            var indexJ = -1;
             var portfolio = user.portfolio;
-            for (var j = 0; j < portfolio.length; j++) {
-              if (portfolio[j].user === req.body.to.name &&
-                  portfolio[j].category === req.body.category) {
-                index = j;
+            for (var i = 0; i < portfolio.length; i++) {
+              if (portfolio[i].category === req.body.category) {
+                var investments = portfolio[i].investments;
+                indexI = i;
+                for (var j = 0; j < investments.length; j++) {
+                  if (investments[j].user === req.body.to.name) {
+                    indexJ = j;
+                  }
+                }
               }
             }
-            if (index != -1) {
-              user.portfolio[index].amount += req.body.amount;
+            
+            // The user is not an investor for this category (ERROR!)
+            if (indexI === -1) {
+              res.status(400).send("Invalid transaction");
+            }
+
+            // The user has never invested in this user before
+            if (indexJ === -1) {
+              var investment = { user       : req.body.to.name,
+                                 amount     : req.body.amount,  
+                                 valuation  : req.body.amount }; 
+              portfolio[indexI].investments.push(investment);
             } else {
-              portfolioEntry = {
-                user: req.body.to.name,
-                category: req.body.category,
-                amount: req.body.amount,
-              };
-              user.portfolio.push(portfolioEntry);
+             portfolio[indexI].investments[indexJ].amount += req.body.amount; 
             }
 
             if (categoryToUpdate !== null) {
