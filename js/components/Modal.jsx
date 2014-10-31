@@ -6,11 +6,14 @@ var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
 
 var Modal = React.createClass({
   mixins: [ModalMixin],
- 
+
   render: function() {
+    var modalStyleOverride = {
+      'zIndex': 1050,
+    };
     return (
-      <div className="modal fade">
-        <div className="modal-dialog">
+      <div className="modal">
+        <div className="modal-dialog" style={modalStyleOverride}>
           <div className="modal-content">
             <div className="modal-header">
               {this.renderCloseButton()}

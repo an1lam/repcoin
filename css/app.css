@@ -331,3 +331,9 @@ html, body {
 .linkItem .text {
   display:inline-block;
 }
+
+/* Modal ///////////////////////// */
+.modal-content {
+  z-index:1050;
+  width: 50000px;
+}
