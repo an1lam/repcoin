@@ -48,14 +48,14 @@ module.exports = function(router, isAuthenticated) {
  
             // Find the portfolio entry that should be updated
             var indexI = -1;
-            var IndexJ = -1;
+            var indexJ = -1;
             var portfolio = user.portfolio;
             for (var i = 0; i < portfolio.length; i++) {
               if (portfolio[i].category === req.body.category) {
                 var investments = portfolio[i].investments;
+                indexI = i;
                 for (var j = 0; j < investments.length; j++) {
                   if (investments[j].user === req.body.to.name) {
-                    indexI = i;
                     indexJ = j;
                   }
                 }
@@ -68,11 +68,13 @@ module.exports = function(router, isAuthenticated) {
             }
 
             // The user has never invested in this user before
-            if (indexJ !== -1) {
+            if (indexJ === -1) {
               var investment = { user       : req.body.to.name,
                                  amount     : req.body.amount,  
                                  valuation  : req.body.amount }; 
-              portfolio[i].investements.push(investment);
+              portfolio[indexI].investments.push(investment);
+            } else {
+             portfolio[indexI].investments[indexJ].amount += req.body.amount; 
             }
 
             if (categoryToUpdate !== null) {

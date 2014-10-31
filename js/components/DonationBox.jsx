@@ -71,10 +71,10 @@ var DonationBox = React.createClass({
 
   render: function() {
     var donationError = this.state.donationError ? <p>You don't have that many reps in that category!</p> : "";
-    var currentUserCategories = this.props.currentUser.categories;
+    var currentUserPortfolio = this.props.currentUser.portfolio;
     var donatableCategories = this.props.user.categories.map(function(category) {
-      for (var i = 0; i < currentUserCategories.length; i++) {
-        if (currentUserCategories[i].name === category.name) {
+      for (var i = 0; i < currentUserPortfolio.length; i++) {
+        if (currentUserPortfolio[i].category === category.name) {
           return <option key={category.id} value={category.name}>{category.name}</option>;
         }
       }

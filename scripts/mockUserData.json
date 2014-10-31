@@ -130,6 +130,15 @@
       "crowdScore": 1201,
       "expertScore": 101,
       "reps": 51
+  },
+  {
+      "name": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
+      "directScore": 33,
+      "previousDirectScore": 30,
+      "crowdScore": 1201,
+      "expertScore": 101,
+      "reps": 23
   }]
 },
 {
@@ -157,11 +166,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
-      "investments": [{
-        "user": "Stephen Malina",
-        "amount": 15,
-        "valuation": 15
-      }]
+      "investments": [{}]
     }
   ],
    "categories": [{
