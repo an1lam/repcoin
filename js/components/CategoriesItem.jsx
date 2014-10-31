@@ -8,7 +8,7 @@ var CategoriesItem = React.createClass({
   getDefaultProps: function() {
     return {
       reps: -1
-    }
+    };
   },
 
   render: function() {

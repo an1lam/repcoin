@@ -3,6 +3,7 @@
   "description": "The first and best reputation market.",
   "author": "Stephen Malina and Matt Ritter",
   "dependencies": {
+    "browserify": "~6.2.0",
     "bcrypt": "^0.8.0",
     "body-parser": "^1.9.0",
     "bootstrap": "~3.3.0",
@@ -19,7 +20,8 @@
     "react": "~0.12.0",
     "react-router": "~0.10.0",
     "react-tools": "~0.12.0",
-    "reduce": "~1.0.1"
+    "reduce": "~1.0.1",
+    "jshint": "~2.5.8"
   },
   "devDependencies": {
     "connect-livereload": "^0.4.0",
@@ -46,5 +48,17 @@
     "node": "true",
     "browser": "true",
     "newcap": "false"
+  },
+  "scripts": {
+    "lint": "jsxhint js/**/*.jsx && jshint api/**/*.js",
+    "build-jsx": "watchify -t reactify --debug --extension=.jsx js/app.jsx -o build/app.js -dv",
+    "build-html": "catw index.html -o build/index.html",
+    "build-css": "catw css/**/*.css -o build/app.css",
+    "build-lib": "cp js/lib/**/* build/js/lib/",
+    "build-fonts": "cp fonts/** build/fonts/",
+    "build": "(npm run build-html & npm run build-css & npm run build-lib & npm run build-fonts) && npm run build-jsx",
+    "kill": "pkill -f npm & pkill -f node;",
+    "build-and-start": "npm run build & npm run start",
+    "start": "node server.js"
   }
 }

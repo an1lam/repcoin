@@ -1,10 +1,10 @@
 "use strict";
 
 var React = require('react');
-var Login = require('./Login');
+var Login = require('./Login.jsx');
 var Router = require('react-router');
 var Link = Router.Link;
-var Signup = require('./Signup');
+var Signup = require('./Signup.jsx');
 
 var LoginPage = React.createClass({
 

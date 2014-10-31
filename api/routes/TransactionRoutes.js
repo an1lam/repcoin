@@ -37,7 +37,7 @@ module.exports = function(router, isAuthenticated) {
             res.send(err);
           } else {
             var fromUser = user;
-        
+
             // Find the category that should be updated
             var categoryToUpdate = null;
             for (var i = 0; i < user.categories.length; i++) {
@@ -45,7 +45,7 @@ module.exports = function(router, isAuthenticated) {
                 categoryToUpdate = user.categories[i];
               }
             }
- 
+
             // Find the portfolio entry that should be updated
             var indexI = -1;
             var indexJ = -1;
@@ -106,7 +106,7 @@ module.exports = function(router, isAuthenticated) {
                             Transaction.findOneAndRemove({'id': transaction.id});
                             fromUser.reps += amount;
                             fromUser.save();
-                            res.send(err)
+                            res.send(err);
                           } else {
                             res.send(transaction);
                           }
