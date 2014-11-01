@@ -1,3 +1,12 @@
+/* General ////////////////////////////////////// */
+.reps_form-label {
+  padding-right: 10px;
+}
+
+.reps_padder {
+  padding-bottom: 10px;
+}
+
 /* Feed Items ////////////////////////////////////// */
 .score {
   height: 28px;
@@ -20,10 +29,11 @@
 }
 
 .feedTitle {
-  margin-top:15px;
-  margin-left:15px;
-  margin-bottom:15px;
+  padding-top:15px;
+  padding-left:10px;
+  padding-bottom:15px;
 }
+
 
 .feedItem {
   display:inline-block;
@@ -333,7 +343,7 @@ html, body {
 }
 
 /* Modal ///////////////////////// */
-.modal-content {
-  z-index:1050;
-  width: 50000px;
+.categories-dropdown {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }

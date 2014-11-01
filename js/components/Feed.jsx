@@ -66,7 +66,6 @@ var Feed = React.createClass({
       <div className="feed panel panel-default">
         <h3 className="feedTitle panel-title">Feed</h3>
         {feedHeader}
-        <InvestmentButton />
         <ul className="list-group">
           {this.state.transactions.map(function(transaction) {
             return <li key={transaction._id} className="list-group-item"><FeedItem transaction={transaction} /></li>;

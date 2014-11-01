@@ -7,6 +7,7 @@ var CategoriesTable = require('./CategoriesTable.jsx');
 var DonationBox = require('./DonationBox.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
+var InvestmentButton = require('./InvestmentButton.jsx');
 var PortfolioTable = require('./PortfolioTable.jsx');
 var ProfileBox = require('./ProfileBox.jsx');
 var PubSub = require('pubsub-js');
@@ -65,6 +66,7 @@ var ProfilePage = React.createClass({
     var feed = '';
     var portfolio = '' ;
     var profileBox = '';
+    var investmentButton = '';
 
     if (this.state.user && this.state.currentUser) {
       categoriesTable = <CategoriesTable user={this.state.user} />;
@@ -77,6 +79,10 @@ var ProfilePage = React.createClass({
 
       if (this.state.currentUser._id !== this.state.user._id) {
         donationBox = <DonationBox user={this.state.user} currentUser={this.state.currentUser} />;
+      }
+
+      if (this.state.currentUser._id !== this.state.user._id) {
+        investmentButton = <InvestmentButton user={this.state.user} currentUser={this.state.currentUser} />;
       }
     }
 
@@ -96,6 +102,7 @@ var ProfilePage = React.createClass({
             </div>
             <div className="col-md-7">
               {donationBox}
+              {investmentButton}
               {feed}
             </div>
           </div>
