@@ -4,6 +4,7 @@
 var React = require('react');
 var FeedItem = require('./FeedItem.jsx');
 var FeedHeader = require('./FeedHeader.jsx');
+var InvestmentButton = require('./InvestmentButton.jsx');
 var $ = require('jquery');
 
 var Feed = React.createClass({
