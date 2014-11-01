@@ -12,7 +12,7 @@ var PortfolioTable = require('./PortfolioTable.jsx');
 var ProfileBox = require('./ProfileBox.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
-var Toolbar = require('./ToolBar.jsx');
+var Toolbar = require('./Toolbar.jsx');
 
 var ProfilePage = React.createClass({
   mixins: [AuthenticatedRoute],
