@@ -29,4 +29,5 @@ Main application entry-point (i.e node server.js)
 - Alphabetize React component imports
 - Use javascript "===" instead of "=="
 - Use two-space indents
-
+- Start js files with "use strict" (allows jsxhint to work)
+- Never include component lifecycle functions unless you need them

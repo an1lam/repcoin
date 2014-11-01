@@ -19,6 +19,7 @@ var UserSchema = new Schema({
       valuation: Number 
     }],
   }],
+  defaultCategory: String,
   categories: [{
     name: String,
     id: Schema.Types.ObjectId,

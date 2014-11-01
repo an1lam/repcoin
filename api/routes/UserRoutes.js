@@ -59,12 +59,13 @@ module.exports = function(router) {
         if (err) {
           res.send(err);
         } else {
-          user.username    = req.body.username || user.username;
-          user.password    = req.body.password || user.password;
-          user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
-          user.categories  = req.body.categories || user.categories;
-          user.portfolio   = req.body.portfolio || user.portfolio;
-          user.picture     = req.body.picture || user.picture;
+          user.username         = req.body.username || user.username;
+          user.password         = req.body.password || user.password;
+          user.phoneNumber      = req.body.phoneNumber || user.phoneNumber;
+          user.categories       = req.body.categories || user.categories;
+          user.defaultCategory  = req.body.defaultCategory || user.defaultCategory;
+          user.portfolio        = req.body.portfolio || user.portfolio;
+          user.picture          = req.body.picture || user.picture;
 
           if (req.body.links) {
             if (req.body.links[0] == "EMPTY") {
