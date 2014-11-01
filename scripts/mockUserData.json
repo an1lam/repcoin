@@ -169,6 +169,7 @@
       "investments": []
     }
   ],
+  "defaultCategory": "Rock and Roll",
    "categories": [{
       "name": "Rock and Roll",
       "id": ObjectId("6434171b7f9bea5969085da1"),

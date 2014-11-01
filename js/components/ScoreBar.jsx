@@ -1,14 +1,9 @@
-/** @jsx React.DOM */
 "use strict";
 
 var React = require('react');
 var $ = require('jquery');
 
 var ScoreBar = React.createClass({
-  getInitialState: function() {
-    return {};
-  },
-
   componentDidMount: function() {
     this.updateDOM(this.props);
   },

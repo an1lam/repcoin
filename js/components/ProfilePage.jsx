@@ -1,18 +1,17 @@
-/** @jsx React.DOM */
 "use strict";
 
-var React = require('react');
-var Toolbar = require('./Toolbar.jsx');
-var ProfileBox = require('./ProfileBox.jsx');
-var Footer = require('./Footer.jsx');
-var Feed = require('./Feed.jsx');
-var CategoriesTable = require('./CategoriesTable.jsx');
-var PortfolioTable = require('./PortfolioTable.jsx');
-var DonationBox = require('./DonationBox.jsx');
 var $ = require('jquery');
-var PubSub = require('pubsub-js');
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var auth = require('../auth.jsx');
+var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
+var CategoriesTable = require('./CategoriesTable.jsx');
+var DonationBox = require('./DonationBox.jsx');
+var Feed = require('./Feed.jsx');
+var Footer = require('./Footer.jsx');
+var PortfolioTable = require('./PortfolioTable.jsx');
+var ProfileBox = require('./ProfileBox.jsx');
+var PubSub = require('pubsub-js');
+var React = require('react');
+var Toolbar = require('./ToolBar.jsx');
 
 var ProfilePage = React.createClass({
   mixins: [AuthenticatedRoute],
@@ -61,15 +60,15 @@ var ProfilePage = React.createClass({
   },
 
   render: function() {
-    var feed = '';
-    var portfolio = '' ;
     var categoriesTable = '';
     var donationBox = '';
+    var feed = '';
+    var portfolio = '' ;
     var profileBox = '';
 
     if (this.state.user && this.state.currentUser) {
-      feed = <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} />;
       categoriesTable = <CategoriesTable user={this.state.user} />;
+      feed = <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} />;
       profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
 
       if (this.state.currentUser._id === this.state.user._id) {
