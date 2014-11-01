@@ -3,15 +3,17 @@
   "description": "The first and best reputation market.",
   "author": "Stephen Malina and Matt Ritter",
   "dependencies": {
-    "browserify": "~6.2.0",
     "bcrypt": "^0.8.0",
     "body-parser": "^1.9.0",
     "bootstrap": "~3.3.0",
+    "browserify": "~6.2.0",
     "busboy": "^0.2.9",
+    "catw": "^0.2.0",
     "express": "~4.9.4",
     "express-session": "~1.8.2",
     "flux": "~2.0.1",
     "jquery": "~2.1.1",
+    "jshint": "~2.5.8",
     "jsxhint": "~0.5.0",
     "mongoose": "~3.8.17",
     "passport": "~0.2.1",
@@ -21,7 +23,7 @@
     "react-router": "~0.10.0",
     "react-tools": "~0.12.0",
     "reduce": "~1.0.1",
-    "jshint": "~2.5.8"
+    "watchify": "^2.1.0"
   },
   "devDependencies": {
     "connect-livereload": "^0.4.0",

@@ -13,11 +13,11 @@ var Signup = React.createClass({
   },
 
   handleSubmit: function() {
-    var username = this.refs.username.getDOMNode().value;
+    var name = this.refs.name.getDOMNode().value;
     var email = this.refs.email.getDOMNode().value;
     var phoneNumber = this.refs.phoneNumber.getDOMNode().value;
     var password = this.refs.password.getDOMNode().value;
-    var data = { username: username, email: email, phoneNumber: phoneNumber, password: password };
+    var data = { username: name, email: email, phoneNumber: phoneNumber, password: password };
    
     $.ajax({
       url: '/api/users',
@@ -36,7 +36,7 @@ var Signup = React.createClass({
     return (
       <div className="signup col-md-2 col-md-offset-5">
         <form onSubmit={this.handleSubmit}>
-          <input type="text" ref="username" className="form-control" placeholder="Username"></input>
+          <input type="text" ref="name" className="form-control" placeholder="Name"></input>
           <input type="text" ref="email" className="form-control" placeholder="Email"></input>
           <input type="text" ref="phoneNumber" className="form-control" placeholder="Phone Number"></input>
           <input type="password" ref="password" className="form-control" placeholder="Password"></input>
