@@ -134,6 +134,10 @@
   display:inline-block;
 }
 
+.linksBox {
+  padding-left:35px;
+}
+
 .editBox {
   float:right;
 }
@@ -179,8 +183,7 @@
 }
 
 .profileBox {
-  background-color: white;
-  overflow: hidden;
+  margin-bottom:30px;
 }
 
 .profilePicture {
@@ -193,15 +196,11 @@
 .profileUsername {
   margin-top:0px;
   font-size:28px;
-  margin-bottom:10px;
+  margin-bottom:30px;
 }
 
 .superScorePanel {
   font-size:26px;
-}
-
-.profileData {
-  position: relative;
 }
 
 .donationCategories {

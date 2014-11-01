@@ -86,7 +86,7 @@ var ProfilePage = React.createClass({
           <Toolbar />
         </div>
         <div id="content">
-          <div className="row">
+          <div className="row profileBox">
             {profileBox}
           </div>
           <div className="row">
