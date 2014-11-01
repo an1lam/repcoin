@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require('jquery');
+var AboutBox = require('./AboutBox.jsx');
 var auth = require('../auth.jsx');
 var LinksBox = require('./LinksBox.jsx');
 var PictureBox = require('./PictureBox.jsx');
@@ -18,6 +19,9 @@ var ProfileBox = React.createClass({
         <div className="col-md-3">
           <div className="row">
             <div className="profileUsername">{this.props.user.username}</div>
+          </div>
+          <div className="row">
+            <AboutBox user={this.props.user}/>
           </div>
           <div className="row">
             <div className="superScorePanel"><SuperScore user={this.props.user} /></div>

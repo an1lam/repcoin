@@ -193,10 +193,13 @@
   margin:5px;
 }
 
+.aboutBox {
+  margin-bottom:20px;
+}
+
 .profileUsername {
   margin-top:0px;
   font-size:28px;
-  margin-bottom:30px;
 }
 
 .superScorePanel {
