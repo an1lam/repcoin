@@ -59,7 +59,7 @@ var LinksBox = React.createClass({
 
    return(
       <div className="linksBox" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
-        <h4>Links</h4>
+        <h4>Content</h4>
         {edit}
         {linkInput}
         <ul className="list-group">
