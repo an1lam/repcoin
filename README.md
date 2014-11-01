@@ -25,6 +25,20 @@ Contains all of our frontend javascript (i.e. React components and frontend rout
 **server.js**
 Main application entry-point (i.e node server.js)
 
+## Build System
+We are using [NPM](http://www.npmjs.org/) as our build system and package manager. To get our code
+set up you will have to create a few directories before you run the build. You must create a
+directory build, and within it add directories fonts, images, and css.
+
+If this is your first time building our code, first run `npm run build-fonts` and `npm run
+build-images`. Then, you are set to start coding and rebuilding our code.
+
+Every time you want to run the site, you should open two terminal tabs. In one, run
+`npm start`. In the other, run `npm run watch`. This will watch all of your changes to the frontend
+and continuously rebuild it.
+
+TODO(Stephen) Add live reloading for the backend.
+
 ## Style
 - Alphabetize React component imports
 - Use javascript "===" instead of "=="
