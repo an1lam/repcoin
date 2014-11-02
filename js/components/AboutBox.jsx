@@ -4,7 +4,6 @@ var React = require('react');
 
 var AboutBox = React.createClass({
   render: function() {
-    debugger;
     var aboutBox = '';
     if (this.props.user.about) {
       aboutBox = <p>{this.props.user.about}</p>;
