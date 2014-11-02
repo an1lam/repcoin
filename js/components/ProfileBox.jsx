@@ -24,7 +24,7 @@ var ProfileBox = React.createClass({
             <AboutBox user={this.props.user}/>
           </div>
           <div className="row">
-            <div className="superScorePanel"><SuperScore user={this.props.user} /></div>
+            <div className="superScorePanel"><SuperScore user={this.props.user} currentUser={this.props.currentUser} /></div>
           </div>
         </div>
         <div className="col-md-7">

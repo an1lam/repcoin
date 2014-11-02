@@ -31,20 +31,26 @@ var SuperScore = React.createClass({
   render: function() {
     var superScore = '';
     if (this.state.category) {
-      return (
-        <div className="superScore panel panel-primary">
+        superScore = <div className="panel panel-primary">
           <div className="panel-heading">
             <div className="superText">{this.state.category}</div>
             <div className="superText">:</div>
             <div className="superText">{this.state.defaultDirectRep}</div>
           </div> 
+        </div>;
+    } else if (this.props.currentUser._id === this.props.user._id) {
+      superScore = <div className="defaultPanel panel panel-default">
+        <div className="panel-body">
+          <em>Choose a default category!</em>
         </div>
-      );
-    } else {
-      return (
-        <div className="superScore"></div>
-      );
+      </div>;
     }
+    
+    return (
+      <div className="superScore">
+        {superScore}
+      </div>
+    );
   }
 });
 
