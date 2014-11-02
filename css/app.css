@@ -322,6 +322,12 @@ html, body {
   margin-right:2px;
 }
 
+/* AboutBox //////////////////////// */
+.aboutBox .edit {
+  display:inline;
+  float:right;
+}
+
 /* LinkItem ///////////////////////// */
 .linkItem .edit {
   display:inline;

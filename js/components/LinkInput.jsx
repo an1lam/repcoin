@@ -1,14 +1,11 @@
-/** @jsx React.DOM */
 "use strict"; 
-var React = require('react');
+
+var $ = require('jquery');
 var auth = require('../auth.jsx');
 var PubSub = require('pubsub-js');
-var $ = require('jquery');
+var React = require('react');
 
 var LinkInput = React.createClass({
-  getInitialState: function() {
-    return {};
-  },
 
   handleSubmit: function(event) {
     event.preventDefault();
@@ -58,7 +55,7 @@ var LinkInput = React.createClass({
   render: function() {
     var title = this.props.title || "Description";
     var url = this.props.url || "URL";
-    return(
+    return (
       <div className="linkInput">
         <form onSubmit={this.handleSubmit} onReset={this.propagateReset}>
           <div>
