@@ -4,17 +4,18 @@ var React = require('react');
 
 var AboutBox = React.createClass({
   render: function() {
+    debugger;
+    var aboutBox = '';
     if (this.props.user.about) {
-      return (
-        <div className="aboutBox">
-          <p>{this.props.user.about}</p>
-        </div>
-      );
-    } else {
-      return (
-        <div className="aboutBox"></div>
-      );
+      aboutBox = <p>{this.props.user.about}</p>;
+    } else if (this.props.user._id === this.props.currentUser._id) {
+      aboutBox = <em>Add a brief description of yourself!</em>;
     }
+    return (
+      <div className="aboutBox">
+        {aboutBox}
+      </div>
+    );    
   }
 });
 
