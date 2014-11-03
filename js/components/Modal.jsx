@@ -82,7 +82,7 @@ var Modal = React.createClass({
     var categories = this.props.user.categories.map(function(category) {
       for (var i = 0; i < currentUserPortfolio.length; i++) {
         if (currentUserPortfolio[i].category === category.name && currentUserPortfolio[i].reps > 0) {
-          return <option key={category.id} value={category.name}>{category.name}</option>;
+          return <option key={category.id} value={category.name}>{category.name}({currentUserPortfolio[i].reps})</option>;
         }
       }
     });

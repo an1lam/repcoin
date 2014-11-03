@@ -53,7 +53,7 @@ return <tr>
     return (
       <table className="table table-bordered">
         <thead>
-        <tr><th colSpan="3">Leaderboard for {this.props.category}</th></tr>
+        <tr><th colSpan="3">{this.props.category} Leaders</th></tr>
         <tr>
           <th>Name</th>
           <th>Direct Rep</th>
