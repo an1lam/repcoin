@@ -1,14 +1,11 @@
 "use strict";
 
-var Router = require('react-router');
-var React = require('react');
-var Link = Router.Link;
 var $ = require('jquery');
+var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var FeedItem = React.createClass({
-  getInitialState: function() {
-    return {};
-  },
 
   componentDidMount: function() {
     var color = this.props.transaction.amount < 0 ? "#BD362F" : "#51A351";

@@ -43,9 +43,7 @@ var InstantBox = React.createClass({
     return (
       <div className="instantBox">
         <SearchBar query={this.state.query} search={this.search} />
-        <div>
-          <SearchDisplayTable data={this.state.filteredData} />
-        </div>
+        <SearchDisplayTable data={this.state.filteredData} />
       </div>
     );
   }
