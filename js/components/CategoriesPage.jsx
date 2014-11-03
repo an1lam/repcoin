@@ -8,7 +8,7 @@ var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 
 var CategoriesPage = React.createClass({
   mixins: [AuthenticatedRoute],
-  
+
   getInitialState: function() {
     return { categories : [] };
   },
