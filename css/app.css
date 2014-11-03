@@ -134,6 +134,16 @@
 
 
 /* Toolbar Items /////////////////////////////////// */
+.searchBar {
+  margin-top:20px;
+}
+
+.searchDisplayTable {
+  display:inline-block;
+  position:absolute;
+  z-index:999;
+}
+
 .toolbarHomeLink {
   float:left;
   padding-right:30px;

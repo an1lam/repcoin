@@ -1,13 +1,13 @@
 /** @jsx React.DOM */
 "use strict";
 
+var auth = require('../auth.jsx');
+var InstantBox = require('./InstantBox.jsx');
+var Logout = require('./Logout.jsx');
 var React = require('react');
 var Router = require('react-router');
-var Link = Router.Link;
-var auth = require('../auth.jsx');
 
-var SearchBar = require('./SearchBar.jsx');
-var Logout = require('./Logout.jsx');
+var Link = Router.Link;
 
 var Toolbar = React.createClass({
   getInitialState: function() {
@@ -29,7 +29,9 @@ var Toolbar = React.createClass({
         <div className="navbar-header">
           <div className="toolbarHomeLink navbar-brand"><Link to="home">Reps</Link></div>
         </div>
-        <SearchBar />
+        <div className="col-md-3 col-md-offset-1">
+          <InstantBox />
+        </div>
         <div className="navbar navbar-right"><div className="navbar-header navbar-brand">{LogoutOrNothing}</div></div>
       </div>
     );
