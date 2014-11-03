@@ -17,7 +17,7 @@ var UserSchema = new Schema({
     investments: [{
       user: String,
       amount: Number,
-      valuation: Number 
+      valuation: Number
     }],
   }],
   defaultCategory: String,
@@ -76,6 +76,10 @@ UserSchema.methods.comparePassword = function(candidatePassword) {
 
 UserSchema.statics.findBySearchTerm = function(searchTerm, cb) {
   return this.find( { "username": { $regex: new RegExp('\\b' + searchTerm, 'i') }}, cb);
+};
+
+UserSchema.statics.findNLeaders = function(category, count, cb) {
+  return this.find( { "categories.name": category } ).sort( { "categories.directScore": -1 } ).limit(10).exec(cb);
 };
 
 module.exports = mongoose.model('User', UserSchema);

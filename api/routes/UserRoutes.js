@@ -97,15 +97,26 @@ module.exports = function(router) {
       });
     })
 
-   // Delete the user with this id
-   .delete(function(req, res) {
-      // Remove the user
-      User.remove({ _id: req.params.user_id }, function(err, user) {
+    // Delete the user with this id
+    .delete(function(req, res) {
+       // Remove the user
+       User.remove({ _id: req.params.user_id }, function(err, user) {
+         if (err) {
+           res.send(err);
+         } else {
+           res.send('Successfully deleted user');
+         }
+       });
+    });
+  ///////// Get n leaders for a category ///////
+  router.route('/users/:categoryName/leaders/:count')
+    .get(function(req, res) {
+      User.findNLeaders(req.params.categoryName, parseInt(req.params.count), function(err, leaders) {
         if (err) {
-          res.send(err);
+          res.status(400).send(err);
         } else {
-          res.send('Successfully deleted user');
+          res.send(leaders);
         }
       });
-   });
+    });
 };

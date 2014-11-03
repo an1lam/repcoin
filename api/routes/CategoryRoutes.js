@@ -83,16 +83,18 @@ router.route('/categories/:categoryName')
       });
     })
 
-   // Delete the category with this id
-   .delete(function(req, res) {
-      // Remove the category
-      Category.remove({ _id: req.params.category_id }, function(err, category) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send('Successfully deleted category');
-        }
-      });
-   });
+    // Delete the category with this id
+    .delete(function(req, res) {
+       // Remove the category
+       Category.remove({ _id: req.params.category_id }, function(err, category) {
+         if (err) {
+           res.send(err);
+         } else {
+           res.send('Successfully deleted category');
+         }
+       });
+    });
+
+
 };
 
