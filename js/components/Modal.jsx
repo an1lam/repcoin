@@ -3,21 +3,88 @@
 
 var React = require('react');
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
+var auth = require('../auth.jsx');
+var PubSub = require('pubsub-js');
+var $ = require('jquery');
 
 var Modal = React.createClass({
   mixins: [ModalMixin],
 
+  getInitialState: function() {
+    return { error: "" };
+  },
+
+  validateAndCreateTransaction: function(categoryName, reps) {
+    var transactionCategory;
+    for (var i = 0; i < this.props.user.categories.length; i++) {
+      var currentCategory = this.props.user.categories[i];
+      if (currentCategory.name === categoryName) {
+        transactionCategory = currentCategory;
+      }
+    }
+    if (!transactionCategory || transactionCategory.reps < reps) {
+      this.setState({error: true});
+    } else {
+      this.setState({error: false});
+      this.createTransaction(this.props.user, this.props.currentUser, categoryName, reps);
+    }
+  },
+
+  createTransaction: function(toUser, fromUser, category, amount) {
+    var to = { "name": toUser.username, "id": toUser._id };
+    var from = { "name": fromUser.username, "id": fromUser._id };
+    $.ajax({
+      url: '/api/transactions',
+      type: 'POST',
+      data: {
+        to: to,
+        from: from,
+        category: category,
+        amount: amount,
+      },
+      success: function(transaction) {
+        $.ajax({
+          url: '/api/users/' + fromUser._id,
+          type: 'GET',
+          success: function(user) {
+            auth.storeCurrentUser(user, function(user) {
+              return user;
+            });
+            PubSub.publish('profileupdate');
+            this.hide();
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(status, err.toString());
+          },
+        });
+
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }.bind(this)
+    });
+  },
+
   handleSubmit: function(event) {
     event.preventDefault();
-
+    var reps = Number(this.refs.amount.getDOMNode().value);
+    var categoryName = this.refs.category.getDOMNode().value;
+    this.validateAndCreateTransaction(categoryName, reps);
   },
 
   render: function() {
     var modalStyleOverride = {
       'zIndex': 1050,
     };
+
+    var error = this.state.error ? 'You don\'t have that many reps in that category':'';
+    var currentUserPortfolio = this.props.currentUser.portfolio;
     var categories = this.props.user.categories.map(function(category) {
-      return <option key={category.id} value={category.name}>{category.name}</option>;
+      for (var i = 0; i < currentUserPortfolio.length; i++) {
+        if (currentUserPortfolio[i].category === category.name && currentUserPortfolio[i].reps > 0) {
+          return <option key={category.id} value={category.name}>{category.name}</option>;
+        }
+      }
     });
     return (
       <div className="modal">
@@ -40,6 +107,9 @@ var Modal = React.createClass({
                   <select ref="category" className="form-control">
                     {categories}
                   </select>
+                </div>
+                <div>
+                  {error}
                 </div>
                 <div className="reps_padder">
                   <strong className="reps_form-label">Amount:</strong><input type="text" placeholder="10" className="form-control reps_text-input" ref="amount"></input>
