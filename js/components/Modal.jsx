@@ -22,7 +22,7 @@ var Modal = React.createClass({
         transactionCategory = currentCategory;
       }
     }
-    if (!transactionCategory || transactionCategory.reps < reps) {
+    if (!transactionCategory || transactionCategory.repsAvailable < reps) {
       this.setState({error: true});
     } else {
       this.setState({error: false});
