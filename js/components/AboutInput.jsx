@@ -24,16 +24,16 @@ var AboutInput = React.createClass({
           return user;
         });
         PubSub.publish('profileupdate');
-        this.propogateReset();
+        this.propagateReset();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-        this.propogateReset();
+        this.propagateReset();
       }.bind(this)
     });
   },
 
-  propogateReset: function() {
+  propagateReset: function() {
     this.props.onReset();
   },
 
@@ -41,7 +41,7 @@ var AboutInput = React.createClass({
     var about = this.props.user.about || "Add short description of yourself!";
     return (
       <div className="aboutInput">
-        <form onSubmit={this.handleSubmit} onReset={this.propogateReset}>
+        <form onSubmit={this.handleSubmit} onReset={this.propagateReset}>
           <textarea ref="about" rows="2" className="form-control" placeholder={about}></textarea>
           <button type="submit" className="btn btn-success">Save</button> 
           <button type="reset" className="btn btn-default">Cancel</button> 
