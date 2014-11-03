@@ -36,6 +36,19 @@ module.exports = function(router, isAuthenticated) {
       });
     });
 
+///////// Routes that have /categories/:categoryName ///////
+router.route('/categories/:categoryName')
+  // Get the category with this name
+  .get(function(req, res) {
+    Category.findByName(req.params.categoryName, function(err, category) {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        res.send(category);
+      }
+    });
+  });
+
 ///////// Routes that have /categories/:category_id ////////
   router.route('/categories/:category_id')
     // Get the category with this id

@@ -8,7 +8,14 @@ var CategorySchema = new Schema({
   timeStamp   : { type: Date, default: Date.now },
   color       : { type: String, default: '#000' },
   ownerName   : { type: String, required: true },
-  quotes      : [ String ] 
+  quotes      : [{
+                  text  : { type: String, required: true },
+                  owner : { type: String, required: true },  
+                }] 
 });
+
+CategorySchema.statics.findByName = function(name, cb) {
+  return this.where( { "name": name }).findOne(cb); 
+};
 
 module.exports = mongoose.model('Category', CategorySchema);
