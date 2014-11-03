@@ -80,9 +80,12 @@ var Modal = React.createClass({
     var error = this.state.error ? 'You don\'t have that many reps in that category':'';
     var currentUserPortfolio = this.props.currentUser.portfolio;
     var categories = this.props.user.categories.map(function(category) {
+      console.log(category.name);
       for (var i = 0; i < currentUserPortfolio.length; i++) {
-        if (currentUserPortfolio[i].category === category.name && currentUserPortfolio[i].reps > 0) {
-          return <option key={category.id} value={category.name}>{category.name}({currentUserPortfolio[i].reps})</option>;
+        console.log(currentUserPortfolio[i]);
+        if (currentUserPortfolio[i].category === category.name && currentUserPortfolio[i].repsAvailable > 0) {
+          console.log("Match");
+          return <option key={category.id} value={category.name}>{category.name} ({currentUserPortfolio[i].repsAvailable})</option>;
         }
       }
     });
