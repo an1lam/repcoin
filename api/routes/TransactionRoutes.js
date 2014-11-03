@@ -61,7 +61,7 @@ module.exports = function(router, isAuthenticated) {
                 }
               }
             }
-            
+
             // The user is not an investor for this category (ERROR!)
             if (indexI === -1) {
               res.status(400).send("Invalid transaction");
@@ -70,11 +70,11 @@ module.exports = function(router, isAuthenticated) {
             // The user has never invested in this user before
             if (indexJ === -1) {
               var investment = { user       : req.body.to.name,
-                                 amount     : req.body.amount,  
-                                 valuation  : req.body.amount }; 
+                                 amount     : req.body.amount,
+                                 valuation  : req.body.amount };
               portfolio[indexI].investments.push(investment);
             } else {
-             portfolio[indexI].investments[indexJ].amount += req.body.amount; 
+             portfolio[indexI].investments[indexJ].amount += Number(req.body.amount);
             }
 
             if (categoryToUpdate !== null) {
