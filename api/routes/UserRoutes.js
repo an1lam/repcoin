@@ -7,13 +7,23 @@ module.exports = function(router) {
   router.route('/users')
     // Get all of the users
     .get(function(req, res) {
-      User.find(function(err, users) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.json(users);
-        }
-      });
+      if (req.query.searchTerm) {
+        User.findBySearchTerm(req.query.searchTerm, function(err, users) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.json(users);
+          }
+        });
+      } else {
+        User.find(function(err, users) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.json(users);
+          }
+        });
+      }
     })
 
     // Create a new user

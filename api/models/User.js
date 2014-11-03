@@ -74,4 +74,8 @@ UserSchema.methods.comparePassword = function(candidatePassword) {
   return bcrypt.compareSync(candidatePassword, this.password);
 };
 
+UserSchema.statics.findBySearchTerm = function(searchTerm, cb) {
+  return this.find( { "username": { $regex: new RegExp('\\b' + searchTerm, 'i') }}, cb);
+};
+
 module.exports = mongoose.model('User', UserSchema);
