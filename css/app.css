@@ -212,6 +212,10 @@
   font-size:28px;
 }
 
+.panel-body em {
+  font-size:20px;
+}
+
 .superScorePanel {
   font-size:26px;
 }
