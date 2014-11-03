@@ -4,7 +4,6 @@ var $ = require('jquery');
 var auth = require('../auth.jsx');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
-var DonationBox = require('./DonationBox.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
 var InvestmentButton = require('./InvestmentButton.jsx');
@@ -62,7 +61,6 @@ var ProfilePage = React.createClass({
 
   render: function() {
     var categoriesTable = '';
-    var donationBox = '';
     var feed = '';
     var portfolio = '' ;
     var profileBox = '';
@@ -75,10 +73,6 @@ var ProfilePage = React.createClass({
 
       if (this.state.currentUser._id === this.state.user._id) {
         portfolio = <PortfolioTable user={this.state.user} />;
-      }
-
-      if (this.state.currentUser._id !== this.state.user._id) {
-        donationBox = <DonationBox user={this.state.user} currentUser={this.state.currentUser} />;
       }
 
       if (this.state.currentUser._id !== this.state.user._id) {
@@ -101,7 +95,6 @@ var ProfilePage = React.createClass({
               {portfolio}
             </div>
             <div className="col-md-7">
-              {donationBox}
               {investmentButton}
               {feed}
             </div>
