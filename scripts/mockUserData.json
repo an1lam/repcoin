@@ -148,7 +148,7 @@
   "email": "tester@testing.com",
   "phoneNumber": "1111111111",
   "timeStamp": "2014-10-11T21:59:07.496Z",
-  "picture": "images/5439a82b1e25afaf21b2adb4.jpg",
+  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "about": "Aspiring rock and roll musician, rhythm guitarist, hobbyist developer",
   "links": [{
     "url": "https://www.facebook.com",
