@@ -15,7 +15,7 @@ var SearchDisplayTable = React.createClass({
   componentDidMount: function() {
     this.setState({
       index: 0,
-      maxindex: this.props.data.length
+      maxindex: this.props.data.length - 1
     });
   },
 
