@@ -1,5 +1,5 @@
 # Repcoin
-## The ony market-based approach to reputation.
+## The only market-based approach to reputation.
 
 Repcoin is a platform to give credibility to the world's internet users. Search engines will bring me relevant content, but they will not bring me credible users. We need a universal system of credibility that can definitively show who knows what on the internet. Repcoin's marketplace will facilitate the creation of that data.
 Prove yourself as a great investor by finding expert talent for various topics.
