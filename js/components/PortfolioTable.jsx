@@ -21,7 +21,7 @@ var PortfolioTable = React.createClass({
           </tr>
           <tbody>
           {this.props.user.portfolio.map(function(category) {
-            return <PortfolioItem category={category} />;
+            return <PortfolioItem key={category.category} category={category} />;
           })}
           </tbody>
         </table>

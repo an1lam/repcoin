@@ -6,9 +6,23 @@ var PubSub = require('pubsub-js');
 var React = require('react');
 
 var AboutInput = React.createClass({
+  getInitialState: function() {
+    return { error: null };
+  },
+
   handleSubmit: function(event) {
     event.preventDefault();
-    this.updateAbout(this.refs.about.getDOMNode().value);
+
+    // Validate input
+    var text = this.refs.about.getDOMNode().value;
+    if (text.length > 200) {
+      this.setState({ error: "Text cannot be longer than 200 characters" });
+    } else if (text.trim().length === 0) {
+      this.setState({ error: "Text cannot be blank" });
+    } else { 
+      this.setState({ error: null });
+      this.updateAbout(this.refs.about.getDOMNode().value);
+    }
   },
 
   updateAbout: function(text) {
@@ -38,6 +52,7 @@ var AboutInput = React.createClass({
   },
 
   render: function() {
+    var error = this.state.error ? <div className="alert alert-danger" role="alert">{this.state.error}</div> : '';
     var about = this.props.user.about || "Add short description of yourself!";
     return (
       <div className="aboutInput">
@@ -46,6 +61,7 @@ var AboutInput = React.createClass({
           <button type="submit" className="btn btn-success">Save</button> 
           <button type="reset" className="btn btn-default">Cancel</button> 
         </form>
+        {error}
       </div>
     );
   }
