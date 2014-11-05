@@ -14,6 +14,7 @@ var CategoryPageHeader = React.createClass({
     var newPortfolioCategory = {
       repsAvailable: 0,
       category: this.props.category.name,
+      id: this.props.category._id,
       investments: []
     };
     user.portfolio.push(newPortfolioCategory);

@@ -8,6 +8,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -17,6 +18,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -50,6 +52,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -59,6 +62,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -106,6 +110,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -115,6 +120,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -158,6 +164,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -167,6 +174,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": []
     }
   ],
@@ -206,6 +214,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -215,6 +224,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -248,6 +258,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -257,6 +268,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -290,6 +302,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -299,6 +312,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -332,6 +346,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -341,6 +356,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -374,6 +390,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -383,6 +400,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -416,6 +434,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -425,6 +444,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -458,6 +478,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -467,6 +488,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -500,6 +522,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -509,6 +532,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -542,6 +566,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -551,6 +576,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -584,6 +610,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -593,6 +620,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
@@ -626,6 +654,7 @@
     {
       "repsAvailable": 10,
       "category": "Rap",
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
         "user": "Kanye West",
         "amount": 20,
@@ -635,6 +664,7 @@
     {
       "repsAvailable": 5,
       "category": "Coding",
+      "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
         "user": "Stephen Malina",
         "amount": 15,
