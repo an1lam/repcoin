@@ -44,7 +44,7 @@ var LeaderTable = React.createClass({
           crowdScore = leader.categories[i].crowdScore;
         }
       }
-return <tr>
+return <tr key={leader._id} >
   <td><Link to="profile" params={{userId: leader._id}}>{leader.username}</Link></td>
         <td>{directScore}</td>
         <td>{crowdScore}</td>

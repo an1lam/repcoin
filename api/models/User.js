@@ -12,34 +12,36 @@ var UserSchema = new Schema({
   phoneNumber: {type: String, required: true, unique: true },
   about: String,
   portfolio: [{
-    repsAvailable: Number,
-    category: String,
+    repsAvailable: {type: Number, default: 0, required: true },
+    category: {type: String, required: true },
+    id: {type: Schema.Types.ObjectId, required: true },
     investments: [{
-      user: String,
-      amount: Number,
-      valuation: Number
+      user: {type: String, required: true },
+      amount: {type: Number, required: true },
+      valuation: {type: Number, required: true }
     }],
   }],
   defaultCategory: String,
   categories: [{
-    name: String,
-    id: Schema.Types.ObjectId,
+    name: {type: String, required: true },
+    id: {type: Schema.Types.ObjectId, required: true },
     directScore: {type: Number, default: 0, required: true },
     previousDirectScore: {type: Number, default: 0, required: true },
     crowdScore: {type: Number, default: 0, required: true },
     previousCrowdScore: {type: Number, default: 0, required: true },
-    expertScore: Number,
-    reps: Number,
+    expertScore: {type: Number, default: 0, required: true },
+    reps: {type: Number, default: 0, required: true }
   }],
   links: [
     {
-      url: String,
-      title: String
+      url: {type: String, required: true },
+      title: {type: String, required: true }
     }
   ],
   picture: {
     type: String,
     default: "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
+    required: true
   },
   timeStamp : {type: Date, default: Date.now },
 });
