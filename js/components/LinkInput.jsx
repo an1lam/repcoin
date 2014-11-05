@@ -6,10 +6,28 @@ var PubSub = require('pubsub-js');
 var React = require('react');
 
 var LinkInput = React.createClass({
+  getInitialState: function() {
+    return { error: null }; 
+  },
 
   handleSubmit: function(event) {
     event.preventDefault();
-    this.updateLinks({ title: this.refs.description.getDOMNode().value, url: this.refs.url.getDOMNode().value });
+
+    // Validate input
+    var title = this.refs.description.getDOMNode().value;
+    var url = this.refs.url.getDOMNode().value;
+    if (title.length > 50) {
+      this.setState({ error: "Title cannot be longer than 50 characters" });
+    } else if (title.trim().length === 0) {
+      this.setState({ error: "Title cannot be blank" });
+    } else if (url.length > 2083) {
+      this.setState({ error: "Url must be less than 2084 characters" });
+    } else if (url.trim().length === 0) {
+      this.setState({ error: "Url cannot be blank" });
+    } else {
+      this.setState({ error: null });
+      this.updateLinks({ title: title, url: url });
+    }
   },
 
   getNewLinks: function(userLinks, link) {
@@ -52,7 +70,8 @@ var LinkInput = React.createClass({
     this.props.onReset();
   },
 
-  render: function() {
+  render: function() { 
+    var error = this.state.error ? <div className="alert alert-danger" role="alert">{this.state.error}</div> : '';
     var title = this.props.title || "Description";
     var url = this.props.url || "URL";
     return (
@@ -66,6 +85,7 @@ var LinkInput = React.createClass({
           <button type="submit" className="btn btn-success">Save</button> 
           <button type="reset" className="btn btn-default">Cancel</button> 
         </form>
+        {error}
       </div>
     );
   }  

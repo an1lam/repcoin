@@ -30,6 +30,7 @@ module.exports = function(router, isAuthenticated) {
       if (err) {
         res.status(400).send(err);
       } else {
+
         // Deal with from user
         User.findById(req.body.from.id, function(err, user) {
           if (err) {
@@ -61,7 +62,6 @@ module.exports = function(router, isAuthenticated) {
                 }
               }
             }
-
             // The user is not an investor for this category (ERROR!)
             if (indexI === -1) {
               res.status(400).send("Invalid transaction");
@@ -76,6 +76,9 @@ module.exports = function(router, isAuthenticated) {
             } else {
              portfolio[indexI].investments[indexJ].amount += Number(req.body.amount);
             }
+
+            // Decrement the resp available for the investor
+            portfolio[indexI].repsAvailable -= Number(req.body.amount);
 
             if (categoryToUpdate !== null) {
               categoryToUpdate.reps -= req.body.amount;
