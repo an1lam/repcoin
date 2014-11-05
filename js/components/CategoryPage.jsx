@@ -3,12 +3,12 @@
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
-var PubSub = require('pubsub-js');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var CategoryPageHeader = require('./CategoryPageHeader.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
 var LeaderTable = require('./LeaderTable.jsx');
+var PubSub = require('pubsub-js');
 var React = require('react');
 var Toolbar = require('./Toolbar.jsx');
 
