@@ -1,5 +1,6 @@
 // api/routes/TransactionRoutes.js
 
+var Category = require('../models/Category.js');
 var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 
@@ -34,17 +35,9 @@ module.exports = function(router, isAuthenticated) {
         User.findById(req.body.from.id, function(err, user) {
           if (err) {
             Transaction.findOneAndRemove({ "id": transaction.id });
-            res.send(err);
+            res.status(400).send(err);
           } else {
             var fromUser = user;
-
-            // Find the category that should be updated
-            var categoryToUpdate = null;
-            for (var i = 0; i < user.categories.length; i++) {
-              if (user.categories[i].name === req.body.category) {
-                categoryToUpdate = user.categories[i];
-              }
-            }
 
             // Find the portfolio entry that should be updated
             var indexI = -1;
@@ -65,6 +58,7 @@ module.exports = function(router, isAuthenticated) {
             // The user is not an investor for this category (ERROR!)
             if (indexI === -1) {
               res.status(400).send("Invalid transaction");
+              return;
             }
 
             // The user has never invested in this user before
@@ -74,53 +68,64 @@ module.exports = function(router, isAuthenticated) {
                                  valuation  : req.body.amount };
               portfolio[indexI].investments.push(investment);
             } else {
+             // Increase the investmenton this user by the appropriate amount
              portfolio[indexI].investments[indexJ].amount += Number(req.body.amount);
             }
 
-            if (categoryToUpdate !== null) {
-              categoryToUpdate.reps -= req.body.amount;
-              user.save(function(err) {
-                if (err) {
-                  Transaction.findOneAndRemove({ "id": transaction.id });
-                  res.send(err);
-                } else {
-                  // Deal with to user.
-                  User.findById(req.body.to.id, function(err, user) {
-                    if (err) {
-                      Transaction.findOneAndRemove({'id': transaction.id});
-                      fromUser.reps += amount;
-                      fromUser.save();
-                      res.send(err);
-                    } else {
-                      var categoryToUpdate = null;
-                      for (var i = 0; i < user.categories.length; i++) {
-                        if (user.categories[i].name === req.body.category) {
-                          categoryToUpdate = user.categories[i];
-                        }
-                      }
-
-                      if (categoryToUpdate !== null) {
-                        categoryToUpdate.directScore = parseInt(categoryToUpdate.directScore) + parseInt(req.body.amount);
-                        user.save(function(err) {
-                          if (err) {
-                            Transaction.findOneAndRemove({'id': transaction.id});
-                            fromUser.reps += amount;
-                            fromUser.save();
-                            res.send(err);
-                          } else {
-                            res.send(transaction);
-                          }
-                        });
-                      } else {
-                        res.send("Unable to find corresponding category");
+            portfolio[indexI].repsAvailable -= Number(req.body.amount);
+            user.save(function(err) {
+              if (err) {
+                Transaction.findOneAndRemove({ "id": transaction.id });
+                res.status(400).send(err);
+              } else {
+                // Deal with to user.
+                User.findById(req.body.to.id, function(err, user) {
+                  if (err) {
+                    Transaction.findOneAndRemove({'id': transaction.id});
+                    fromUser.reps += amount;
+                    fromUser.save();
+                    res.status(400).send(err);
+                  } else {
+                    var toUser = user;
+                    var categoryToUpdate = null;
+                    for (var i = 0; i < user.categories.length; i++) {
+                      if (user.categories[i].name === req.body.category) {
+                        categoryToUpdate = user.categories[i];
                       }
                     }
-                  });
-                }
-              });
-            } else {
-              res.send("Unable to find corresponding category");
-            }
+                    if (categoryToUpdate !== null) {
+                      categoryToUpdate.directScore = parseInt(categoryToUpdate.directScore) + parseInt(req.body.amount);
+                      user.save(function(err) {
+                        if (err) {
+                          Transaction.findOneAndRemove({'id': transaction.id});
+                          fromUser.reps += amount;
+                          fromUser.save();
+                          res.status(400).send(err);
+                        } else {
+                          Category.findByName(categoryToUpdate.name, function(err, category) {
+                            if (err) {
+                              Transaction.findOneAndRemove({'id': transaction.id});
+                              fromUser.reps += amount;
+                              fromUser.save();
+                              toUser.reps -= amount;
+                              toUser.save();
+                              res.status(400).send(err);
+                            } else {
+                              category.repsLiquid = category.repsLiquid - Number(req.body.amount);
+                              category.repsInvested = category.repsInvested + Number(req.body.amount);
+                              category.save(); 
+                              res.send(transaction);
+                            }
+                          });
+                        }
+                      });
+                    } else {
+                      res.status(400).send("Unable to find corresponding category");
+                    }
+                  }
+                });
+              }
+            });
           }
         });
       }
