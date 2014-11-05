@@ -72,6 +72,7 @@ var CategoryPageHeader = React.createClass({
   },
  
   render: function() {
+    var total = this.props.category.repsInvested + this.props.category.repsLiquid;
     var expertBtn = <button onClick={this.setExpertCategory} className="btn btn-default">Become a {this.props.category.name} expert!</button>;
     if (this.isExpert(this.props.currentUser)) {
       expertBtn = <div className="alert alert-success" role="alert">You are a {this.props.category.name} expert.</div>
@@ -96,6 +97,7 @@ var CategoryPageHeader = React.createClass({
           {expertBtn}
           {investorBtn}
         </div>
+        <h4 className="text-center">Total reps in {this.props.category.name}: {total}</h4>
       </div>
     );
   }
