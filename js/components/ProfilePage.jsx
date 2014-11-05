@@ -67,7 +67,7 @@ var ProfilePage = React.createClass({
     var investmentButton = '';
 
     if (this.state.user && this.state.currentUser) {
-      categoriesTable = <CategoriesTable user={this.state.user} />;
+      categoriesTable = <CategoriesTable currentUser={this.state.currentUser} user={this.state.user} />;
       feed = <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} />;
       profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
 
