@@ -31,6 +31,7 @@ module.exports = function(router, isAuthenticated) {
       if (err) {
         res.status(400).send(err);
       } else {
+
         // Deal with from user
         User.findById(req.body.from.id, function(err, user) {
           if (err) {
@@ -54,7 +55,6 @@ module.exports = function(router, isAuthenticated) {
                 }
               }
             }
-
             // The user is not an investor for this category (ERROR!)
             if (indexI === -1) {
               res.status(400).send("Invalid transaction");
@@ -91,8 +91,9 @@ module.exports = function(router, isAuthenticated) {
                     for (var i = 0; i < user.categories.length; i++) {
                       if (user.categories[i].name === req.body.category) {
                         categoryToUpdate = user.categories[i];
-                      }
+                       }
                     }
+
                     if (categoryToUpdate !== null) {
                       categoryToUpdate.directScore = parseInt(categoryToUpdate.directScore) + parseInt(req.body.amount);
                       user.save(function(err) {
