@@ -106,10 +106,11 @@ module.exports = function(router, isAuthenticated) {
             Number(portfolio[indexI].investments[indexJ].amount/toUserCategoryTotal * 100)
         }
         portfolio[indexI].repsAvailable -= amount;
-          
+        fromUser.portfolio = portfolio;
+ 
         transaction.save();
-        fromUser.save();
         toUser.save();
+        fromUser.save();
         category.save();
         res.send(transaction);
         return;
