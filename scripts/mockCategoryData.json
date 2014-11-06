@@ -133,19 +133,4 @@
       "text": "I love biology",
       "owner": "Matt Ritter"
     }]
-},
-{
-  "name": "Rap",
-  "_id": ObjectId("1434171b7f9cea5969085db1"),
-  "timeStamp": {"$date": 1413480132},
-  "color": "Blue",
-  "ownerName": "Kanye West",
-  "quotes": [{
-      "text": "I love testing!",
-      "owner": "Kanye West"
-    },
-    { 
-      "text": "I love biology",
-      "owner": "Matt Ritter"
-    }]
 }
