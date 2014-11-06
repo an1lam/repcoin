@@ -28,110 +28,119 @@ module.exports = function(router, isAuthenticated) {
     });
 
     transaction.save( function(err) {
+      var amount = Number(req.body.amount);
       if (err) {
         res.status(400).send(err);
-      } else {
+        return;
+      } 
+      
+      // Deal with from user
+      User.findById(req.body.from.id, function(err, user) {
+        if (err) {
+          Transaction.findOneAndRemove({ "id": transaction.id });
+          res.status(400).send(err);
+          return;
+        }
+        var fromUser = user;
 
-        // Deal with from user
-        User.findById(req.body.from.id, function(err, user) {
+        // Find the portfolio entry that should be updated
+        var indexI = -1;
+        var indexJ = -1;
+        var portfolio = user.portfolio;
+        for (var i = 0; i < portfolio.length; i++) {
+          if (portfolio[i].category === req.body.category) {
+            var investments = portfolio[i].investments;
+            indexI = i;
+            for (var j = 0; j < investments.length; j++) {
+              if (investments[j].user === req.body.to.name) {
+                indexJ = j;
+              }
+            }
+          }
+        }
+        
+        // The user is not an investor for this category (ERROR!)
+        if (indexI === -1) {
+          res.status(400).send("Invalid transaction");
+          return;
+        }
+
+        // The user has never invested in this user before
+        if (indexJ === -1) {
+          var investment = { user       : req.body.to.name,
+                             amount     : req.body.amount,
+                             valuation  : req.body.amount };
+          portfolio[indexI].investments.push(investment);
+        } else {
+          // Increase the investmenton this user by the appropriate amount
+          portfolio[indexI].investments[indexJ].amount += amount;
+        }
+
+        console.log("amount is: " + amount);
+        portfolio[indexI].repsAvailable -= amount;
+        user.save(function(err) {
           if (err) {
             Transaction.findOneAndRemove({ "id": transaction.id });
             res.status(400).send(err);
-          } else {
-            var fromUser = user;
+            return;
+          }
 
-            // Find the portfolio entry that should be updated
-            var indexI = -1;
-            var indexJ = -1;
-            var portfolio = user.portfolio;
-            for (var i = 0; i < portfolio.length; i++) {
-              if (portfolio[i].category === req.body.category) {
-                var investments = portfolio[i].investments;
-                indexI = i;
-                for (var j = 0; j < investments.length; j++) {
-                  if (investments[j].user === req.body.to.name) {
-                    indexJ = j;
-                  }
-                }
-              }
-            }
-            // The user is not an investor for this category (ERROR!)
-            if (indexI === -1) {
-              res.status(400).send("Invalid transaction");
+          // Deal with to user.
+          console.log("dealing with to user");
+          User.findById(req.body.to.id, function(err, user) {
+            if (err) {
+              Transaction.findOneAndRemove({'id': transaction.id});
+              fromUser.reps += amount;
+              fromUser.save();
+              res.status(400).send(err);
               return;
             }
-
-            // The user has never invested in this user before
-            if (indexJ === -1) {
-              var investment = { user       : req.body.to.name,
-                                 amount     : req.body.amount,
-                                 valuation  : req.body.amount };
-              portfolio[indexI].investments.push(investment);
-            } else {
-             // Increase the investmenton this user by the appropriate amount
-             portfolio[indexI].investments[indexJ].amount += Number(req.body.amount);
+            
+            var toUser = user;
+            var categoryToUpdate = null;
+            for (var i = 0; i < user.categories.length; i++) {
+              if (user.categories[i].name === req.body.category) {
+                categoryToUpdate = user.categories[i];
+              }
             }
 
-            portfolio[indexI].repsAvailable -= Number(req.body.amount);
+            if (categoryToUpdate === null) {
+              res.status(400).send("Unable to find corresponding category");
+            }
+
+            categoryToUpdate.directScore = parseInt(categoryToUpdate.directScore) + amount;
             user.save(function(err) {
               if (err) {
-                Transaction.findOneAndRemove({ "id": transaction.id });
+                Transaction.findOneAndRemove({'id': transaction.id});
+                fromUser.reps += amount;
+                fromUser.save();
                 res.status(400).send(err);
-              } else {
-                // Deal with to user.
-                User.findById(req.body.to.id, function(err, user) {
-                  if (err) {
-                    Transaction.findOneAndRemove({'id': transaction.id});
-                    fromUser.reps += amount;
-                    fromUser.save();
-                    res.status(400).send(err);
-                  } else {
-                    var toUser = user;
-                    var categoryToUpdate = null;
-                    for (var i = 0; i < user.categories.length; i++) {
-                      if (user.categories[i].name === req.body.category) {
-                        categoryToUpdate = user.categories[i];
-                       }
-                    }
-
-                    if (categoryToUpdate !== null) {
-                      categoryToUpdate.directScore = parseInt(categoryToUpdate.directScore) + parseInt(req.body.amount);
-                      user.save(function(err) {
-                        if (err) {
-                          Transaction.findOneAndRemove({'id': transaction.id});
-                          fromUser.reps += amount;
-                          fromUser.save();
-                          res.status(400).send(err);
-                        } else {
-                          Category.findByName(categoryToUpdate.name, function(err, category) {
-                            if (err) {
-                              Transaction.findOneAndRemove({'id': transaction.id});
-                              fromUser.reps += amount;
-                              fromUser.save();
-                              toUser.reps -= amount;
-                              toUser.save();
-                              res.status(400).send(err);
-                            } else {
-                              category.repsLiquid = category.repsLiquid - Number(req.body.amount);
-                              category.repsInvested = category.repsInvested + Number(req.body.amount);
-                              category.save(); 
-                              res.send(transaction);
-                            }
-                          });
-                        }
-                      });
-                    } else {
-                      res.status(400).send("Unable to find corresponding category");
-                    }
-                  }
-                });
+                return;
               }
+
+              Category.findByName(categoryToUpdate.name, function(err, category) {
+                if (err) {
+                  Transaction.findOneAndRemove({'id': transaction.id});
+                  fromUser.reps += amount;
+                  fromUser.save();
+                  toUser.reps -= amount;
+                  toUser.save();
+                  res.status(400).send(err);
+                  return;
+                }
+
+                category.repsLiquid = category.repsLiquid - amount;
+                category.repsInvested = category.repsInvested + amount;
+                category.save(); 
+                res.send(transaction);
+              });
             });
-          }
+          });
         });
-      }
+      });
     });
   }
+
   router.route('/transactions')
     // Get all the transactions
     .get(function(req, res) {
