@@ -18,7 +18,8 @@ var UserSchema = new Schema({
     investments: [{
       user: {type: String, required: true },
       amount: {type: Number, required: true },
-      valuation: {type: Number, required: true }
+      valuation: {type: Number, required: true },
+      percentage: {type: Number, required: true }
     }],
   }],
   defaultCategory: String,
