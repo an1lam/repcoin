@@ -65,7 +65,6 @@
     "build-lib": "cp js/lib/**/* build/js/lib/",
     "build-fonts": "cp fonts/** build/fonts/",
     "kill": "pkill -f npm & pkill -f node;",
-    "build-and-start": "npm run build-jsx && npm run start",
     "start": "node server.js"
   }
 }
