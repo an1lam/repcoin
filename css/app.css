@@ -4,8 +4,13 @@
 }
 
 .reps_padder {
+  padding-top: 10px;
   padding-bottom: 10px;
 }
+
+.reps_table-nonfluid {
+}
+
 
 /* Feed Items ////////////////////////////////////// */
 .score {
@@ -338,7 +343,18 @@ html, body {
 }
 
 /* Modal ///////////////////////// */
-.categories-dropdown {
+.reps_modal table {
+  width: auto;
+  padding-left: 10px;
+}
+
+.reps_modal .categories-dropdown {
+  float: left;
   padding-top: 10px;
   padding-bottom: 10px;
+  padding-right: 60px;
+}
+
+.reps_modal .reps_form-label {
+  float: left;
 }
