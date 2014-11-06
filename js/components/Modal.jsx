@@ -94,8 +94,6 @@ var Modal = React.createClass({
         }
       }
     }.bind(this));
-    console.log(valuationData.length);
-    console.log(valuationData.length > 0);
     if (valuationData.length > 0) {
       valuationTable = (
         <table className="table table-bordered reps_table-nonfluid">
