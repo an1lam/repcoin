@@ -16,8 +16,8 @@ var CategorySchema = new Schema({
                   }] 
 });
 
-CategorySchema.statics.findByName = function(name, cb) {
-  return this.where( { "name": name }).findOne(cb); 
+CategorySchema.statics.findByName = function(name) {
+  return this.where( { "name": name }).findOne().exec(); 
 };
 
 module.exports = mongoose.model('Category', CategorySchema);

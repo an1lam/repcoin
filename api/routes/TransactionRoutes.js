@@ -26,27 +26,55 @@ module.exports = function(router, isAuthenticated) {
       amount      : req.body.amount,
       category    : req.body.category
     });
+     
+    var categoryPromise = Category.findByName(req.body.category); 
+    var fromUserPromise = User.findById(req.body.from.id).exec();
+    var toUserPromise = User.findById(req.body.to.id).exec();
+    var amount = Number(req.body.amount);
 
-    transaction.save( function(err) {
-      var amount = Number(req.body.amount);
-      if (err) {
+    var toUserCategoryTotal;
+    var toUser;
+    var fromUser;
+    var category;
+
+    // Get the category
+    categoryPromise
+      .then(function(categoryP) {
+        categoryP.repsLiquid = categoryP.repsLiquid - amount;
+        categoryP.repsInvested = categoryP.repsInvested + amount;
+        category = categoryP;
+        return toUserPromise; 
+      }, function(err) {
         res.status(400).send(err);
         return;
-      } 
-      
-      // Deal with from user
-      User.findById(req.body.from.id, function(err, user) {
-        if (err) {
-          Transaction.findOneAndRemove({ "id": transaction.id });
-          res.status(400).send(err);
-          return;
-        }
-        var fromUser = user;
 
+      // Deal with the to user
+      }).then(function(touser) {
+        var updated = false;
+        for (var i = 0; i < touser.categories.length; i++) {
+          if (touser.categories[i].name === req.body.category) {
+              touser.categories[i].directScore = touser.categories[i].directScore + amount;
+              toUserCategoryTotal = touser.categories[i].directScore;
+              updated = true;
+            }
+          }
+
+          if (!updated) {
+            res.status(400).send("Unable to find corresponding category");
+            return;
+          }
+          toUser = touser;
+          return fromUserPromise;
+      }, function(err) {
+        res.status(400).send(err);
+        return;
+
+      // Deal with the from user
+      }).then(function(fromUser) {
         // Find the portfolio entry that should be updated
         var indexI = -1;
         var indexJ = -1;
-        var portfolio = user.portfolio;
+        var portfolio = fromUser.portfolio;
         for (var i = 0; i < portfolio.length; i++) {
           if (portfolio[i].category === req.body.category) {
             var investments = portfolio[i].investments;
@@ -59,86 +87,37 @@ module.exports = function(router, isAuthenticated) {
           }
         }
         
-        // The user is not an investor for this category (ERROR!)
+        // The from user is not an investor for this category (ERROR!)
         if (indexI === -1) {
           res.status(400).send("Invalid transaction");
           return;
         }
-
-        // The user has never invested in this user before
+        // The from user has never invested in this user before
         if (indexJ === -1) {
           var investment = { user       : req.body.to.name,
-                             amount     : req.body.amount,
-                             valuation  : req.body.amount };
+                             amount     : amount,
+                             valuation  : amount,
+                             percentage : Number(amount/toUserCategoryTotal * 100) };
           portfolio[indexI].investments.push(investment);
         } else {
           // Increase the investmenton this user by the appropriate amount
           portfolio[indexI].investments[indexJ].amount += amount;
+          portfolio[indexI].investments[indexJ].percentage =
+            Number(portfolio[indexI].investments[indexJ].amount/toUserCategoryTotal * 100)
         }
-
-        console.log("amount is: " + amount);
         portfolio[indexI].repsAvailable -= amount;
-        user.save(function(err) {
-          if (err) {
-            Transaction.findOneAndRemove({ "id": transaction.id });
-            res.status(400).send(err);
-            return;
-          }
-
-          // Deal with to user.
-          console.log("dealing with to user");
-          User.findById(req.body.to.id, function(err, user) {
-            if (err) {
-              Transaction.findOneAndRemove({'id': transaction.id});
-              fromUser.reps += amount;
-              fromUser.save();
-              res.status(400).send(err);
-              return;
-            }
-            
-            var toUser = user;
-            var categoryToUpdate = null;
-            for (var i = 0; i < user.categories.length; i++) {
-              if (user.categories[i].name === req.body.category) {
-                categoryToUpdate = user.categories[i];
-              }
-            }
-
-            if (categoryToUpdate === null) {
-              res.status(400).send("Unable to find corresponding category");
-            }
-
-            categoryToUpdate.directScore = parseInt(categoryToUpdate.directScore) + amount;
-            user.save(function(err) {
-              if (err) {
-                Transaction.findOneAndRemove({'id': transaction.id});
-                fromUser.reps += amount;
-                fromUser.save();
-                res.status(400).send(err);
-                return;
-              }
-
-              Category.findByName(categoryToUpdate.name, function(err, category) {
-                if (err) {
-                  Transaction.findOneAndRemove({'id': transaction.id});
-                  fromUser.reps += amount;
-                  fromUser.save();
-                  toUser.reps -= amount;
-                  toUser.save();
-                  res.status(400).send(err);
-                  return;
-                }
-
-                category.repsLiquid = category.repsLiquid - amount;
-                category.repsInvested = category.repsInvested + amount;
-                category.save(); 
-                res.send(transaction);
-              });
-            });
-          });
-        });
-      });
-    });
+        fromUser.portfolio = portfolio;
+ 
+        transaction.save();
+        toUser.save();
+        fromUser.save();
+        category.save();
+        res.send(transaction);
+        return;
+      }, function(err) {
+        res.status(400).send(err);
+        return;
+      }).end();
   }
 
   router.route('/transactions')
