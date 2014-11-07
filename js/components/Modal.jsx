@@ -87,7 +87,7 @@ var Modal = React.createClass({
           var categoryInvestments = currentUserPortfolio[i].investments;
           for (var j = 0; j < categoryInvestments.length; j++) {
             if (categoryInvestments[j].user === this.props.user.username) {
-              valuationData.push(<tr key={category.id}><td>{category.name}</td><td>{currentUserPortfolio[j].repsAvailable}</td><td>{categoryInvestments[j].amount}</td></tr>);
+              valuationData.push(<tr key={category.id}><td>{category.name}</td><td>{currentUserPortfolio[i].repsAvailable}</td><td>{categoryInvestments[j].amount}</td></tr>);
             }
           }
           return <option key={category.id} value={category.name}>{category.name} ({currentUserPortfolio[i].repsAvailable})</option>;
