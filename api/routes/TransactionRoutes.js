@@ -53,8 +53,8 @@ module.exports = function(router, isAuthenticated) {
         var updated = false;
         for (var i = 0; i < touser.categories.length; i++) {
           if (touser.categories[i].name === req.body.category) {
-              touser.categories[i].directScore = touser.categories[i].directScore + amount;
-              toUserCategoryTotal = touser.categories[i].directScore;
+              touser.categories[i].reps = touser.categories[i].reps + amount;
+              toUserCategoryTotal = touser.categories[i].reps;
               updated = true;
             }
           }
@@ -100,11 +100,15 @@ module.exports = function(router, isAuthenticated) {
                              percentage : Number(amount/toUserCategoryTotal * 100) };
           portfolio[indexI].investments.push(investment);
         } else {
-          // Increase the investmenton this user by the appropriate amount
+          // Update the existing investment
           portfolio[indexI].investments[indexJ].amount += amount;
           portfolio[indexI].investments[indexJ].percentage =
             Number(portfolio[indexI].investments[indexJ].amount/toUserCategoryTotal * 100)
+          var valuation = portfolio[indexI].investments[indexJ].percentage/100 * toUserCategoryTotal;
+          portfolio[indexI].investments[indexJ].valuation = Math.floor(valuation);
         }
+
+        // Update the portfolio entry for that category
         portfolio[indexI].repsAvailable -= amount;
         fromUser.portfolio = portfolio;
  
