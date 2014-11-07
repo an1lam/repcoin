@@ -8,6 +8,7 @@ var CategoriesItem = React.createClass({
 
   render: function() {
     var reps = this.props.includeReps ? <td>{this.props.reps}</td> : '';
+
     return (
       <tr className="categoriesItem">
         <td>{this.props.category}</td>

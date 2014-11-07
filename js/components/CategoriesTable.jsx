@@ -55,21 +55,24 @@ var CategoriesTable = React.createClass({
         repsHeader = <th>Reps</th>;
     }
     return (
-      <div className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
+      <div key={this.props.user._id} className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <CategoriesHeader user={this.props.user} />
         {edit}
         {addCategory}
         <table className="table table-bordered table-striped">
-          <tr>
-            <th>Category</th>
-            <th>Direct Rep</th>
-            <th>Crowd Rep</th>
-            {repsHeader}
-          </tr>
           <tbody>
           {this.props.user.categories.map(function(category) {
             return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} crowdRep={category.crowdScore} reps={category.reps} includeReps={includeReps} />;
           })}
+            <tr>
+              <th>Category</th>
+              <th>Direct Rep</th>
+              <th>Crowd Rep</th>
+              {repsHeader}
+            </tr>
+            {this.props.user.categories.map(function(category) {
+              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} crowdRep={category.crowdScore} reps={category.reps} includeReps={includeReps} />;
+            })}
           </tbody>
         </table>
       </div>
