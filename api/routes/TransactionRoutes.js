@@ -102,12 +102,9 @@ module.exports = function(router, isAuthenticated) {
         } else {
           // Update the existing investment
           portfolio[indexI].investments[indexJ].amount += amount;
-          console.log("Existing percentage is: " + portfolio[indexI].investments[indexJ].percentage);
           portfolio[indexI].investments[indexJ].percentage =
             Number(portfolio[indexI].investments[indexJ].amount/toUserCategoryTotal * 100)
-          console.log("New percentage is: " + portfolio[indexI].investments[indexJ].percentage);
           var valuation = portfolio[indexI].investments[indexJ].percentage/100 * toUserCategoryTotal;
-          console.log("New valuation is: " + valuation);
           portfolio[indexI].investments[indexJ].valuation = Math.floor(valuation);
             portfolio[indexI].investments[indexJ].percentage/100 * toUserCategoryTotal;
         }
