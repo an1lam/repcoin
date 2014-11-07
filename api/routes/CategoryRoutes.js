@@ -10,12 +10,12 @@ module.exports = function(router, isAuthenticated) {
   router.route('/categories')
     // Get all the categories
     .get(isAuthenticated, function(req, res) {
-      Category.find(function(err, categories) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.json(categories);
-        }
+      Category.find().then(function(categories) {
+        res.json(categories);
+        return;
+      }, function(err) {
+        res.status(501).send(err);
+        return;
       });
     })
 
@@ -40,12 +40,10 @@ module.exports = function(router, isAuthenticated) {
 router.route('/categories/:categoryName')
   // Get the category with this name
   .get(function(req, res) {
-    Category.findByName(req.params.categoryName, function(err, category) {
-      if (err) {
-        res.status(400).send(err);
-      } else {
-        res.send(category);
-      }
+    Category.findByName(req.params.categoryName).then(function(category) {
+      res.send(category);
+    }, function(err) {
+      res.status(501).send(err);
     });
   });
 
