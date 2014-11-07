@@ -79,15 +79,35 @@ var Modal = React.createClass({
 
     var error = this.state.error ? 'You don\'t have that many reps in that category':'';
     var currentUserPortfolio = this.props.currentUser.portfolio;
+    var valuationTable = '';
+    var valuationData = [];
     var categories = this.props.user.categories.map(function(category) {
       for (var i = 0; i < currentUserPortfolio.length; i++) {
         if (currentUserPortfolio[i].category === category.name && currentUserPortfolio[i].repsAvailable > 0) {
+          var categoryInvestments = currentUserPortfolio[i].investments;
+          for (var i = 0; i < categoryInvestments.length; i++) {
+            if (categoryInvestments[i].user === this.props.user.username) {
+              valuationData.push(<tr key={category.id}><td>{category.name}</td><td>{currentUserPortfolio[i].repsAvailable}</td><td>{categoryInvestments[i].amount}</td></tr>);
+            }
+          }
           return <option key={category.id} value={category.name}>{category.name} ({currentUserPortfolio[i].repsAvailable})</option>;
         }
       }
-    });
+    }.bind(this));
+    if (valuationData.length > 0) {
+      valuationTable = (
+        <table className="table table-bordered reps_table-nonfluid">
+          <thead>
+            <tr><th>Category</th><th>Amount</th><th>Valuation</th></tr>
+          </thead>
+          <tbody>
+            {valuationData}
+          </tbody>
+        </table>
+      );
+    }
     return (
-      <div className="modal">
+      <div className="modal reps_modal">
         <div className="modal-dialog" style={modalStyleOverride}>
           <div className="modal-content">
             <div className="modal-header">
@@ -107,17 +127,19 @@ var Modal = React.createClass({
                   <select ref="category" className="form-control">
                     {categories}
                   </select>
+                  <div className="reps_padder">
+                    <strong className="reps_form-label">Amount:</strong><input type="text" placeholder="10" className="form-control reps_text-input" ref="amount"></input>
+                  </div>
+                  <div>
+                    <button type="submit" className="btn btn-lg btn-primary reps_invest-button">Invest</button>
+                  </div>
+
                 </div>
+                {valuationTable}
                 <div>
                   {error}
                 </div>
-                <div className="reps_padder">
-                  <strong className="reps_form-label">Amount:</strong><input type="text" placeholder="10" className="form-control reps_text-input" ref="amount"></input>
-                </div>
-                <div>
-                  <button type="submit" className="btn btn-lg btn-primary reps_invest-button">Invest</button>
-                </div>
-            </div>
+              </div>
             </form>
             <div className="modal-footer"></div>
           </div>
