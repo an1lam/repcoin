@@ -100,11 +100,16 @@ module.exports = function(router, isAuthenticated) {
                              percentage : Number(amount/toUserCategoryTotal * 100) };
           portfolio[indexI].investments.push(investment);
         } else {
-          // Increase the investmenton this user by the appropriate amount
+          // Update the existing investment
           portfolio[indexI].investments[indexJ].amount += amount;
           portfolio[indexI].investments[indexJ].percentage =
             Number(portfolio[indexI].investments[indexJ].amount/toUserCategoryTotal * 100)
+          var valuation = portfolio[indexI].investments[indexJ].percentage/100 * toUserCategoryTotal;
+          portfolio[indexI].investments[indexJ].valuation = Math.floor(valuation);
+            portfolio[indexI].investments[indexJ].percentage/100 * toUserCategoryTotal;
         }
+
+        // Update the portfolio entry for that category
         portfolio[indexI].repsAvailable -= amount;
         fromUser.portfolio = portfolio;
  
