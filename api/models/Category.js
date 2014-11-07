@@ -20,4 +20,8 @@ CategorySchema.statics.findByName = function(name) {
   return this.where( { "name": name }).findOne().exec(); 
 };
 
+CategorySchema.statics.findBySearchTerm = function(searchTerm, cb) {
+  return this.find( { "name": { $regex: new RegExp('\\b' + searchTerm, 'i') }}, cb);
+};
+
 module.exports = mongoose.model('Category', CategorySchema);

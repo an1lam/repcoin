@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 "use strict";
 
 var React = require('react');
@@ -12,6 +11,7 @@ var SearchBar = React.createClass({
   handleKeyDown: function(event) {
     switch (event.keyCode) {
       case 40: // down
+        event.preventDefault();
         if ($(".searchItem-0")) {
           $(".searchItem-0").focus();
         }

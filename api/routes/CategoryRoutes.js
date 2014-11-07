@@ -10,13 +10,23 @@ module.exports = function(router, isAuthenticated) {
   router.route('/categories')
     // Get all the categories
     .get(isAuthenticated, function(req, res) {
-      Category.find(function(err, categories) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.json(categories);
-        }
-      });
+      if (req.query.searchTerm) {
+        Category.findBySearchTerm(req.query.searchTerm, function(err, categories) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.json(categories);
+          }
+        });
+      } else {
+        Category.find(function(err, categories) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.json(categories);
+          }
+        });
+      }
     })
 
     // Create a new category
