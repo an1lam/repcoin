@@ -106,7 +106,6 @@ module.exports = function(router, isAuthenticated) {
             Number(portfolio[indexI].investments[indexJ].amount/toUserCategoryTotal * 100)
           var valuation = portfolio[indexI].investments[indexJ].percentage/100 * toUserCategoryTotal;
           portfolio[indexI].investments[indexJ].valuation = Math.floor(valuation);
-            portfolio[indexI].investments[indexJ].percentage/100 * toUserCategoryTotal;
         }
 
         // Update the portfolio entry for that category
