@@ -51,7 +51,7 @@ var Modal = React.createClass({
               return user;
             });
             PubSub.publish('profileupdate');
-            this.hide();
+            this.props.hide();
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(status, err.toString());
