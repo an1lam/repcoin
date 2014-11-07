@@ -11,17 +11,18 @@ var CategorySchema = new Schema({
   color         : { type: String, default: '#000' },
   ownerName     : { type: String, required: true },
   quotes        : [{
-                    text  : { type: String, required: true },
-                    owner : { type: String, required: true },  
-                  }] 
+                    text    : { type: String, required: true },
+                    owner   : { type: String, required: true },
+                    ownerId : { type: Schema.Types.ObjectId, required: true },
+                  }]
 });
 
 CategorySchema.statics.findByName = function(name) {
-  return this.where( { "name": name }).findOne().exec(); 
+  return this.where( { "name": name }).findOne().exec();
 };
 
-CategorySchema.statics.findBySearchTerm = function(searchTerm, cb) {
-  return this.find( { "name": { $regex: new RegExp('\\b' + searchTerm, 'i') }}, cb);
+CategorySchema.statics.findBySearchTerm = function(searchTerm) {
+  return this.find( { "name": { $regex: new RegExp('\\b' + searchTerm, 'i') }} ).exec();
 };
 
 module.exports = mongoose.model('Category', CategorySchema);

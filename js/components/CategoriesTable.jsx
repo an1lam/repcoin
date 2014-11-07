@@ -44,17 +44,16 @@ var CategoriesTable = React.createClass({
       }
       
       if (this.state.showInput) {
-        addCategory = <CategoryInput/>;
+        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox}/>;
       }
     }
 
-    var toIncludeReps = false;
+    var includeReps = false;
     var repsHeader = '';
     if (this.props.currentUser.username === this.props.user.username) {
-        toIncludeReps = true;
+        includeReps = true;
         repsHeader = <th>Reps</th>;
     }
-
     return (
       <div className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <CategoriesHeader user={this.props.user} />
@@ -69,11 +68,7 @@ var CategoriesTable = React.createClass({
           </tr>
           <tbody>
           {this.props.user.categories.map(function(category) {
-            if (toIncludeReps) {
-              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} crowdRep={category.crowdScore} reps={category.reps} />;
-            } else {
-              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} crowdRep={category.crowdScore} />;
-            }
+            return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} crowdRep={category.crowdScore} reps={category.reps} includeReps={includeReps} />;
           })}
           </tbody>
         </table>

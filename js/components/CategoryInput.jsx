@@ -42,7 +42,7 @@ var CategoryInput = React.createClass({
     return (
       <div className="categoryInput">
         <CategorySearch query={this.state.query} search={this.search} />
-        <CategorySearchDisplayTable data={this.state.filteredData} />
+        <CategorySearchDisplayTable onReset={this.props.onReset} user={this.props.user} data={this.state.filteredData} />
       </div>
     );
   }
