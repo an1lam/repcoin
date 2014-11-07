@@ -13,7 +13,7 @@
         "user": "Kanye West",
         "amount": 20,
         "valuation": 20,
-        "percentage": 20
+        "percentage": 10
       }]
     },
     {
@@ -112,7 +112,7 @@
    }],
   "portfolio": [
     {
-      "repsAvailable": 11,
+      "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
@@ -123,7 +123,7 @@
       }]
     },
     {
-      "repsAvailable": 13,
+      "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
