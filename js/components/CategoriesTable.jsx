@@ -9,30 +9,26 @@ var $ = require('jquery');
 
 var CategoriesTable = React.createClass({
   render: function() {
-    var toIncludeReps = false;
+    var includeReps = false;
     var repsHeader = '';
     if (this.props.currentUser.username === this.props.user.username) {
-        toIncludeReps = true;
+        includeReps = true;
         repsHeader = <th>Reps</th>;
     }
 
     return (
-      <div className="categoriesTable panel panel-default">
+      <div key={this.props.user._id} className="categoriesTable panel panel-default">
         <CategoriesHeader user={this.props.user} />
         <table className="table table-bordered table-striped">
-          <tr>
-            <th>Category</th>
-            <th>Direct Rep</th>
-            {repsHeader}
-          </tr>
           <tbody>
-          {this.props.user.categories.map(function(category) {
-            if (toIncludeReps) {
-              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} reps={category.reps} />;
-            } else {
-              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} />;
-            }
-          })}
+            <tr>
+              <th>Category</th>
+              <th>Direct Rep</th>
+              {repsHeader}
+            </tr>
+            {this.props.user.categories.map(function(category) {
+              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} reps={category.reps} includeReps={includeReps} />;
+            })}
           </tbody>
         </table>
       </div>

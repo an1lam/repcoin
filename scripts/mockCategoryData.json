@@ -8,11 +8,13 @@
   "repsInvested": 0,
   "quotes": [{
       "text": "I love testing!",
-      "owner": "Kanye West"
+      "owner": "Kanye West",
+      "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
     { 
       "text": "I love biology",
-      "owner": "Matt Ritter"
+      "owner": "Matt Ritter",
+      "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
     }]
 },
 {
@@ -25,11 +27,13 @@
   "repsInvested": 0,
   "quotes": [{
       "text": "I love testing!",
-      "owner": "Kanye West"
+      "owner": "Kanye West",
+      "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
     { 
       "text": "I love biology",
-      "owner": "Matt Ritter"
+      "owner": "Matt Ritter",
+      "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
     }]
 },
 {
@@ -42,11 +46,13 @@
   "repsInvested": 0,
   "quotes": [{
       "text": "I love testing!",
-      "owner": "Kanye West"
+      "owner": "Kanye West",
+      "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
     { 
       "text": "I love biology",
-      "owner": "Matt Ritter"
+      "owner": "Matt Ritter",
+      "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
     }]
 },
 {
@@ -59,11 +65,13 @@
   "repsInvested": 0,
   "quotes": [{
       "text": "I love testing!",
-      "owner": "Kanye West"
+      "owner": "Kanye West",
+      "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
     { 
       "text": "I love biology",
-      "owner": "Matt Ritter"
+      "owner": "Matt Ritter",
+      "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
     }]
 },
 {
@@ -76,11 +84,13 @@
   "repsInvested": 0,
   "quotes": [{
       "text": "I love testing!",
-      "owner": "Kanye West"
+      "owner": "Kanye West",
+      "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
     { 
       "text": "I love biology",
-      "owner": "Matt Ritter"
+      "owner": "Matt Ritter",
+      "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
     }]
 },
 {
@@ -93,11 +103,13 @@
   "repsInvested": 0,
   "quotes": [{
       "text": "I love testing!",
-      "owner": "Kanye West"
+      "owner": "Kanye West",
+      "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
     { 
       "text": "I love biology",
-      "owner": "Matt Ritter"
+      "owner": "Matt Ritter",
+      "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
     }]
 },
 {
@@ -110,11 +122,13 @@
   "repsInvested": 0,
   "quotes": [{
       "text": "I love testing!",
-      "owner": "Kanye West"
+      "owner": "Kanye West",
+      "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
     { 
       "text": "I love biology",
-      "owner": "Matt Ritter"
+      "owner": "Matt Ritter",
+      "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
     }]
 },
 {
@@ -127,10 +141,12 @@
   "repsInvested": 0,
   "quotes": [{
       "text": "I love testing!",
-      "owner": "Kanye West"
+      "owner": "Kanye West",
+      "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
     { 
       "text": "I love biology",
-      "owner": "Matt Ritter"
+      "owner": "Matt Ritter",
+      "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
     }]
 }

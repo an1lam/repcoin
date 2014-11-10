@@ -60,7 +60,7 @@
     "build-jsx": "watchify -t reactify --debug --extension=.jsx js/app.jsx -o build/app.js -dv",
     "build-css": "cp -a css/ build/css/",
     "build-html": "cp index.html build/index.html",
-    "watch-css": "nodemon --ignore build/ -e css --watch css --exec 'cp -a css/ build/'",
+    "watch-css": "nodemon --ignore build/ -e css --watch css --exec 'cp -a css/ build/css/'",
     "watch-html": "nodemon --ignore build/ -e html --watch index.html --exec 'cp index.html build/index.html'",
     "build-lib": "cp js/lib/**/* build/js/lib/",
     "build-fonts": "cp fonts/** build/fonts/",
