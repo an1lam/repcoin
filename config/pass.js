@@ -11,10 +11,10 @@ module.exports = function(passport, LocalStrategy) {
           return done(err); 
         }
         if (!user) {
-          return done(null, false, { message: 'Incorrect username' });
+          return done(null, false, { message: 'Unrecognized email address' });
         }
         if (!user.comparePassword(password)) {
-          return done(null, false, { message: 'Incorrect Password' });
+          return done(null, false, { message: 'Incorrect email and password combination' });
         }
         return done(null, user);
       });
