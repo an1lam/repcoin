@@ -1,7 +1,7 @@
 {
   "_id": ObjectId("543acfa788257fca61ff521b"),
   "username": "Kanye West",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "kanye@kanye.com",
   "phoneNumber": "9144200201",
   "portfolio": [
@@ -45,7 +45,7 @@
 },
 {
   "username": "Arnold Palmer",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "arnold@arnold.com",
   "_id": ObjectId("5434171b7f9bea5969085da2"),
   "phoneNumber": "9144200200",
@@ -91,7 +91,7 @@
 {
   "_id": ObjectId("5439a8221e25afaf21b2adb3"),
   "username": "Matt Ritter",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "matt@matt.com",
   "phoneNumber": "0000000000",
   "timeStamp": "2014-10-11T21:58:58.692Z",
@@ -152,7 +152,7 @@
 {
   "_id": ObjectId("5439a82b1e25afaf21b2adb4"),
   "username": "Stephen Malina",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "stephen@stephen.com",
   "phoneNumber": "1111111111",
   "timeStamp": "2014-10-11T21:59:07.496Z",
@@ -202,7 +202,7 @@
 {
   "_id": ObjectId("543a252acb4b5e50277998d6"),
   "username": "Sarah Rosenburg",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "sarah@sarah.com",
   "phoneNumber": "1111111112",
   "timeStamp": "2014-10-12T06:52:26.059Z",
@@ -247,7 +247,7 @@
 {
   "_id": ObjectId("543a2533cb4b5e50277998d7"),
   "username": "Trent Thompson",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "trent@trent.com",
   "phoneNumber": "3333333333",
   "timeStamp": "2014-10-12T06:52:35.722Z",
@@ -292,7 +292,7 @@
 {
   "_id": ObjectId("543a253bcb4b5e50277998d8"),
   "username": "Adam Baker",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "adam@adam.com",
   "phoneNumber": "4444444444",
   "timeStamp": "2014-10-12T06:52:43.105Z",
@@ -337,7 +337,7 @@
 {
   "_id": ObjectId("543a2543cb4b5e50277998d9"),
   "username": "John Randazzo",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "john@john.com",
   "phoneNumber": "5555555555",
   "timeStamp": "2014-10-12T06:52:51.775Z",
@@ -382,7 +382,7 @@
 {
   "_id": ObjectId("543a254dcb4b5e50277998da"),
   "username": "Jean Walker",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "jean@jean.com",
   "phoneNumber": "6666666666",
   "timeStamp": "2014-10-12T06:53:01.535Z",
@@ -427,7 +427,7 @@
 {
   "_id": ObjectId("543a2555cb4b5e50277998db"),
   "username": "Sofia Cortez",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "sofia@sofia.com",
   "phoneNumber": "7777777777",
   "timeStamp": "2014-10-12T06:53:09.540Z",
@@ -473,7 +473,7 @@
 {
   "_id": ObjectId("543a255ccb4b5e50277998dc"),
   "username": "Jen Dalecki",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "jen@jen.com",
   "phoneNumber": "8888888888",
   "timeStamp": "2014-10-12T06:53:16.300Z",
@@ -518,7 +518,7 @@
 {
   "_id": ObjectId("54428d1418c74ed07ec3e773"),
   "username": "Bob Trenton",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "bob@bob.com",
   "phoneNumber": "9999999999",
   "timeStamp": "2014-10-18T15:53:56.176Z",
@@ -563,7 +563,7 @@
 {
   "_id": ObjectId("54428de218c74ed07ec3e774"),
   "username": "Brian Leventhal",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "brian@brian.com",
   "phoneNumber": "Brian Leventhal",
   "timeStamp": "2014-10-18T15:57:22.133Z",
@@ -608,7 +608,7 @@
 {
   "_id": ObjectId("54428e2e18c74ed07ec3e776"),
   "username": "Michaela Meyers",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "michaela@michaela.com",
   "phoneNumber": "Michaela Meyers",
   "timeStamp": "2014-10-18T15:58:38.658Z",
@@ -653,7 +653,7 @@
 {
   "_id": ObjectId("54428e5618c74ed07ec3e777"),
   "username": "Peter Piper",
-  "password": "$2a$10$HGDrBGJrNPnpk7nx/s/ORuksBtBIuugg2buPy7Tp2zD3xD1OpNshe",
+  "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "peter@peter.com",
   "phoneNumber": "Peter Piper",
   "timeStamp": "2014-10-18T15:59:18.982Z",
