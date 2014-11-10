@@ -73,6 +73,11 @@ var CategoryInput = React.createClass({
           return user;
         });
         PubSub.publish('profileupdate');
+        this.props.onReset();
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+        this.props.onReset();
       }.bind(this)
     });  
   },
@@ -132,7 +137,7 @@ var CategoryInput = React.createClass({
     var type = this.props.expert ? "expert" : "investor";
     return (
       <div className="categoryInput">
-        <CategorySearch onReset={this.props.onReset} query={this.state.query} search={this.search} handleClick={this.props.handleClick} getCategory={this.getCategory} setExpertCategory={this.setExpertCategory} type={type} />
+        <CategorySearch onReset={this.props.onReset} query={this.state.query} search={this.search} handleClick={this.props.handleClick} getCategory={this.getCategory} setExpertCategory={this.setExpertCategory} setInvestorCategory={this.setInvestorCategory} type={type} />
         <CategorySearchDisplayTable onReset={this.props.onReset} user={this.props.user} data={this.state.filteredData} handleClick={this.handleClick} type={type} />
       </div>
     );

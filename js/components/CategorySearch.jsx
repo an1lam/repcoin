@@ -31,7 +31,8 @@ var CategorySearch = React.createClass({
   handleSubmit: function(event) {
     event.preventDefault();
     var categoryName = this.props.query;
-    this.props.getCategory(categoryName, this.props.setExpertCategory);
+    var cb = this.props.expert ? this.props.setExpertCategory : this.props.setInvestorCategory;
+    this.props.getCategory(categoryName, cb);
   },
 
   render: function() {
