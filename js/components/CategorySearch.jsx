@@ -12,14 +12,16 @@ var CategorySearch = React.createClass({
     switch (event.keyCode) {
       case 40: // down
         event.preventDefault();
-        if ($(".categorySearchItem-0")) {
-          $(".categorySearchItem-0").focus();
+        var baseSearchItem = "." + this.props.type + "searchItem-0";
+        if ($(baseSearchItem)) {
+          $(baseSearchItem).focus();
         }
         break;
 
       case 13: // return
+        var submitBtn = "." + this.props.type + "submit";
         event.preventDefault();
-        $(".submitbtn").click();
+        $(submitBtn).click();
         break;
 
       default: return;
@@ -29,16 +31,19 @@ var CategorySearch = React.createClass({
   handleSubmit: function(event) {
     event.preventDefault();
     var categoryName = this.props.query;
-    this.props.getCategory(categoryName, this.props.setExpertCategory);
+    var cb = this.props.expert ? this.props.setExpertCategory : this.props.setInvestorCategory;
+    this.props.getCategory(categoryName, cb);
   },
 
   render: function() {
+    var submitClasses = this.props.type + "submit btn btn-primary";
+    var searchBarInput = this.props.type + "search + form-control";
     return (
       <div className="searchBar" onKeyDown={this.handleKeyDown}>
         <div className="input-group">
-          <input type="text" ref="searchInput" value={this.props.query} onChange={this.search} className="categorySearchBarInput form-control" placeholder="Search" />
+          <input type="text" ref="searchInput" value={this.props.query} onChange={this.search} className={searchBarInput} placeholder="Search" />
           <div className="input-group-btn">
-            <button type="submit" onClick={this.handleSubmit} className="submitbtn btn btn-primary"><span className="glyphicon glyphicon-ok"></span></button>  
+            <button type="submit" onClick={this.handleSubmit} className={submitClasses}><span className="glyphicon glyphicon-ok"></span></button>  
           </div>
           <div className="input-group-btn">
             <button type="reset" onClick={this.props.onReset} className="btn btn-default"><span className="glyphicon glyphicon-remove"></span></button>  

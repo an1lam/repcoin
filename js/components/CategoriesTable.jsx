@@ -1,11 +1,10 @@
 "use strict";
 
-var auth = require('../auth.jsx');
+var $ = require('jquery');
+var CategoriesHeader = require('./CategoriesHeader');
+var CategoriesItem = require('./CategoriesItem');
 var CategoryInput = require('./CategoryInput');
 var React = require('react');
-var CategoriesItem = require('./CategoriesItem');
-var CategoriesHeader = require('./CategoriesHeader');
-var $ = require('jquery');
 
 var CategoriesTable = React.createClass({
   getInitialState: function() {
@@ -44,7 +43,7 @@ var CategoriesTable = React.createClass({
       }
       
       if (this.state.showInput) {
-        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox}/>;
+        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={true} />;
       }
     }
 

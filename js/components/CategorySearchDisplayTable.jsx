@@ -28,23 +28,27 @@ var CategorySearchDisplayTable = React.createClass({
 
   handleKeyDown: function(event) {
     switch (event.keyCode) {
+
       case 38: // up
         if (this.state.index === 0) {
-          $(".categorySearchBarInput").focus();
+          var searchBarInput = "." + this.props.type + "search";
+          $(searchBarInput).focus();
         }
 
         else if (this.state.index > 0) {
+          var searchBarItem = "." + this.props.type + "searchItem-";
           var i = this.state.index-1;
           this.setState({ index: i });
-          $(".categorySearchItem-" + i).focus();
+          $(searchBarItem + i).focus();
         }
       break;
       
       case 40: // down
         if (this.state.index < this.state.maxIndex) {
+          var searchBarItem = "." + this.props.type + "searchItem-";
           var i = this.state.index+1;
           this.setState({ index: i });
-          $(".categorySearchItem-" + i).focus();
+          $(searchBarItem + i).focus();
         }
       break;
       
@@ -55,11 +59,12 @@ var CategorySearchDisplayTable = React.createClass({
 
   render: function() {
     var i = 0;
+    var searchBarItem = this.props.type + "searchItem-";
     return (
       <div className="searchDisplayTable">
         <ul className="list-group">
           {this.props.data.map(function(datum) {
-            var name = "categorySearchItem-" + i;
+            var name = searchBarItem + i;
             i += 1;
             return <li key={datum._id} className="list-group-item"> 
               <a href={datum.name} onClick={this.props.handleClick} onKeyDown={this.handleKeyDown} className={name}>

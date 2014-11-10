@@ -32,10 +32,15 @@ module.exports = function(router, isAuthenticated) {
     .post(isAuthenticated, function(req, res) {
       var category = new Category({
         name        : req.body.name,
-        color       : req.body.color,
         ownerName   : req.body.ownerName,
         quotes      : req.body.quotes
       });
+
+      // If there is no specified color, Mongoose will give it the default
+      if (req.body.color) {
+        category.color = req.body.color;
+      }
+
       category.save( function(err) {
         if (err) {
           res.status(400).send(err);

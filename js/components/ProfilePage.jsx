@@ -72,7 +72,7 @@ var ProfilePage = React.createClass({
       profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
 
       if (this.state.currentUser._id === this.state.user._id) {
-        portfolio = <PortfolioTable user={this.state.user} />;
+        portfolio = <PortfolioTable user={this.state.user} currentUser={this.state.currentUser}/>;
       }
 
       if (this.state.currentUser._id !== this.state.user._id) {
