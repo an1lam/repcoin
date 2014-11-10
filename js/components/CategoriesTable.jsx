@@ -64,11 +64,10 @@ var CategoriesTable = React.createClass({
             <tr>
               <th>Category</th>
               <th>Direct Rep</th>
-              <th>Crowd Rep</th>
               {repsHeader}
             </tr>
             {this.props.user.categories.map(function(category) {
-              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} crowdRep={category.crowdScore} reps={category.reps} includeReps={includeReps} />;
+              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} reps={category.reps} includeReps={includeReps} />;
             })}
           </tbody>
         </table>
