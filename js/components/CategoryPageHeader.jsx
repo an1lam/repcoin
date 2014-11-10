@@ -26,6 +26,7 @@ var CategoryPageHeader = React.createClass({
         auth.storeCurrentUser(user, function(user) {
           return user;
         });
+        this.incrementSubscribers(this.props.category, true);
         PubSub.publish('userupdate');
       }.bind(this),
       error: function(xhr, status, err) {
@@ -34,8 +35,12 @@ var CategoryPageHeader = React.createClass({
    });  
   },
 
-  incrementExperts: function(category) {
-    category.experts = category.experts + 1;
+  incrementSubscribers: function(category, isInvestor) {
+    if (isInvestor) {
+      category.investors = category.investors + 1;
+    } else {
+      category.experts = category.experts + 1;
+    }
     $.ajax({
       url: '/api/categories/' + category._id,
       type: 'PUT',
@@ -66,7 +71,7 @@ var CategoryPageHeader = React.createClass({
         auth.storeCurrentUser(user, function(user) {
           return user;
         });
-        this.incrementExperts(this.props.category);
+        this.incrementSubscribers(this.props.category, false);
         PubSub.publish('userupdate');
       }.bind(this),
       error: function(xhr, status, err) {
