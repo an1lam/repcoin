@@ -26,9 +26,32 @@ var CategoryPageHeader = React.createClass({
         auth.storeCurrentUser(user, function(user) {
           return user;
         });
+        this.incrementSubscribers(this.props.category, true);
         PubSub.publish('userupdate');
-      }.bind(this)
-    });  
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }.bind(this) 
+   });  
+  },
+
+  incrementSubscribers: function(category, isInvestor) {
+    if (isInvestor) {
+      category.investors = category.investors + 1;
+    } else {
+      category.experts = category.experts + 1;
+    }
+    $.ajax({
+      url: '/api/categories/' + category._id,
+      type: 'PUT',
+      data: category,
+      success: function(category) {
+        return;
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }.bind(this) 
+    });
   },
 
   setExpertCategory: function(event) {
@@ -48,8 +71,12 @@ var CategoryPageHeader = React.createClass({
         auth.storeCurrentUser(user, function(user) {
           return user;
         });
+        this.incrementSubscribers(this.props.category, false);
         PubSub.publish('userupdate');
-      }.bind(this)
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }.bind(this) 
     });
   },
  

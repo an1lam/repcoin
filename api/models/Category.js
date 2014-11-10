@@ -5,9 +5,11 @@ var Schema = mongoose.Schema;
 
 var CategorySchema = new Schema({
   name          : { type: String, required: true, unique: true },
-  repsLiquid    : { type: Number, required: true, default: 0 },
-  repsInvested  : { type: Number, required: true, default: 0 },
-  timeStamp     : { type: Date, required: true, default: Date.now },
+  repsLiquid    : { type: Number, default: 0, required: true },
+  repsInvested  : { type: Number, default: 0, required: true },
+  experts       : { type: Number, required: true, default: 0 },
+  investors     : { type: Number, required: true, default: 0 },
+  timeStamp     : { type: Date, default: Date.now },
   color         : { type: String, required: true, default: '#000' },
   ownerName     : { type: String, required: true },
   quotes        : [{
