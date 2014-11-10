@@ -8,12 +8,12 @@ var Navigation = Router.Navigation;
 var auth = {
   mixins: [Navigation],
 
-  logIn: function(username, password, cb) {
+  logIn: function(email, password, cb) {
     return $.ajax({
       type: 'POST',
       url: '/api/login',
       data: {
-        username: username,
+        email: email,
         password: password
       },
       success: function(user) {
