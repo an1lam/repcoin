@@ -56,23 +56,22 @@ var CategoryInput = React.createClass({
   },
 
   setInvestorCategory: function(category) {
-    var user = this.props.user;
-    var newPortfolioCategory = {
-      repsAvailable: 0,
+    var newCategory = {
       category: category.name,
       id: category._id,
-      investments: []
     };
-    user.portfolio.push(newPortfolioCategory);
     $.ajax({
-      url: '/api/users/' + this.props.user._id,
+      url: '/api/users/' + this.props.user._id + '/investor',
       type: 'PUT',
-      data: user,
+      data: newCategory,
       success: function(user) {
-        auth.storeCurrentUser(user, function(user) {
-          return user;
-        });
-        PubSub.publish('profileupdate');
+        // No user returned means the user is already an investor
+        if (user) {
+          auth.storeCurrentUser(user, function(user) {
+            return user;
+          });
+          PubSub.publish('profileupdate');
+        }
         this.props.onReset();
       }.bind(this),
       error: function(xhr, status, err) {
@@ -83,21 +82,22 @@ var CategoryInput = React.createClass({
   },
 
   setExpertCategory: function(category) {
-    var user = this.props.user;
-    var newExpertCategory = {
+    var newCategory = {
       name: category.name,
       id: category._id,
     };
-    user.categories.push(newExpertCategory);
     $.ajax({
-      url: '/api/users/' + this.props.user._id,
+      url: '/api/users/' + this.props.user._id + '/expert',
       type: 'PUT',
-      data: user,
+      data: newCategory,
       success: function(user) {
-        auth.storeCurrentUser(user, function(user) {
-          return user;
-        });
-        PubSub.publish('profileupdate');
+        // No user means the user is already an investor
+        if (user) {
+          auth.storeCurrentUser(user, function(user) {
+            return user;
+          });
+          PubSub.publish('profileupdate');
+        }
         this.props.onReset();
       }.bind(this),
       error: function(xhr, status, err) {
