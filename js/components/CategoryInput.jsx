@@ -17,7 +17,8 @@ var CategoryInput = React.createClass({
   handleClick: function(event) {
     event.preventDefault();
     var name = $(event.currentTarget).attr('href');
-    this.getCategory(name, this.setExpertCategory);
+    var cb = this.props.expert ? this.setExpertCategory : this.setInvestorCategory;
+    this.getCategory(name, cb);
   },
 
   // Create a new category
@@ -128,10 +129,11 @@ var CategoryInput = React.createClass({
   },
 
   render: function() {
+    var type = this.props.expert ? "expert" : "investor";
     return (
       <div className="categoryInput">
-        <CategorySearch onReset={this.props.onReset} query={this.state.query} search={this.search} handleClick={this.props.handleClick} getCategory={this.getCategory} setExpertCategory={this.setExpertCategory} />
-        <CategorySearchDisplayTable onReset={this.props.onReset} user={this.props.user} data={this.state.filteredData} handleClick={this.handleClick} />
+        <CategorySearch onReset={this.props.onReset} query={this.state.query} search={this.search} handleClick={this.props.handleClick} getCategory={this.getCategory} setExpertCategory={this.setExpertCategory} type={type} />
+        <CategorySearchDisplayTable onReset={this.props.onReset} user={this.props.user} data={this.state.filteredData} handleClick={this.handleClick} type={type} />
       </div>
     );
   }

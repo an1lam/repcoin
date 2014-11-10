@@ -1,9 +1,9 @@
-/** @jsx React.DOM */
 "use strict";
 
-var React = require('react');
-var PortfolioItem = require('./PortfolioItem.jsx');
+var CategoryInput = require('./CategoryInput');
 var PortfolioHeader = require('./PortfolioHeader.jsx');
+var PortfolioItem = require('./PortfolioItem.jsx');
+var React = require('react');
 
 var PortfolioTable = React.createClass({
   getInitialState: function() {
@@ -31,9 +31,8 @@ var PortfolioTable = React.createClass({
   render: function() {
     var edit = '';
     var addCategory = '';
-    
     if (this.props.currentUser._id === this.props.user._id) {
-      if (this.state.showAddCategory) {
+      if (this.state.showAddPortfolio) {
         edit = <div className="editBox" onClick={this.handleClick}>
                  <button className="btn btn-default btn-small">
                    <span className="glyphicon glyphicon-plus"></span>
@@ -42,13 +41,15 @@ var PortfolioTable = React.createClass({
       }
       
       if (this.state.showInput) {
-        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} portfolio={true}/>;
+        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={false}/>;
       }
     }
 
     return (
-      <div className="categoriesTable panel panel-default">
+      <div className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
         <PortfolioHeader />
+        {edit}
+        {addCategory}
         <table className="table table-bordered table-striped">
           <tr className="PortfolioHeader">
             <th>Category</th>
