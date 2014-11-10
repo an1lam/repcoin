@@ -10,7 +10,7 @@ module.exports = function(router, isAuthenticated) {
   router.route('/categories')
     // Get all the categories
     .get(isAuthenticated, function(req, res) {
-      Category.find().then(function(categories) {
+      Category.find().exec().then(function(categories) {
         res.json(categories);
         return;
       }, function(err) {
