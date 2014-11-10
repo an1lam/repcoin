@@ -7,7 +7,7 @@ var SearchItem = require('./SearchItem.jsx');
 
 var Link = Router.Link;
 
-var SearchDisplayTable = React.createClass({
+var CategorySearchDisplayTable = React.createClass({
   getInitialState: function() {
     return {};
   },
@@ -30,13 +30,13 @@ var SearchDisplayTable = React.createClass({
     switch (event.keyCode) {
       case 38: // up
         if (this.state.index === 0) {
-          $(".searchBarInput").focus();
+          $(".categorySearchBarInput").focus();
         }
 
         else if (this.state.index > 0) {
           var i = this.state.index-1;
           this.setState({ index: i });
-          $(".searchItem-" + i).focus();
+          $(".categorySearchItem-" + i).focus();
         }
       break;
       
@@ -44,7 +44,7 @@ var SearchDisplayTable = React.createClass({
         if (this.state.index < this.state.maxIndex) {
           var i = this.state.index+1;
           this.setState({ index: i });
-          $(".searchItem-" + i).focus();
+          $(".categorySearchItem-" + i).focus();
         }
       break;
       
@@ -59,11 +59,13 @@ var SearchDisplayTable = React.createClass({
       <div className="searchDisplayTable">
         <ul className="list-group">
           {this.props.data.map(function(datum) {
-            var name = "searchItem-" + i;
+            var name = "categorySearchItem-" + i;
             i += 1;
-            return <li key={datum._id} className="list-group-item">
-              <Link onKeyDown={this.handleKeyDown} className={name} to="profile" params={{userId: datum._id}}><SearchItem name={datum.username} index={i-1}/></Link>
-            </li>
+            return <li key={datum._id} className="list-group-item"> 
+              <a href={datum.name} onClick={this.props.handleClick} onKeyDown={this.handleKeyDown} className={name}>
+                <SearchItem name={datum.name} index={i-1}/>
+              </a>
+              </li>;
           }.bind(this))}
         </ul> 
       </div>
@@ -71,4 +73,4 @@ var SearchDisplayTable = React.createClass({
   } 
 });
 
-module.exports = SearchDisplayTable;
+module.exports = CategorySearchDisplayTable;

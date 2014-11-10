@@ -38,7 +38,7 @@
 },
 {
   "name": "Hip Hop",
-  "_id": ObjectId("6434171b7f9bea5969085da1"),
+  "_id": ObjectId("9434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
   "ownerName": "Kanye West",
@@ -134,6 +134,25 @@
 {
   "name": "Rap",
   "_id": ObjectId("1434171b7f9cea5969085db1"),
+  "timeStamp": {"$date": 1413480132},
+  "color": "Blue",
+  "ownerName": "Kanye West",
+  "repsLiquid": 0,
+  "repsInvested": 0,
+  "quotes": [{
+      "text": "I love testing!",
+      "owner": "Kanye West",
+      "ownerId": ObjectId("543acfa788257fca61ff521b")
+    },
+    { 
+      "text": "I love biology",
+      "owner": "Matt Ritter",
+      "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
+    }]
+},
+{
+  "name": "Rock and Roll",
+  "_id": ObjectId("6434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
   "ownerName": "Kanye West",
