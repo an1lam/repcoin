@@ -10,11 +10,11 @@ var LinkDelete = require('./LinkDelete.jsx');
 
 var LinkItem = React.createClass({
   getInitialState: function() {
-    return { 
+    return {
       showEdit: false,
       showInput: false,
       showDelete: false
-    }; 
+    };
   },
 
   handleEditClick: function() {
