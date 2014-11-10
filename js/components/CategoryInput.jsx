@@ -65,12 +65,14 @@ var CategoryInput = React.createClass({
       type: 'PUT',
       data: newCategory,
       success: function(user) {
-        // No user returned means the user is already an investor
+        // No user means the user is already an investor
         if (user) {
           auth.storeCurrentUser(user, function(user) {
             return user;
           });
           PubSub.publish('profileupdate');
+        } else {
+          this.props.setError("Already an investor for " + category.name);
         }
         this.props.onReset();
       }.bind(this),
@@ -91,12 +93,14 @@ var CategoryInput = React.createClass({
       type: 'PUT',
       data: newCategory,
       success: function(user) {
-        // No user means the user is already an investor
+        // No user means the user is already an expert
         if (user) {
           auth.storeCurrentUser(user, function(user) {
             return user;
           });
           PubSub.publish('profileupdate');
+        } else {
+          this.props.setError("Already an expert in " + category.name);
         }
         this.props.onReset();
       }.bind(this),
