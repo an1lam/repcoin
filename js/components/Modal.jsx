@@ -14,7 +14,7 @@ var Modal = React.createClass({
     return { error: "" };
   },
 
-  validateAndCreateTransaction: function(categoryName, reps) {
+  validateAndCreateTransaction: function(categoryName, reps, anonymous) {
     var transactionCategory;
     for (var i = 0; i < this.props.user.categories.length; i++) {
       var currentCategory = this.props.user.categories[i];
@@ -26,13 +26,13 @@ var Modal = React.createClass({
       this.setState({error: true});
     } else {
       this.setState({error: false});
-      this.createTransaction(this.props.user, this.props.currentUser, categoryName, reps);
+      this.createTransaction(this.props.user, this.props.currentUser, categoryName, reps, anonymous);
     }
   },
 
-  createTransaction: function(toUser, fromUser, category, amount) {
+  createTransaction: function(toUser, fromUser, category, amount, anonymous) {
     var to = { "name": toUser.username, "id": toUser._id };
-    var from = { "name": fromUser.username, "id": fromUser._id };
+    var from = { "name": fromUser.username, "anonymous": anonymous, "id": fromUser._id };
     $.ajax({
       url: '/api/transactions',
       type: 'POST',
@@ -41,6 +41,7 @@ var Modal = React.createClass({
         from: from,
         category: category,
         amount: amount,
+        anonymous: anonymous,
       },
       success: function(transaction) {
         $.ajax({
@@ -57,7 +58,6 @@ var Modal = React.createClass({
             console.error(status, err.toString());
           },
         });
-
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
@@ -69,7 +69,8 @@ var Modal = React.createClass({
     event.preventDefault();
     var reps = Number(this.refs.amount.getDOMNode().value);
     var categoryName = this.refs.category.getDOMNode().value;
-    this.validateAndCreateTransaction(categoryName, reps);
+    var anonymous = this.refs.anonymous.getDOMNode().checked;
+    this.validateAndCreateTransaction(categoryName, reps, anonymous);
   },
 
   render: function() {
@@ -127,6 +128,9 @@ var Modal = React.createClass({
                   </select>
                 </div>
                 <div className="categories-dropdown">
+                  <div className="reps_padder">
+                    <strong>Anonymous</strong>: <input type="checkbox" ref="anonymous" />
+                  </div>
                   <strong className="reps_form-label">Categories:</strong>
                   <select ref="category" className="form-control">
                     {categories}
