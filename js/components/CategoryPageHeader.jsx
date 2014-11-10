@@ -27,8 +27,26 @@ var CategoryPageHeader = React.createClass({
           return user;
         });
         PubSub.publish('userupdate');
-      }.bind(this)
-    });  
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }.bind(this) 
+   });  
+  },
+
+  incrementExperts: function(category) {
+    category.experts = category.experts + 1;
+    $.ajax({
+      url: '/api/categories/' + category._id,
+      type: 'PUT',
+      data: category,
+      success: function(category) {
+        return;
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }.bind(this) 
+    });
   },
 
   setExpertCategory: function(event) {
@@ -48,8 +66,12 @@ var CategoryPageHeader = React.createClass({
         auth.storeCurrentUser(user, function(user) {
           return user;
         });
+        this.incrementExperts(this.props.category);
         PubSub.publish('userupdate');
-      }.bind(this)
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }.bind(this) 
     });
   },
  

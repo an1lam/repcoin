@@ -66,10 +66,12 @@ router.route('/categories/:categoryName')
         if (err) {
           res.status(400).send(err);
         } else {
-          category.name       = req.body.name;
-          category.color      = req.body.color;
-          category.ownerName  = req.body.ownerName;
-          category.quotes     = req.body.quotes;
+          category.name       = req.body.name || category.name;
+          category.color      = req.body.color || category.color;
+          category.ownerName  = req.body.ownerName || category.ownerName;
+          category.quotes     = req.body.quotes || category.quotes;
+          category.experts    = req.body.experts || category.experts;
+          category.investors  = req.body.investors || category.investors; 
           category.save(function(err) {
             if (err) {
               res.status(400).send(err);
