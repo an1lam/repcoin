@@ -44,7 +44,7 @@ var CategoriesTable = React.createClass({
       }
       
       if (this.state.showInput) {
-        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox}/>;
+        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} category={true} />;
       }
     }
 
