@@ -268,12 +268,14 @@ html, body {
 }
 
 .categoriesHeader {
+  display:inline-block;
   margin-top:10px;
   margin-bottom:10px;
   margin-left:10px;
 }
 
 .portfolioHeader {
+  display:inline-block;
   margin-top:10px;
   margin-bottom:10px;
   margin-left:10px;

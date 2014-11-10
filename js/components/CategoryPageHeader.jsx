@@ -116,7 +116,7 @@ var CategoryPageHeader = React.createClass({
           <h1 className="text-center">{this.props.category.name}</h1>
           <div>
             {this.props.category.quotes.map(function(quote) {
-              return <h3 className="text-center" key={quote.text}>"{quote.text}"</h3>
+              return <div><h3 className="text-center" key={quote.text}>"{quote.text}"</h3><h4 className="text-center">{quote.owner}</h4></div>
             })}
           </div>
         </div>

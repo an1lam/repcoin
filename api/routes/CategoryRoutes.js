@@ -10,23 +10,37 @@ module.exports = function(router, isAuthenticated) {
   router.route('/categories')
     // Get all the categories
     .get(isAuthenticated, function(req, res) {
-      Category.find().then(function(categories) {
-        res.json(categories);
-        return;
-      }, function(err) {
-        res.status(501).send(err);
-        return;
-      });
+      if (req.query.searchTerm) {
+        Category.findBySearchTerm(req.query.searchTerm).then(function(categories) {
+          res.json(categories);
+          return;
+        }, function(err) {
+          res.status(501).send(err);
+        });
+      } else {
+        Category.find().exec().then(function(categories) {
+          res.json(categories);
+          return;
+        }, function(err) {
+          res.status(501).send(err);
+          return;
+        });
+      }
     })
 
     // Create a new category
     .post(isAuthenticated, function(req, res) {
       var category = new Category({
         name        : req.body.name,
-        color       : req.body.color,
         ownerName   : req.body.ownerName,
         quotes      : req.body.quotes
       });
+
+      // If there is no specified color, Mongoose will give it the default
+      if (req.body.color) {
+        category.color = req.body.color;
+      }
+
       category.save( function(err) {
         if (err) {
           res.status(400).send(err);

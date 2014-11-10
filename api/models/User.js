@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
 var UserSchema = new Schema({
   username: {type: String, required: true, index: { unique: true } },
   password: {type: String, required: true },
-  email: {type: String, required: true},
+  email: {type: String, required: true, unique: true },
   phoneNumber: {type: String, required: true, unique: true },
   about: String,
   portfolio: [{
@@ -28,8 +28,6 @@ var UserSchema = new Schema({
     id: {type: Schema.Types.ObjectId, required: true },
     directScore: {type: Number, default: 0, required: true },
     previousDirectScore: {type: Number, default: 0, required: true },
-    crowdScore: {type: Number, default: 0, required: true },
-    previousCrowdScore: {type: Number, default: 0, required: true },
     expertScore: {type: Number, default: 0, required: true },
     reps: {type: Number, default: 0, required: true }
   }],

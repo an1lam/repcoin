@@ -10,7 +10,7 @@ var CategorySchema = new Schema({
   experts       : { type: Number, required: true, default: 0 },
   investors     : { type: Number, required: true, default: 0 },
   timeStamp     : { type: Date, default: Date.now },
-  color         : { type: String, default: '#000' },
+  color         : { type: String, required: true, default: '#000' },
   ownerName     : { type: String, required: true },
   quotes        : [{
                     text    : { type: String, required: true },
@@ -21,6 +21,10 @@ var CategorySchema = new Schema({
 
 CategorySchema.statics.findByName = function(name) {
   return this.where( { "name": name }).findOne().exec();
+};
+
+CategorySchema.statics.findBySearchTerm = function(searchTerm) {
+  return this.find( { "name": { $regex: new RegExp('\\b' + searchTerm, 'i') }} ).exec();
 };
 
 module.exports = mongoose.model('Category', CategorySchema);

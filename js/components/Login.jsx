@@ -18,9 +18,9 @@ var Login = React.createClass({
 
   handleSubmit: function(event) {
     event.preventDefault();
-    var username = this.refs.username.getDOMNode().value;
+    var email = this.refs.email.getDOMNode().value;
     var password = this.refs.password.getDOMNode().value;
-    auth.logIn(username, password, function(loggedIn) {
+    auth.logIn(email, password, function(loggedIn) {
       if (loggedIn) {
         this.transitionTo('/home');
       }
@@ -35,7 +35,7 @@ var Login = React.createClass({
     return (
       <div className="col-md-2 col-md-offset-10">
         <form onSubmit={this.handleSubmit}>
-          <input type="text" ref="username" className="form-control" placeholder="Username"></input>
+          <input type="text" ref="email" className="form-control" placeholder="Email Address"></input>
           <div className="input-group">
             <input type="password" ref="password" className="form-control" placeholder="Password"></input>
             <span className="input-group-btn">
