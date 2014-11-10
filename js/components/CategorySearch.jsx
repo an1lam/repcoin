@@ -21,16 +21,22 @@ var CategorySearch = React.createClass({
     }
   },
 
+  handleSubmit: function(event) {
+    event.preventDefault();
+    var categoryName = this.props.query;
+    this.props.getCategory(categoryName, this.props.setExpertCategory);
+  },
+
   render: function() {
     return (
       <div className="searchBar" onKeyDown={this.handleKeyDown}>
         <div className="input-group">
           <input type="text" ref="searchInput" value={this.props.query} onChange={this.search} className="categorySearchBarInput form-control" placeholder="Search" />
           <div className="input-group-btn">
-            <button type="submit" className="btn btn-primary"><span className="glyphicon glyphicon-ok"></span></button>  
+            <button type="submit" onClick={this.handleSubmit} className="btn btn-primary"><span className="glyphicon glyphicon-ok"></span></button>  
           </div>
           <div className="input-group-btn">
-            <button type="reset" className="btn btn-default"><span className="glyphicon glyphicon-remove"></span></button>  
+            <button type="reset" onClick={this.props.onReset} className="btn btn-default"><span className="glyphicon glyphicon-remove"></span></button>  
           </div>
         </div>
       </div>
