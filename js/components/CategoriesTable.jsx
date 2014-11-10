@@ -23,15 +23,14 @@ var CategoriesTable = React.createClass({
           <tr>
             <th>Category</th>
             <th>Direct Rep</th>
-            <th>Crowd Rep</th>
             {repsHeader}
           </tr>
           <tbody>
           {this.props.user.categories.map(function(category) {
             if (toIncludeReps) {
-              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} crowdRep={category.crowdScore} reps={category.reps} />;
+              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} reps={category.reps} />;
             } else {
-              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} crowdRep={category.crowdScore} />;
+              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} />;
             }
           })}
           </tbody>
