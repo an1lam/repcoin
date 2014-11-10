@@ -15,7 +15,12 @@ var CategorySearch = React.createClass({
         if ($(".categorySearchItem-0")) {
           $(".categorySearchItem-0").focus();
         }
-      break;
+        break;
+
+      case 13: // return
+        event.preventDefault();
+        $(".submitbtn").click();
+        break;
 
       default: return;
     }
@@ -33,7 +38,7 @@ var CategorySearch = React.createClass({
         <div className="input-group">
           <input type="text" ref="searchInput" value={this.props.query} onChange={this.search} className="categorySearchBarInput form-control" placeholder="Search" />
           <div className="input-group-btn">
-            <button type="submit" onClick={this.handleSubmit} className="btn btn-primary"><span className="glyphicon glyphicon-ok"></span></button>  
+            <button type="submit" onClick={this.handleSubmit} className="submitbtn btn btn-primary"><span className="glyphicon glyphicon-ok"></span></button>  
           </div>
           <div className="input-group-btn">
             <button type="reset" onClick={this.props.onReset} className="btn btn-default"><span className="glyphicon glyphicon-remove"></span></button>  

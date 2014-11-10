@@ -20,12 +20,33 @@ var CategoryInput = React.createClass({
     this.getCategory(name, this.setExpertCategory);
   },
 
+  // Create a new category
+  createCategory: function(categoryName, cb) {
+    var category = { name: categoryName,
+                     ownerName: this.props.user.username }; 
+    $.ajax({
+      url: '/api/categories/',
+      type: 'POST',
+      data: category,
+      success: function(category) {
+        return cb(category);
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(categoryName, status, err.toString());
+      }.bind(this)
+    });
+  },
 
+  // Get the category if one exists. Otherwise, create it.
   getCategory: function(categoryName, cb) {
     $.ajax({
       url: '/api/categories/' + categoryName,
       success: function(category) {
-        return cb(category);
+        if (category) {
+          return cb(category);
+        } else {
+          return this.createCategory(categoryName, cb);
+        }
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(categoryName, status, err.toString());
