@@ -1,4 +1,3 @@
-// A User model with authentication
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,

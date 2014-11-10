@@ -26,8 +26,8 @@ module.exports = function(router, isAuthenticated) {
       amount      : req.body.amount,
       category    : req.body.category
     });
-     
-    var categoryPromise = Category.findByName(req.body.category); 
+
+    var categoryPromise = Category.findByName(req.body.category);
     var fromUserPromise = User.findById(req.body.from.id).exec();
     var toUserPromise = User.findById(req.body.to.id).exec();
     var amount = Number(req.body.amount);
@@ -43,7 +43,7 @@ module.exports = function(router, isAuthenticated) {
         categoryP.repsLiquid = categoryP.repsLiquid - amount;
         categoryP.repsInvested = categoryP.repsInvested + amount;
         category = categoryP;
-        return toUserPromise; 
+        return toUserPromise;
       }, function(err) {
         res.status(400).send(err);
         return;
@@ -86,7 +86,7 @@ module.exports = function(router, isAuthenticated) {
             }
           }
         }
-        
+
         // The from user is not an investor for this category (ERROR!)
         if (indexI === -1) {
           res.status(400).send("Invalid transaction");
@@ -111,7 +111,7 @@ module.exports = function(router, isAuthenticated) {
         // Update the portfolio entry for that category
         portfolio[indexI].repsAvailable -= amount;
         fromUser.portfolio = portfolio;
- 
+
         transaction.save();
         toUser.save();
         fromUser.save();
