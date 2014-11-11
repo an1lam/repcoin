@@ -14,10 +14,10 @@ var Signup = React.createClass({
   },
 
   handleSubmit: function() {
-    var firstname = this.refs.firstname.getDOMNode().value;
-    var lastname = this.refs.lastname.getDOMNode().value;
-    var email = this.refs.email.getDOMNode().value;
-    var phoneNumber = this.refs.phoneNumber.getDOMNode().value;
+    var firstname = this.refs.firstname.getDOMNode().value.trim();
+    var lastname = this.refs.lastname.getDOMNode().value.trim();
+    var email = this.refs.email.getDOMNode().value.trim();
+    var phoneNumber = this.refs.phoneNumber.getDOMNode().value.trim();
     var password = this.refs.password.getDOMNode().value;
     var data = { firstname: firstname, lastname: lastname, email: email, phoneNumber: phoneNumber, password: password };
    
