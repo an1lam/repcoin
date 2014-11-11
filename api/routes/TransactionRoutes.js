@@ -94,7 +94,8 @@ module.exports = function(router, isAuthenticated) {
         }
         // The from user has never invested in this user before
         if (indexJ === -1) {
-          var investment = { user       : req.body.to.name,
+          var investment = { userId     : req.body.to.id,
+                             user       : req.body.to.name,
                              amount     : amount,
                              valuation  : amount,
                              percentage : Number(amount/toUserCategoryTotal * 100) };
