@@ -22,13 +22,13 @@ var LoginPage = React.createClass({
     var login = this.state.showLogin ? <Login /> : '';
     return (
       <div className="loginPage">
-        <div className="loginHeader">
+        <div className="loginHeader row">
           <div>
           <button onClick={this.handleClick} type="button" ref="login" className="loginButton btn btn-default">Log In</button>
           {login}
           </div>
         </div>
-        <div className="loginBody">
+        <div className="loginBody row">
           <span className="logo">Repcoin</span>
           <span className="slogan">
             <h1>Find your expert.</h1>

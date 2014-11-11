@@ -36,7 +36,16 @@ module.exports = function(router) {
       });
       user.save( function(err) {
         if (err) {
-          res.status(400).send(err);
+          // Mongoose validation errors are put in err.errors
+          if (err.errors) {
+            if (err.errors.password) {
+              res.status(501).send(err.errors.password.message);
+            } else {
+              res.status(501).send("Error");
+            }
+          } else {
+            res.status(501).send("Error");
+          }
         } else {
           req.login(user, function(err) {
             if (err) {
