@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 "use strict";
-var React = require('react');
 var $ = require('jquery');
+var React = require('react');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 

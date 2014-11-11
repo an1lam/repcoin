@@ -1,11 +1,9 @@
-/** @jsx React.DOM */
 "use strict";
-
-var React = require('react');
+var auth = require('../auth.jsx');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
+var React = require('react');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
-var auth = require('../auth.jsx');
 
 var Login = React.createClass({
   mixins: [Navigation],
