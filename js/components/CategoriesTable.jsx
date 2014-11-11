@@ -8,7 +8,9 @@ var React = require('react');
 
 var CategoriesTable = React.createClass({
   getInitialState: function() {
-    return { showInput: false, showAddCategory: false };
+    return { showInput: false,
+             showAddCategory: false,
+             error: null };
   },
 
   handleMouseOver: function() {
@@ -22,14 +24,19 @@ var CategoriesTable = React.createClass({
   },
 
   handleClick: function() {
-    this.setState({ showInput: true });
+    this.setState({ showInput: true, error: null });
   },
 
   closeInputBox: function() {
     this.setState({ showInput: false });
   },
 
+  setError: function(error) {
+    this.setState({ error: error });
+  },
+
   render: function() {
+    var error = this.state.error ? <div className="alert alert-info" role="alert">{this.state.error}</div> : '';
     var edit = '';
     var addCategory = '';
     
@@ -43,7 +50,7 @@ var CategoriesTable = React.createClass({
       }
       
       if (this.state.showInput) {
-        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={true} />;
+        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={true} setError={this.setError} />;
       }
     }
 
@@ -57,6 +64,7 @@ var CategoriesTable = React.createClass({
       <div key={this.props.user._id} className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <CategoriesHeader user={this.props.user} />
         {edit}
+        {error}
         {addCategory}
         <table className="table table-bordered table-striped">
           <tbody>
