@@ -1,13 +1,14 @@
-/** @jsx React.DOM */
 "use strict";
-
-var React = require('react');
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
-var Router = require('react-router');
-var auth = require('../auth.jsx');
 var $ = require('jquery');
+var auth = require('../auth.jsx');
+var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
+var React = require('react');
+var Router = require('react-router');
+var Navigation = Router.Navigation;
 
 var Signup = React.createClass({
+  mixins: [Navigation],
+
   getInitialState: function() {
     return { error: null };
   },
@@ -25,8 +26,7 @@ var Signup = React.createClass({
       type: 'POST',
       data: data,
       success: function() {
-        this.setState({ error: null });
-        Router.transitionTo('/home');
+        this.transitionTo('/home');
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText !== "Error") {
