@@ -29,10 +29,9 @@ var Signup = React.createClass({
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText !== "Error") {
-          console.log(xhr.responseText);
           this.setState({ error: xhr.responseText });
         }
-        console.error(status, err.toString());
+        console.error(xhr.responseText);
       }.bind(this)
     });
   },
