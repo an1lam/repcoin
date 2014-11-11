@@ -7,7 +7,9 @@ var React = require('react');
 
 var PortfolioTable = React.createClass({
   getInitialState: function() {
-    return { showInput: false, showAddPortfolio: false };
+    return { showInput: false,
+             showAddPortfolio: false,
+             error: null };
   },
 
   handleMouseOver: function() {
@@ -21,14 +23,19 @@ var PortfolioTable = React.createClass({
   },
 
   handleClick: function() {
-    this.setState({ showInput: true });
+    this.setState({ showInput: true, error: null });
   },
 
   closeInputBox: function() {
     this.setState({ showInput: false });
   },
 
+  setError: function(error) {
+    this.setState({ error: error });
+  },
+
   render: function() {
+    var error = this.state.error ? <div className="alert alert-info" role="alert">{this.state.error}</div> : '';
     var edit = '';
     var addCategory = '';
     if (this.props.currentUser._id === this.props.user._id) {
@@ -41,7 +48,7 @@ var PortfolioTable = React.createClass({
       }
       
       if (this.state.showInput) {
-        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={false}/>;
+        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={false} setError={this.setError} />;
       }
     }
 
@@ -49,6 +56,7 @@ var PortfolioTable = React.createClass({
       <div className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
         <PortfolioHeader />
         {edit}
+        {error}
         {addCategory}
         <table className="table table-bordered table-striped">
           <tr className="PortfolioHeader">
