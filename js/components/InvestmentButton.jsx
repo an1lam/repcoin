@@ -3,6 +3,7 @@
 
 var React = require('react');
 var Modal = require('./Modal.jsx');
+var $ = require('jquery');
 
 var InvestmentButton = React.createClass({
   getInitialState: function() {
@@ -14,14 +15,14 @@ var InvestmentButton = React.createClass({
   },
 
   handleHideModal: function() {
+    $('body').removeClass('modal-open');
     this.setState({ showModal: false });
   },
 
   render: function() {
     var modal = '';
     if (this.state.showModal) {
-      modal = <Modal ref="modal"
-                show={true} hide={this.handleHideModal} user={this.props.user} currentUser={this.props.currentUser} />
+      modal = <Modal ref="modal" show={true} hide={this.handleHideModal} user={this.props.user} currentUser={this.props.currentUser} className="modal-open"/>;
     }
 
     return (
