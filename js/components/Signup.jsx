@@ -13,11 +13,12 @@ var Signup = React.createClass({
   },
 
   handleSubmit: function() {
-    var name = this.refs.name.getDOMNode().value;
+    var firstname = this.refs.firstname.getDOMNode().value;
+    var lastname = this.refs.lastname.getDOMNode().value;
     var email = this.refs.email.getDOMNode().value;
     var phoneNumber = this.refs.phoneNumber.getDOMNode().value;
     var password = this.refs.password.getDOMNode().value;
-    var data = { username: name, email: email, phoneNumber: phoneNumber, password: password };
+    var data = { firstname: firstname, lastname: lastname, email: email, phoneNumber: phoneNumber, password: password };
    
     $.ajax({
       url: '/api/users',
@@ -36,9 +37,10 @@ var Signup = React.createClass({
     return (
       <div className="signup col-md-2 col-md-offset-5">
         <form onSubmit={this.handleSubmit}>
-          <input type="text" ref="name" className="form-control" placeholder="Name"></input>
+          <input type="text" ref="firstname" className="form-control" placeholder="First name"></input>
+          <input type="text" ref="lastname" className="form-control" placeholder="Last name"></input>
           <input type="text" ref="email" className="form-control" placeholder="Email"></input>
-          <input type="text" ref="phoneNumber" className="form-control" placeholder="Phone Number"></input>
+          <input type="text" ref="phoneNumber" className="form-control" placeholder="Phone number"></input>
           <input type="password" ref="password" className="form-control" placeholder="Password"></input>
           <button type="submit" className="signupSubmit btn btn-default">Sign Up</button>
         </form>
