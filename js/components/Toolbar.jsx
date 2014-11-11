@@ -27,7 +27,7 @@ var Toolbar = React.createClass({
     return (
       <div className="toolbar navbar navbar-default" role="navigation">
         <div className="navbar-header">
-          <div className="toolbarHomeLink navbar-brand"><Link to="home">Reps</Link></div>
+          <div className="toolbarHomeLink navbar-brand"><Link to="home">Repcoin</Link></div>
         </div>
         <div className="col-md-3 col-md-offset-1">
           <InstantBox />
