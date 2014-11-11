@@ -2,12 +2,21 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   bcrypt = require('bcrypt'),
   SALT_WORK_FACTOR = 10;
+var validate = require('mongoose-validator');
+
+var passwordValidator = [
+  validate({
+    validator: 'isLength',
+    arguments: [8],
+    message: 'Password must be at least 8 characters'
+  })
+];
 
 var UserSchema = new Schema({
   firstname: {type: String, required: true },
   lastname: {type: String, required: true },
   username: {type: String, required: true },
-  password: {type: String, required: true },
+  password: {type: String, required: true, validate: passwordValidator },
   email: {type: String, required: true, unique: true },
   phoneNumber: {type: String, required: true, unique: true },
   about: String,

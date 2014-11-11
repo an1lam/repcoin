@@ -9,7 +9,7 @@ var $ = require('jquery');
 
 var Signup = React.createClass({
   getInitialState: function() {
-    return {};
+    return { error: null };
   },
 
   handleSubmit: function() {
@@ -25,17 +25,24 @@ var Signup = React.createClass({
       type: 'POST',
       data: data,
       success: function() {
+        this.setState({ error: null });
         Router.transitionTo('/home');
       }.bind(this),
       error: function(xhr, status, err) {
+        if (xhr.responseText !== "Error") {
+          console.log(xhr.responseText);
+          this.setState({ error: xhr.responseText });
+        }
         console.error(status, err.toString());
       }.bind(this)
     });
   },
 
   render: function() {
+    var error = this.state.error ? <div className="alert alert-danger" role="alert"><p>{this.state.error}</p></div> : '';
     return (
       <div className="signup col-md-2 col-md-offset-5">
+        {error}
         <form onSubmit={this.handleSubmit}>
           <input type="text" ref="firstname" className="form-control" placeholder="First name"></input>
           <input type="text" ref="lastname" className="form-control" placeholder="Last name"></input>
