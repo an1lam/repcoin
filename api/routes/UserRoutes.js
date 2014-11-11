@@ -43,7 +43,7 @@ module.exports = function(router) {
             if (err.errors.password) {
               res.status(501).send(err.errors.password.message);
             } else {
-              res.status(501).send("Error");
+              res.status(501).send("Fields cannot be blank");
             }
           // If the error is not from Mongoose, try parsing MongoDB errors
           } else if (err.err.indexOf('email') !== -1) {

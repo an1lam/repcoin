@@ -13,13 +13,13 @@ var passwordValidator = [
 ];
 
 var UserSchema = new Schema({
-  firstname: {type: String, required: true },
-  lastname: {type: String, required: true },
-  username: {type: String, required: true },
+  firstname: {type: String, required: true, trim: true },
+  lastname: {type: String, required: true, trim: true },
+  username: {type: String, required: true, trim: true },
   password: {type: String, required: true, validate: passwordValidator },
-  email: {type: String, required: true, unique: true },
-  phoneNumber: {type: String, required: true, unique: true },
-  about: String,
+  email: {type: String, required: true, unique: true, trim: true },
+  phoneNumber: {type: String, required: true, unique: true, trim: true },
+  about: {type: String, trim: true },
   portfolio: [{
     repsAvailable: {type: Number, default: 0, required: true },
     category: {type: String, required: true },
