@@ -10,24 +10,23 @@ var CategoryPageHeader = React.createClass({
   setInvestorCategory: function(event) {
     event.preventDefault();
 
-    var user = this.props.currentUser;
-    var newPortfolioCategory = {
-      repsAvailable: 0,
+    var newCategory = {
       category: this.props.category.name,
       id: this.props.category._id,
-      investments: []
     };
-    user.portfolio.push(newPortfolioCategory);
     $.ajax({
-      url: '/api/users/' + this.props.currentUser._id,
+      url: '/api/users/' + this.props.currentUser._id + '/investor',
       type: 'PUT',
-      data: user,
+      data: newCategory,
       success: function(user) {
-        auth.storeCurrentUser(user, function(user) {
-          return user;
-        });
-        this.incrementSubscribers(this.props.category, true);
-        PubSub.publish('userupdate');
+        // No user means the user is already an investor
+        if (user) {
+          auth.storeCurrentUser(user, function(user) {
+            return user;
+          });
+          this.incrementSubscribers(this.props.category, true);
+          PubSub.publish('userupdate');
+        }
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
@@ -56,23 +55,24 @@ var CategoryPageHeader = React.createClass({
 
   setExpertCategory: function(event) {
     event.preventDefault();
-    
-    var user = this.props.currentUser;
-    var newExpertCategory = {
+
+    var newCategory = {
       name: this.props.category.name,
       id: this.props.category._id,
     };
-    user.categories.push(newExpertCategory);
     $.ajax({
-      url: '/api/users/' + this.props.currentUser._id,
+      url: '/api/users/' + this.props.currentUser._id + '/expert',
       type: 'PUT',
-      data: user,
+      data: newCategory,
       success: function(user) {
-        auth.storeCurrentUser(user, function(user) {
-          return user;
-        });
-        this.incrementSubscribers(this.props.category, false);
-        PubSub.publish('userupdate');
+        // No user means the user is already an investor
+        if (user) {
+          auth.storeCurrentUser(user, function(user) {
+            return user;
+          });
+          this.incrementSubscribers(this.props.category, false);
+          PubSub.publish('userupdate');
+        }
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
