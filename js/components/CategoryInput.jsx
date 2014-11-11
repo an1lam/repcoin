@@ -56,24 +56,25 @@ var CategoryInput = React.createClass({
   },
 
   setInvestorCategory: function(category) {
-    var user = this.props.user;
-    var newPortfolioCategory = {
-      repsAvailable: 0,
+    var newCategory = {
       category: category.name,
       id: category._id,
-      investments: []
     };
-    user.portfolio.push(newPortfolioCategory);
     $.ajax({
-      url: '/api/users/' + this.props.user._id,
+      url: '/api/users/' + this.props.user._id + '/investor',
       type: 'PUT',
-      data: user,
+      data: newCategory,
       success: function(user) {
-        auth.storeCurrentUser(user, function(user) {
-          return user;
-        });
-        this.incrementSubscribers(category, true);
-        PubSub.publish('profileupdate');
+        // No user means the user is already an investor
+        if (user) {
+          auth.storeCurrentUser(user, function(user) {
+            return user;
+          });
+          this.incrementSubscribers(category, true);
+          PubSub.publish('profileupdate');
+        } else {
+          this.props.setError("Already an investor for " + category.name);
+        }
         this.props.onReset();
       }.bind(this),
       error: function(xhr, status, err) {
@@ -84,22 +85,25 @@ var CategoryInput = React.createClass({
   },
 
   setExpertCategory: function(category) {
-    var user = this.props.user;
-    var newExpertCategory = {
+    var newCategory = {
       name: category.name,
       id: category._id,
     };
-    user.categories.push(newExpertCategory);
     $.ajax({
-      url: '/api/users/' + this.props.user._id,
+      url: '/api/users/' + this.props.user._id + '/expert',
       type: 'PUT',
-      data: user,
+      data: newCategory,
       success: function(user) {
-        auth.storeCurrentUser(user, function(user) {
-          return user;
-        });
-        this.incrementSubscribers(category, false);
-        PubSub.publish('profileupdate');
+        // No user means the user is already an expert
+        if (user) {
+          auth.storeCurrentUser(user, function(user) {
+            return user;
+          });
+          this.incrementSubscribers(category, false);
+          PubSub.publish('profileupdate');
+        } else {
+          this.props.setError("Already an expert in " + category.name);
+        }
         this.props.onReset();
       }.bind(this),
       error: function(xhr, status, err) {

@@ -29,14 +29,33 @@ module.exports = function(router) {
     // Create a new user
     .post(function(req, res) {
       var user = new User({
-          username    : req.body.username,
+          firstname   : req.body.firstname,
+          lastname    : req.body.lastname,
+          username    : req.body.firstname + ' ' + req.body.lastname,
           password    : req.body.password,
           email       : req.body.email,
           phoneNumber : req.body.phoneNumber,
       });
       user.save( function(err) {
         if (err) {
-          res.status(400).send(err);
+          // Mongoose validation errors are put in err.errors
+          if (err.errors) {
+            if (err.errors.password) {
+              res.status(501).send(err.errors.password.message);
+            } else {
+              res.status(501).send("Error");
+            }
+          // If the error is not from Mongoose, try parsing MongoDB errors
+          } else if (err.err.indexOf('username') !== -1) {
+            res.status(501).send("Username is already taken");
+          } else if (err.err.indexOf('email') !== -1) {
+            res.status(501).send("Email is already taken");
+          } else if (err.err.indexOf('phoneNumber') !== -1) {
+            res.status(501).send("Phone number is already taken");
+          // Otherwise, send back generic "Error" message
+          } else {
+            res.status(501).send("Error");
+          }
         } else {
           req.login(user, function(err) {
             if (err) {
@@ -64,6 +83,7 @@ module.exports = function(router) {
     })
 
     // Update the user with this id
+    // This route cannot be used to change the user's categories or portfolio
     .put(function(req, res) {
       User.findById(req.params.user_id, function(err, user) {
         if (err) {
@@ -73,9 +93,7 @@ module.exports = function(router) {
           user.username         = req.body.username || user.username;
           user.password         = req.body.password || user.password;
           user.phoneNumber      = req.body.phoneNumber || user.phoneNumber;
-          user.categories       = req.body.categories || user.categories;
           user.defaultCategory  = req.body.defaultCategory || user.defaultCategory;
-          user.portfolio        = req.body.portfolio || user.portfolio;
           user.picture          = req.body.picture || user.picture;
 
           if (req.body.links) {
@@ -108,6 +126,7 @@ module.exports = function(router) {
          }
        });
     });
+
   ///////// Get n leaders for a category ///////
   router.route('/users/:categoryName/leaders/:count')
     .get(function(req, res) {
@@ -117,6 +136,36 @@ module.exports = function(router) {
         } else {
           res.send(leaders);
         }
+      });
+    });
+ 
+  /////////// Add an expert category if it is not already added
+  router.route('/users/:userId/expert')
+    .put(function(req, res) {
+      User.findOneAndUpdate(
+        {_id: req.params.userId, "categories.name": {$ne: req.body.name}},
+        {$push: {categories: req.body}},
+        function(err, user) {
+          if (err) {
+            res.status(501).send(err);
+          } else {
+            res.send(user);
+          }
+      });
+    });
+ 
+  /////////// Add an investor category if it not already added
+  router.route('/users/:userId/investor')
+    .put(function(req, res) {
+      User.findOneAndUpdate(
+        {_id: req.params.userId, "portfolio.category": {$ne: req.body.category}},
+        {$push: { portfolio: req.body}},
+        function(err, user) {
+          if (err) {
+            res.status(501).send(err);
+          } else {
+            res.send(user);
+          }
       });
     });
 };
