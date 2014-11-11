@@ -46,8 +46,6 @@ module.exports = function(router) {
               res.status(501).send("Error");
             }
           // If the error is not from Mongoose, try parsing MongoDB errors
-          } else if (err.err.indexOf('username') !== -1) {
-            res.status(501).send("Username is already taken");
           } else if (err.err.indexOf('email') !== -1) {
             res.status(501).send("Email is already taken");
           } else if (err.err.indexOf('phoneNumber') !== -1) {
