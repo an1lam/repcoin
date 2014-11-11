@@ -28,7 +28,6 @@ module.exports = function(router) {
 
     // Create a new user
     .post(function(req, res) {
-      console.log(req.body);
       var user = new User({
           firstname   : req.body.firstname,
           lastname    : req.body.lastname,
