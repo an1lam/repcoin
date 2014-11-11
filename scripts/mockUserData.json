@@ -1,5 +1,7 @@
 {
   "_id": ObjectId("543acfa788257fca61ff521b"),
+  "firstname": "Kanye",
+  "lastname": "West",
   "username": "Kanye West",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "kanye@kanye.com",
@@ -10,6 +12,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "amount": 20,
         "valuation": 20,
@@ -21,6 +24,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "amount": 15,
         "valuation": 15,
@@ -45,6 +49,8 @@
 },
 {
   "username": "Arnold Palmer",
+  "firstname": "Arnold",
+  "lastname": "Palmer",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "arnold@arnold.com",
   "_id": ObjectId("5434171b7f9bea5969085da2"),
@@ -55,6 +61,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -66,6 +73,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -91,6 +99,8 @@
 {
   "_id": ObjectId("5439a8221e25afaf21b2adb3"),
   "username": "Matt Ritter",
+  "firstname": "Matt",
+  "lastname": "Ritter",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "matt@matt.com",
   "phoneNumber": "0000000000",
@@ -114,6 +124,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -125,6 +136,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -152,6 +164,8 @@
 {
   "_id": ObjectId("5439a82b1e25afaf21b2adb4"),
   "username": "Stephen Malina",
+  "firstname": "Stephen",
+  "lastname": "Malina",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "stephen@stephen.com",
   "phoneNumber": "1111111111",
@@ -168,6 +182,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -202,6 +217,8 @@
 {
   "_id": ObjectId("543a252acb4b5e50277998d6"),
   "username": "Sarah Rosenburg",
+  "firstname": "Sarah",
+  "lastname": "Rosenburg",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "sarah@sarah.com",
   "phoneNumber": "1111111112",
@@ -217,6 +234,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -228,6 +246,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -247,6 +266,8 @@
 {
   "_id": ObjectId("543a2533cb4b5e50277998d7"),
   "username": "Trent Thompson",
+  "firstname": "Trent",
+  "lastname": "Thompson",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "trent@trent.com",
   "phoneNumber": "3333333333",
@@ -262,6 +283,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -273,6 +295,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -292,6 +315,8 @@
 {
   "_id": ObjectId("543a253bcb4b5e50277998d8"),
   "username": "Adam Baker",
+  "firstname": "Adam",
+  "lastname": "Baker",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "adam@adam.com",
   "phoneNumber": "4444444444",
@@ -307,6 +332,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -318,6 +344,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -337,6 +364,8 @@
 {
   "_id": ObjectId("543a2543cb4b5e50277998d9"),
   "username": "John Randazzo",
+  "firstname": "John",
+  "latname": "Randazzo",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "john@john.com",
   "phoneNumber": "5555555555",
@@ -352,6 +381,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -363,6 +393,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -382,6 +413,8 @@
 {
   "_id": ObjectId("543a254dcb4b5e50277998da"),
   "username": "Jean Walker",
+  "firstname": "Jean",
+  "lastname": "Walker",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "jean@jean.com",
   "phoneNumber": "6666666666",
@@ -397,6 +430,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -408,6 +442,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -427,6 +462,8 @@
 {
   "_id": ObjectId("543a2555cb4b5e50277998db"),
   "username": "Sofia Cortez",
+  "firstname": "Sofia",
+  "lastname": "Cortez",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "sofia@sofia.com",
   "phoneNumber": "7777777777",
@@ -442,6 +479,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -453,6 +491,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -473,6 +512,8 @@
 {
   "_id": ObjectId("543a255ccb4b5e50277998dc"),
   "username": "Jen Dalecki",
+  "firstname": "Jen",
+  "lastname": "Dalecki",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "jen@jen.com",
   "phoneNumber": "8888888888",
@@ -488,6 +529,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -499,6 +541,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -518,6 +561,8 @@
 {
   "_id": ObjectId("54428d1418c74ed07ec3e773"),
   "username": "Bob Trenton",
+  "firstname": "Bob",
+  "lastname": "Trenton",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "bob@bob.com",
   "phoneNumber": "9999999999",
@@ -533,6 +578,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -544,6 +590,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -563,6 +610,8 @@
 {
   "_id": ObjectId("54428de218c74ed07ec3e774"),
   "username": "Brian Leventhal",
+  "firstname": "Brian",
+  "lastname": "Leventhal",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "brian@brian.com",
   "phoneNumber": "Brian Leventhal",
@@ -578,6 +627,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -589,6 +639,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -608,6 +659,8 @@
 {
   "_id": ObjectId("54428e2e18c74ed07ec3e776"),
   "username": "Michaela Meyers",
+  "firstname": "Michaela",
+  "lastname": "Meyers",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "michaela@michaela.com",
   "phoneNumber": "Michaela Meyers",
@@ -623,6 +676,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -634,6 +688,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -653,6 +708,8 @@
 {
   "_id": ObjectId("54428e5618c74ed07ec3e777"),
   "username": "Peter Piper",
+  "firstname": "Peter",
+  "lastname": "Piper",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "peter@peter.com",
   "phoneNumber": "Peter Piper",
@@ -668,6 +725,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -679,6 +737,7 @@
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "investments": [{
+        "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,

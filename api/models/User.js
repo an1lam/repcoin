@@ -25,6 +25,7 @@ var UserSchema = new Schema({
     category: {type: String, required: true },
     id: {type: Schema.Types.ObjectId, required: true },
     investments: [{
+      userId: {type: Schema.Types.ObjectId, required: true },
       user: {type: String, required: true },
       amount: {type: Number, required: true },
       valuation: {type: Number, required: true },
