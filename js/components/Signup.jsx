@@ -25,8 +25,10 @@ var Signup = React.createClass({
       url: '/api/users',
       type: 'POST',
       data: data,
-      success: function() {
-        this.transitionTo('/home');
+      success: function(user) {
+        auth.storeCurrentUser(user, function(user) {
+          this.transitionTo('/home');
+        }.bind(this));
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText !== "Error") {
