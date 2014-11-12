@@ -17,10 +17,21 @@ var Signup = React.createClass({
     var firstname = this.refs.firstname.getDOMNode().value.trim();
     var lastname = this.refs.lastname.getDOMNode().value.trim();
     var email = this.refs.email.getDOMNode().value.trim();
+    var email2 = this.refs.email2.getDOMNode().value.trim();
     var phoneNumber = this.refs.phoneNumber.getDOMNode().value.trim();
     var password = this.refs.password.getDOMNode().value;
+    var password2 = this.refs.password2.getDOMNode().value;
     var data = { firstname: firstname, lastname: lastname, email: email, phoneNumber: phoneNumber, password: password };
    
+    if (email !== email2) {
+      this.setState({ error: 'Emails do not match' });
+      return;
+    }
+    if (password !== password2) {
+      this.setState({ error: 'Passwords do not match' })
+      return;
+    }
+
     $.ajax({
       url: '/api/users',
       type: 'POST',
@@ -48,8 +59,10 @@ var Signup = React.createClass({
           <input type="text" ref="firstname" className="form-control" placeholder="First name"></input>
           <input type="text" ref="lastname" className="form-control" placeholder="Last name"></input>
           <input type="text" ref="email" className="form-control" placeholder="Email"></input>
+          <input type="text" ref="email2" className="form-control" placeholder="Re-enter email"></input>
           <input type="text" ref="phoneNumber" className="form-control" placeholder="Phone number"></input>
           <input type="password" ref="password" className="form-control" placeholder="Password"></input>
+          <input type="password" ref="password2" className="form-control" placeholder="Re-enter password"></input>
           <button type="submit" className="signupSubmit btn btn-default">Sign Up</button>
         </form>
       </div>
