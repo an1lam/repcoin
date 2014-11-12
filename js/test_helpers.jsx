@@ -1,9 +1,11 @@
 /** @jsx React.DOM */
+/* Hack to get around react-router's issues with testing. Taken from here:
+   https://github.com/rackt/react-router/issues/437
+*/
 module.exports = {
   makeStubbedDescriptor: function(component, props, contextStubs) {
     var React = require('react');
     var merge = require('react/lib/merge');
-
     var TestWrapper = React.createClass({
       childContextTypes: {
         currentPath: React.PropTypes.string,
@@ -47,6 +49,6 @@ module.exports = {
       }
     });
 
-    return TestWrapper(props);
+    return new TestWrapper(props);
   }
 };

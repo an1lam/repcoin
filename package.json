@@ -11,6 +11,8 @@
     "express-session": "~1.8.2",
     "flux": "~2.0.1",
     "jquery": "~2.1.1",
+    "jshint": "~2.5.8",
+    "jsxhint": "~0.5.0",
     "mongoose": "~3.8.17",
     "mongoose-validator": "^1.0.2",
     "nodemon": "~1.2.1",
@@ -23,7 +25,7 @@
     "react-router": "~0.10.0",
     "react-tools": "~0.12.0",
     "reduce": "~1.0.1",
-    "watchify": "^2.1.0"
+    "watchify": "^2.1.0",
     "karma": "~0.12.24",
     "karma-cjsx-preprocessor": "0.0.5",
     "karma-browserify": "~0.2.1",
