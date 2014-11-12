@@ -40,7 +40,9 @@ module.exports = function(router) {
         if (err) {
           // Mongoose validation errors are put in err.errors
           if (err.errors) {
-            if (err.errors.password) {
+            if (err.errors.phoneNumber) {
+              res.status(501).send(err.errors.phoneNumber.message);
+            } else if (err.errors.password) {
               res.status(501).send(err.errors.password.message);
             } else {
               res.status(501).send("Fields cannot be blank");

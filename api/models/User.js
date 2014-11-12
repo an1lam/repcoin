@@ -3,6 +3,7 @@ var mongoose = require('mongoose'),
   bcrypt = require('bcrypt'),
   SALT_WORK_FACTOR = 10;
 var validate = require('mongoose-validator');
+var phone = require('phone');
 
 var passwordValidator = [
   validate({
@@ -12,13 +13,22 @@ var passwordValidator = [
   })
 ];
 
+var phoneValidator = [
+  validate({
+    validator: function(val) {
+      return phone(val, 'USA').length > 0;  
+    },
+    message: 'Invalid phone number'
+  })
+];
+
 var UserSchema = new Schema({
   firstname: {type: String, required: true, trim: true },
   lastname: {type: String, required: true, trim: true },
   username: {type: String, required: true, trim: true },
   password: {type: String, required: true, validate: passwordValidator },
   email: {type: String, required: true, unique: true, trim: true },
-  phoneNumber: {type: String, required: true, unique: true, trim: true },
+  phoneNumber: {type: String, required: true, unique: true, trim: true, validate: phoneValidator },
   about: {type: String, trim: true },
   portfolio: [{
     repsAvailable: {type: Number, default: 0, required: true },
