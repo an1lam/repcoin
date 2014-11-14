@@ -15,6 +15,13 @@
   border-radius:2px;
 }
 
+.superScore .edit {
+  margin-right:12px;
+  margin-top:8px;
+  display:inline;
+  float:right;
+}
+
 .superText {
   display:inline-block;
   margin-left:5px;
