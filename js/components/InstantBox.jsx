@@ -25,18 +25,41 @@ var InstantBox = React.createClass({
     }
 
     $.ajax({
-      url: url,
+      url: '/api/users/',
       data: data,
-      success: function(results) {
-        this.setState({
-          query: query,
-          filteredData: results
+      success: function(users) {
+        $.ajax({
+          url: '/api/categories/',
+          data: data,
+          success: function(categories) {
+            var filteredData = (users.concat(categories)).sort(this.compareFunc);
+            this.setState({
+              query: query,
+              filteredData: filteredData
+            });
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(status, err.toString());
+          }.bind(this)
         });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
       }.bind(this) 
     });
+  },
+
+  // TODO: compare with something more meaningful than the alphabet
+  compareFunc: function(a, b) {
+    var aName = a.name ? a.name : a.firstname;
+    var bName = b.name ? b.name : b.firstname;
+    if (aName < bName) {
+      return -1;
+    } 
+    if (bName < aName) {
+      return 1;
+    }
+    return 0;
   },
 
   render: function() {

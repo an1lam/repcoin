@@ -61,9 +61,15 @@ var SearchDisplayTable = React.createClass({
           {this.props.data.map(function(datum) {
             var name = "searchItem-" + i;
             i += 1;
-            return <li key={datum._id} className="list-group-item">
-              <Link onKeyDown={this.handleKeyDown} className={name} to="profile" params={{userId: datum._id}}><SearchItem name={datum.username} index={i-1}/></Link>
-            </li>
+            if (datum.name) {
+              return <li key={datum._id} className="list-group-item">
+                <Link onKeyDown={this.handleKeyDown} className={name} to="category" params={{category: datum.name}}><SearchItem name={datum.name} index={i-1}/></Link>
+              </li>;
+            } else {
+              return <li key={datum._id} className="list-group-item">
+                <Link onKeyDown={this.handleKeyDown} className={name} to="profile" params={{userId: datum._id}}><SearchItem name={datum.username} index={i-1}/></Link>
+              </li>;
+            }
           }.bind(this))}
         </ul> 
       </div>
