@@ -38,7 +38,7 @@ var SuperScore = React.createClass({
             <div className="superText">{this.state.defaultDirectRep}</div>
           </div> 
         </div>;
-    } else if (this.props.currentUser._id === this.props.user._id) {
+    } else if (this.props.currentUser && this.props.currentUser._id === this.props.user._id) {
       superScore = <div className="defaultPanel panel panel-default">
         <div className="panel-body">
           <em>Choose a default category!</em>
