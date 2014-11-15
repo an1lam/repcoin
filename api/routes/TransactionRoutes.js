@@ -113,12 +113,39 @@ module.exports = function(router, isAuthenticated) {
         portfolio[indexI].repsAvailable -= amount;
         fromUser.portfolio = portfolio;
 
-        transaction.save();
-        toUser.save();
-        fromUser.save();
-        category.save();
-        res.send(transaction);
-        return;
+        transaction.save(function(err) {
+          if (err) {
+            res.send(err);
+          } else{
+            toUser.save(function(err) {
+              if (err) {
+                Transaction.findOneAndRemove({'id': transaction.id});
+              } else {
+                fromUser.save(function(err) {
+                  if (err) {
+                    Transaction.findOneAndRemove({'id': transaction.id});
+                    toUser.reps -= amount;
+                    toUser.save();
+                    res.send(err);
+                  } else {
+                    category.save(function(err) {
+                      if (err) {
+                        Transaction.findOneAndRemove({'id': transaction.id});
+                        toUser.reps -= amount;
+                        toUser.save();
+                        fromUser.portfolio[indexI].repsAvailable += amount;
+                        fromUser.save();
+                        res.send(err);
+                      } else {
+                        res.send(transaction);
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
       }, function(err) {
         res.status(400).send(err);
         return;
