@@ -61,12 +61,12 @@ var SearchPage = React.createClass({
 
   generateResultList: function() {
     return (
-      <ul className="list-group">
+      <ul className="list-group searchlist">
         {this.state.results.map(function(result) {
         if (result.firstname) {
-          return <li key={result._id} className="list-group-item"><SearchPageUser user={result} /></li>;
+          return <li key={result._id} className="row list-group-item"><SearchPageUser user={result} /></li>;
         } else {
-          return <li key={result._id} className="list-group-item"><SearchPageCategory category={result} /></li>;
+          return <li key={result._id} className="row list-group-item"><SearchPageCategory category={result} /></li>;
         }
         })}
       </ul>

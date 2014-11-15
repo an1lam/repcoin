@@ -375,3 +375,22 @@ html, body {
 .reps_modal .reps_form-label {
   float: left;
 }
+
+/* Search Page ////////////////// */
+.searchPageItem {
+  height:170px;
+}
+
+.searchPageUser img {
+  max-height:160px;
+  margin-right:20px;
+  float:left;
+  max-width:30%;
+}
+
+.searchPageUser .superScore {
+  font-size:26px;
+  display:inline-block; 
+}
+
+
