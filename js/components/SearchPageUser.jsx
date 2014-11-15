@@ -1,6 +1,8 @@
 "use strict";
 
 var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 var SuperScore = require('./SuperScore.jsx');
 
 var SearchPageUser = React.createClass({
@@ -12,7 +14,9 @@ var SearchPageUser = React.createClass({
           <img className="img-thumbnail" src={this.props.user.picture}></img>
         </div>
         <div>
-          <h2>{this.props.user.username}</h2>
+          <Link to="profile" params={{userId: this.props.user._id}}>
+            <h2>{this.props.user.username}</h2>
+          </Link>
           <p>{about}</p>
           <SuperScore user={this.props.user} currentUser={this.props.currentUser} />
         </div>
