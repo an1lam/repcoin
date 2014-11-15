@@ -4,11 +4,8 @@ var $ = require('jquery');
 var auth = require('../auth.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
-var Router = require('react-router');
-var Navigation = Router.Navigation;
 
 var PictureBox = React.createClass({
-  mixins: [Navigation],
 
   getInitialState: function() {
     return { showEdit: false };
