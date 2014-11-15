@@ -103,9 +103,9 @@
   "lastname": "Ritter",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "matt@matt.com",
-  "phoneNumber": "0000000000",
+  "phoneNumber": "9089172739",
   "timeStamp": "2014-10-11T21:58:58.692Z",
-  "picture": "images/5439a8221e25afaf21b2adb3.jpg",
+  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"

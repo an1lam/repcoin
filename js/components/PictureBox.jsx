@@ -1,21 +1,31 @@
-/** @jsx React.DOM */
 "use strict";
 
-var React = require('react');
-var auth = require('../auth.jsx');
 var $ = require('jquery');
+var auth = require('../auth.jsx');
 var PubSub = require('pubsub-js');
+var React = require('react');
+var Router = require('react-router');
+var Navigation = Router.Navigation;
 
 var PictureBox = React.createClass({
+  mixins: [Navigation],
+
   getInitialState: function() {
     return { showEdit: false };
+  },
+
+  componentDidMount: function() {
+    $(".pictureUpload").onClick = function() {
+      this.value = null;
+    };
   },
 
   handleChange: function(e) {
     var file = e.target.files[0];
     var url = '/api/upload';
     var data = new FormData();
-    data.append(this.props.user._id + '.' + file.name.split('.')[1], file);
+    var date = new Date();
+    data.append(this.props.user._id + + date.getTime() + '.' + file.name.split('.')[1], file);
     $.ajax({
       url: url,
       cache: false,
