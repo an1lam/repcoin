@@ -2,13 +2,23 @@
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
+var PictureUploadModal = require('./PictureUploadModal');
 var PubSub = require('pubsub-js');
 var React = require('react');
 
 var PictureBox = React.createClass({
 
   getInitialState: function() {
-    return { showEdit: false };
+    return { showEdit: false, showModal: false };
+  },
+
+  handleShowModal: function() {
+    this.setState({ showModal: true });
+  },
+
+  handleHideModal: function() {
+    $('body').removeClass('modal-open');
+    this.setState({ showModal: false });
   },
 
   componentDidMount: function() {
@@ -68,10 +78,16 @@ var PictureBox = React.createClass({
   },
 
   handleClick: function() {
-    $('.pictureUpload').trigger("click");
+    this.setState({ showModal: true }); 
+    //$('.pictureUpload').trigger("click");
   },
 
   render: function() {
+    var modal = '';
+    if (this.state.showModal) {
+      modal = <PictureUploadModal ref="modal" show={true} hide={this.handleHideModal} className="modal-open"/>;
+    }
+
     var edit = '';
     if (this.props.currentUser._id == this.props.user._id) {
       if (this.state.showEdit) {
@@ -93,6 +109,7 @@ var PictureBox = React.createClass({
       <div className="pictureBox" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <img className="img-thumbnail" src={this.props.user.picture}></img>
       {edit}
+      {modal}
       </div>
     );
   }

@@ -375,3 +375,27 @@ html, body {
 .reps_modal .reps_form-label {
   float: left;
 }
+
+/* PictureUploadModal ////////////// */
+.cropit-image-background {
+  opacity: .2;
+}
+
+/*
+ * If the slider or anything else is covered by the background image,
+ * use relative or absolute position on it
+ */
+input.cropit-image-zoom-input {
+  position: relative;
+}
+
+/* Limit the background image by adding overflow: hidden */
+.image-cropper {
+  overflow: hidden;
+}
+
+.cropit-image-preview {
+  /* You can specify preview size in CSS */
+  width: 500px;
+  height: 600px;
+}
