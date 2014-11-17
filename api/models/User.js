@@ -95,12 +95,18 @@ UserSchema.methods.comparePassword = function(candidatePassword) {
   return bcrypt.compareSync(candidatePassword, this.password);
 };
 
+// Get all the users whose first or last name start with searchTerm
 UserSchema.statics.findBySearchTerm = function(searchTerm, cb) {
   return this.find({ "username": { $regex: new RegExp('\\b' + searchTerm, 'i') }}, cb);
 };
 
 UserSchema.statics.findNLeaders = function(category, count, cb) {
   return this.find( { "categories.name": category } ).sort( { "categories.directScore": -1 } ).limit(10).exec(cb);
+};
+
+// Find all the users who are experts in a category in increasing order of reps
+UserSchema.statics.findExpertByCategoryIncOrder = function(category, cb) {
+  return this.find({ "categories.name": category }).sort({ "categories.reps": 1 }).exec(cb);
 };
 
 module.exports = mongoose.model('User', UserSchema);

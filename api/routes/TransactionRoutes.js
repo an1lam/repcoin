@@ -7,6 +7,106 @@ var User = require('../models/User.js');
 // Routes that end in /transactions
 // TODO : ADD AUTHENTICATION INTO EACH ROUTE!!
 module.exports = function(router, isAuthenticated) {
+
+  // Save an array of documents
+  saveAll = function(docs, cb) {
+    for (var i = 0; i < docs.length; i++) {
+      docs[i].save(function(err) {
+        if (err) {
+          cb(err);
+        }
+      });
+    }
+    return cb(null);
+  }
+
+  // Find the index for a given category for an expert
+  getCategoryIndex = function(expert, category) {
+    for (var i = 0; i < expert.categories.length; i++) {
+      if (expert.categories[i].name === category) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
+  // Given a list of experts, update their percentiles
+  percentiles = function(experts, category, cb) {   
+    
+    // Calculates the percentage for a value
+    var formula = function (l, s, sampleSize) {
+      return Math.floor(100 * ((s * 0.5) + l) / sampleSize);
+    };
+    
+    var percentileDict = {}; // Maps reps value to percentile
+    var indexDict = {}; // Maps user._id to category index
+    var l = 0; // Number of items less than current
+    var s = 1; // Number of items seen the same as current
+
+    // Set the index for the 0th expert
+    var index = getCategoryIndex(experts[0], category);
+    if (index === -1) {
+      cb("Could not find index for user " + experts[0].username);
+    }
+    indexDict[experts[0]._id] = index;
+
+    // Each unique reps value will have a unique percentage
+    percentileDict[experts[0].categories[index].reps] = formula(l, s, length);
+
+    var length = experts.length;
+    for (var i = 1; i < length; i += 1) {
+      index = getCategoryIndex(experts[i], category);
+      if (index === -1) {
+        cb("Could not find index for user " + experts[i].username);
+      }
+      indexDict[experts[i]._id] = index;
+
+      // If we have seen this value before, increment s
+      // Otherwise, we know there are s more numbers less than the current
+      //  In that case, we increment l by s and set s back to 1
+      var currReps = experts[i].categories[index].reps;
+      var prevReps = experts[i-1].categories[indexDict[experts[i-1]._id]].reps;
+      if (currReps === prevReps) {
+        s += 1;
+      } else {
+        l += s;
+        s = 1;
+      }
+
+      //Reset the percentile for the given reps value
+      percentileDict[currReps] = formula(l, s, length);
+    }
+   
+    // Go through the results and reset all of the percentiles 
+    for (var i = 0; i < length; i++) {
+      var j = indexDict[experts[i]._id];
+      var reps = experts[i].categories[j].reps;
+      var percentile = percentileDict[reps];
+      experts[i].categories[j].directScore = percentile;
+    }
+    cb(null);
+  };
+
+  function updatePercentiles(category, cb) {
+    var expertsPromise = User.findExpertByCategoryIncOrder(category, function() {});
+    expertsPromise.then(function(experts) {
+      percentiles(experts, category, function(err) {
+        if (err) {
+          cb("Error calculating percentiles");
+        }
+        saveAll(experts, function(err) {
+          if (err) {
+            cb(err);
+          } else {
+            cb(null);
+          }
+        });
+      });
+    }, function(err) {
+      return err;
+    });
+  }
+
   function createTransaction(req, res) {
     // Check that there is a user logged in
     if (!req.user) {
@@ -115,18 +215,19 @@ module.exports = function(router, isAuthenticated) {
 
         transaction.save(function(err) {
           if (err) {
-            res.send(err);
-          } else{
+            res.status(400).send(err);
+          } else {
             toUser.save(function(err) {
               if (err) {
                 Transaction.findOneAndRemove({'id': transaction.id});
+                res.status(400).send(err);
               } else {
                 fromUser.save(function(err) {
                   if (err) {
                     Transaction.findOneAndRemove({'id': transaction.id});
                     toUser.reps -= amount;
                     toUser.save();
-                    res.send(err);
+                    res.status(400).send(err);
                   } else {
                     category.save(function(err) {
                       if (err) {
@@ -135,9 +236,24 @@ module.exports = function(router, isAuthenticated) {
                         toUser.save();
                         fromUser.portfolio[indexI].repsAvailable += amount;
                         fromUser.save();
-                        res.send(err);
+                        res.status(400).send(err);
                       } else {
-                        res.send(transaction);
+                        // Update the percentiles
+                        updatePercentiles(category.name, function(err) {
+                          if (err) {
+                            Transaction.findOneAndRemove({'id': transaction.id});
+                            toUser.reps -= amount;
+                            toUser.save();
+                            fromUser.portfolio[indexI].repsAvailable += amount;
+                            fromUser.save();
+                            category.repsLiquid += amount;
+                            category.repsInvested -= amount;
+                            category.save();
+                            res.status(400).send(err);
+                          } else {
+                            res.send(transaction);
+                          }
+                        });
                       }
                     });
                   }
