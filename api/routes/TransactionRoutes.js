@@ -92,7 +92,7 @@ module.exports = function(router, isAuthenticated) {
     expertsPromise.then(function(experts) {
       percentiles(experts, category, function(err) {
         if (err) {
-          cb("Error calculating percentiles");;
+          cb("Error calculating percentiles");
         }
         saveAll(experts, function(err) {
           if (err) {
