@@ -32,7 +32,9 @@
     "karma-phantomjs-launcher": "~0.1.4",
     "karma-chrome-launcher": "~0.1.5",
     "karma-react-jsx-preprocessor": "~0.1.1",
-    "karma-bro": "~0.10.0"
+    "karma-bro": "~0.10.0",
+    "cropit": "~0.1.9",
+    "browserify-shim": "~3.8.0"
   },
   "devDependencies": {
     "connect-livereload": "^0.4.0",
@@ -55,10 +57,28 @@
       "react"
     ]
   },
+  "browser": {
+    "jquery": "./js/lib/jquery/jquery-1.11.1.min.js"
+  },
+  "browserify-shim": {
+    "js/lib/jquery/jquery-1.11.1.min.js": "jQuery",
+    "cropit": {
+      "exports": "cropit",
+      "depends": [
+        "js/lib/jquery/jquery-1.11.1.min.js:jQuery"
+      ]
+    }
+  },
+  "browserify": {
+    "transform": [
+      "reactify",
+      "browserify-shim"
+    ]
+  },
   "scripts": {
     "lint": "jsxhint js/**/*.jsx && jshint api/**/*.js",
     "watch": "npm run watch-html & npm run watch-css & npm run watch-images & npm run build-jsx",
-    "build-jsx": "watchify -t reactify --debug --extension=.jsx js/app.jsx -o build/app.js -dv",
+    "build-jsx": "watchify --debug --extension=.jsx js/app.jsx -o build/app.js -dv",
     "build-css": "cp -a css/ build/css/",
     "build-html": "cp index.html build/index.html",
     "build-images": "cp -a images/ build/images/",
