@@ -12,7 +12,9 @@ module.exports = function(router) {
         file.pipe(fs.createWriteStream(saveTo));
       });
       busboy.on('finish', function() {
-         res.status(200).send(saveTo).end();
+        while (!fs.existsSync('build/' + saveTo)) {
+        }
+        res.status(200).send(saveTo).end();
       });
       req.pipe(busboy);
     });
