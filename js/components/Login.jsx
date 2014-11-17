@@ -1,6 +1,5 @@
 "use strict";
 var auth = require('../auth.jsx');
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
 var React = require('react');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
