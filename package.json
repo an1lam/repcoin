@@ -63,8 +63,8 @@
     "build-html": "cp index.html build/index.html",
     "watch-css": "nodemon --ignore build/ -e css --watch css --exec 'cp -a css/ build/css/'",
     "watch-html": "nodemon --ignore build/ -e html --watch index.html --exec 'cp index.html build/index.html'",
-    "build-lib": "cp js/lib/**/* build/js/lib/",
-    "build-fonts": "cp fonts/** build/fonts/",
+    "build-lib": "cp -a js/lib/ build/js/lib",
+    "build-fonts": "cp -a fonts/ build/fonts/",
     "kill": "pkill -f npm & pkill -f node;",
     "start": "node server.js",
     "test": "jest"
