@@ -5,7 +5,7 @@
   "username": "Kanye West",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "kanye@kanye.com",
-  "phoneNumber": "9144200201",
+  "phoneNumber": "6036673255",
   "portfolio": [
     {
       "repsAvailable": 10,
@@ -54,7 +54,7 @@
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "arnold@arnold.com",
   "_id": ObjectId("5434171b7f9bea5969085da2"),
-  "phoneNumber": "9144200200",
+  "phoneNumber": "2162998054",
   "portfolio": [
     {
       "repsAvailable": 10,
@@ -105,7 +105,7 @@
   "email": "matt@matt.com",
   "phoneNumber": "9089172739",
   "timeStamp": "2014-10-11T21:58:58.692Z",
-  "picture": "images/5439a8221e25afaf21b2adb3.jpg",
+  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -221,7 +221,7 @@
   "lastname": "Rosenburg",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "sarah@sarah.com",
-  "phoneNumber": "1111111112",
+  "phoneNumber": "9176878574",
   "timeStamp": "2014-10-12T06:52:26.059Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -270,7 +270,7 @@
   "lastname": "Thompson",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "trent@trent.com",
-  "phoneNumber": "3333333333",
+  "phoneNumber": "6316970018",
   "timeStamp": "2014-10-12T06:52:35.722Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -319,7 +319,7 @@
   "lastname": "Baker",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "adam@adam.com",
-  "phoneNumber": "4444444444",
+  "phoneNumber": "9089174967",
   "timeStamp": "2014-10-12T06:52:43.105Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -368,7 +368,7 @@
   "latname": "Randazzo",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "john@john.com",
-  "phoneNumber": "5555555555",
+  "phoneNumber": "6036464000",
   "timeStamp": "2014-10-12T06:52:51.775Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -417,7 +417,7 @@
   "lastname": "Walker",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "jean@jean.com",
-  "phoneNumber": "6666666666",
+  "phoneNumber": "2019832514",
   "timeStamp": "2014-10-12T06:53:01.535Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -466,7 +466,7 @@
   "lastname": "Cortez",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "sofia@sofia.com",
-  "phoneNumber": "7777777777",
+  "phoneNumber": "9144203818",
   "timeStamp": "2014-10-12T06:53:09.540Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -516,7 +516,7 @@
   "lastname": "Dalecki",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "jen@jen.com",
-  "phoneNumber": "8888888888",
+  "phoneNumber": "7183079383",
   "timeStamp": "2014-10-12T06:53:16.300Z",
   "links": [{
     "url": "https://www.facebook.com",
@@ -565,7 +565,7 @@
   "lastname": "Trenton",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "bob@bob.com",
-  "phoneNumber": "9999999999",
+  "phoneNumber": "3104333781",
   "timeStamp": "2014-10-18T15:53:56.176Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -614,7 +614,7 @@
   "lastname": "Leventhal",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "brian@brian.com",
-  "phoneNumber": "Brian Leventhal",
+  "phoneNumber": "6176401975",
   "timeStamp": "2014-10-18T15:57:22.133Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -663,7 +663,7 @@
   "lastname": "Meyers",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "michaela@michaela.com",
-  "phoneNumber": "Michaela Meyers",
+  "phoneNumber": "8473238007",
   "timeStamp": "2014-10-18T15:58:38.658Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
@@ -712,7 +712,7 @@
   "lastname": "Piper",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "peter@peter.com",
-  "phoneNumber": "Peter Piper",
+  "phoneNumber": "9177038670",
   "timeStamp": "2014-10-18T15:59:18.982Z",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
