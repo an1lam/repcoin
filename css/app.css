@@ -393,4 +393,7 @@ html, body {
   display:inline-block; 
 }
 
+textarea {
+  resize:none;
+}
 
