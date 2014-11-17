@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
+var cropit = require('cropit');
 var PictureUploadModal = require('./PictureUploadModal');
 var PubSub = require('pubsub-js');
 var React = require('react');
@@ -21,13 +22,8 @@ var PictureBox = React.createClass({
     this.setState({ showModal: false });
   },
 
-  componentDidMount: function() {
-    $(".pictureUpload").onClick = function() {
-      this.value = null;
-    };
-  },
-
   handleChange: function(e) {
+    e.preventDefault();
     var file = e.target.files[0];
     var url = '/api/upload';
     var data = new FormData();
@@ -51,6 +47,7 @@ var PictureBox = React.createClass({
 
   updateUserPhoto: function(pictureLink) {
     var url = '/api/users/' + this.props.user._id;
+    var oldLink = this.props.user.picture;
     var user = this.props.user;
     user.picture = pictureLink;
     $.ajax({
@@ -61,12 +58,30 @@ var PictureBox = React.createClass({
         auth.storeCurrentUser(user, function(user) {
           return user;
         });
-        PubSub.publish('profileupdate');
+        this.deleteOldPhoto(oldLink, function() {
+          PubSub.publish('profileupdate');
+        });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
       }.bind(this)
     });  
+  },
+
+  deleteOldPhoto: function(link, cb) {
+    var url = '/api/remove';
+    var data = { filename: link };
+    $.ajax({
+      url: url,
+      type: 'PUT',
+      data: data,
+      success: function() {
+        cb();
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }.bind(this)
+    });
   },
 
   handleMouseOver: function() {
@@ -79,7 +94,7 @@ var PictureBox = React.createClass({
 
   handleClick: function() {
     this.setState({ showModal: true }); 
-    //$('.pictureUpload').trigger("click");
+    $('.pictureUpload').trigger('click');
   },
 
   render: function() {

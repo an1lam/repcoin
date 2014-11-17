@@ -32,7 +32,16 @@
     "react-router": "~0.10.0",
     "react-tools": "~0.12.0",
     "reduce": "~1.0.1",
-    "watchify": "^2.1.0"
+    "watchify": "^2.1.0",
+    "karma": "~0.12.24",
+    "karma-cjsx-preprocessor": "0.0.5",
+    "karma-jasmine": "~0.2.3",
+    "karma-phantomjs-launcher": "~0.1.4",
+    "karma-chrome-launcher": "~0.1.5",
+    "karma-react-jsx-preprocessor": "~0.1.1",
+    "karma-bro": "~0.10.0",
+    "cropit": "~0.1.9",
+    "browserify-shim": "~3.8.0"
   },
   "devDependencies": {
     "agenda": "~0.6.22",
@@ -56,18 +65,36 @@
       "react"
     ]
   },
+  "browser": {
+    "jquery": "./js/lib/jquery/jquery-1.11.1.min.js"
+  },
+  "browserify-shim": {
+    "js/lib/jquery/jquery-1.11.1.min.js": "jQuery",
+    "cropit": {
+      "exports": "cropit",
+      "depends": [
+        "js/lib/jquery/jquery-1.11.1.min.js:jQuery"
+      ]
+    }
+  },
+  "browserify": {
+    "transform": [
+      "reactify",
+      "browserify-shim"
+    ]
+  },
   "scripts": {
     "lint": "jsxhint js/**/*.jsx && jshint api/**/*.js",
     "watch": "npm run watch-html & npm run watch-css & npm run watch-images & npm run build-jsx",
-    "build-jsx": "watchify -t reactify --debug --extension=.jsx js/app.jsx -o build/app.js -dv",
+    "build-jsx": "watchify --debug --extension=.jsx js/app.jsx -o build/app.js -dv",
     "build-css": "cp -a css/ build/css/",
     "build-html": "cp index.html build/index.html",
     "build-images": "cp -a images/ build/images/",
     "watch-css": "nodemon --ignore build/ -e css --watch css --exec 'cp -a css/ build/css/'",
     "watch-html": "nodemon --ignore build/ -e html --watch index.html --exec 'cp index.html build/index.html'",
+    "build-lib": "cp -a js/lib/ build/js/lib",
+    "build-fonts": "cp -a fonts/ build/fonts/",
     "watch-images": "nodemon --ignore build/ -e jpg,jpeg,png --watch images --exec 'cp -a images/ build/images/'",
-    "build-lib": "cp js/lib/**/* build/js/lib/",
-    "build-fonts": "cp fonts/** build/fonts/",
     "kill": "pkill -f npm & pkill -f node;",
     "start": "node server.js",
     "test": "jest"

@@ -399,3 +399,30 @@ input.cropit-image-zoom-input {
   width: 500px;
   height: 600px;
 }
+
+/* Search Page ////////////////// */
+.searchPageItem {
+  height:170px;
+}
+
+.searchPageUser img {
+  max-height:160px;
+  margin-right:20px;
+  float:left;
+  max-width:30%;
+}
+
+.searchPageUser .superScore {
+  font-size:26px;
+  display:inline-block; 
+}
+
+.pictureUpload {
+  top:-100px;
+  position:absolute;
+}
+
+textarea {
+  resize:none;
+}
+
