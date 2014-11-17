@@ -7,7 +7,6 @@
     "body-parser": "^1.9.0",
     "bootstrap": "~3.3.0",
     "busboy": "^0.2.9",
-    "cropit": "^0.1.9",
     "express": "~4.9.4",
     "express-session": "~1.8.2",
     "flux": "~2.0.1",
@@ -36,13 +35,14 @@
     "watchify": "^2.1.0"
   },
   "devDependencies": {
-    "connect-livereload": "^0.4.0",
-    "reactify": "~0.15.2",
-    "should": "^4.0.4",
-    "supertest": "^0.14.0",
     "agenda": "~0.6.22",
     "chai": "~1.9.2",
-    "sinon": "~1.11.1"
+    "connect-livereload": "^0.4.0",
+    "grunt": "^0.4.5",
+    "reactify": "~0.15.2",
+    "should": "^4.0.4",
+    "sinon": "~1.11.1",
+    "supertest": "^0.14.0"
   },
   "jshintConfig": {
     "node": "true",

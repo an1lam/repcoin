@@ -1,7 +1,6 @@
 "use strict";
 
 global.jQuery = global.$ = require('jquery');
-debugger;
 require('cropit');
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
 var React = require('react');
