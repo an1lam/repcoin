@@ -397,3 +397,8 @@ html, body {
   top:-100px;
   position:absolute;
 }
+
+textarea {
+  resize:none;
+}
+

@@ -1,12 +1,15 @@
 "use strict";
 
-var React = require('react');
+var auth = require('../auth.jsx');
+var LoggedInRoute = require('../mixins/LoggedInRoute.jsx');
 var Login = require('./Login.jsx');
+var React = require('react');
 var Router = require('react-router');
-var Link = Router.Link;
 var Signup = require('./Signup.jsx');
+var Link = Router.Link;
 
 var LoginPage = React.createClass({
+  mixins: [LoggedInRoute],
 
   getInitialState: function() {
     return {
