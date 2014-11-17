@@ -18,4 +18,22 @@ module.exports = function(router) {
       });
       req.pipe(busboy);
     });
+
+  router.route('/remove')
+    .put(function(req, res) {
+      var oldFile = 'build/' + req.body.filename;
+      fs.unlink(oldFile, function(err) {
+        if (err) {
+          res.status(400).send(err);
+        } else {
+          fs.unlink(req.body.filename, function(err) {
+            if (err) {
+              res.status(400).send(err);
+            } else {
+              res.status(200).send("Successfully deleted file");
+            }
+          });
+        }
+      });
+    });
 };
