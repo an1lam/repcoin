@@ -4,6 +4,7 @@ var $ = require('jquery');
 var auth = require('../auth.jsx');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
+var cropit = require('cropit');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
 var InvestmentButton = require('./InvestmentButton.jsx');
