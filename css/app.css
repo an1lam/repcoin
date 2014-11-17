@@ -394,5 +394,6 @@ html, body {
 }
 
 .pictureUpload {
-  opacity:0;
+  top:-100px;
+  position:absolute;
 }
