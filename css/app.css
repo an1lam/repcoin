@@ -393,4 +393,6 @@ html, body {
   display:inline-block; 
 }
 
-
+.pictureUpload {
+  opacity:0;
+}
