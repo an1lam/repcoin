@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require('jquery');
+var DEFAULT_LINK = "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png";
 var PictureUploadModal = require('./PictureUploadModal');
 var React = require('react');
 
@@ -30,6 +31,10 @@ var PictureBox = React.createClass({
     this.setState({ showModal: true }); 
   },
 
+  handleImgError: function() {
+    $(".img-thumbnail").attr("src", DEFAULT_LINK);
+  },
+
   render: function() {
     var modal = '';
     if (this.state.showModal) {
@@ -48,7 +53,7 @@ var PictureBox = React.createClass({
 
     return (
       <div className="pictureBox" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
-        <img className="img-thumbnail" src={this.props.user.picture}></img>
+        <img className="img-thumbnail" src={this.props.user.picture} onError={this.handleImgError} ></img>
       {edit}
       {modal}
       </div>
