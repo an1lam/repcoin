@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 "use strict";
 
 var auth = require('../auth.jsx');
@@ -6,7 +5,6 @@ var InstantBox = require('./InstantBox.jsx');
 var Logout = require('./Logout.jsx');
 var React = require('react');
 var Router = require('react-router');
-
 var Link = Router.Link;
 
 var Toolbar = React.createClass({

@@ -9,8 +9,12 @@ var Logout = React.createClass({
   mixins: [Navigation],
 
   handleClick: function() {
-    auth.logOut();
-    this.transitionTo("/");
+    auth.logOut(function(err) {
+      if (err) {
+        console.error("Error logging out user");
+      }
+      this.transitionTo("/");
+    }.bind(this));
   },
   render: function() {
     return (

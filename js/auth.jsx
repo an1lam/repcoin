@@ -71,17 +71,21 @@ var auth = {
     return !!window.localStorage.getItem('currentUser'); 
   },
 
-  logOut: function() {
+  logOut: function(cb) {
     return $.ajax({
       url: 'api/logout',
       type: 'POST',
       error: function(xhr, status, err) {
-        console.log(err);
-        return false;
+        console.error(err);
+        if (cb) {
+          cb(true);
+        }
       }.bind(this),
       success: function(user) {
         window.localStorage.removeItem('currentUser', JSON.stringify(user));
-        return true;
+        if (cb) {
+          cb(false);
+        }
       }.bind(this),
     });
   }
