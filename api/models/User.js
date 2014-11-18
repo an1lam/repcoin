@@ -48,7 +48,6 @@ var UserSchema = new Schema({
     id: {type: Schema.Types.ObjectId, required: true },
     directScore: {type: Number, default: 0, required: true },
     previousDirectScore: {type: Number, default: 0, required: true },
-    expertScore: {type: Number, default: 0, required: true },
     reps: {type: Number, default: 0, required: true }
   }],
   links: [
