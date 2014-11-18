@@ -45,7 +45,6 @@ describe('Rendering the Modal', function() {
 
   it('creates a give transaction correctly', function () {
     // Simulate creating a transaction where currentUser gives to another user
-    // TODO: Simulate a revoke transaction and make sure it works
     var amountInput = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'reps_text-input').getDOMNode();
     amountInput.value = 1;
