@@ -195,10 +195,6 @@
   position:relative;
 }
 
-.editPhotoForm {
-  display:none;
-}
-
 .pictureBox .editPhoto {
   position:absolute;
   bottom:0;
@@ -376,6 +372,58 @@ html, body {
   float: left;
 }
 
+/* PictureUploadModal ////////////// */
+
+/* Hide file input */
+input.cropit-image-input {
+  visibility: hidden;
+}
+
+/* Place the preview upload box in the middle of the modal */
+.cropit-image-preview-container {
+  margin-left:15%;
+}
+
+/* Show load indicator when image is being loaded */
+.cropit-image-preview.cropit-image-loading .spinner {
+  opacity: 1;
+}
+
+/* Translucent background image */
+.cropit-image-background {
+  opacity: .2;
+}
+
+/* Style the background image differently when preview area is hovered */
+.cropit-image-background.cropit-preview-hovered {
+  opacity: .2;
+}
+
+/* Gray out zoom slider when the image cannot be zoomed */
+.cropit-image-zoom-input[disabled] {
+  opacity: .2;
+}
+
+/*
+ * If the slider or anything else is covered by the background image,
+ * use relative or absolute position on it
+ */
+input.cropit-image-zoom-input {
+  position: relative;
+}
+
+/* Limit the background image by adding overflow: hidden */
+.image-cropper {
+  position:relative;
+  overflow: hidden;
+}
+
+.cropit-image-preview {
+  /* You can specify preview size in CSS */
+  width: 300px;
+  height: 300px;
+}
+
 /* Search Page ////////////////// */
 .searchPageItem {
   height:170px;
@@ -391,11 +439,6 @@ html, body {
 .searchPageUser .superScore {
   font-size:26px;
   display:inline-block; 
-}
-
-.pictureUpload {
-  top:-100px;
-  position:absolute;
 }
 
 textarea {
