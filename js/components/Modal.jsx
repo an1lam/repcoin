@@ -13,7 +13,9 @@ var Modal = React.createClass({
     return { error: "" };
   },
 
-  validateAndCreateTransaction: function(categoryName, reps, anonymous) {
+  validateAndCreateTransaction: function(
+    categoryName, reps, anonymous, giveOrRevoke
+  ) {
     var transactionCategory;
     for (var i = 0; i < this.props.user.categories.length; i++) {
       var currentCategory = this.props.user.categories[i];
@@ -21,11 +23,34 @@ var Modal = React.createClass({
         transactionCategory = currentCategory;
       }
     }
-    if (!transactionCategory || transactionCategory.repsAvailable < reps) {
-      this.setState({error: true});
+    if (giveOrRevoke === 'give') {
+      if (!transactionCategory || transactionCategory.repsAvailable < reps) {
+        this.setState({error: true});
+      } else {
+        this.setState({error: false});
+        this.createTransaction(
+          this.props.user, this.props.currentUser, categoryName, reps,
+          anonymous);
+      }
     } else {
-      this.setState({error: false});
-      this.createTransaction(this.props.user, this.props.currentUser, categoryName, reps, anonymous);
+      var currentUserPortfolio = this.props.currentUser.portfolio;
+      for (var i = 0; i < currentUserPortfolio.length; i++) {
+        if (currentUserPortfolio[i].category === categoryName) {
+          var categoryInvestments = currentUserPortfolio[i].investments;
+          for (var j = 0; j < categoryInvestments.length; j++) {
+            if (
+              categoryInvestments[j].user === this.props.user.username &&
+              categoryInvestments[j].amount > reps && transactionCategory) {
+              this.setState({error: false});
+              this.createTransaction(
+                this.props.user, this.props.currentUser, categoryName, -reps,
+                anonymous);
+              return;
+            }
+          }
+        }
+      }
+      this.setState({error: true});
     }
   },
 
@@ -69,7 +94,9 @@ var Modal = React.createClass({
     var reps = Number(this.refs.amount.getDOMNode().value);
     var categoryName = this.refs.category.getDOMNode().value;
     var anonymous = this.refs.anonymous.getDOMNode().checked;
-    this.validateAndCreateTransaction(categoryName, reps, anonymous);
+    var giveOrRevoke = this.refs.giveOrRevoke.getDOMNode().value;
+    this.validateAndCreateTransaction(
+      categoryName, reps, anonymous, giveOrRevoke);
   },
 
   render: function() {
@@ -121,21 +148,27 @@ var Modal = React.createClass({
             <form onSubmit={this.handleSubmit} className="navbar-form">
             <div className="modal-body container">
                 <div className="give-revoke-dropwdown">
-                  <select ref="giveOrRevoke" className="form-control">
+                  <select ref="giveOrRevoke"
+                    className="form-control give-revoke-select">
                     <option value="give">Give</option>
                     <option value="revoke">Revoke</option>
                   </select>
                 </div>
                 <div className="categories-dropdown">
                   <div className="reps_padder">
-                    <strong>Anonymous</strong>: <input type="checkbox" ref="anonymous" />
+                    <strong>Anonymous</strong>: <input type="checkbox"
+                      ref="anonymous" className="reps_checkbox" />
                   </div>
                   <strong className="reps_form-label">Categories:</strong>
                   <select ref="category" className="form-control">
                     {categories}
                   </select>
                   <div className="reps_padder">
-                    <strong className="reps_form-label">Amount:</strong><input type="text" placeholder="10" className="form-control reps_text-input" ref="amount"></input>
+                    <strong className="reps_form-label">Amount:</strong>
+                    <input
+                      type="text" placeholder="10"
+                      className="form-control reps_text-input" ref="amount">
+                    </input>
                   </div>
                   <div>
                     <button type="submit" className="btn btn-lg btn-primary reps_invest-button">Invest</button>
@@ -143,7 +176,7 @@ var Modal = React.createClass({
 
                 </div>
                 {valuationTable}
-                <div>
+                <div className="error">
                   {error}
                 </div>
               </div>

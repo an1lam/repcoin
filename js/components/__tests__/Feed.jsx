@@ -14,7 +14,8 @@ describe('Render the Feed', function() {
       params.success(responses[params.url]);
     });
     spyOn(auth, "getCurrentUser").and.returnValue({'userId': 'foo'});
-    TestFeed = TestHelper.makeStubbedDescriptor(Feed, {'userId': 'foo', 'parent': 'HomePage'});
+    TestFeed = TestHelper.makeStubbedDescriptor(
+      Feed, {'userId': 'foo', 'parent': 'HomePage'});
     feedPage = TestUtils.renderIntoDocument(TestFeed);
   });
   it('Has a header with four select buttons', function() {

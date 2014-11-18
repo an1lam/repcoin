@@ -62,6 +62,7 @@
   },
   "browserify-shim": {
     "js/lib/jquery/jquery-1.11.1.min.js": "jQuery",
+    "js/lib/jquery/jquery-1.11.1.min.js": "$",
     "cropit": {
       "exports": "cropit",
       "depends": [

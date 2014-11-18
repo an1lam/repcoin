@@ -50,5 +50,42 @@ module.exports = {
     });
 
     return new TestWrapper(props);
+  },
+
+  // A collection of fake responses to various ajax requests we make throughout our application
+  mockAjaxResponses: {
+    '/api/user': {'userId': 'foo'},
+    '/api/transactions': [
+      {
+        '_id': 'testId1', 'category': 'testing',
+        'from': {'name': 'foo', 'id': 'foo'},
+        'to': {'id': 'testId2', 'name': 'bar'}
+      }
+    ]
+  },
+  
+  mockUsers: {
+    "to": {
+      '_id': 'foo',
+      'username': 'foo',
+      'portfolio': [{
+        'category': 'testing',
+        'repsAvailable': 3,
+        'id': 'testing',
+        'investments': [{
+          'userId': 'bar',
+          'user': 'bar',
+          'amount': 10,
+          'valuation': 15,
+        }],
+      }],
+    },
+    'from': {
+      'username': 'bar',
+      '_id': 'bar',
+      'categories': [{
+        'name': 'testing'
+      }],
+    }
   }
 };
