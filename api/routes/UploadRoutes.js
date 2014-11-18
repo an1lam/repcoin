@@ -9,11 +9,9 @@ module.exports = function(router) {
       var saveTo;
       busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
         saveTo = 'images/' + fieldname;
-        file.pipe(fs.createWriteStream(saveTo));
+        file.pipe(fs.createWriteStream('build/' + saveTo));
       });
       busboy.on('finish', function() {
-        while (!fs.existsSync('build/' + saveTo)) {
-        }
         res.status(200).send(saveTo).end();
       });
       req.pipe(busboy);
@@ -26,13 +24,7 @@ module.exports = function(router) {
         if (err) {
           res.status(400).send(err);
         } else {
-          fs.unlink(req.body.filename, function(err) {
-            if (err) {
-              res.status(400).send(err);
-            } else {
-              res.status(200).send("Successfully deleted file");
-            }
-          });
+          res.status(200).send("Successfully deleted file");
         }
       });
     });
