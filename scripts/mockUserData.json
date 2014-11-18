@@ -37,7 +37,6 @@
       "id": ObjectId("5434171b7f9bea5969085da1"),
       "directScore": 55,
       "previousDirectScore": 58,
-      "expertScore": 100,
       "reps": 50
   }],
   "links": [{
@@ -86,7 +85,6 @@
       "id": ObjectId("5434171b7f9bea5969085da1"),
       "directScore": 51,
       "previousDirectScore": 49,
-      "expertScore": 10,
       "reps": 20
   }],
   "links": [{
@@ -149,7 +147,6 @@
       "id": ObjectId("6434171b7f9bea5969085da1"),
       "directScore": 72,
       "previousDirectScore": 75,
-      "expertScore": 101,
       "reps": 51
   },
   {
@@ -157,7 +154,6 @@
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "directScore": 33,
       "previousDirectScore": 30,
-      "expertScore": 101,
       "reps": 30
   }]
 },
@@ -202,7 +198,6 @@
       "id": ObjectId("6434171b7f9bea5969085da1"),
       "directScore": 27,
       "previousDirectScore": 24,
-      "expertScore": 101,
       "reps": 51
     },
     {
@@ -210,7 +205,6 @@
       "id": ObjectId("6434171b7f9cea5969085da1"),
       "directScore": 42,
       "previousDirectScore": 39,
-      "expertScore": 67,
       "reps": 27
     }]
 },
@@ -259,7 +253,6 @@
       "id": ObjectId("3434171b7f9bea5969085da1"),
       "directScore": 67,
       "previousDirectScore": 64,
-      "expertScore": 101,
       "reps": 51
   }]
 },
@@ -308,7 +301,6 @@
       "id": ObjectId("3434171b7f9bea5969085da1"),
       "directScore": 82,
       "previousDirectScore": 85,
-      "expertScore": 101,
       "reps": 51
   }]
 },
@@ -357,7 +349,6 @@
       "id": ObjectId("2434171b7f9bea5969085da1"),
       "directScore": 16,
       "previousDirectScore": 14,
-      "expertScore": 101,
       "reps": 51
   }]
 },
@@ -406,7 +397,6 @@
       "id": ObjectId("2434171b7f9bea5969085da1"),
       "directScore": 59,
       "previousDirectScore": 63,
-      "expertScore": 101,
       "reps": 51
   }]
 },
@@ -455,7 +445,6 @@
       "id": ObjectId("1434171b7f9bea5969085da1"),
       "directScore": 33,
       "previousDirectScore": 36,
-      "expertScore": 101,
       "reps": 51
   }]
 },
@@ -504,7 +493,6 @@
     "id": ObjectId("1434171b7f9bea5969085da1"),
     "directScore": 50,
     "previousDirectScore": 47,
-    "expertScore": 101,
     "reps": 51
   }]
 },
@@ -554,7 +542,6 @@
     "id": ObjectId("5424171b7f9bea5969085da1"),
     "directScore": 42,
     "previousDirectScore": 44,
-    "expertScore": 101,
     "reps": 51
   }]
 },
@@ -603,7 +590,6 @@
     "id": ObjectId("5424171b7f9bea5969085da1"),
     "directScore": 6,
     "previousDirectScore": 0,
-    "expertScore": 101,
     "reps": 51
   }]
 },
@@ -652,7 +638,6 @@
     "id": ObjectId("5424171b7f9bea5969085da1"),
     "directScore": 69,
     "previousDirectScore": 70,
-    "expertScore": 101,
     "reps": 51
   }]
 },
@@ -701,7 +686,6 @@
     "id": ObjectId("2434171b7f9bea5969085da1"),
     "directScore": 12,
     "previousDirectScore": 11,
-    "expertScore": 101,
     "reps": 51
   }]
 },
@@ -750,7 +734,6 @@
     "id": ObjectId("2434171b7f9bea5969085da1"),
     "directScore": 46,
     "previousDirectScore": 42,
-    "expertScore": 101,
     "reps": 51
   }]
 }
