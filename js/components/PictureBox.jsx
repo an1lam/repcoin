@@ -15,7 +15,7 @@ var PictureBox = React.createClass({
 
   handleHideModal: function() {
     $('body').removeClass('modal-open');
-    this.setState({ showModal: false });
+    this.setState({ showModal: false, showEdit: false });
   },
 
   handleMouseOver: function() {
