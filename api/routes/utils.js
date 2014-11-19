@@ -10,9 +10,6 @@ var utils = {
     for (var i = 0; i < docs.length; i++) {
       docs[i].save(function(err) {
         if (err) {
-          console.log("SAVE ALL");
-          console.log(err);
-          console.log(docs[i]);
           cb(err);
         }
       });
@@ -102,12 +99,11 @@ var utils = {
 
   // Given a list of investors, update their percentiles
   getInvestorPercentiles: function(investors, category, cb) {   
-    console.log(investors);
     // Calculates the percentage for a value
     var formula = function (l, s, sampleSize) {
       return Math.floor(100 * ((s * 0.5) + l) / sampleSize);
     };
-    
+   
     var percentileDict = {}; // Maps reps value to percentile
     var indexDict = {}; // Maps user._id to category index
     var l = 0; // Number of items less than current
@@ -153,8 +149,6 @@ var utils = {
       var percentile = percentileDict[reps];
       investors[i].portfolio[j].percentile = percentile;
     }
-    console.log("exiting getting percentiles");
-    console.log(investors);
     cb(null);
   },
 

@@ -89,12 +89,8 @@ module.exports = function(router, isAuthenticated) {
                 Transaction.findOneAndRemove({'id': transaction.id});
                 res.status(400).send(err);
               } else {
-                console.log("about to try saving the fromUser");
-                console.log(fromUser.portfolio);
-                console.log(fromUser.portfolio[1].investments);  
                 fromUser.save(function(err) {
                   if (err) {
-                    console.log("could not save fromUser");
                     Transaction.findOneAndRemove({'id': transaction.id});
                     toUser.categories[categoryIndex].reps -= amount;
                     toUser.save();
@@ -111,7 +107,6 @@ module.exports = function(router, isAuthenticated) {
                       } else {
                         // Update the expert percentiles
                         utils.updateExpertPercentiles(category.name, function(err) {
-                          console.log("finished updating expert percentiles");
                           if (err) {
                             Transaction.findOneAndRemove({'id': transaction.id});
                             toUser.categories[categoryIndex].reps -= amount;
@@ -124,7 +119,6 @@ module.exports = function(router, isAuthenticated) {
                             return res.status(400).send(err);
                           } else {
                             // Update the investor percentiles
-                            console.log("updating investor percentiles");
                             utils.updateInvestorPercentiles(category.name, function(err) {
                               if (err) {
                                 Transaction.findOneAndRemove({'id': transaction.id});
