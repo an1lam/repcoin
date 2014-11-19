@@ -74,7 +74,7 @@ var CategoriesTable = React.createClass({
               {repsHeader}
             </tr>
             {this.props.user.categories.map(function(category) {
-              return <CategoriesItem key={category.id} category={category.name} directRep={category.directScore} prevDirectRep={category.previousDirectScore} reps={category.reps} includeReps={includeReps} />;
+              return <CategoriesItem key={category.id} category={category} includeReps={includeReps} />;
             })}
           </tbody>
         </table>
