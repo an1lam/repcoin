@@ -1,5 +1,4 @@
 "use strict";
-
 var Category = require('../models/Category.js');
 var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
@@ -201,53 +200,53 @@ module.exports = function(router, isAuthenticated) {
   router.route('/transactions/users/:userId/all')
     // Get all of the transactions to or from a given user
     .get(function(req, res) {
-      Transaction.findByUserIdAll(req.params.userId.then(function(transactions) {
+      Transaction.findByUserIdAll(req.params.userId).then(function(transactions) {
         res.send(transactions);
       }, function(err) {
         res.status(501).send(err);
       });
-  });
+    });
 
   router.route('/transactions/users/:userId/all/public')
     // Get all of the public transactions to or from a given user
     .get(function(req, res) {
-      Transaction.findByUserIdAllPublic(req.params.userId.then(function(transactions) {
+      Transaction.findByUserIdAllPublic(req.params.userId).then(function(transactions) {
         res.send(transactions);
       }, function(err) {
         res.status(501).send(err);
       });
-  });
+    });
 
 
   // Get all of the transactions to a given user
   router.route('/transactions/users/:userId/to/public')
     .get(function(req, res) {
-      Transaction.findByUserIdTo(req.params.userId.then(function(transactions) {
+      Transaction.findByUserIdTo(req.params.userId).then(function(transactions) {
         res.send(transactions);
       }, function(err) {
         res.status(501).send(err);
       });
-  });
+    });
 
   // Get all of the transactions from a given user
   router.route('/transactions/users/:userId/from')
     .get(function(req, res) {
-      Transaction.findByUserIdFrom(req.params.userId.then(function(transactions) {
+      Transaction.findByUserIdFrom(req.params.userId).then(function(transactions) {
         res.send(transactions);
       }, function(err) {
         res.status(501).send(err);
       });
-  });
+    });
 
   // Get all of the public transactions from a given user
   router.route('/transactions/users/:userId/from/public')
     .get(function(req, res) {
-      Transaction.findByUserIdFromPublic(req.params.userId.then(function(transactions) {
+      Transaction.findByUserIdFromPublic(req.params.userId).then(function(transactions) {
         res.send(transactions);
       }, function(err) {
         res.status(501).send(err);
       });
-  });
+    });
 
   // Get all of the public transactions between users
   router.route('/transactions/users/:userId/us/public')
@@ -257,7 +256,7 @@ module.exports = function(router, isAuthenticated) {
       }, function(err) {
         res.status(501).send(err);
       });
-  });
+    });
 
   // Get all of the public transactions for a given category
   router.route('/transactions/categories/:categoryName')
@@ -267,5 +266,5 @@ module.exports = function(router, isAuthenticated) {
       }, function(err) {
         res.status(501).send(err);
       });
-  });
+    });
 };
