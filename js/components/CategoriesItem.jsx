@@ -6,7 +6,7 @@ var ScoreBar = require('./ScoreBar.jsx');
 var CategoriesItem = React.createClass({
 
   render: function() {
-    var reps = this.props.includeReps ? <td>{this.props.category.reps}</td> : '';
+    var reps = this.props.includeReps ? (<td>{this.props.category.reps}</td>) : '';
 
     return (
       <tr className="categoriesItem">
