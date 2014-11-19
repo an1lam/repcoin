@@ -9,7 +9,7 @@ var InvestorList = React.createClass({
       <ul className="investorList list-group">
         {this.props.investors.map(function(investor) {
           if (i < 3) {
-            i += 1;
+            i++;
             return <li key={investor._id} className="list-group-item">{investor.name}</li>;
           }
         })}
