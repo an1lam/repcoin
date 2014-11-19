@@ -104,7 +104,7 @@ module.exports = function(router, isAuthenticated) {
                         fromUser.save();
                         res.status(400).send(err);
                       } else {
-                        // Update the percentiles
+                        // Update the expert percentiles
                         utils.updateExpertPercentiles(category.name, function(err) {
                           if (err) {
                             Transaction.findOneAndRemove({'id': transaction.id});
@@ -117,7 +117,22 @@ module.exports = function(router, isAuthenticated) {
                             category.save();
                             res.status(400).send(err);
                           } else {
-                            res.send(transaction);
+                            // Update the investor percentiles
+                            utils.updateInvestorPercentiles(category.name, function(err) {
+                              if (err) {
+                                Transaction.findOneAndRemove({'id': transaction.id});
+                                toUser.reps -= amount;
+                                toUser.save();
+                                fromUser.portfolio[indexI].repsAvailable += amount;
+                                fromUser.save();
+                                category.repsLiquid += amount;
+                                category.repsInvested -= amount;
+                                category.save();
+                                res.status(400).send(err);
+                              } else {
+                                res.send(transaction);
+                              }
+                            }); 
                           }
                         });
                       }

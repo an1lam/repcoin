@@ -84,7 +84,7 @@
     "watch-css": "nodemon --ignore public -e css --watch css --exec 'cp -a css/ public/css/'",
     "watch-html": "nodemon --ignore public -e html --watch index.html --exec 'cp index.html public/index.html'",
     "build-lib": "cp -a js/lib/ public/js/lib",
-    "build-fonts": "cp -a fonts/ public/",
+    "build-fonts": "cp -r fonts public/",
     "kill": "pkill -f npm & pkill -f node;",
     "build-production-js": "browserify --debug --extension=.jsx js/app.jsx -o public/app.js"
   }

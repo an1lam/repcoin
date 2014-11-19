@@ -19,8 +19,20 @@ var utils = {
 
   // Find the index for a given category for an expert
   getCategoryIndex: function(expert, category) {
-    for (var i = 0; i < expert.categories.length; i++) {
+    var length = expert.categories.length;
+    for (var i = 0; i < expert.length; i++) {
       if (expert.categories[i].name === category) {
+        return i;
+      }
+    }
+    return -1;
+  },
+
+  // Find the index for a given category for an investor
+  getPortfolioIndex: function(investor, category) {
+    var length = investor.portfolio.length;
+    for (var i = 0; i < length; i++) {
+      if (investor.portfolio[i].category === category) {
         return i;
       }
     }
@@ -71,6 +83,61 @@ var utils = {
     // Update the portfolio entry for that category
     portfolio[indexI].repsAvailable -= amount;
     return portfolio;
+  },
+
+  // Given a list of investors, update their percentiles
+  getInvestorPercentiles: function(investors, category, cb) {   
+    // Calculates the percentage for a value
+    var formula = function (l, s, sampleSize) {
+      return Math.floor(100 * ((s * 0.5) + l) / sampleSize);
+    };
+    
+    var percentileDict = {}; // Maps reps value to percentile
+    var indexDict = {}; // Maps user._id to category index
+    var l = 0; // Number of items less than current
+    var s = 1; // Number of items seen the same as current
+    var length = investors.length;
+
+    // Set the index for the 0th expert
+    var index = this.getPortfolioIndex(investors[0], category);
+    if (index === -1) {
+      cb("Could not find index for user " + investors[0].username);
+    }
+    indexDict[investors[0]._id] = index;
+
+    // Each unique reps value will have a unique percentage
+    percentileDict[investors[0].portfolio[index].repsAvailable] = formula(l, s, length);
+
+    for (var i = 1; i < length; i += 1) {
+      index = this.getPortfolioIndex(investors[i], category);
+      if (index === -1) {
+        cb("Could not find index for user " + investors[i].username);
+      }
+      indexDict[investors[i]._id] = index;
+
+      // If we have seen this value before, increment s
+      // Otherwise, we know there are s more numbers less than the current
+      //  In that case, we increment l by s and set s back to 1
+      var currReps = investors[i].portfolio[index].repsAvailable;
+      var prevReps = investors[i-1].portfolio[indexDict[investors[i-1]._id]].repsAvailable;
+      if (currReps === prevReps) {
+        s += 1;
+      } else {
+        l += s;
+        s = 1;
+      }
+
+      //Reset the percentile for the given reps value
+      percentileDict[currReps] = formula(l, s, length);
+    }
+    // Go through the results and reset all of the percentiles 
+    for (var i = 0; i < length; i++) {
+      var j = indexDict[investors[i]._id];
+      var reps = investors[i].portfolio[j].repsAvailable;
+      var percentile = percentileDict[reps];
+      investors[i].portfolio[j].percentile = percentile;
+    }
+    cb(null);
   },
 
   // Given a list of experts, update their percentiles
@@ -128,6 +195,28 @@ var utils = {
     cb(null);
   },
 
+  // Given a category name, update the percentiles for all the investors in that category
+  updateInvestorPercentiles: function(category, cb) {
+    var self = this;
+    var investorsPromise = User.findInvestorByCategoryIncOrder(category, function() {});
+    investorsPromise.then(function(investors) {
+      self.getInvestorPercentiles(investors, category, function(err) {
+        if (err) {
+          cb("Error calculating investor percentiles");
+        }
+        self.saveAll(investors, function(err) {
+          if (err) {
+            cb(err);
+          } else {
+            cb(null);
+          }
+        });
+      });
+    }, function(err) {
+      cb(err);
+    });
+  },
+
   // Given a category name, update the percentiles for all the experts in that category
   updateExpertPercentiles: function(category, cb) {
     var self = this;
@@ -135,7 +224,7 @@ var utils = {
     expertsPromise.then(function(experts) {
       self.getExpertPercentiles(experts, category, function(err) {
         if (err) {
-          cb("Error calculating percentiles");
+          cb("Error calculating expert percentiles");
         }
         self.saveAll(experts, function(err) {
           if (err) {
