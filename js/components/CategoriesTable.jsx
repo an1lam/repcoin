@@ -71,6 +71,7 @@ var CategoriesTable = React.createClass({
             <tr>
               <th>Category</th>
               <th>Direct Rep</th>
+              <th>Top Investors</th>
               {repsHeader}
             </tr>
             {this.props.user.categories.map(function(category) {
