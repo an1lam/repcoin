@@ -1,7 +1,7 @@
 "use strict";
 
-var React = require('react');
 var $ = require('jquery');
+var React = require('react');
 
 var ScoreBar = React.createClass({
   componentDidMount: function() {

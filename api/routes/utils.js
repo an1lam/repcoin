@@ -27,8 +27,20 @@ var utils = {
     return -1;
   },
 
+  // Add an investor to an expert's category if not already present
+  addInvestorToExpertCategory: function(expert, investorId, investorName, i) {
+    var length = expert.categories[i].investors.length;
+    for (var j = 0; j < length; j++) {
+      if (expert.categories[i].investors[j].id === investorId) {
+        return expert;
+      }
+    }
+    var newInvestor = { id: investorId, name: investorName };
+    expert.categories[i].investors.push(newInvestor);
+    return expert;
+  },
+
   // Update an investor making an investment for a given category,
-  // user, an 
   // Returns null if the investment is not possible
   updateInvestorPortfolio: function(portfolio, category, toUser, amount, toUserCategoryTotal) {
     // Find the portfolio entry that should be updated

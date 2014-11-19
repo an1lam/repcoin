@@ -9,6 +9,11 @@ var utils = require('./utils.js');
 module.exports = function(router, isAuthenticated) {
 
   function createTransaction(req, res) {
+    var from = req.body.from;
+    var to = req.body.to;
+    var amount = Number(req.body.amount);
+    var categoryName = req.body.category;
+
     // Check that there is a user logged in
     if (!req.user) {
       res.status(400).send("No user logged in");
@@ -17,21 +22,20 @@ module.exports = function(router, isAuthenticated) {
 
     // Check that the user is the same as from
     if (req.user._id != req.body.from.id) {
-      res.status(400).send("Incorrect user: " + req.body.from.name + "does not match " + req.user.username);
+      res.status(400).send("Incorrect user: " + from.name + "does not match " + req.user.username);
       return;
     }
 
     var transaction = new Transaction({
-      to          : req.body.to,
-      from        : req.body.from,
-      amount      : req.body.amount,
-      category    : req.body.category
+      to          : to,
+      from        : from,
+      amount      : amount,
+      category    : categoryName
     });
 
-    var categoryPromise = Category.findByName(req.body.category);
-    var fromUserPromise = User.findById(req.body.from.id).exec();
-    var toUserPromise = User.findById(req.body.to.id).exec();
-    var amount = Number(req.body.amount);
+    var categoryPromise = Category.findByName(categoryName);
+    var fromUserPromise = User.findById(from.id).exec();
+    var toUserPromise = User.findById(to.id).exec();
 
     var toUserCategoryTotal;
     var toUser;
@@ -51,20 +55,20 @@ module.exports = function(router, isAuthenticated) {
 
       // Deal with the to user
       }).then(function(touser) {
-        var updated = false;
+        var categoryIndex = -1;
         for (var i = 0; i < touser.categories.length; i++) {
-          if (touser.categories[i].name === req.body.category) {
+          if (touser.categories[i].name === categoryName) {
               touser.categories[i].reps = touser.categories[i].reps + amount;
               toUserCategoryTotal = touser.categories[i].reps;
-              updated = true;
+              categoryIndex = i;
             }
           }
 
-          if (!updated) {
+          if (categoryIndex === -1) {
             res.status(400).send("Unable to find corresponding category");
             return;
           }
-          toUser = touser;
+          toUser = utils.addInvestorToExpertCategory(touser, from.id, from.name, categoryIndex);
           return fromUserPromise;
       }, function(err) {
         res.status(400).send(err);
@@ -73,7 +77,7 @@ module.exports = function(router, isAuthenticated) {
       // Deal with the from user
       }).then(function(fromUser) {
         var portfolio = utils.updateInvestorPortfolio(fromUser.portfolio,
-          req.body.category, req.body.to, amount, toUserCategoryTotal);
+          categoryName, to, amount, toUserCategoryTotal);
         if (!portfolio) {
           res.status(400).send("Invalid transaction");
           return;   
