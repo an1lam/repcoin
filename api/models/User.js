@@ -49,7 +49,11 @@ var UserSchema = new Schema({
     id: {type: Schema.Types.ObjectId, required: true },
     directScore: {type: Number, default: 0, required: true },
     previousDirectScore: {type: Number, default: 0, required: true },
-    reps: {type: Number, default: 0, required: true }
+    reps: {type: Number, default: 0, required: true },
+    investors: [{
+      name: {type: String, required: true },
+      id: {type: Schema.Types.ObjectId, required: true }
+    }],
   }],
   links: [
     {
@@ -101,17 +105,20 @@ UserSchema.statics.findBySearchTerm = function(searchTerm, cb) {
 };
 
 UserSchema.statics.findNLeaders = function(category, count, cb) {
-  return this.find( { "categories.name": category } ).sort( { "categories.directScore": -1 } ).limit(10).exec(cb);
+  var directScore = "categories." + category + ".directScore";
+  return this.find( { "categories.name": category } ).sort( { directScore: -1 } ).limit(10).exec(cb);
 };
 
 // Find all the users who are experts in a category in increasing order of reps
 UserSchema.statics.findExpertByCategoryIncOrder = function(category, cb) {
-  return this.find({ "categories.name": category }).sort({ "categories.reps": 1 }).exec(cb);
+  var reps = "categories." + category + ".reps";
+  return this.find({ "categories.name": category }).sort({ reps: 1 }).exec(cb);
 };
 
 // Find all the users who are investors in a category in increasing order of reps
 UserSchema.statics.findInvestorByCategoryIncOrder = function(category, cb) {
-  return this.find({ "portfolio.category": category }).sort({ "portfolio.repsAvailable": 1 }).exec(cb);
+  var repsAvailable = "portfolio." + category + ".repsAvailable";
+  return this.find({ "portfolio.category": category }).sort({ repsAvailable: 1 }).exec(cb);
 };
 
 module.exports = mongoose.model('User', UserSchema);

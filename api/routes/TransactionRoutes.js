@@ -9,29 +9,33 @@ var utils = require('./utils.js');
 module.exports = function(router, isAuthenticated) {
 
   function createTransaction(req, res) {
+    var from = req.body.from;
+    var to = req.body.to;
+    var amount = Number(req.body.amount);
+    var categoryName = req.body.category;
+    var categoryIndex = -1;
+    var portfolioIndex = -1;
+
     // Check that there is a user logged in
     if (!req.user) {
-      res.status(400).send("No user logged in");
-      return;
+      return res.status(400).send("No user logged in");
     }
 
     // Check that the user is the same as from
     if (req.user._id != req.body.from.id) {
-      res.status(400).send("Incorrect user: " + req.body.from.name + "does not match " + req.user.username);
-      return;
+      return res.status(400).send("Incorrect user: " + from.name + "does not match " + req.user.username);
     }
 
     var transaction = new Transaction({
-      to          : req.body.to,
-      from        : req.body.from,
-      amount      : req.body.amount,
-      category    : req.body.category
+      to          : to,
+      from        : from,
+      amount      : amount,
+      category    : categoryName
     });
 
-    var categoryPromise = Category.findByName(req.body.category);
-    var fromUserPromise = User.findById(req.body.from.id).exec();
-    var toUserPromise = User.findById(req.body.to.id).exec();
-    var amount = Number(req.body.amount);
+    var categoryPromise = Category.findByName(categoryName);
+    var fromUserPromise = User.findById(from.id).exec();
+    var toUserPromise = User.findById(to.id).exec();
 
     var toUserCategoryTotal;
     var toUser;
@@ -46,37 +50,34 @@ module.exports = function(router, isAuthenticated) {
         category = categoryP;
         return toUserPromise;
       }, function(err) {
-        res.status(400).send(err);
-        return;
-
+        return res.status(400).send(err);
       // Deal with the to user
       }).then(function(touser) {
-        var updated = false;
         for (var i = 0; i < touser.categories.length; i++) {
-          if (touser.categories[i].name === req.body.category) {
+          if (touser.categories[i].name === categoryName) {
               touser.categories[i].reps = touser.categories[i].reps + amount;
               toUserCategoryTotal = touser.categories[i].reps;
-              updated = true;
+              categoryIndex = i;
             }
           }
 
-          if (!updated) {
-            res.status(400).send("Unable to find corresponding category");
-            return;
+          if (categoryIndex === -1) {
+            return res.status(400).send("Unable to find corresponding category");
           }
-          toUser = touser;
+          toUser = utils.addInvestorToExpertCategory(touser, from.id, from.name, categoryIndex);
           return fromUserPromise;
       }, function(err) {
-        res.status(400).send(err);
-        return;
-
+        return res.status(400).send(err);
       // Deal with the from user
       }).then(function(fromUser) {
+        portfolioIndex = utils.getPortfolioIndex(fromUser, categoryName);
+        if (portfolioIndex === -1) {
+          return res.status(400).send("Unable to find portfolioIndex");
+        }
         var portfolio = utils.updateInvestorPortfolio(fromUser.portfolio,
-          req.body.category, req.body.to, amount, toUserCategoryTotal);
+          categoryName, to, amount, toUserCategoryTotal);
         if (!portfolio) {
-          res.status(400).send("Invalid transaction");
-          return;   
+          return res.status(400).send("Invalid transaction");
         }
         fromUser.portfolio = portfolio;
         transaction.save(function(err) {
@@ -88,49 +89,55 @@ module.exports = function(router, isAuthenticated) {
                 Transaction.findOneAndRemove({'id': transaction.id});
                 res.status(400).send(err);
               } else {
+                console.log("about to try saving the fromUser");
+                console.log(fromUser.portfolio);
+                console.log(fromUser.portfolio[1].investments);  
                 fromUser.save(function(err) {
                   if (err) {
+                    console.log("could not save fromUser");
                     Transaction.findOneAndRemove({'id': transaction.id});
-                    toUser.reps -= amount;
+                    toUser.categories[categoryIndex].reps -= amount;
                     toUser.save();
                     res.status(400).send(err);
                   } else {
                     category.save(function(err) {
                       if (err) {
                         Transaction.findOneAndRemove({'id': transaction.id});
-                        toUser.reps -= amount;
+                        toUser.categories[categoryIndex].reps -= amount;
                         toUser.save();
-                        fromUser.portfolio[indexI].repsAvailable += amount;
+                        fromUser.portfolio[portfolioIndex].repsAvailable += amount;
                         fromUser.save();
                         res.status(400).send(err);
                       } else {
                         // Update the expert percentiles
                         utils.updateExpertPercentiles(category.name, function(err) {
+                          console.log("finished updating expert percentiles");
                           if (err) {
                             Transaction.findOneAndRemove({'id': transaction.id});
-                            toUser.reps -= amount;
+                            toUser.categories[categoryIndex].reps -= amount;
                             toUser.save();
-                            fromUser.portfolio[indexI].repsAvailable += amount;
+                            fromUser.portfolio[portfolioIndex].repsAvailable += amount;
                             fromUser.save();
                             category.repsLiquid += amount;
                             category.repsInvested -= amount;
                             category.save();
-                            res.status(400).send(err);
+                            return res.status(400).send(err);
                           } else {
                             // Update the investor percentiles
+                            console.log("updating investor percentiles");
                             utils.updateInvestorPercentiles(category.name, function(err) {
                               if (err) {
                                 Transaction.findOneAndRemove({'id': transaction.id});
-                                toUser.reps -= amount;
+                                toUser.categories[categoryIndex].reps -= amount;
                                 toUser.save();
-                                fromUser.portfolio[indexI].repsAvailable += amount;
+                                fromUser.portfolio[portfolioIndex].repsAvailable += amount;
                                 fromUser.save();
                                 category.repsLiquid += amount;
                                 category.repsInvested -= amount;
                                 category.save();
-                                res.status(400).send(err);
+                                return res.status(400).send(err);
                               } else {
-                                res.send(transaction);
+                                return res.send(transaction);
                               }
                             }); 
                           }
@@ -144,8 +151,7 @@ module.exports = function(router, isAuthenticated) {
           }
         });
       }, function(err) {
-        res.status(400).send(err);
-        return;
+        return res.status(400).send(err);
       }).end();
   }
 

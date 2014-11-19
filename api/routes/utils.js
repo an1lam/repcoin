@@ -10,6 +10,9 @@ var utils = {
     for (var i = 0; i < docs.length; i++) {
       docs[i].save(function(err) {
         if (err) {
+          console.log("SAVE ALL");
+          console.log(err);
+          console.log(docs[i]);
           cb(err);
         }
       });
@@ -20,7 +23,7 @@ var utils = {
   // Find the index for a given category for an expert
   getCategoryIndex: function(expert, category) {
     var length = expert.categories.length;
-    for (var i = 0; i < expert.length; i++) {
+    for (var i = 0; i < length; i++) {
       if (expert.categories[i].name === category) {
         return i;
       }
@@ -39,8 +42,20 @@ var utils = {
     return -1;
   },
 
+  // Add an investor to an expert's category if not already present
+  addInvestorToExpertCategory: function(expert, investorId, investorName, i) {
+    var length = expert.categories[i].investors.length;
+    for (var j = 0; j < length; j++) {
+      if (expert.categories[i].investors[j].id === investorId) {
+        return expert;
+      }
+    }
+    var newInvestor = { id: investorId, name: investorName };
+    expert.categories[i].investors.push(newInvestor);
+    return expert;
+  },
+
   // Update an investor making an investment for a given category,
-  // user, an 
   // Returns null if the investment is not possible
   updateInvestorPortfolio: function(portfolio, category, toUser, amount, toUserCategoryTotal) {
     // Find the portfolio entry that should be updated
@@ -87,6 +102,7 @@ var utils = {
 
   // Given a list of investors, update their percentiles
   getInvestorPercentiles: function(investors, category, cb) {   
+    console.log(investors);
     // Calculates the percentage for a value
     var formula = function (l, s, sampleSize) {
       return Math.floor(100 * ((s * 0.5) + l) / sampleSize);
@@ -101,7 +117,7 @@ var utils = {
     // Set the index for the 0th expert
     var index = this.getPortfolioIndex(investors[0], category);
     if (index === -1) {
-      cb("Could not find index for user " + investors[0].username);
+      cb("Could not find portfolio index for user " + investors[0].username);
     }
     indexDict[investors[0]._id] = index;
 
@@ -111,7 +127,7 @@ var utils = {
     for (var i = 1; i < length; i += 1) {
       index = this.getPortfolioIndex(investors[i], category);
       if (index === -1) {
-        cb("Could not find index for user " + investors[i].username);
+        cb("Could not find portfolio index for user " + investors[i].username);
       }
       indexDict[investors[i]._id] = index;
 
@@ -137,6 +153,8 @@ var utils = {
       var percentile = percentileDict[reps];
       investors[i].portfolio[j].percentile = percentile;
     }
+    console.log("exiting getting percentiles");
+    console.log(investors);
     cb(null);
   },
 
@@ -156,7 +174,7 @@ var utils = {
     // Set the index for the 0th expert
     var index = this.getCategoryIndex(experts[0], category);
     if (index === -1) {
-      cb("Could not find index for user " + experts[0].username);
+      cb("Could not find category index for user " + experts[0].username);
     }
     indexDict[experts[0]._id] = index;
 
@@ -166,7 +184,7 @@ var utils = {
     for (var i = 1; i < length; i += 1) {
       index = this.getCategoryIndex(experts[i], category);
       if (index === -1) {
-        cb("Could not find index for user " + experts[i].username);
+        cb("Could not find category index for user " + experts[i].username);
       }
       indexDict[experts[i]._id] = index;
 
@@ -224,7 +242,7 @@ var utils = {
     expertsPromise.then(function(experts) {
       self.getExpertPercentiles(experts, category, function(err) {
         if (err) {
-          cb("Error calculating expert percentiles");
+          cb(err);
         }
         self.saveAll(experts, function(err) {
           if (err) {

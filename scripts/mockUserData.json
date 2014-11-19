@@ -20,6 +20,12 @@
       }]
     },
     {
+      "repsAvailable": 11,
+      "category": "Biology",
+      "id": ObjectId("5434171b7f9bea5969085da1"),
+      "investments": []
+    },
+    {
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
@@ -80,13 +86,22 @@
       }]
     }
   ],
-  "categories": [{
+  "categories": [
+    {
       "name": "Rap",
       "id": ObjectId("5434171b7f9bea5969085da1"),
       "directScore": 51,
       "previousDirectScore": 49,
       "reps": 20
-  }],
+    },
+    {
+      "name": "Biology",
+      "id": ObjectId("5434171b7f9bea5969085da1"),
+      "directScore": 13,
+      "previousDirectScore": 13,
+      "reps": 13
+    }
+  ],
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -128,6 +143,12 @@
         "amount": 20,
         "valuation": 20
       }]
+    },
+    {
+      "repsAvailable": 8,
+      "category": "Biology",
+      "id": ObjectId("5434171b7f9bea5969085da1"),
+      "investments": []
     },
     {
       "repsAvailable": 500,
