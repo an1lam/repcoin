@@ -393,7 +393,7 @@
   "_id": ObjectId("543a2543cb4b5e50277998d9"),
   "username": "John Randazzo",
   "firstname": "John",
-  "latname": "Randazzo",
+  "lastname": "Randazzo",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "john@john.com",
   "phoneNumber": "6036464000",

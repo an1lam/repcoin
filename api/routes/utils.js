@@ -7,14 +7,15 @@ var User = require('../models/User.js');
 var utils = {
   // Save an array of documents
   saveAll: function(docs, cb) {
+    var errs = [];
     for (var i = 0; i < docs.length; i++) {
       docs[i].save(function(err) {
         if (err) {
-          cb(err);
+          errs.push(err);
         }
       });
     }
-    cb(null);
+    cb(errs);
   },
 
   // Find the index for a given category for an expert
@@ -216,9 +217,9 @@ var utils = {
         if (err) {
           cb("Error calculating investor percentiles");
         }
-        self.saveAll(investors, function(err) {
-          if (err) {
-            cb(err);
+        self.saveAll(investors, function(errs) {
+          if (errs.length > 0) {
+            cb(errs);
           } else {
             cb(null);
           }
@@ -238,9 +239,9 @@ var utils = {
         if (err) {
           cb(err);
         }
-        self.saveAll(experts, function(err) {
-          if (err) {
-            cb(err);
+        self.saveAll(experts, function(errs) {
+          if (errs.length > 0) {
+            cb(errs);
           } else {
             cb(null);
           }
