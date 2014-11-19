@@ -9,7 +9,7 @@ module.exports = function(router) {
       var saveTo;
       busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
         saveTo = 'images/' + fieldname;
-        file.pipe(fs.createWriteStream('build/' + saveTo));
+        file.pipe(fs.createWriteStream('public/' + saveTo));
       });
       busboy.on('finish', function() {
         res.status(200).send(saveTo).end();
@@ -19,7 +19,7 @@ module.exports = function(router) {
 
   router.route('/remove')
     .put(function(req, res) {
-      var oldFile = 'build/' + req.body.filename;
+      var oldFile = 'public/' + req.body.filename;
       fs.unlink(oldFile, function(err) {
         if (err) {
           res.status(400).send(err);

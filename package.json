@@ -1,7 +1,9 @@
 {
   "name": "reps",
+  "version": "0.0.1",
   "description": "The first and best reputation market.",
   "author": "Stephen Malina and Matt Ritter",
+  "engines": "0.10.24",
   "dependencies": {
     "bcrypt": "^0.8.0",
     "body-parser": "^1.9.0",
@@ -33,15 +35,18 @@
     "karma-chrome-launcher": "~0.1.5",
     "karma-react-jsx-preprocessor": "~0.1.1",
     "karma-bro": "~0.10.0",
-    "cropit": "~0.1.9",
-    "browserify-shim": "~3.8.0"
-  },
-  "devDependencies": {
+    "cropit": "https://github.com/krazemon/cropit/tarball/master",
+    "browserify-shim": "~3.8.0",
+    "agenda": "~0.6.22",
     "connect-livereload": "^0.4.0",
     "reactify": "~0.15.2",
+    "path": "~0.4.9",
+    "browserify": "~6.3.2",
+    "jade": "~1.7.0"
+  },
+  "devDependencies": {
     "should": "^4.0.4",
     "supertest": "^0.14.0",
-    "agenda": "~0.6.22",
     "chai": "~1.9.2",
     "sinon": "~1.11.1"
   },
@@ -60,34 +65,27 @@
   "browser": {
     "jquery": "./js/lib/jquery/jquery-1.11.1.min.js"
   },
-  "browserify-shim": {
-    "js/lib/jquery/jquery-1.11.1.min.js": "jQuery",
-    "js/lib/jquery/jquery-1.11.1.min.js": "$",
-    "cropit": {
-      "exports": "cropit",
-      "depends": [
-        "js/lib/jquery/jquery-1.11.1.min.js:jQuery"
-      ]
-    }
-  },
+
   "browserify": {
     "transform": [
-      "reactify",
-      "browserify-shim"
+      "reactify"
     ]
   },
   "scripts": {
+    "start": "node server.js",
+    "test": "karma start",
+    "preinstall": "./scripts/preinstall.sh",
+    "postinstall": "./scripts/postinstall.sh",
     "lint": "jsxhint js/**/*.jsx && jshint api/**/*.js",
     "watch": "npm run watch-html & npm run watch-css & npm run watch-images & npm run build-jsx",
-    "build-jsx": "watchify --debug --extension=.jsx js/app.jsx -o build/app.js -dv",
-    "build-css": "cp -a css/ build/css/",
-    "build-html": "cp index.html build/index.html",
-    "watch-css": "nodemon --ignore build/ -e css --watch css --exec 'cp -a css/ build/css/'",
-    "watch-html": "nodemon --ignore build/ -e html --watch index.html --exec 'cp index.html build/index.html'",
-    "build-lib": "cp -a js/lib/ build/js/lib",
-    "build-fonts": "cp -a fonts/ build/fonts/",
+    "build-jsx": "watchify --debug --extension=.jsx js/app.jsx -o public/app.js -dv",
+    "build-css": "cp -a css/ public/css/",
+    "build-html": "cp index.html public/index.html",
+    "watch-css": "nodemon --ignore public -e css --watch css --exec 'cp -a css/ public/css/'",
+    "watch-html": "nodemon --ignore public -e html --watch index.html --exec 'cp index.html public/index.html'",
+    "build-lib": "cp -a js/lib/ public/js/lib",
+    "build-fonts": "cp -a fonts/ public/",
     "kill": "pkill -f npm & pkill -f node;",
-    "start": "node server.js",
-    "test": "jest"
+    "build-production-js": "browserify --debug --extension=.jsx js/app.jsx -o public/app.js"
   }
 }
