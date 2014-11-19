@@ -5,8 +5,12 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
 var agenda = require('agenda');
+var path = require('path');
 var LocalStrategy = require('passport-local').Strategy;
 require('./config/pass.js')(passport, LocalStrategy);
+
+// Get CWD
+var STATIC_PATH = path.join(process.env.PWD, 'public');
 
 // Mock authentication if test environment
 if (!module.parent) {
@@ -26,8 +30,13 @@ app.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-f
 var db = require('./config/db');
 var port = process.env.PORT || 8080; // set up our port
 
-app.use(require('connect-livereload')());
-app.use(express.static('./build'));
+app.use(express.static(STATIC_PATH));
+console.log('Serving static files from ' + __dirname + '/public');
+
+app.set('views', STATIC_PATH);
+app.engine('.html', require('jade').__express);
+
+
 app.use(session({
   secret: 'ubermensch',
   resave: true,
@@ -36,11 +45,10 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 /* GET the starting page for our app.
-  This is the bridge to all of the react components */
+   This is the bridge to all of the react components */
 app.get('/', function(req, res) {
-    res.render('index.html');
+  res.render('index.html');
 });
 
 /////////// Routes /////////////////////////
@@ -69,14 +77,20 @@ app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter, uplo
 
 // Start the server unless we are running a test
 if (!module.parent) {
-  mongoose.connect(db.url);
+  if (process.env.NODE_ENV === 'production') {
+    var mongoUrl = db.production_url;
+  }
+  else {
+    var mongoUrl = db.development_url;
+  }
+  mongoose.connect(mongoUrl);
   console.log('Listening at port ' + port);
   app.listen(port); // startup our app at http://localhost:8080
 }
 
 // Config scheduled jobs
 var Agenda = require('agenda');
-var agenda = new Agenda({db: {address: db.url}});
+var agenda = new Agenda({db: {address: mongoUrl}});
 require('./api/jobs/user.js')(agenda);
 agenda.start();
 

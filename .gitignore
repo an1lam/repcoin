@@ -1,7 +1,9 @@
-build/
+public/
+.DS_Store
 node_modules
 images/
 npm-debug.log
 *#*#*
 bower_components
 .zedstate
+/*.env
