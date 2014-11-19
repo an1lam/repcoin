@@ -19,39 +19,46 @@ var TransactionSchema = new Schema({
 });
 
 // Get all transactions involving a given user
-TransactionSchema.statics.findByUserIdAll = function(userId, cb) {
-    return this.find( { $or: [ { "to.id" : userId }, { "from.id" : userId } ] }, cb);
+// Sorted from most recent to least recent
+TransactionSchema.statics.findByUserIdAll = function(userId) {
+    return this.find( { $or: [ { "to.id" : userId }, { "from.id" : userId } ] }).sort({ "timeStamp": -1 }).exec();
 };
 
 // Get all transactions from a given user
-TransactionSchema.statics.findByUserIdFrom = function(userId, cb) {
-    return this.find( { "from.id" : userId }, cb);
+// Sorted from most recent to least recent
+TransactionSchema.statics.findByUserIdFrom = function(userId) {
+    return this.find( { "from.id" : userId }).sort({ "timeStamp": -1 }).exec();
 };
 
 // Get all transactions to a given user
-TransactionSchema.statics.findByUserIdTo = function(userId, cb) {
-    return this.find( { "to.id" : userId }, cb);
+// Sorted from most recent to least recent
+TransactionSchema.statics.findByUserIdTo = function(userId) {
+    return this.find( { "to.id" : userId }).sort({ "timeStamp": -1 }).exec();
 };
 
 // Get all transactions involving a given user where the user is not anonymous
-TransactionSchema.statics.findByUserIdAllPublic = function(userId, cb) {
-    return this.find( { $or: [ { "to.id" : userId }, { "from.id" : userId, "from.anonymous" : false } ] }, cb);
+// Sorted from most recent to least recent
+TransactionSchema.statics.findByUserIdAllPublic = function(userId) {
+    return this.find( { $or: [ { "to.id" : userId }, { "from.id" : userId, "from.anonymous" : false } ] }).sort({ "timeStamp": -1 }).exec();
 };
 
 // Get all transactions from a given user where the user is not anonymous
-TransactionSchema.statics.findByUserIdFromPublic = function(userId, cb) {
-    return this.find( { "from.id" : userId, "from.anonymous": false }, cb);
+// Sorted from most recent to least recent
+TransactionSchema.statics.findByUserIdFromPublic = function(userId) {
+    return this.find( { "from.id" : userId, "from.anonymous": false }).sort({ "timeStamp": -1 }).exec();
 };
 
-// Get all public transactions between two users
-TransactionSchema.statics.findByUserIdUsPublic = function(userId1, userId2, cb) {
+// Get all public transactions between two users 
+// Sorted from most recent to least recent
+TransactionSchema.statics.findByUserIdUsPublic = function(userId1, userId2) {
     return this.find( { $or: [ { "from.id" : userId1, "from.anonymous": false, "to.id" : userId2 },
-      { "from.id": userId2, "from.anonymous": false, "to.id": userId1 } ] }, cb);
+      { "from.id": userId2, "from.anonymous": false, "to.id": userId1 } ] }).sort({ "timeStamp": -1 }).exec();
 };
 
 // Get all transactions for a given category
-TransactionSchema.statics.findByCategory = function(category, cb) {
-  return this.find( { category : category }, cb);
+// Sorted from most recent to least recent
+TransactionSchema.statics.findByCategory = function(category) {
+  return this.find( { category : category }).sort({ "timeStamp": -1 }).exec();
 };
 
 module.exports = mongoose.model('Transaction', TransactionSchema);
