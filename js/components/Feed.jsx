@@ -1,11 +1,10 @@
-/** @jsx React.DOM */
 "use strict";
 
-var React = require('react');
-var FeedItem = require('./FeedItem.jsx');
-var FeedHeader = require('./FeedHeader.jsx');
-var InvestmentButton = require('./InvestmentButton.jsx');
 var $ = require('jquery');
+var FeedHeader = require('./FeedHeader.jsx');
+var FeedItem = require('./FeedItem.jsx');
+var InvestmentButton = require('./InvestmentButton.jsx');
+var React = require('react');
 
 var Feed = React.createClass({
   getInitialState: function() {
