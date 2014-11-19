@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var TestHelper = require('test_helpers.jsx');
