@@ -1,8 +1,7 @@
-/** @jsx React.DOM */
 "use strict";
 
-var React = require('react');
 var InvestmentItem = require('./InvestmentItem');
+var React = require('react');
 
 var InvestmentList = React.createClass({
   render: function() {
