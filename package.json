@@ -65,15 +65,7 @@
   "browser": {
     "jquery": "./js/lib/jquery/jquery-1.11.1.min.js"
   },
-  "browserify-shim": {
-    "js/lib/jquery/jquery-1.11.1.min.js": "$",
-    "cropit": {
-      "exports": "cropit",
-      "depends": [
-        "js/lib/jquery/jquery-1.11.1.min.js:jQuery"
-      ]
-    }
-  },
+
   "browserify": {
     "transform": [
       "reactify"
