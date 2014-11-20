@@ -16,7 +16,7 @@ describe("Utils: ", function() {
       expect(result).toEqual(null);
     });
 
-    it('should add category to the portfolio is investor has never invested int his expert before', function() {
+    it('should add category to the portfolio is investor has never invested in this expert before', function() {
       portfolio = [{ repsAvailable: 100, category: "Coding", investments: [] }];
       amount = 10;
       toUserCategoryTotal = 20;
