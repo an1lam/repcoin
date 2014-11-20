@@ -3,10 +3,10 @@
 var User = require('../models/User.js');
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
-module.exports = function(router) {
+module.exports = function(router, isAuthenticated) {
   router.route('/users')
     // Get all of the users
-    .get(function(req, res) {
+    .get(isAuthenticated, function(req, res) {
       if (req.query.searchTerm) {
         User.findBySearchTerm(req.query.searchTerm, function(err, users) {
           if (err) {
@@ -69,10 +69,9 @@ module.exports = function(router) {
     });
 
 /////// Routes that have /users/:user_id ///////////
-// TODO (ritterm) : Authenticate these routes before production!!!!
-    // Get the user with the provided id
   router.route('/users/:user_id')
-    .get(function(req, res) {
+    // Get the user with the provided id
+    .get(isAuthenticated, function(req, res) {
       User.findById(req.params.user_id, function(err, user) {
         if (err){
           res.send(err);
@@ -84,7 +83,7 @@ module.exports = function(router) {
 
     // Update the user with this id
     // This route cannot be used to change the user's categories or portfolio
-    .put(function(req, res) {
+    .put(isAuthenticated, function(req, res) {
       User.findById(req.params.user_id, function(err, user) {
         if (err) {
           res.send(err);
@@ -116,7 +115,7 @@ module.exports = function(router) {
     })
 
     // Delete the user with this id
-    .delete(function(req, res) {
+    .delete(isAuthenticated, function(req, res) {
        // Remove the user
        User.remove({ _id: req.params.user_id }, function(err, user) {
          if (err) {
@@ -129,7 +128,7 @@ module.exports = function(router) {
 
   ///////// Get n leaders for a category ///////
   router.route('/users/:categoryName/leaders/:count')
-    .get(function(req, res) {
+    .get(isAuthenticated, function(req, res) {
       User.findNLeaders(req.params.categoryName, parseInt(req.params.count), function(err, leaders) {
         if (err) {
           res.status(400).send(err);
@@ -141,7 +140,7 @@ module.exports = function(router) {
  
   /////////// Add an expert category if it is not already added
   router.route('/users/:userId/expert')
-    .put(function(req, res) {
+    .put(isAuthenticated, function(req, res) {
       User.findOneAndUpdate(
         {_id: req.params.userId, "categories.name": {$ne: req.body.name}},
         {$push: {categories: req.body}},
@@ -156,7 +155,7 @@ module.exports = function(router) {
  
   /////////// Add an investor category if it not already added
   router.route('/users/:userId/investor')
-    .put(function(req, res) {
+    .put(isAuthenticated, function(req, res) {
       User.findOneAndUpdate(
         {_id: req.params.userId, "portfolio.category": {$ne: req.body.category}},
         {$push: { portfolio: req.body}},

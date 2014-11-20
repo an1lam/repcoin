@@ -1,10 +1,11 @@
+"use strict";
+
 var Busboy = require('busboy');
 var fs = require('fs');
 
-module.exports = function(router) {
-  // TODO : error handling and file checking
+module.exports = function(router, isAuthenticated) {
   router.route('/upload')
-    .post(function(req, res) {
+    .post(isAuthenticated, function(req, res) {
       var busboy = new Busboy({ headers: req.headers });
       var saveTo;
       busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
@@ -18,7 +19,7 @@ module.exports = function(router) {
     });
 
   router.route('/remove')
-    .put(function(req, res) {
+    .put(isAuthenticated, function(req, res) {
       var oldFile = 'public/' + req.body.filename;
       fs.unlink(oldFile, function(err) {
         if (err) {

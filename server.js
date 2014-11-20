@@ -55,7 +55,7 @@ app.get('/', function(req, res) {
 
 // Users
 var userRouter = express.Router();
-var userRoutes = require('./api/routes/UserRoutes.js')(userRouter);
+var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth);
 
 // Categories
 var categoryRouter = express.Router();
@@ -71,7 +71,7 @@ var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transaction
 
 // Uploads
 var uploadsRouter = express.Router();
-var uploadRoutes = require('./api/routes/UploadRoutes.js')(uploadsRouter);
+var uploadRoutes = require('./api/routes/UploadRoutes.js')(uploadsRouter, auth);
 
 app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter, uploadsRouter ]);
 
