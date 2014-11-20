@@ -37,8 +37,6 @@ module.exports = function(router, isAuthenticated) {
           if (err) {
             res.send(err);
           } else {
-            console.log("found all the users???");
-            console.log("\n\n");
             res.json(users);
           }
         });
