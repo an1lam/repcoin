@@ -11,6 +11,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -20,9 +21,17 @@
       }]
     },
     {
+      "repsAvailable": 11,
+      "percentile": 0,
+      "category": "Biology",
+      "id": ObjectId("5434171b7f9bea5969085da1"),
+      "investments": []
+    },
+    {
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -34,7 +43,7 @@
   ],
   "categories": [{
       "name": "Rap",
-      "id": ObjectId("5434171b7f9bea5969085da1"),
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "directScore": 55,
       "previousDirectScore": 58,
       "reps": 50
@@ -59,6 +68,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -71,6 +81,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -80,13 +91,22 @@
       }]
     }
   ],
-  "categories": [{
+  "categories": [
+    {
       "name": "Rap",
-      "id": ObjectId("5434171b7f9bea5969085da1"),
+      "id": ObjectId("1434171b7f9cea5969085db1"),
       "directScore": 51,
       "previousDirectScore": 49,
       "reps": 20
-  }],
+    },
+    {
+      "name": "Biology",
+      "id": ObjectId("5434171b7f9bea5969085da1"),
+      "directScore": 13,
+      "previousDirectScore": 13,
+      "reps": 13
+    }
+  ],
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -121,6 +141,7 @@
       "repsAvailable": 100,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -130,9 +151,17 @@
       }]
     },
     {
+      "repsAvailable": 8,
+      "category": "Biology",
+      "id": ObjectId("5434171b7f9bea5969085da1"),
+      "percentile": 0,
+      "investments": []
+    },
+    {
       "repsAvailable": 500,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -177,6 +206,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -189,6 +219,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": []
     }
   ],
@@ -227,6 +258,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -239,6 +271,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -275,6 +308,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -287,6 +321,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -323,6 +358,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -335,6 +371,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -356,7 +393,7 @@
   "_id": ObjectId("543a2543cb4b5e50277998d9"),
   "username": "John Randazzo",
   "firstname": "John",
-  "latname": "Randazzo",
+  "lastname": "Randazzo",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "john@john.com",
   "phoneNumber": "6036464000",
@@ -371,6 +408,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -383,6 +421,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -419,6 +458,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -431,6 +471,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -467,6 +508,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -479,6 +521,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -516,6 +559,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -528,6 +572,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -564,6 +609,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -576,6 +622,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -612,6 +659,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -624,6 +672,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -660,6 +709,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -672,6 +722,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
@@ -708,6 +759,7 @@
       "repsAvailable": 10,
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Kanye West",
@@ -720,6 +772,7 @@
       "repsAvailable": 5,
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
+      "percentile": 0,
       "investments": [{
         "userId": ObjectId("1434171b7f9cea5969085db1"),
         "user": "Stephen Malina",
