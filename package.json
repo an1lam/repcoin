@@ -42,13 +42,16 @@
     "reactify": "~0.15.2",
     "path": "~0.4.9",
     "browserify": "~6.3.2",
-    "jade": "~1.7.0"
+    "jade": "~1.7.0",
+    "jasmine": "~2.1.0"
   },
   "devDependencies": {
     "should": "^4.0.4",
     "supertest": "^0.14.0",
     "chai": "~1.9.2",
-    "sinon": "~1.11.1"
+    "sinon": "~1.11.1",
+    "jasmine-node": "~1.14.5",
+    "request": "~2.48.0"
   },
   "jshintConfig": {
     "node": "true",
@@ -65,7 +68,6 @@
   "browser": {
     "jquery": "./js/lib/jquery/jquery-1.11.1.min.js"
   },
-
   "browserify": {
     "transform": [
       "reactify"
@@ -74,6 +76,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "karma start",
+    "frontend-test": "karma start",
+    "backend-test": "jasmine-node spec/",
     "preinstall": "./scripts/preinstall.sh",
     "postinstall": "./scripts/postinstall.sh",
     "lint": "jsxhint js/**/*.jsx && jshint api/**/*.js",
