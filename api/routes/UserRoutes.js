@@ -1,6 +1,5 @@
 // Routes to manipulate Users
 var User = require('../models/User.js');
-var utils = require('./utils.js');
 
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
