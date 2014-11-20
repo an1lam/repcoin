@@ -51,7 +51,7 @@ var SuperScore = React.createClass({
   },
 
   render: function() {
-    var mypage = this.props.currentUser._id === this.props.user._id;
+    var mypage = this.props.currentUser && this.props.currentUser._id === this.props.user._id;
     var edit = '';
     var superScore = '';
     if (mypage) {
