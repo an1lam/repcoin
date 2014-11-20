@@ -5,7 +5,6 @@ var Category = require('../models/Category.js');
 
 // Routes that end in /categories
 // -------------------------------------------------------------
-
 module.exports = function(router, isAuthenticated) {
   router.route('/categories')
     // Get all the categories
@@ -53,7 +52,7 @@ module.exports = function(router, isAuthenticated) {
 ///////// Routes that have /categories/:categoryName ///////
 router.route('/categories/:categoryName')
   // Get the category with this name
-  .get(function(req, res) {
+  .get(isAuthenticated, function(req, res) {
     Category.findByName(req.params.categoryName).then(function(category) {
       res.send(category);
     }, function(err) {
@@ -64,7 +63,7 @@ router.route('/categories/:categoryName')
 ///////// Routes that have /categories/:category_id ////////
   router.route('/categories/:category_id')
     // Get the category with this id
-    .get(function(req, res) {
+    .get(isAuthenticated, function(req, res) {
       Category.findById(req.params.category_id, function(err, category) {
         if (err) {
           res.status(400).send(err);
@@ -75,7 +74,7 @@ router.route('/categories/:categoryName')
     })
 
     // Update the category with this id
-    .put( function(req, res) {
+    .put(isAuthenticated, function(req, res) {
       Category.findById(req.params.category_id, function(err, category) {
         if (err) {
           res.status(400).send(err);
@@ -98,7 +97,7 @@ router.route('/categories/:categoryName')
     })
 
     // Delete the category with this id
-    .delete(function(req, res) {
+    .delete(isAuthenticated, function(req, res) {
        // Remove the category
        Category.remove({ _id: req.params.category_id }, function(err, category) {
          if (err) {
@@ -108,7 +107,5 @@ router.route('/categories/:categoryName')
          }
        });
     });
-
-
 };
 
