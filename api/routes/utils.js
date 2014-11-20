@@ -8,14 +8,19 @@ var utils = {
   // Save an array of documents
   saveAll: function(docs, cb) {
     var errs = [];
+    var done = 0;
     for (var i = 0; i < docs.length; i++) {
       docs[i].save(function(err) {
         if (err) {
           errs.push(err);
         }
+        done++;
+
+        if (done === docs.length) {
+          cb(errs);
+        }
       });
     }
-    cb(errs);
   },
 
   // Find the index for a given category for an expert
@@ -99,12 +104,12 @@ var utils = {
   },
 
   // Given a list of investors, update their percentiles
-  getInvestorPercentiles: function(investors, category, cb) {   
+  getInvestorPercentiles: function(investors, category, cb) {
     // Calculates the percentage for a value
     var formula = function (l, s, sampleSize) {
       return Math.floor(100 * ((s * 0.5) + l) / sampleSize);
     };
-   
+
     var percentileDict = {}; // Maps reps value to percentile
     var indexDict = {}; // Maps user._id to category index
     var l = 0; // Number of items less than current
@@ -143,7 +148,7 @@ var utils = {
       //Reset the percentile for the given reps value
       percentileDict[currReps] = formula(l, s, length);
     }
-    // Go through the results and reset all of the percentiles 
+    // Go through the results and reset all of the percentiles
     for (var i = 0; i < length; i++) {
       var j = indexDict[investors[i]._id];
       var reps = investors[i].portfolio[j].repsAvailable;
@@ -154,12 +159,12 @@ var utils = {
   },
 
   // Given a list of experts, update their percentiles
-  getExpertPercentiles: function(experts, category, cb) {   
+  getExpertPercentiles: function(experts, category, cb) {
     // Calculates the percentage for a value
     var formula = function (l, s, sampleSize) {
       return Math.floor(100 * ((s * 0.5) + l) / sampleSize);
     };
-    
+
     var percentileDict = {}; // Maps reps value to percentile
     var indexDict = {}; // Maps user._id to category index
     var l = 0; // Number of items less than current
@@ -198,7 +203,7 @@ var utils = {
       //Reset the percentile for the given reps value
       percentileDict[currReps] = formula(l, s, length);
     }
-    // Go through the results and reset all of the percentiles 
+    // Go through the results and reset all of the percentiles
     for (var i = 0; i < length; i++) {
       var j = indexDict[experts[i]._id];
       var reps = experts[i].categories[j].reps;
