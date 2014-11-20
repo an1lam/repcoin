@@ -1,12 +1,26 @@
 // Routes to manipulate Users
-
 var User = require('../models/User.js');
+var utils = require('./utils.js');
+
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
 module.exports = function(router, isAuthenticated) {
+  router.route('/users/list/byids')
+    // Get all of the users for the given list
+    .get(isAuthenticated, function(req, res) {
+      User.find({ '_id': { $in: req.query.idList }}, function(err, users) {
+        if (err) {
+          return res.status(501).send(err);
+        } else {
+          return res.status(200).send(users);
+        }
+      });
+   });
+
   router.route('/users')
     // Get all of the users
     .get(isAuthenticated, function(req, res) {
+      // Check if we want to get the users with a search term
       if (req.query.searchTerm) {
         User.findBySearchTerm(req.query.searchTerm, function(err, users) {
           if (err) {
@@ -15,11 +29,16 @@ module.exports = function(router, isAuthenticated) {
             res.json(users);
           }
         });
-      } else {
+      }
+ 
+      // Get the users normally
+      else {
         User.find(function(err, users) {
           if (err) {
             res.send(err);
           } else {
+            console.log("found all the users???");
+            console.log("\n\n");
             res.json(users);
           }
         });
@@ -125,7 +144,7 @@ module.exports = function(router, isAuthenticated) {
          }
        });
     });
-
+ 
   ///////// Get n leaders for a category ///////
   router.route('/users/:categoryName/leaders/:count')
     .get(isAuthenticated, function(req, res) {
