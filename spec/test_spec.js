@@ -6,6 +6,31 @@ var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 
 describe("Utils: ", function() {
+  describe("getAverageROI: ", function() {
+    it('should return 0 if there are no investments', function() {
+      var investments = [];
+      var avg = utils.getAverageROI(investments);
+      expect(avg).toEqual(0);
+    });
+
+    it('should return the correct average roi', function() {
+      var investments = [
+        { valuation: 10, amount: 10 },
+      ];
+      var avg = utils.getAverageROI(investments);
+      expect(avg).toEqual(0);
+
+      investments = [
+        { valuation: 10, amount: 100 },
+        { valuation: 0, amount: 10 },
+        { valuation: 100, amount: 10 },
+      ]
+      avg = utils.getAverageROI(investments);
+      expect(avg).toEqual(2);
+    });
+
+  });
+
   describe("saveAll: ", function() {
     beforeEach(function() {
       jasmine.Clock.useMock();

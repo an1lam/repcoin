@@ -103,6 +103,25 @@ var utils = {
     return portfolio;
   },
 
+  getAverageROI: function(investments) {
+    // Function for ROI
+    var roi = function(investment) {
+      return Math.floor((investment.valuation - investment.amount)/investment.amount);
+    };
+
+    var length = investments.length;
+    if (length === 0) {
+      return 0;
+    }
+
+    // total ROI is the average of all ROIs for each investment 
+    var totalROI = 0;
+    for (var i = 0; i < length; i++) {
+      totalROI += roi(investments[i]); 
+    }
+    return Math.floor(totalROI/length);
+  },
+
   // Given a list of investors, update their percentiles
   getInvestorPercentiles: function(investors, category, cb) {
     // Calculates the percentage for a value
