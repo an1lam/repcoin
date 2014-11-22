@@ -32,6 +32,10 @@ var UserSchema = new Schema({
   about: {type: String, trim: true },
   portfolio: [{
     repsAvailable: {type: Number, default: 0, required: true },
+    roi: {
+      value   : { type: Number, default: 0, required: true },
+      length  : { type: Number, default: 0, required: true },
+    },
     percentile: {type: Number, default: 0, required: true },
     category: {type: String, required: true },
     id: {type: Schema.Types.ObjectId, required: true },
@@ -115,10 +119,10 @@ UserSchema.statics.findExpertByCategoryIncOrder = function(category, cb) {
   return this.find({ "categories.name": category }).sort({ reps: 1 }).exec(cb);
 };
 
-// Find all the users who are investors in a category in increasing order of reps
+// Find all the users who are investors in a category in increasing order of roi
 UserSchema.statics.findInvestorByCategoryIncOrder = function(category, cb) {
-  var repsAvailable = "portfolio." + category + ".repsAvailable";
-  return this.find({ "portfolio.category": category }).sort({ repsAvailable: 1 }).exec(cb);
+  var roi = "portfolio." + category + ".roi";
+  return this.find({ "portfolio.category": category }).sort({ roi: 1 }).exec(cb);
 };
 
 module.exports = mongoose.model('User', UserSchema);

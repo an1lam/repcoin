@@ -6,29 +6,83 @@ var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 
 describe("Utils: ", function() {
-  describe("getAverageROI: ", function() {
-    it('should return 0 if there are no investments', function() {
-      var investments = [];
-      var avg = utils.getAverageROI(investments);
-      expect(avg).toEqual(0);
+  describe('getInvestorPercentiles: ', function() {
+    var investors, category, cb;
+    
+    beforeEach(function() {
+      cb = jasmine.createSpy();
     });
 
-    it('should return the correct average roi', function() {
-      var investments = [
-        { valuation: 10, amount: 10 },
+    it('should give all investors a percentile of 50 if ROIs are the same', function() {
+      category = "Coding";
+      investors = [
+        { _id: "1", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+        { _id: "2", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
       ];
-      var avg = utils.getAverageROI(investments);
-      expect(avg).toEqual(0);
 
-      investments = [
-        { valuation: 10, amount: 100 },
-        { valuation: 0, amount: 10 },
-        { valuation: 100, amount: 10 },
-      ]
-      avg = utils.getAverageROI(investments);
-      expect(avg).toEqual(2);
+      utils.getInvestorPercentiles(investors, category, cb); 
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
+      expect(investors[0].portfolio[0].percentile).toEqual(50);
+      expect(investors[1].portfolio[0].percentile).toEqual(50);
     });
 
+    it('should give all investors correct percentiles if ROIs are different', function() {
+
+      category = "Coding";
+      investors = [
+        { _id: "1", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+        { _id: "2", portfolio: [ { category: category, roi: { value: 13, length: 2 } }] },
+        { _id: "3", portfolio: [ { category: category, roi: { value: 19, length: 2 } }] },
+        { _id: "4", portfolio: [ { category: category, roi: { value: 20, length: 2 } }] },
+      ];
+
+      utils.getInvestorPercentiles(investors, category, cb); 
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
+      expect(investors[0].portfolio[0].percentile).toEqual(12);
+      expect(investors[1].portfolio[0].percentile).toEqual(37);
+      expect(investors[2].portfolio[0].percentile).toEqual(62);
+      expect(investors[3].portfolio[0].percentile).toEqual(87);
+    });
+
+    it('should give a single investor a percentile of 50', function() {
+      category = "Coding";
+       var investments = [
+        { valuation: 40, amount: 10 },
+      ];
+
+      investors = [
+        { _id: "1", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+      ];
+
+      utils.getInvestorPercentiles(investors, category, cb); 
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
+      expect(investors[0].portfolio[0].percentile).toEqual(50);
+    });
+
+    it('should return an error if the first investor does not have the category', function() {
+      category = "Coding";
+      investors = [
+        { _id: "1", portfolio: [ { category: "A", roi: { value: 10, length: 2 } }], username: "Matt Ritter" },
+      ];
+      utils.getInvestorPercentiles(investors, category, cb); 
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith("Could not find portfolio index for user Matt Ritter");
+    });
+
+    it('should return an error if any investor does not have the category', function() {
+      category = "Coding";
+      investors = [
+        { _id: "1", username: "Matt Ritter", portfolio: [ { category: category, roi: { value: 10, length: 2 } }], username: "Matt Ritter" },
+        { _id: "2", username: "Bob", portfolio: [ { category: "A", roi: { value: 10, length: 2 } }] },
+      ];
+
+      utils.getInvestorPercentiles(investors, category, cb); 
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith("Could not find portfolio index for user Bob");
+    });
   });
 
   describe("saveAll: ", function() {
