@@ -16,26 +16,26 @@ describe("Utils: ", function() {
       expect(result).toEqual(null);
     });
 
-    it('should add category to the portfolio is investor has never invested int his expert before', function() {
-      portfolio = [{ repsAvailable: 100, category: "Coding", investments: [] }];
+    it('should add category to the portfolio if investor has never invested in this expert before', function() {
+      existingPortfolio = [{ repsAvailable: 100, category: "Coding", investments: [] }];
       amount = 10;
       toUserCategoryTotal = 20;
       toUser = { id: "123", name: "Matt" };
       
-      var p = utils.updateInvestorPortfolio(portfolio, category, toUser, amount, toUserCategoryTotal);
-      var investment = { user: "Matt", userId: "123", amount: 10, valuation: 10, percentage: 50 }; 
-      expect(p[0].investments).toEqual([investment]); 
-      expect(portfolio[0].repsAvailable).toEqual(90);
+      var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal);
+      var newInvestment = { user: "Matt", userId: "123", amount: 10, valuation: 10, percentage: 50 }; 
+      expect(p[0].investments).toEqual([newInvestment]); 
+      expect(p[0].repsAvailable).toEqual(90);
     });
 
     it('should update the existing investment if it is present', function() {
-      var investment = { user: "Matt", userId: "123", amount: 10, valuation: 10, percentage: 50 }; 
-      portfolio = [{ repsAvailable: 100, category: "Coding", investments: [investment] }];
+      var existingInvestment = { user: "Matt", userId: "123", amount: 10, valuation: 10, percentage: 50 }; 
+      existingPortfolio = [{ repsAvailable: 100, category: "Coding", investments: [existingInvestment] }];
       amount = 5;
       toUserCategoryTotal = 20;
       toUser = { id: "123", name: "Matt" };
 
-      var p = utils.updateInvestorPortfolio(portfolio, category, toUser, amount, toUserCategoryTotal);
+      var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal);
       expect(p[0].investments.length).toEqual(1);
       expect(p[0].investments[0].amount).toEqual(15);
       expect(p[0].investments[0].percentage).toEqual(75);
