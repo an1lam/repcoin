@@ -49,7 +49,7 @@ var utils = {
   addInvestorToExpertCategory: function(expert, investorId, investorName, i) {
     var length = expert.categories[i].investors.length;
     for (var j = 0; j < length; j++) {
-      if (expert.categories[i].investors[j].id === investorId) {
+      if (String(expert.categories[i].investors[j].id) === String(investorId)) {
         return expert;
       }
     }
