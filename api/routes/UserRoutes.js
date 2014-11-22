@@ -7,6 +7,9 @@ module.exports = function(router, isAuthenticated) {
   router.route('/users/list/byids')
     // Get all of the users for the given list
     .get(isAuthenticated, function(req, res) {
+      if (!req.query.idList) {
+        return res.status(501).send("No id list provided");
+      }
       User.find({ '_id': { $in: req.query.idList }}, function(err, users) {
         if (err) {
           return res.status(501).send(err);

@@ -13,7 +13,7 @@ var CategoriesItem = React.createClass({
       <tr className="categoriesItem">
         <td>{this.props.category.name}</td>
         <td><ScoreBar directRep={this.props.category.directScore} prevDirectRep={this.props.category.previousDirectScore} category={this.props.category.name}/></td>
-        <td><InvestorList investors={this.props.category.investors}/></td>
+        <td><InvestorList category={this.props.category}/></td>
         {reps}
       </tr>
     );

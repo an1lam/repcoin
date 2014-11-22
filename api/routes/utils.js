@@ -95,7 +95,7 @@ var utils = {
       var roiForRevoke = (investment.valuation - investment.amount)/investment.amount;
       investment.amount += amount;
       investment.percentage = Number(investment.amount/toUserCategoryTotal * 100)
-      var valuation = investmentpercentage/100 * toUserCategoryTotal;
+      var valuation = investment.percentage/100 * toUserCategoryTotal;
       investment.valuation = Math.floor(valuation);
       portfolio[indexI].investments[indexJ] = investment;
 
@@ -111,9 +111,9 @@ var utils = {
   },
 
   // Given a revoke that just happened, update roi
-  updateROI: function(oldROI, revoke) {
+  updateROI: function(oldROI, roiFromRevoke) {
     var newLen = oldROI.length + 1;
-    var newVal = (oldROI.value * old.length + revoke)/(newLen);
+    var newVal = (((oldROI.value * oldROI.length + roiFromRevoke)/(newLen)).toFixed(2))/1;
     return { length: newLen, value: newVal };
   },
 
@@ -191,7 +191,7 @@ var utils = {
     // Set the index for the 0th expert
     var index = this.getCategoryIndex(experts[0], category);
     if (index === -1) {
-      cb("Could not find category index for user " + experts[0].username);
+      return cb("Could not find category index for user " + experts[0].username);
     }
     indexDict[experts[0]._id] = index;
 
@@ -201,7 +201,7 @@ var utils = {
     for (var i = 1; i < length; i += 1) {
       index = this.getCategoryIndex(experts[i], category);
       if (index === -1) {
-        cb("Could not find category index for user " + experts[i].username);
+        return cb("Could not find category index for user " + experts[i].username);
       }
       indexDict[experts[i]._id] = index;
 
@@ -227,7 +227,7 @@ var utils = {
       var percentile = percentileDict[reps];
       experts[i].categories[j].directScore = percentile;
     }
-    cb(null);
+    return cb(null);
   },
 
   // Given a category name, update the percentiles for all the investors in that category
