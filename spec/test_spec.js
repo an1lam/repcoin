@@ -29,6 +29,52 @@ describe("Utils: ", function() {
     });
   });
 
+  describe("getCategoryIndex: ", function() {
+    var categories = [
+      { name: "Ballet" },
+      { name: "Coding" },
+    ]
+    var expert = { categories: categories };
+    it('should return the index of the category if present', function() {
+      var i = utils.getCategoryIndex(expert, "Coding");
+      expect(i).toEqual(1);
+    });
+
+    it('should return -1 when the category is not present', function() {
+      var i = utils.getCategoryIndex(expert, "Foo");
+      expect(i).toEqual(-1);
+    });
+
+    it('should return -1 if the expert has no categories', function() {
+      var emptyExpert = { categories: [] };
+      var i = utils.getCategoryIndex(emptyExpert, "Coding");
+      expect(i).toEqual(-1);
+    });
+  });
+
+  describe("getPortfolioIndex: ", function() {
+    var portfolio = [
+      { category: "Ballet" },
+      { category: "Coding" },
+    ]
+    var investor = { portfolio: portfolio };
+    it('should return the index of the category if present', function() {
+      var i = utils.getPortfolioIndex(investor, "Coding");
+      expect(i).toEqual(1);
+    });
+
+    it('should return -1 when the category is not present', function() {
+      var i = utils.getPortfolioIndex(investor, "Foo");
+      expect(i).toEqual(-1);
+    });
+
+    it('should return -1 if the investor has no categories', function() {
+      var emptyInvestor = { portfolio: [] };
+      var i = utils.getPortfolioIndex(emptyInvestor, "Coding");
+      expect(i).toEqual(-1);
+    });
+  });
+
   describe("saveAll: ", function() {
     beforeEach(function() {
       jasmine.Clock.useMock();
