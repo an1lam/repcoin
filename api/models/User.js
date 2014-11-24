@@ -159,8 +159,7 @@ UserSchema.statics.findExpertByCategoryIncOrder = function(category, cb) {
 
 // Find all the users who are investors in a category in increasing order of roi
 UserSchema.statics.findInvestorByCategoryIncOrder = function(category, cb) {
-  var roi = "portfolio." + category + ".roi";
-  return this.find({ "portfolio.category": category }).sort({ roi: 1 }).exec(cb);
+  return this.find({ "portfolio.category": category }).exec(cb);
 };
 
 module.exports = mongoose.model('User', UserSchema);
