@@ -7,34 +7,121 @@ var User = require('../api/models/User.js');
 
 describe('Utils: ', function() {
   describe('updateExpertPercentiles: ', function() {
-    var category, experts;
+    beforeEach(function() {
+      cb = jasmine.createSpy();
+    });
+    var category = 'Coding';
+    var expertsPromise = {
+      experts: [
+        { _id: '1', categories: [ { name: category, reps: 9, directScore: 50 }] },
+        { _id: '2', categories: [ { name: category, reps: 1, directScore: 50 }] },
+        { _id: '3', categories: [ { name: category, reps: 8, directScore: 50 }] },
+        { _id: '4', categories: [ { name: category, reps: 5, directScore: 50 }] },
+      ],
+
+      then: function(cb) {
+        return cb(this.experts);
+      }
+    };
+
+    it('should correctly update percentiles for some experts', function() {
+      spyOn(User, 'findExpertByCategory').andReturn(expertsPromise);
+      spyOn(utils, 'saveAll').andCallFake(function(experts, cb) {
+        return cb([]);
+      });
+      spyOn(utils, 'getExpertPercentiles').andCallFake(function(experts, category, cb) {
+        return cb(null);
+      });
+      utils.updateExpertPercentiles(category, cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
+    });
+
+    it('should correctly handle error from getExpertPercentiles', function() {
+      spyOn(User, 'findExpertByCategory').andReturn(expertsPromise);
+      spyOn(utils, 'saveAll').andCallFake(function(experts, cb) {
+        return cb([]);
+      });
+      spyOn(utils, 'getExpertPercentiles').andCallFake(function(experts, category, cb) {
+        return cb('getExpertPercentile error');
+      });
+      utils.updateExpertPercentiles(category, cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith('getExpertPercentile error');
+    });
+
+    it('should correctly handle error from saveAll()', function() {
+      spyOn(User, 'findExpertByCategory').andReturn(expertsPromise);
+      var errs = ['Error from saveAll()'];
+      spyOn(utils, 'saveAll').andCallFake(function(experts, cb) {
+        return cb(errs);
+      });
+      spyOn(utils, 'getExpertPercentiles').andCallFake(function(experts, category, cb) {
+        return cb(null);
+      });
+      utils.updateExpertPercentiles(category, cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(errs);
+    });
+  });
+
+  describe('updateInvestorPercentiles: ', function() {
     beforeEach(function() {
       cb = jasmine.createSpy();
     });
 
-    it('should correctly update percentiles for some experts', function() {
-      category = 'Coding';
-      var expertsPromise = {
-        experts: [
-          { _id: '1', categories: [ { name: category, reps: 9, directScore: 50 }] },
-          { _id: '2', categories: [ { name: category, reps: 1, directScore: 50 }] },
-          { _id: '3', categories: [ { name: category, reps: 8, directScore: 50 }] },
-          { _id: '4', categories: [ { name: category, reps: 5, directScore: 50 }] },
-        ],
-        then: function(cb) {
-          return cb(this.experts);
-        }
-      };
-      User.findExpertByCategory = jasmine.createSpy('mockFindExpertByCategory')
-        .andReturn(expertsPromise);
-      utils.saveAll = jasmine.createSpy('mockSaveAll')
-        .andCallFake(function(experts, cb) {
-          return cb([]);
-        });
+    var category = 'Coding';
+    var investorsPromise = {
+      investors: [
+        { _id: '1', portfolio: [ { category: category, roi: {length: 1, value: 9}, percentile: 50 }] },
+        { _id: '2', portfolio: [ { category: category, roi: {length: 1, value: 5}, percentile: 50 }] },
+        { _id: '3', portfolio: [ { category: category, roi: {length: 1, value: 3}, percentile: 50 }] },
+        { _id: '4', portfolio: [ { category: category, roi: {length: 1, value: 4}, percentile: 50 }] },
+      ],
 
-      utils.updateExpertPercentiles(category, cb);
+      then: function(cb) {
+        return cb(this.investors);
+      }
+    };
+
+    it('should correctly update percentiles for some investors', function() {
+      spyOn(User, 'findInvestorByCategory').andReturn(investorsPromise);
+      spyOn(utils, 'saveAll').andCallFake(function(investors, cb) {
+        return cb([]);
+      });
+      spyOn(utils, 'getInvestorPercentiles').andCallFake(function(investors, category, cb) {
+        return cb(null);
+      });
+      utils.updateInvestorPercentiles(category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
+    });
+
+    it('should correctly handle error from getInvestorPercentiles', function() {
+      spyOn(User, 'findInvestorByCategory').andReturn(investorsPromise);
+      spyOn(utils, 'saveAll').andCallFake(function(investors, cb) {
+        return cb([]);
+      });
+      spyOn(utils, 'getInvestorPercentiles').andCallFake(function(investors, category, cb) {
+        return cb('getInvestorPercentile error');
+      });
+      utils.updateInvestorPercentiles(category, cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith('getInvestorPercentile error');
+    });
+
+    it('should correctly handle error from saveAll()', function() {
+      spyOn(User, 'findInvestorByCategory').andReturn(investorsPromise);
+      var errs = ['Error from saveAll()'];
+      spyOn(utils, 'saveAll').andCallFake(function(investors, cb) {
+        return cb(errs);
+      });
+      spyOn(utils, 'getInvestorPercentiles').andCallFake(function(investors, category, cb) {
+        return cb(null);
+      });
+      utils.updateInvestorPercentiles(category, cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(errs);
     });
   });
 

@@ -261,18 +261,18 @@ var utils = {
       investors.sort(roiComparator);
       self.getInvestorPercentiles(investors, category, function(err) {
         if (err) {
-          cb("Error calculating investor percentiles");
+          return cb(err);
         }
         self.saveAll(investors, function(errs) {
           if (errs.length > 0) {
-            cb(errs);
+            return cb(errs);
           } else {
-            cb(null);
+            return cb(null);
           }
         });
       });
     }, function(err) {
-      cb(err);
+      return cb(err);
     });
   },
 
@@ -285,18 +285,18 @@ var utils = {
       experts.sort(repsComparator);
       self.getExpertPercentiles(experts, category, function(err) {
         if (err) {
-          cb(err);
+          return cb(err);
         }
         self.saveAll(experts, function(errs) {
           if (errs.length > 0) {
-            cb(errs);
+            return cb(errs);
           } else {
-            cb(null);
+            return cb(null);
           }
         });
       });
     }, function(err) {
-      cb(err);
+      return cb(err);
     });
   }
 };
