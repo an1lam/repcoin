@@ -8,9 +8,7 @@ var InvestorList = React.createClass({
   },
 
   componentDidMount: function() {
-    if (this.props.investors.length !== 0) {
-      this.getInvestors(this.props);
-    }
+    this.getInvestors(this.props);
   },
 
   componentWillReceiveProps: function(newProps) {
@@ -20,8 +18,12 @@ var InvestorList = React.createClass({
   getInvestors: function(props) {
     var idList = [];
     var length = props.investors.length;
+    if (length === 0) {
+      return;
+    }
+
     for (var i = 0; i < length; i++) {
-      idList.push(this.props.investors[i].id);
+      idList.push(props.investors[i].id);
     }
     var url = '/api/users/list/byids';
     var data = { idList: idList };
