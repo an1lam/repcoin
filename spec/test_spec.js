@@ -218,10 +218,10 @@ describe('Utils: ', function() {
     });
 
     it('should give all investors a percentile of 50 if ROIs are the same', function() {
-      category = "Coding";
+      category = 'Coding';
       investors = [
-        { _id: "1", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
-        { _id: "2", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+        { _id: '1', portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+        { _id: '2', portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
       ];
 
       utils.getInvestorPercentiles(investors, category, cb); 
@@ -233,12 +233,12 @@ describe('Utils: ', function() {
 
     it('should give all investors correct percentiles if ROIs are different', function() {
 
-      category = "Coding";
+      category = 'Coding';
       investors = [
-        { _id: "1", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
-        { _id: "2", portfolio: [ { category: category, roi: { value: 13, length: 2 } }] },
-        { _id: "3", portfolio: [ { category: category, roi: { value: 19, length: 2 } }] },
-        { _id: "4", portfolio: [ { category: category, roi: { value: 20, length: 2 } }] },
+        { _id: '1', portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+        { _id: '2', portfolio: [ { category: category, roi: { value: 13, length: 2 } }] },
+        { _id: '3', portfolio: [ { category: category, roi: { value: 19, length: 2 } }] },
+        { _id: '4', portfolio: [ { category: category, roi: { value: 20, length: 2 } }] },
       ];
 
       utils.getInvestorPercentiles(investors, category, cb); 
@@ -251,13 +251,13 @@ describe('Utils: ', function() {
     });
 
     it('should give a single investor a percentile of 50', function() {
-      category = "Coding";
+      category = 'Coding';
        var investments = [
         { valuation: 40, amount: 10 },
       ];
 
       investors = [
-        { _id: "1", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+        { _id: '1', portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
       ];
 
       utils.getInvestorPercentiles(investors, category, cb); 
@@ -267,25 +267,25 @@ describe('Utils: ', function() {
     });
 
     it('should return an error if the first investor does not have the category', function() {
-      category = "Coding";
+      category = 'Coding';
       investors = [
-        { _id: "1", portfolio: [ { category: "A", roi: { value: 10, length: 2 } }], username: "Matt Ritter" },
+        { _id: '1', portfolio: [ { category: 'A', roi: { value: 10, length: 2 } }], username: 'Matt Ritter' },
       ];
       utils.getInvestorPercentiles(investors, category, cb); 
       expect(cb.callCount).toEqual(1);
-      expect(cb).toHaveBeenCalledWith("Could not find portfolio index for user Matt Ritter");
+      expect(cb).toHaveBeenCalledWith('Could not find portfolio index for user Matt Ritter');
     });
 
     it('should return an error if any investor does not have the category', function() {
-      category = "Coding";
+      category = 'Coding';
       investors = [
-        { _id: "1", username: "Matt Ritter", portfolio: [ { category: category, roi: { value: 10, length: 2 } }], username: "Matt Ritter" },
-        { _id: "2", username: "Bob", portfolio: [ { category: "A", roi: { value: 10, length: 2 } }] },
+        { _id: '1', username: 'Matt Ritter', portfolio: [ { category: category, roi: { value: 10, length: 2 } }], username: 'Matt Ritter' },
+        { _id: '2', username: 'Bob', portfolio: [ { category: 'A', roi: { value: 10, length: 2 } }] },
       ];
 
       utils.getInvestorPercentiles(investors, category, cb); 
       expect(cb.callCount).toEqual(1);
-      expect(cb).toHaveBeenCalledWith("Could not find portfolio index for user Bob");
+      expect(cb).toHaveBeenCalledWith('Could not find portfolio index for user Bob');
     });
   });
 
