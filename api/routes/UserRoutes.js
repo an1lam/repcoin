@@ -165,9 +165,23 @@ module.exports = function(router, isAuthenticated) {
         {$push: {categories: req.body}},
         function(err, user) {
           if (err) {
-            res.status(501).send(err);
+            return res.status(501).send(err);
+          } else if (!user) {
+            return res.status(501).send("User is already an expert for this category");
           } else {
-            res.send(user);
+            utils.updateExpertPercentiles(req.body.name, function(err) {
+              if (err) {
+                return res.status(501).send(err);
+              } else {
+                User.findById(req.params.userId, function(err, user) {
+                  if (err) {
+                    return res.status(501).send(err);
+                  } else {
+                    return res.status(200).send(user);
+                  }
+                });
+              }
+            });
           }
       });
     });
@@ -180,9 +194,23 @@ module.exports = function(router, isAuthenticated) {
         {$push: { portfolio: req.body}},
         function(err, user) {
           if (err) {
-            res.status(501).send(err);
+            return res.status(501).send(err);
+          } else if (!user) {
+            return res.status(501).send("User is already an investor for this category");
           } else {
-            res.send(user);
+            utils.updateInvestorPercentiles(req.body.category, function(err) {
+              if (err) {
+                return res.status(501).send(err);
+              } else {
+                User.findById(req.params.userId, function(err, user) {
+                  if (err) {
+                    return res.status(501).send(err);
+                  } else {
+                    return res.status(200).send(user);
+                  }
+                });
+              }
+            });
           }
       });
     });
