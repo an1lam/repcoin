@@ -32,7 +32,7 @@ describe('Rendering the Modal', function() {
       ModalComponent, 'td');
     expect(cells[0].getDOMNode().textContent).toEqual("testing");
     expect(cells[1].getDOMNode().textContent).toEqual("10");
-    expect(cells[2].getDOMNode().textContent).toEqual("15");
+    expect(cells[2].getDOMNode().textContent).toEqual("100");
   });
   
   it('renders the correct category-to-invest-in', function() {
@@ -74,7 +74,7 @@ describe('Rendering the Modal', function() {
     // Simulate creating a transaction where currentUser revokes to another user
     var amountInput = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'reps_text-input').getDOMNode();
-    amountInput.value = 1;
+    amountInput.value = 10;
 
     var giveRevokeSelectComponent = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'give-revoke-select').getDOMNode();
@@ -95,12 +95,32 @@ describe('Rendering the Modal', function() {
         to: jasmine.any(Object),
         from: jasmine.any(Object),
         category: 'testing',
-        amount: -1,
+        amount: -10,
         anonymous: false,
       },
       success: jasmine.any(Function),
       error: jasmine.any(Function)
     })
     expect(mockHideFunction).toHaveBeenCalled();
-  })
+  });
+  
+  it('doesn\'t allow the user to revoke reps unless the amount is valid',
+  function() {
+    var amountInput = TestUtils.findRenderedDOMComponentWithClass(
+      ModalComponent, 'reps_text-input').getDOMNode();
+    amountInput.value = 2;
+
+    var giveRevokeSelectComponent = TestUtils.findRenderedDOMComponentWithClass(
+      ModalComponent, 'give-revoke-select').getDOMNode();
+    giveRevokeSelectComponent.value = 'revoke';
+
+    var error = TestUtils.findRenderedDOMComponentWithClass(
+      ModalComponent, 'error').getDOMNode();
+    var form = TestUtils.findRenderedDOMComponentWithTag(ModalComponent, 'form')
+      .getDOMNode();
+    TestUtils.Simulate.submit(form);
+
+    expect(error.textContent).toEqual('You don\'t have that many reps in that category');
+    expect(mockHideFunction).not.toHaveBeenCalled();
+  });
 });

@@ -38,9 +38,14 @@ var Modal = React.createClass({
         if (currentUserPortfolio[i].category === categoryName) {
           var categoryInvestments = currentUserPortfolio[i].investments;
           for (var j = 0; j < categoryInvestments.length; j++) {
+            // Confirm that the amount we are revoking is equal
+            // to some fraction of the valuation that matches reps values
+            var isValidSellAmount = reps % (categoryInvestments[i].valuation / categoryInvestments[i].amount) === 0;
             if (
               categoryInvestments[j].user === this.props.user.username &&
-              categoryInvestments[j].amount > reps && transactionCategory) {
+              categoryInvestments[j].valuation > reps &&
+              isValidSellAmount && transactionCategory
+            ) {
               this.setState({error: false});
               this.createTransaction(
                 this.props.user, this.props.currentUser, categoryName, -reps,

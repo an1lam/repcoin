@@ -8,9 +8,7 @@ var InvestorList = React.createClass({
   },
 
   componentDidMount: function() {
-    if (this.props.investors.length !== 0) {
-      this.getInvestors(this.props);
-    }
+    this.getInvestors(this.props);
   },
 
   componentWillReceiveProps: function(newProps) {
@@ -19,9 +17,13 @@ var InvestorList = React.createClass({
 
   getInvestors: function(props) {
     var idList = [];
-    var length = props.investors.length;
+    var length = props.category.investors.length;
+    if (length === 0) {
+      return;
+    }
+
     for (var i = 0; i < length; i++) {
-      idList.push(this.props.investors[i].id);
+      idList.push(props.category.investors[i].id);
     }
     var url = '/api/users/list/byids';
     var data = { idList: idList };
@@ -39,22 +41,21 @@ var InvestorList = React.createClass({
 
   generateInvestorList: function() {
     var i = 0;
+    var category = this.props.category.name;
+    var investors = [];
     if (this.state.investors) {
       var investors = this.state.investors.map(function(investor) {
-        var percentile = investor.percentile || 0;
+        var percentile = 0;
+        var length = investor.portfolio.length;
+        for (var j = 0; j < length; j++) {
+          if (investor.portfolio[j].category === category) {
+            percentile = investor.portfolio[j].percentile;
+          }
+        }
         if (i < 3) {
           i++;
           return (
             <li key={investor._id} className="list-group-item">{investor.username} ({percentile})</li>
-          );
-        }
-      });
-    } else {
-      var investors = this.props.investors.map(function(investor) {
-        if (i < 3) {
-          i++;
-          return (
-            <li key={investor.id} className="list-group-item">{investor.name}</li>
           );
         }
       });
