@@ -13,7 +13,6 @@ var utils = {
       
       var roiA = a.portfolio[indexA].roi.value;
       var roiB = b.portfolio[indexB].roi.value;
-      
       return roiA - roiB;
     }.bind(this)
   },
