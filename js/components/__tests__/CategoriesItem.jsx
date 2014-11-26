@@ -10,8 +10,11 @@ describe('Categories Item: ', function() {
       {
         'includeReps': true,
         'category': {
-          'name': 'foo', 'reps': 5,
+          'name': 'foo',
           'directScore': 10, 'previousDirectScore': 11,
+          'investors': [{
+            'username': 'foo', 'reps': 5,
+          }],
         }
       });
     categoriesItemComponent = TestUtils.renderIntoDocument(
@@ -21,9 +24,8 @@ describe('Categories Item: ', function() {
   it('generates an item in a table', function() {
     var tableData = TestUtils.scryRenderedDOMComponentsWithTag(
       categoriesItemComponent, 'td');
-    expect(tableData.length).toEqual(3);
+    expect(tableData.length).toEqual(4);
     expect(tableData[0].getDOMNode().textContent).toEqual('foo');
-    expect(tableData[2].getDOMNode().textContent).toEqual('5');
   });
   
   it('has a score bar with a current score', function() {
