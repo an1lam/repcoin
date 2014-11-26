@@ -1,5 +1,6 @@
 // Routes to manipulate Users
 var User = require('../models/User.js');
+var utils = require('./utils.js');
 
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
@@ -150,9 +151,11 @@ module.exports = function(router, isAuthenticated) {
     .get(isAuthenticated, function(req, res) {
       User.findNLeaders(req.params.categoryName, parseInt(req.params.count), function(err, leaders) {
         if (err) {
-          res.status(400).send(err);
+          return res.status(400).send(err);
         } else {
-          res.send(leaders);
+          // sort the users in decreasing order of directScore
+          var directScoreComparator = utils.getDirectScoreComparator(req.params.categoryName);
+          return res.send(leaders.sort(directScoreComparator));
         }
       });
     });

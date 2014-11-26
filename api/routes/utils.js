@@ -5,6 +5,45 @@ var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 
 var utils = {
+  // Sort users by ROI for a given category, increasing order
+  getROIComparator: function(category) {
+    return function(a, b) {
+      var indexA = this.getPortfolioIndex(a, category);
+      var indexB = this.getPortfolioIndex(b, category);
+      
+      var roiA = a.portfolio[indexA].roi.value;
+      var roiB = b.portfolio[indexB].roi.value;
+      
+      return roiA - roiB;
+    }.bind(this)
+  },
+
+  // Sort users by reps for a given category, increasing order
+  getRepsComparator: function(category) {
+    return function(a, b) {
+      var indexA = this.getCategoryIndex(a, category);
+      var indexB = this.getCategoryIndex(b, category);
+      
+      var repsA = a.categories[indexA].reps;
+      var repsB = b.categories[indexB].reps;
+      
+      return repsA - repsB;
+    }.bind(this)
+  },
+
+  // Sort users by direct score for a given category, decreasing order
+  getDirectScoreComparator: function(category) {
+    return function(a, b) {
+      var indexA = this.getCategoryIndex(a, category);
+      var indexB = this.getCategoryIndex(b, category);
+      
+      var directScoreA = a.categories[indexA].directScore;
+      var directScoreB = b.categories[indexB].directScore;
+      
+      return directScoreB - directScoreA;
+    }.bind(this)
+  },
+
   // Save an array of documents
   saveAll: function(docs, cb) {
     var errs = [];
@@ -233,44 +272,48 @@ var utils = {
   // Given a category name, update the percentiles for all the investors in that category
   updateInvestorPercentiles: function(category, cb) {
     var self = this;
-    var investorsPromise = User.findInvestorByCategoryIncOrder(category, function() {});
+    var investorsPromise = User.findInvestorByCategory(category, function() {});
     investorsPromise.then(function(investors) {
+      var roiComparator = self.getROIComparator(category);
+      investors.sort(roiComparator);
       self.getInvestorPercentiles(investors, category, function(err) {
         if (err) {
-          cb("Error calculating investor percentiles");
+          return cb(err);
         }
         self.saveAll(investors, function(errs) {
           if (errs.length > 0) {
-            cb(errs);
+            return cb(errs);
           } else {
-            cb(null);
+            return cb(null);
           }
         });
       });
     }, function(err) {
-      cb(err);
+      return cb(err);
     });
   },
 
   // Given a category name, update the percentiles for all the experts in that category
   updateExpertPercentiles: function(category, cb) {
     var self = this;
-    var expertsPromise = User.findExpertByCategoryIncOrder(category, function() {});
+    var expertsPromise = User.findExpertByCategory(category, function() {});
     expertsPromise.then(function(experts) {
+      var repsComparator = self.getRepsComparator(category);
+      experts.sort(repsComparator);
       self.getExpertPercentiles(experts, category, function(err) {
         if (err) {
-          cb(err);
+          return cb(err);
         }
         self.saveAll(experts, function(errs) {
           if (errs.length > 0) {
-            cb(errs);
+            return cb(errs);
           } else {
-            cb(null);
+            return cb(null);
           }
         });
       });
     }, function(err) {
-      cb(err);
+      return cb(err);
     });
   }
 };

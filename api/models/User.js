@@ -147,18 +147,16 @@ UserSchema.statics.findBySearchTerm = function(searchTerm, cb) {
 };
 
 UserSchema.statics.findNLeaders = function(category, count, cb) {
-  var directScore = "categories." + category + ".directScore";
-  return this.find( { "categories.name": category } ).sort( { directScore: -1 } ).limit(10).exec(cb);
+  return this.find( { "categories.name": category } ).limit(parseInt(count)).exec(cb);
 };
 
-// Find all the users who are experts in a category in increasing order of reps
-UserSchema.statics.findExpertByCategoryIncOrder = function(category, cb) {
-  var reps = "categories." + category + ".reps";
-  return this.find({ "categories.name": category }).sort({ reps: 1 }).exec(cb);
+// Find all the users who are experts in a category
+UserSchema.statics.findExpertByCategory = function(category, cb) {
+  return this.find({ "categories.name": category }).exec(cb);
 };
 
-// Find all the users who are investors in a category in increasing order of roi
-UserSchema.statics.findInvestorByCategoryIncOrder = function(category, cb) {
+// Find all the users who are investors in a category
+UserSchema.statics.findInvestorByCategory= function(category, cb) {
   return this.find({ "portfolio.category": category }).exec(cb);
 };
 
