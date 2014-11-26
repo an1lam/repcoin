@@ -30,26 +30,68 @@ var UserSchema = new Schema({
   email: {type: String, required: true, unique: true, trim: true },
   phoneNumber: {type: String, required: true, unique: true, trim: true, validate: phoneValidator },
   about: {type: String, trim: true },
+
+  // A list of investments for various categories
   portfolio: [{
+    // reps available to invest for this category
     repsAvailable: {type: Number, default: 0, required: true },
+
+    // ROI for this category based on all revokes for this category
+    roi: {
+      value   : { type: Number, default: 0, required: true },
+      length  : { type: Number, default: 0, required: true },
+    },
+
+    // Percentile relative to all investors in this category
     percentile: {type: Number, default: 0, required: true },
+
+    // Category for this portfolio entry
     category: {type: String, required: true },
+
+    // Id of the category for this portfolio entry
     id: {type: Schema.Types.ObjectId, required: true },
+
+    // A list of investments for this category
     investments: [{
+      // The id of the user invested in
       userId: {type: Schema.Types.ObjectId, required: true },
+  
+      // The name of the user invested in
       user: {type: String, required: true },
+
+      // The amount invested in this user
       amount: {type: Number, required: true },
+
+      // The current valuation of the amount
       valuation: {type: Number, required: true },
+
+      // The percentage of the user owned
       percentage: {type: Number, required: true }
     }],
   }],
+
+  // Default category, used for the SuperScore
   defaultCategory: String,
+
+  // A list of expert categories
   categories: [{
+
+    // The name of the category
     name: {type: String, required: true },
+
+    // The id of the category
     id: {type: Schema.Types.ObjectId, required: true },
+
+    // The percentile for this user compared to users in this category
     directScore: {type: Number, default: 0, required: true },
+
+    // The percentile from yesterday
     previousDirectScore: {type: Number, default: 0, required: true },
+
+    // The reps received for this category
     reps: {type: Number, default: 0, required: true },
+
+    // A list of investors who hold reps in this user for this category
     investors: [{
       name: {type: String, required: true },
       id: {type: Schema.Types.ObjectId, required: true }
@@ -115,10 +157,9 @@ UserSchema.statics.findExpertByCategoryIncOrder = function(category, cb) {
   return this.find({ "categories.name": category }).sort({ reps: 1 }).exec(cb);
 };
 
-// Find all the users who are investors in a category in increasing order of reps
+// Find all the users who are investors in a category in increasing order of roi
 UserSchema.statics.findInvestorByCategoryIncOrder = function(category, cb) {
-  var repsAvailable = "portfolio." + category + ".repsAvailable";
-  return this.find({ "portfolio.category": category }).sort({ repsAvailable: 1 }).exec(cb);
+  return this.find({ "portfolio.category": category }).exec(cb);
 };
 
 module.exports = mongoose.model('User', UserSchema);

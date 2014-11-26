@@ -13,9 +13,9 @@ var TransactionSchema = new Schema({
     name : { type: String, required: true },
     id : { type: Schema.Types.ObjectId, required: true },
   },
-  amount : { type: Number },
+  amount : { type: Number, required: true },
   category : { type: String, required: true },
-  timeStamp : { type: Date, default: Date.now }, 
+  timeStamp : { type: Date, default: Date.now, required: true }, 
 });
 
 // Get all transactions involving a given user

@@ -6,9 +6,103 @@ var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 
 describe("Utils: ", function() {
+  describe('updateROI: ', function() {
+    it('should correctly update roi when it starts as 0', function() {
+      var oldROI = { length: 0, value: 0 };
+      var roiFromRevoke = 5;
+      var roi = utils.updateROI(oldROI, roiFromRevoke);
+      expect(roi).toEqual({ length: 1, value: 5 });
+    });
+
+    it('should correctly update roi when it has an arbitrary value', function() {
+      var oldROI = { length: 4, value: 2.5 };
+      var roiFromRevoke = 1.2
+      var roi = utils.updateROI(oldROI, roiFromRevoke);
+      expect(roi).toEqual({ length: 5, value: 2.24 });
+    });
+
+  });
+
+  describe('getInvestorPercentiles: ', function() {
+    var investors, category, cb;
+    beforeEach(function() {
+      cb = jasmine.createSpy();
+    });
+
+    it('should give all investors a percentile of 50 if ROIs are the same', function() {
+      category = "Coding";
+      investors = [
+        { _id: "1", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+        { _id: "2", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+      ];
+
+      utils.getInvestorPercentiles(investors, category, cb); 
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
+      expect(investors[0].portfolio[0].percentile).toEqual(50);
+      expect(investors[1].portfolio[0].percentile).toEqual(50);
+    });
+
+    it('should give all investors correct percentiles if ROIs are different', function() {
+
+      category = "Coding";
+      investors = [
+        { _id: "1", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+        { _id: "2", portfolio: [ { category: category, roi: { value: 13, length: 2 } }] },
+        { _id: "3", portfolio: [ { category: category, roi: { value: 19, length: 2 } }] },
+        { _id: "4", portfolio: [ { category: category, roi: { value: 20, length: 2 } }] },
+      ];
+
+      utils.getInvestorPercentiles(investors, category, cb); 
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
+      expect(investors[0].portfolio[0].percentile).toEqual(12);
+      expect(investors[1].portfolio[0].percentile).toEqual(37);
+      expect(investors[2].portfolio[0].percentile).toEqual(62);
+      expect(investors[3].portfolio[0].percentile).toEqual(87);
+    });
+
+    it('should give a single investor a percentile of 50', function() {
+      category = "Coding";
+       var investments = [
+        { valuation: 40, amount: 10 },
+      ];
+
+      investors = [
+        { _id: "1", portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+      ];
+
+      utils.getInvestorPercentiles(investors, category, cb); 
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
+      expect(investors[0].portfolio[0].percentile).toEqual(50);
+    });
+
+    it('should return an error if the first investor does not have the category', function() {
+      category = "Coding";
+      investors = [
+        { _id: "1", portfolio: [ { category: "A", roi: { value: 10, length: 2 } }], username: "Matt Ritter" },
+      ];
+      utils.getInvestorPercentiles(investors, category, cb); 
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith("Could not find portfolio index for user Matt Ritter");
+    });
+
+    it('should return an error if any investor does not have the category', function() {
+      category = "Coding";
+      investors = [
+        { _id: "1", username: "Matt Ritter", portfolio: [ { category: category, roi: { value: 10, length: 2 } }], username: "Matt Ritter" },
+        { _id: "2", username: "Bob", portfolio: [ { category: "A", roi: { value: 10, length: 2 } }] },
+      ];
+
+      utils.getInvestorPercentiles(investors, category, cb); 
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith("Could not find portfolio index for user Bob");
+    });
+  });
+
   describe('getExpertPercentiles: ', function() {
     var experts, category, cb;
-    
     beforeEach(function() {
       cb = jasmine.createSpy();
     });
@@ -100,18 +194,38 @@ describe("Utils: ", function() {
 
     it('should update the existing investment if it is present', function() {
       var existingInvestment = { user: "Matt", userId: "123", amount: 10, valuation: 10, percentage: 50 }; 
-      existingPortfolio = [{ repsAvailable: 100, category: "Coding", investments: [existingInvestment] }];
+      existingPortfolio = [{ repsAvailable: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [existingInvestment] }];
       amount = 5;
       toUserCategoryTotal = 20;
       toUser = { id: "123", name: "Matt" };
+      var expectedROI =  { value: 0, length: 0 };
 
       var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal);
       expect(p[0].investments.length).toEqual(1);
       expect(p[0].investments[0].amount).toEqual(15);
       expect(p[0].investments[0].percentage).toEqual(75);
       expect(p[0].investments[0].valuation).toEqual(15);
+      expect(p[0].roi).toEqual(expectedROI);
       expect(p[0].repsAvailable).toEqual(95);
     }); 
+
+    it('should update the existing investment and roi if revoke', function() {
+      var existingInvestment = { user: "Matt", userId: "123", amount: 10, valuation: 20, percentage: 50 }; 
+      existingPortfolio = [{ repsAvailable: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [existingInvestment] }];
+      amount = -5;
+      toUserCategoryTotal = 20;
+      toUser = { id: "123", name: "Matt" };
+      var expectedROI =  { length: 1, value: 5 };
+
+      var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal);
+      expect(p[0].investments.length).toEqual(1);
+      expect(p[0].investments[0].amount).toEqual(5);
+      expect(p[0].investments[0].percentage).toEqual(25);
+      expect(p[0].investments[0].valuation).toEqual(5);
+      expect(p[0].roi).toEqual(expectedROI);
+      expect(p[0].repsAvailable).toEqual(105);
+    }); 
+
   });
 
   describe("addInvestorToExpertCategory", function() {
