@@ -32,6 +32,10 @@ var UserSchema = new Schema({
   about: {type: String, trim: true },
   portfolio: [{
     repsAvailable: {type: Number, default: 0, required: true },
+    roi: {
+      value   : { type: Number, default: 0, required: true },
+      length  : { type: Number, default: 0, required: true },
+    },
     percentile: {type: Number, default: 0, required: true },
     category: {type: String, required: true },
     id: {type: Schema.Types.ObjectId, required: true },

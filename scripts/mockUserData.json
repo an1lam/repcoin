@@ -9,6 +9,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -22,6 +23,7 @@
     },
     {
       "repsAvailable": 11,
+      "roi": { "length": 0, "value": 3 },
       "percentile": 0,
       "category": "Biology",
       "id": ObjectId("5434171b7f9bea5969085da1"),
@@ -29,6 +31,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 1, "value": 1 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -66,6 +69,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 3, "value": 3 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -79,6 +83,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -102,7 +107,7 @@
     {
       "name": "Biology",
       "id": ObjectId("5434171b7f9bea5969085da1"),
-      "directScore": 50,
+      "directScore": 13,
       "previousDirectScore": 13,
       "reps": 13
     }
@@ -139,6 +144,7 @@
   "portfolio": [
     {
       "repsAvailable": 100,
+      "roi": { "length": 0, "value": 5 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -152,6 +158,7 @@
     },
     {
       "repsAvailable": 8,
+      "roi": { "length": 0, "value": 0 },
       "category": "Biology",
       "id": ObjectId("5434171b7f9bea5969085da1"),
       "percentile": 0,
@@ -159,6 +166,7 @@
     },
     {
       "repsAvailable": 500,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -204,6 +212,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -217,6 +226,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -256,6 +266,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -269,6 +280,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -306,6 +318,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -319,6 +332,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -356,6 +370,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -369,6 +384,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -406,6 +422,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -419,6 +436,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -456,6 +474,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -469,6 +488,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -506,6 +526,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -519,6 +540,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -557,6 +579,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -570,6 +593,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -607,6 +631,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -620,6 +645,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -657,6 +683,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -670,6 +697,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -707,6 +735,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -720,6 +749,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
@@ -757,6 +787,7 @@
   "portfolio": [
     {
       "repsAvailable": 10,
+      "roi": { "length": 0, "value": 0 },
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
@@ -770,6 +801,7 @@
     },
     {
       "repsAvailable": 5,
+      "roi": { "length": 0, "value": 0 },
       "category": "Coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
