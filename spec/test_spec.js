@@ -1,4 +1,4 @@
-process.env.NODE_ENV = 'test';
+ process.env.NODE_ENV = 'test';
 var utils = require('../api/routes/utils.js');
 
 var Category = require('../api/models/Category.js');

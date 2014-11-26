@@ -76,7 +76,7 @@ module.exports = {
           'userId': 'bar',
           'user': 'bar',
           'amount': 10,
-          'valuation': 15,
+          'valuation': 100,
         }],
       }],
     },

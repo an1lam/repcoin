@@ -8,6 +8,7 @@ describe('Render the Feed', function() {
   var responses = {
     '/api/transactions': [{'_id': 'testId1', 'category': 'testing', 'from': {'name': 'foo', 'id': 'foo'}, 'to': {'id': 'testId2', 'name': 'bar'}}]
   };
+
   beforeEach(function() {
     spyOn($, "ajax").and.callFake(function(params) {
       params.success(responses[params.url]);
@@ -17,6 +18,7 @@ describe('Render the Feed', function() {
       Feed, {'userId': 'foo', 'parent': 'HomePage'});
     feedPage = TestUtils.renderIntoDocument(TestFeed);
   });
+
   it('Has a header with four select buttons', function() {
     var feedHeaderButtons = TestUtils.scryRenderedDOMComponentsWithClass(feedPage, "btn");
     expect(feedHeaderButtons.length).toEqual(4);

@@ -130,16 +130,30 @@ var utils = {
       portfolio[indexI].investments.push(investment);
     } else {
       // Update the existing investment
-      portfolio[indexI].investments[indexJ].amount += amount;
-      portfolio[indexI].investments[indexJ].percentage =
-        Number(portfolio[indexI].investments[indexJ].amount/toUserCategoryTotal * 100)
-      var valuation = portfolio[indexI].investments[indexJ].percentage/100 * toUserCategoryTotal;
-      portfolio[indexI].investments[indexJ].valuation = Math.floor(valuation);
+      var investment = portfolio[indexI].investments[indexJ];
+      var roiForRevoke = (investment.valuation - investment.amount)/investment.amount;
+      investment.amount += amount;
+      investment.percentage = Number(investment.amount/toUserCategoryTotal * 100)
+      var valuation = investment.percentage/100 * toUserCategoryTotal;
+      investment.valuation = Math.floor(valuation);
+      portfolio[indexI].investments[indexJ] = investment;
+
+      // Update the roi for this category if we made a revoke
+      if (amount < 0) {
+        portfolio[indexI].roi = this.updateROI(portfolio[indexI].roi, amount * -1 * roiForRevoke);
+      }
     }
 
-    // Update the portfolio entry for that category
+    // Update the portfolio entry for this category
     portfolio[indexI].repsAvailable -= amount;
     return portfolio;
+  },
+
+  // Given a revoke that just happened, update roi
+  updateROI: function(oldROI, roiFromRevoke) {
+    var newLen = oldROI.length + 1;
+    var newVal = (((oldROI.value * oldROI.length + roiFromRevoke)/(newLen)).toFixed(2))/1;
+    return { length: newLen, value: newVal };
   },
 
   // Given a list of investors, update their percentiles
@@ -151,6 +165,7 @@ var utils = {
 
     var percentileDict = {}; // Maps reps value to percentile
     var indexDict = {}; // Maps user._id to category index
+
     var l = 0; // Number of items less than current
     var s = 1; // Number of items seen the same as current
     var length = investors.length;
@@ -158,26 +173,26 @@ var utils = {
     // Set the index for the 0th expert
     var index = this.getPortfolioIndex(investors[0], category);
     if (index === -1) {
-      cb("Could not find portfolio index for user " + investors[0].username);
+      return cb("Could not find portfolio index for user " + investors[0].username);
     }
     indexDict[investors[0]._id] = index;
 
     // Each unique reps value will have a unique percentage
-    percentileDict[investors[0].portfolio[index].repsAvailable] = formula(l, s, length);
+    var prevROI = investors[0].portfolio[index].roi.value;
+    percentileDict[prevROI] = formula(l, s, length);
 
     for (var i = 1; i < length; i += 1) {
       index = this.getPortfolioIndex(investors[i], category);
       if (index === -1) {
-        cb("Could not find portfolio index for user " + investors[i].username);
+        return cb("Could not find portfolio index for user " + investors[i].username);
       }
       indexDict[investors[i]._id] = index;
 
       // If we have seen this value before, increment s
       // Otherwise, we know there are s more numbers less than the current
       //  In that case, we increment l by s and set s back to 1
-      var currReps = investors[i].portfolio[index].repsAvailable;
-      var prevReps = investors[i-1].portfolio[indexDict[investors[i-1]._id]].repsAvailable;
-      if (currReps === prevReps) {
+      var currROI = investors[i].portfolio[index].roi.value;
+      if (currROI === prevROI) {
         s += 1;
       } else {
         l += s;
@@ -185,16 +200,18 @@ var utils = {
       }
 
       //Reset the percentile for the given reps value
-      percentileDict[currReps] = formula(l, s, length);
+      percentileDict[currROI] = formula(l, s, length);
+      prevROI = currROI;
     }
+
     // Go through the results and reset all of the percentiles
     for (var i = 0; i < length; i++) {
       var j = indexDict[investors[i]._id];
-      var reps = investors[i].portfolio[j].repsAvailable;
-      var percentile = percentileDict[reps];
+      var roiVal = investors[i].portfolio[j].roi.value;
+      var percentile = percentileDict[roiVal];
       investors[i].portfolio[j].percentile = percentile;
     }
-    cb(null);
+    return cb(null);
   },
 
   // Given a list of experts, update their percentiles
