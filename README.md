@@ -31,7 +31,8 @@ set up you will have to create a few directories before you run the build. You m
 directory build, and within it add directories fonts, images, and css.
 
 If this is your first time building our code, first run `npm run build-fonts` and `npm run
-build-images`. Then, you are set to start coding and rebuilding our code.
+build-images`. Finaly run, ```./scripts/connect-git-hooks.sh``` to make sure you have our pre-push
+and any other git hooks we've created. Then, you are set to start coding and rebuilding our code.
 
 Every time you want to run the site, you should open two terminal tabs. In one, run
 `npm start`. In the other, run `npm run watch`. This will watch all of your changes to the frontend
