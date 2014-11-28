@@ -13,9 +13,9 @@ var ScoreBar = React.createClass({
   },
 
   updateDOM: function(props) {
-    var change = props.directRep - props.prevDirectRep;
+    var change = props.percentile - props.previousPercentile;
     var color = change < 0 ? "#BD362F" : "#51A351";
-    var w = props.directRep + "%";
+    var w = props.percentile + "%";
     var id = props.category.split(' ').join('_');
 
     $("." + id).width(w);
@@ -27,7 +27,7 @@ var ScoreBar = React.createClass({
     return (
       <div className="scoreBar">
         <div className={classes}></div>
-        <div className="number">{this.props.directRep}</div>
+        <div className="number">{this.props.percentile}</div>
       </div>
     );
   }

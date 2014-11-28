@@ -11,7 +11,7 @@ describe('Categories Item: ', function() {
         'includeReps': true,
         'category': {
           'name': 'foo',
-          'directScore': 10, 'previousDirectScore': 11,
+          'percentile': 10, 'previousPercentile': 11,
           'investors': [{
             'username': 'foo', 'reps': 5,
           }],

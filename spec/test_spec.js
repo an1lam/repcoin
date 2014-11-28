@@ -13,10 +13,10 @@ describe('Utils: ', function() {
     var category = 'Coding';
     var expertsPromise = {
       experts: [
-        { _id: '1', categories: [ { name: category, reps: 9, directScore: 50 }] },
-        { _id: '2', categories: [ { name: category, reps: 1, directScore: 50 }] },
-        { _id: '3', categories: [ { name: category, reps: 8, directScore: 50 }] },
-        { _id: '4', categories: [ { name: category, reps: 5, directScore: 50 }] },
+        { _id: '1', categories: [ { name: category, reps: 9, percentile: 50 }] },
+        { _id: '2', categories: [ { name: category, reps: 1, percentile: 50 }] },
+        { _id: '3', categories: [ { name: category, reps: 8, percentile: 50 }] },
+        { _id: '4', categories: [ { name: category, reps: 5, percentile: 50 }] },
       ],
 
       then: function(cb) {
@@ -148,24 +148,24 @@ describe('Utils: ', function() {
     });
   });
 
-  describe('directScoreComparator: ', function() {
-    it('should correctly sort users by directScore in decreasing order', function() {
+  describe('percentileComparator: ', function() {
+    it('should correctly sort users by percentile in decreasing order', function() {
       var users = [
-        { _id: '1', categories: [{ name: 'Coding', directScore: 3 }] },
-        { _id: '2', categories: [{ name: 'Coding', directScore: 5 }] },
-        { _id: '3', categories: [{ name: 'Coding', directScore: 3 }] },
-        { _id: '4', categories: [{ name: 'Coding', directScore: 1 }] },
+        { _id: '1', categories: [{ name: 'Coding', percentile: 3 }] },
+        { _id: '2', categories: [{ name: 'Coding', percentile: 5 }] },
+        { _id: '3', categories: [{ name: 'Coding', percentile: 3 }] },
+        { _id: '4', categories: [{ name: 'Coding', percentile: 1 }] },
       ];
 
       var expected = [
-        { _id: '2', categories: [{ name: 'Coding', directScore: 5 }] },
-        { _id: '1', categories: [{ name: 'Coding', directScore: 3 }] },
-        { _id: '3', categories: [{ name: 'Coding', directScore: 3 }] },
-        { _id: '4', categories: [{ name: 'Coding', directScore: 1 }] },
+        { _id: '2', categories: [{ name: 'Coding', percentile: 5 }] },
+        { _id: '1', categories: [{ name: 'Coding', percentile: 3 }] },
+        { _id: '3', categories: [{ name: 'Coding', percentile: 3 }] },
+        { _id: '4', categories: [{ name: 'Coding', percentile: 1 }] },
       ];
 
-      var directScoreComparator = utils.getDirectScoreComparator('Coding');
-      var results = users.sort(directScoreComparator);
+      var percentileComparator = utils.getDirectScoreComparator('Coding');
+      var results = users.sort(percentileComparator);
       expect(results.length).toEqual(4);
       expect(results).toEqual(expected);
     });
@@ -305,8 +305,8 @@ describe('Utils: ', function() {
       utils.getExpertPercentiles(experts, category, cb); 
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
-      expect(experts[0].categories[0].directScore).toEqual(50);
-      expect(experts[1].categories[0].directScore).toEqual(50);
+      expect(experts[0].categories[0].percentile).toEqual(50);
+      expect(experts[1].categories[0].percentile).toEqual(50);
     });
 
     it('should give all experts correct percentiles if reps are different', function() {
@@ -320,10 +320,10 @@ describe('Utils: ', function() {
       utils.getExpertPercentiles(experts, category, cb); 
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
-      expect(experts[0].categories[0].directScore).toEqual(12);
-      expect(experts[1].categories[0].directScore).toEqual(37);
-      expect(experts[2].categories[0].directScore).toEqual(62);
-      expect(experts[3].categories[0].directScore).toEqual(87);
+      expect(experts[0].categories[0].percentile).toEqual(12);
+      expect(experts[1].categories[0].percentile).toEqual(37);
+      expect(experts[2].categories[0].percentile).toEqual(62);
+      expect(experts[3].categories[0].percentile).toEqual(87);
     });
 
     it('should give a single expert a percentile of 50', function() {
@@ -334,7 +334,7 @@ describe('Utils: ', function() {
       utils.getExpertPercentiles(experts, category, cb); 
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
-      expect(experts[0].categories[0].directScore).toEqual(50);
+      expect(experts[0].categories[0].percentile).toEqual(50);
     });
 
     it('should return an error if the first expert does not have the category', function() {
@@ -370,7 +370,7 @@ describe('Utils: ', function() {
     });
 
     it('should add category to the portfolio if investor has never invested in this expert before', function() {
-      existingPortfolio = [{ repsAvailable: 100, category: 'Coding', investments: [] }];
+      existingPortfolio = [{ reps: 100, category: 'Coding', investments: [] }];
       amount = 10;
       toUserCategoryTotal = 20;
       toUser = { id: '123', name: 'Matt' };
@@ -378,12 +378,12 @@ describe('Utils: ', function() {
       var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal);
       var newInvestment = { user: 'Matt', userId: '123', amount: 10, valuation: 10, percentage: 50 }; 
       expect(p[0].investments).toEqual([newInvestment]); 
-      expect(p[0].repsAvailable).toEqual(90);
+      expect(p[0].reps).toEqual(90);
     });
 
     it('should update the existing investment if it is present', function() {
       var existingInvestment = { user: 'Matt', userId: '123', amount: 10, valuation: 10, percentage: 50 }; 
-      existingPortfolio = [{ repsAvailable: 100, category: 'Coding',  roi: { value: 0, length: 0 }, investments: [existingInvestment] }];
+      existingPortfolio = [{ reps: 100, category: 'Coding',  roi: { value: 0, length: 0 }, investments: [existingInvestment] }];
       amount = 5;
       toUserCategoryTotal = 20;
       toUser = { id: '123', name: 'Matt' };
@@ -395,12 +395,12 @@ describe('Utils: ', function() {
       expect(p[0].investments[0].percentage).toEqual(75);
       expect(p[0].investments[0].valuation).toEqual(15);
       expect(p[0].roi).toEqual(expectedROI);
-      expect(p[0].repsAvailable).toEqual(95);
+      expect(p[0].reps).toEqual(95);
     }); 
 
     it('should update the existing investment and roi if revoke', function() {
       var existingInvestment = { user: "Matt", userId: "123", amount: 10, valuation: 20, percentage: 50 }; 
-      existingPortfolio = [{ repsAvailable: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [existingInvestment] }];
+      existingPortfolio = [{ reps: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [existingInvestment] }];
       amount = -5;
       toUserCategoryTotal = 20;
       toUser = { id: "123", name: "Matt" };
@@ -412,7 +412,7 @@ describe('Utils: ', function() {
       expect(p[0].investments[0].percentage).toEqual(25);
       expect(p[0].investments[0].valuation).toEqual(5);
       expect(p[0].roi).toEqual(expectedROI);
-      expect(p[0].repsAvailable).toEqual(105);
+      expect(p[0].reps).toEqual(105);
     }); 
   });
 

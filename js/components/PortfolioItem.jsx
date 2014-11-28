@@ -9,7 +9,7 @@ var PortfolioItem = React.createClass({
     return (
       <tr className="portfolioItem">
         <td>{this.props.category.category}</td>
-        <td>{this.props.category.repsAvailable}</td>
+        <td>{this.props.category.reps}</td>
         <td><InvestmentList investments={this.props.category.investments}/></td>
       </tr>
     );

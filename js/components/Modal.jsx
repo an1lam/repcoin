@@ -24,7 +24,7 @@ var Modal = React.createClass({
       }
     }
     if (giveOrRevoke === 'give') {
-      if (!transactionCategory || transactionCategory.repsAvailable < reps) {
+      if (!transactionCategory || transactionCategory.reps < reps) {
         this.setState({error: true});
       } else {
         this.setState({error: false});
@@ -115,7 +115,7 @@ var Modal = React.createClass({
     var valuationData = [];
     var categories = this.props.user.categories.map(function(category) {
       for (var i = 0; i < currentUserPortfolio.length; i++) {
-        if (currentUserPortfolio[i].category === category.name && currentUserPortfolio[i].repsAvailable > 0) {
+        if (currentUserPortfolio[i].category === category.name && currentUserPortfolio[i].reps > 0) {
           var categoryInvestments = currentUserPortfolio[i].investments;
           for (var j = 0; j < categoryInvestments.length; j++) {
             if (categoryInvestments[j].user === this.props.user.username) {
@@ -126,7 +126,7 @@ var Modal = React.createClass({
               </tr>);
             }
           }
-          return <option key={category.id} value={category.name}>{category.name} ({currentUserPortfolio[i].repsAvailable})</option>;
+          return <option key={category.id} value={category.name}>{category.name} ({currentUserPortfolio[i].reps})</option>;
         }
       }
     }.bind(this));
