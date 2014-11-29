@@ -70,7 +70,7 @@ var CategoriesTable = React.createClass({
           <tbody>
             <tr>
               <th>Category</th>
-              <th>Direct Rep</th>
+              <th>Percentile</th>
               <th>Top Investors</th>
               {repsHeader}
             </tr>

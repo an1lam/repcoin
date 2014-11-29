@@ -37,15 +37,15 @@ var LeaderTable = React.createClass({
   render: function() {
     var leaders = '';
     leaders = this.state.leaders.map(function(leader) {
-      var directScore;
+      var percentile;
       for (var i = 0; i < leader.categories.length; i++) {
         if (leader.categories[i].name.toLowerCase() === this.props.category.toLowerCase()) {
-          directScore = leader.categories[i].directScore;
+          percentile = leader.categories[i].percentile;
         }
       }
 return <tr key={leader._id} >
   <td><Link to="profile" params={{userId: leader._id}}>{leader.username}</Link></td>
-        <td>{directScore}</td>
+        <td>{percentile}</td>
       </tr>;
     }.bind(this));
     return (
@@ -54,7 +54,7 @@ return <tr key={leader._id} >
         <tr><th colSpan="3">{this.props.category} Leaders</th></tr>
         <tr>
           <th>Name</th>
-          <th>Direct Rep</th>
+          <th>Percentile</th>
         </tr>
         </thead>
         <tbody>

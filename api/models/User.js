@@ -34,7 +34,7 @@ var UserSchema = new Schema({
   // A list of investments for various categories
   portfolio: [{
     // reps available to invest for this category
-    repsAvailable: {type: Number, default: 0, required: true },
+    reps: {type: Number, default: 0, required: true },
 
     // ROI for this category based on all revokes for this category
     roi: {
@@ -83,10 +83,10 @@ var UserSchema = new Schema({
     id: {type: Schema.Types.ObjectId, required: true },
 
     // The percentile for this user compared to users in this category
-    directScore: {type: Number, default: 0, required: true },
+    percentile: {type: Number, default: 0, required: true },
 
     // The percentile from yesterday
-    previousDirectScore: {type: Number, default: 0, required: true },
+    previousPercentile: {type: Number, default: 0, required: true },
 
     // The reps received for this category
     reps: {type: Number, default: 0, required: true },

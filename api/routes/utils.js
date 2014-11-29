@@ -36,10 +36,10 @@ var utils = {
       var indexA = this.getCategoryIndex(a, category);
       var indexB = this.getCategoryIndex(b, category);
       
-      var directScoreA = a.categories[indexA].directScore;
-      var directScoreB = b.categories[indexB].directScore;
+      var percentileA = a.categories[indexA].percentile;
+      var percentileB = b.categories[indexB].percentile;
       
-      return directScoreB - directScoreA;
+      return percentileB - percentileA;
     }.bind(this)
   },
 
@@ -144,7 +144,7 @@ var utils = {
     }
 
     // Update the portfolio entry for this category
-    portfolio[indexI].repsAvailable -= amount;
+    portfolio[indexI].reps -= amount;
     return portfolio;
   },
 
@@ -263,7 +263,7 @@ var utils = {
       var j = indexDict[experts[i]._id];
       var reps = experts[i].categories[j].reps;
       var percentile = percentileDict[reps];
-      experts[i].categories[j].directScore = percentile;
+      experts[i].categories[j].percentile = percentile;
     }
     return cb(null);
   },
