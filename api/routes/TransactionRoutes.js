@@ -116,8 +116,8 @@ module.exports = function(router, isAuthenticated) {
                             category.save();
                             return res.status(400).send(err);
                           } else {
-                            // Update the investor percentiles
-                            utils.updateInvestorPercentiles(category.name, function(err) {
+                            // Update the investor percentiles, valuations, and percentages
+                            utils.updateInvestors(category.name, function(err) {
                               if (err) {
                                 Transaction.findOneAndRemove({'id': transaction.id});
                                 toUser.categories[categoryIndex].reps -= amount;
@@ -131,7 +131,7 @@ module.exports = function(router, isAuthenticated) {
                               } else {
                                 return res.send(transaction);
                               }
-                            }); 
+                            }, toUser.name, toUserCategoryTotal); 
                           }
                         });
                       }

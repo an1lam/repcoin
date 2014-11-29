@@ -133,7 +133,7 @@ var utils = {
       var roiForRevoke = (investment.valuation - investment.amount)/investment.amount;
       investment.amount += amount;
       investment.percentage = Number(investment.amount/toUserCategoryTotal * 100)
-      var valuation = investment.percentage/100 * toUserCategoryTotal;
+      var valuation = Math.floor(investment.percentage/100 * toUserCategoryTotal);
       investment.valuation = Math.floor(valuation);
       portfolio[indexI].investments[indexJ] = investment;
 
@@ -146,6 +146,35 @@ var utils = {
     // Update the portfolio entry for this category
     portfolio[indexI].reps -= amount;
     return portfolio;
+  },
+
+  // Given a transaction, update all of the percentages for investors
+  updateInvestorPercentagesAndValuations: function(investors, expertCategoryTotal, category, username) {
+    var investor, j, errs;
+    var length = investors.length;
+    for (var i = 0; i < length; i++) {
+      j = -1;
+      investor = investors[i];
+      j = this.getPortfolioIndex(investor, category);
+      if (j === -1) {
+        continue;
+      }
+
+      var len = investor.portfolio[j].investments.length;
+      for (var q = 0; q < len; q++) {
+        var investment = investor.portfolio[j].investments[q];
+        if (investment.user === username) {
+
+          // Reset the percentage
+          investment.percentage = 100 * investment.amount/expertCategoryTotal;
+
+          // Reset the valuation
+          investment.valuation = Math.floor(investment.percentage/100 * expertCategoryTotal);
+          investor.portfolio[j].investments[q] = investment;
+        }
+      }
+    }
+    return investors; 
   },
 
   // Given a revoke that just happened, update roi
@@ -268,11 +297,18 @@ var utils = {
     return cb(null);
   },
 
-  // Given a category name, update the percentiles for all the investors in that category
-  updateInvestorPercentiles: function(category, cb) {
+  // Given a category name, update the percentiles, percentages, and valuations for all investors
+  updateInvestors: function(category, cb, username, expertCategoryTotal) {
     var self = this;
     var investorsPromise = User.findInvestorByCategory(category, function() {});
     investorsPromise.then(function(investors) {
+
+      // If parameters are avaiable, update all the investor percentages and valuations
+      if (username && expertCategoryTotal) {
+        investors = self.updateInvestorPercentagesAndValuations(investors, expertCategoryTotal, category, username);
+      }
+
+      // Sort the investors by roi in increasing order
       var roiComparator = self.getROIComparator(category);
       investors.sort(roiComparator);
       self.getInvestorPercentiles(investors, category, function(err) {

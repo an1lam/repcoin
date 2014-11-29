@@ -201,7 +201,7 @@ module.exports = function(router, isAuthenticated) {
           } else if (!user) {
             return res.status(501).send("User is already an investor for this category");
           } else {
-            utils.updateInvestorPercentiles(req.body.category, function(err) {
+            utils.updateInvestors(req.body.category, function(err) {
               if (err) {
                 return res.status(501).send(err);
               } else {
