@@ -65,7 +65,7 @@ describe('Utils: ', function() {
     });
   });
 
-  describe('updateInvestorPercentiles: ', function() {
+  describe('updateInvestors: ', function() {
     beforeEach(function() {
       cb = jasmine.createSpy();
     });
@@ -84,7 +84,11 @@ describe('Utils: ', function() {
       }
     };
 
-    it('should correctly update percentiles for some investors', function() {
+    it('should call updateInvestorPercentagesAndValuations when parameters are provided', function() {
+      spyOn(utils, 'updateInvestorPercentagesAndValuations')
+        .andCallFake(function(investors, toUserCategoryTotal, category, username) {
+          return investors;
+        });
       spyOn(User, 'findInvestorByCategory').andReturn(investorsPromise);
       spyOn(utils, 'saveAll').andCallFake(function(investors, cb) {
         return cb([]);
@@ -92,12 +96,34 @@ describe('Utils: ', function() {
       spyOn(utils, 'getInvestorPercentiles').andCallFake(function(investors, category, cb) {
         return cb(null);
       });
-      utils.updateInvestorPercentiles(category, cb);
+      utils.updateInvestors(category, cb, 100, 'Coding', 'Matt');
+      expect(utils.updateInvestorPercentagesAndValuations.callCount).toEqual(1);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
+    });
+
+    it('should correctly update percentiles for some investors', function() {
+      spyOn(utils, 'updateInvestorPercentagesAndValuations')
+        .andCallFake(function(investors, toUserCategoryTotal, category, username) {
+          return investors;
+        });
+      spyOn(User, 'findInvestorByCategory').andReturn(investorsPromise);
+      spyOn(utils, 'saveAll').andCallFake(function(investors, cb) {
+        return cb([]);
+      });
+      spyOn(utils, 'getInvestorPercentiles').andCallFake(function(investors, category, cb) {
+        return cb(null);
+      });
+      utils.updateInvestors(category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
     });
 
     it('should correctly handle error from getInvestorPercentiles', function() {
+      spyOn(utils, 'updateInvestorPercentagesAndValuations')
+        .andCallFake(function(investors, toUserCategoryTotal, category, username) {
+          return investors;
+        });
       spyOn(User, 'findInvestorByCategory').andReturn(investorsPromise);
       spyOn(utils, 'saveAll').andCallFake(function(investors, cb) {
         return cb([]);
@@ -105,12 +131,16 @@ describe('Utils: ', function() {
       spyOn(utils, 'getInvestorPercentiles').andCallFake(function(investors, category, cb) {
         return cb('getInvestorPercentile error');
       });
-      utils.updateInvestorPercentiles(category, cb);
+      utils.updateInvestors(category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith('getInvestorPercentile error');
     });
 
     it('should correctly handle error from saveAll()', function() {
+      spyOn(utils, 'updateInvestorPercentagesAndValuations')
+        .andCallFake(function(investors, toUserCategoryTotal, category, username) {
+          return investors;
+        });
       spyOn(User, 'findInvestorByCategory').andReturn(investorsPromise);
       var errs = ['Error from saveAll()'];
       spyOn(utils, 'saveAll').andCallFake(function(investors, cb) {
@@ -119,7 +149,7 @@ describe('Utils: ', function() {
       spyOn(utils, 'getInvestorPercentiles').andCallFake(function(investors, category, cb) {
         return cb(null);
       });
-      utils.updateInvestorPercentiles(category, cb);
+      utils.updateInvestors(category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(errs);
     });
@@ -482,6 +512,41 @@ describe('Utils: ', function() {
       var emptyInvestor = { portfolio: [] };
       var i = utils.getPortfolioIndex(emptyInvestor, 'Coding');
       expect(i).toEqual(-1);
+    });
+  });
+
+  describe('updateInvestorPercentagesAndValuations', function() {
+    it('should correctly update percentages and valuations', function() {
+      var category = 'Coding';
+      var expertCategoryTotal = 100;
+      var username = 'Matt';
+
+      var investment1 = { user: 'Matt', userId: '123', amount: 8, valuation: 14, percentage: 20 }; 
+      var investment2 = { user: 'Matt', userId: '123', amount: 5, valuation: 12, percentage: 15 }; 
+      var investment3 = { user: 'Matt', userId: '123', amount: 20, valuation: 11, percentage: 10 }; 
+      var investment4 = { user: 'Bob', userId: '456', amount: 10, valuation: 10, percentage: 14 }; 
+
+      var investors = [
+        { _id: '1', portfolio: [ { category: category, investments: [investment1] }] },
+        { _id: '2', portfolio: [ { category: category, investments: [investment2] }] },
+        { _id: '3', portfolio: [ { category: category, investments: [investment3] }] },
+        { _id: '4', portfolio: [ { category: category, investments: [investment4] }] },
+      ];
+
+      var result1 = { user: 'Matt', userId: '123', amount: 8, valuation: 8, percentage: 8 }; 
+      var result2 = { user: 'Matt', userId: '123', amount: 5, valuation: 5, percentage: 5 }; 
+      var result3 = { user: 'Matt', userId: '123', amount: 20, valuation: 20, percentage: 20 }; 
+      var result4 = { user: 'Bob', userId: '456', amount: 10, valuation: 10, percentage: 14 }; 
+
+      var expectedInvestors = [
+        { _id: '1', portfolio: [ { category: category, investments: [result1] }] },
+        { _id: '2', portfolio: [ { category: category, investments: [result2] }] },
+        { _id: '3', portfolio: [ { category: category, investments: [result3] }] },
+        { _id: '4', portfolio: [ { category: category, investments: [result4] }] },
+      ];
+
+      var results = utils.updateInvestorPercentagesAndValuations(investors, expertCategoryTotal, category, username); 
+      expect(results).toEqual(expectedInvestors);
     });
   });
 
