@@ -399,7 +399,15 @@ describe('Utils: ', function() {
       expect(result).toEqual(null);
     });
 
-    it('should add category to the portfolio if investor has never invested in this expert before', function() {
+    it('should return null if revoking from a non-existent investment', function() {
+      portfolio = [{ category: 'Coding', investments: [] }];
+      category = 'Coding';
+      amount = -1;
+      var result = utils.updateInvestorPortfolio(portfolio, category, toUser, amount, toUserCategoryTotal);
+      expect(result).toEqual(null);
+    });
+
+    it('should add user to the portfolio if investment is a give', function() {
       existingPortfolio = [{ reps: 100, category: 'Coding', investments: [] }];
       amount = 10;
       toUserCategoryTotal = 20;
@@ -411,38 +419,37 @@ describe('Utils: ', function() {
       expect(p[0].reps).toEqual(90);
     });
 
-    it('should update the existing investment if it is present', function() {
-      var existingInvestment = { user: 'Matt', userId: '123', amount: 10, valuation: 10, percentage: 50 }; 
-      existingPortfolio = [{ reps: 100, category: 'Coding',  roi: { value: 0, length: 0 }, investments: [existingInvestment] }];
-      amount = 5;
-      toUserCategoryTotal = 20;
-      toUser = { id: '123', name: 'Matt' };
-      var expectedROI =  { value: 0, length: 0 };
+    it('should update the existing investment and roi if revoke', function() {
+      var existingInvestment = { _id: '1', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 }; 
+      existingPortfolio = [{ reps: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [existingInvestment] }];
+      amount = -2;
+      toUserCategoryTotal = 998;
+      toUser = { id: "123", name: "Matt" };
+      var expectedROI =  { length: 1, value: 18 };
+      var id = '1';
+      var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal, id);
 
-      var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal);
       expect(p[0].investments.length).toEqual(1);
-      expect(p[0].investments[0].amount).toEqual(15);
-      expect(p[0].investments[0].percentage).toEqual(75);
-      expect(p[0].investments[0].valuation).toEqual(15);
+      expect(p[0].investments[0].amount).toEqual(8);
+      expect(p[0].investments[0].percentage).toEqual(8);
+      expect(p[0].investments[0].valuation).toEqual(79);
       expect(p[0].roi).toEqual(expectedROI);
-      expect(p[0].reps).toEqual(95);
+      expect(p[0].reps).toEqual(120);
     }); 
 
-    it('should update the existing investment and roi if revoke', function() {
-      var existingInvestment = { user: "Matt", userId: "123", amount: 10, valuation: 20, percentage: 50 }; 
-      existingPortfolio = [{ reps: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [existingInvestment] }];
-      amount = -5;
-      toUserCategoryTotal = 20;
+    it('should remove the investment if it is entirely revoked', function() {
+      var existingInvestment = { _id: '1', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 }; 
+      var existingInvestment2 = { _id: '2', user: "Bob", userId: "456", amount: 10, valuation: 100, percentage: 10 }; 
+      existingPortfolio = [{ reps: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [existingInvestment, existingInvestment2] }];
+      amount = -10;
+      toUserCategoryTotal = 990;
       toUser = { id: "123", name: "Matt" };
-      var expectedROI =  { length: 1, value: 5 };
+      var id = '1';
+      var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal, id);
 
-      var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal);
       expect(p[0].investments.length).toEqual(1);
-      expect(p[0].investments[0].amount).toEqual(5);
-      expect(p[0].investments[0].percentage).toEqual(25);
-      expect(p[0].investments[0].valuation).toEqual(5);
-      expect(p[0].roi).toEqual(expectedROI);
-      expect(p[0].reps).toEqual(105);
+      expect(p[0].investments[0]._id).toEqual('2');
+      expect(p[0].reps).toEqual(200);
     }); 
   });
 
