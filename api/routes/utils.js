@@ -98,53 +98,81 @@ var utils = {
 
   // Update an investor making an investment for a given category,
   // Returns null if the investment is not possible
-  updateInvestorPortfolio: function(portfolio, category, toUser, amount, toUserCategoryTotal) {
+  updateInvestorPortfolio: function(portfolio, category, toUser, amount, toUserCategoryTotal, id) {
     // Find the portfolio entry that should be updated
-    var indexI = -1;
-    var indexJ = -1;
+    var index = -1;
     var length = portfolio.length;
     for (var i = 0; i < length; i++) {
       if (portfolio[i].category === category) {
         var investments = portfolio[i].investments;
-        indexI = i;
-        for (var j = 0; j < investments.length; j++) {
-          if (investments[j].user === toUser.name) {
-            indexJ = j;
-          }
-        }
+        index = i;
+        break;
       }
     }
 
     // The from user is not an investor for this category (ERROR!)
-    if (indexI === -1) {
+    if (index === -1) {
       return null;
     }
-    // The from user has never invested in this user before
-    if (indexJ === -1) {
+
+    // Add the investment to the portfolio
+    if (amount > 0) {
       var investment = { userId     : toUser.id,
                          user       : toUser.name,
                          amount     : amount,
                          valuation  : amount,
                          percentage : Number(amount/toUserCategoryTotal * 100) };
-      portfolio[indexI].investments.push(investment);
+
+      portfolio[index].investments.push(investment);
+      portfolio[index].repsAvailable -= amount;
+    // Otherwise, the investment is a revoke
     } else {
-      // Update the existing investment
-      var investment = portfolio[indexI].investments[indexJ];
-      var roiForRevoke = (investment.valuation - investment.amount)/investment.amount;
-      investment.amount += amount;
-      investment.percentage = Number(investment.amount/toUserCategoryTotal * 100)
-      var valuation = investment.percentage/100 * toUserCategoryTotal;
-      investment.valuation = Math.floor(valuation);
-      portfolio[indexI].investments[indexJ] = investment;
-
-      // Update the roi for this category if we made a revoke
-      if (amount < 0) {
-        portfolio[indexI].roi = this.updateROI(portfolio[indexI].roi, amount * -1 * roiForRevoke);
+      var j = -1;   
+      var length = portfolio[index].investments.length;
+      for (var i = 0; i < length; i++) {
+        if (portfolio[index].investments[i]._id ===  id) {
+          j = i;
+          break; 
+        }
       }
-    }
 
-    // Update the portfolio entry for this category
-    portfolio[indexI].repsAvailable -= amount;
+      // The investor is trying to revoke an investment that was not found (ERROR!)
+      if (j === -1) {
+        return null;
+      }
+      
+      amount *= -1;
+      var investment = portfolio[index].investments[j];
+      var prevAmount = investment.amount;
+
+      // Revenue is the fraction sold times the valuation
+      var revenue = Math.floor(amount/prevAmount * investment.valuation);
+      var roi = (revenue - amount)/amount;
+
+      // Adjust the investor's reps
+      portfolio[index].repsAvailable += revenue;
+
+      // Update the amount
+      investment.amount -= amount;
+
+      // If the amount is now zero, remove the investment
+      if (investment.amount === 0) {
+        portfolio[index].investments.splice(j, 1);
+        return portfolio;
+      }
+
+      // OldTotal/OldPercentage = newTotal/newPercentage (Proportional)
+      investment.percentage = Math.floor((investment.amount * investment.percentage)/prevAmount);
+
+      // New valuation is the portion of the old percentage times category total
+      investment.valuation = Math.floor(toUserCategoryTotal * investment.percentage/100);
+
+      // Update the date
+      investment.timeStamp = Date.now();
+
+      portfolio[index].investments[j] = investment;
+      portfolio[index].roi = this.updateROI(portfolio[index].roi, amount * roi);
+    }
     return portfolio;
   },
 

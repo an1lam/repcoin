@@ -53,6 +53,9 @@ var UserSchema = new Schema({
 
     // A list of investments for this category
     investments: [{
+      // The time of the investment
+      timeStamp : {type: Date, default: Date.now, required: true },
+      
       // The id of the user invested in
       userId: {type: Schema.Types.ObjectId, required: true },
   
@@ -65,7 +68,7 @@ var UserSchema = new Schema({
       // The current valuation of the amount
       valuation: {type: Number, required: true },
 
-      // The percentage of the user owned
+      // The percentage of the user
       percentage: {type: Number, required: true }
     }],
   }],
@@ -108,7 +111,7 @@ var UserSchema = new Schema({
     default: "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
     required: true
   },
-  timeStamp : {type: Date, default: Date.now },
+  timeStamp : {type: Date, default: Date.now, required: true },
 });
 
 // TODO: Abstract this logic out into it's own function for testing purposes
