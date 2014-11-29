@@ -43,6 +43,11 @@ var ProfilePage = React.createClass({
     this.updateUser();
   },
 
+  componentWillUnmount: function () {
+    PubSub.unsubscribe('profileupdate', this.updateUser);
+    PubSub.unsubscribe('profileupdate', this.resetCurrentUser);
+  },
+
   setUser: function(url) {
     $.ajax({
       url: url,

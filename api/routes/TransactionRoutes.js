@@ -99,7 +99,7 @@ module.exports = function(router, isAuthenticated) {
                         Transaction.findOneAndRemove({'id': transaction.id});
                         toUser.categories[categoryIndex].reps -= amount;
                         toUser.save();
-                        fromUser.portfolio[portfolioIndex].repsAvailable += amount;
+                        fromUser.portfolio[portfolioIndex].reps += amount;
                         fromUser.save();
                         res.status(400).send(err);
                       } else {
@@ -109,20 +109,20 @@ module.exports = function(router, isAuthenticated) {
                             Transaction.findOneAndRemove({'id': transaction.id});
                             toUser.categories[categoryIndex].reps -= amount;
                             toUser.save();
-                            fromUser.portfolio[portfolioIndex].repsAvailable += amount;
+                            fromUser.portfolio[portfolioIndex].reps += amount;
                             fromUser.save();
                             category.repsLiquid += amount;
                             category.repsInvested -= amount;
                             category.save();
                             return res.status(400).send(err);
                           } else {
-                            // Update the investor percentiles
-                            utils.updateInvestorPercentiles(category.name, function(err) {
+                            // Update the investor percentiles, valuations, and percentages
+                            utils.updateInvestors(category.name, function(err) {
                               if (err) {
                                 Transaction.findOneAndRemove({'id': transaction.id});
                                 toUser.categories[categoryIndex].reps -= amount;
                                 toUser.save();
-                                fromUser.portfolio[portfolioIndex].repsAvailable += amount;
+                                fromUser.portfolio[portfolioIndex].reps += amount;
                                 fromUser.save();
                                 category.repsLiquid += amount;
                                 category.repsInvested -= amount;
@@ -131,7 +131,7 @@ module.exports = function(router, isAuthenticated) {
                               } else {
                                 return res.send(transaction);
                               }
-                            }); 
+                            }, toUser.name, toUserCategoryTotal); 
                           }
                         });
                       }

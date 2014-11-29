@@ -70,7 +70,7 @@ module.exports = {
       'username': 'foo',
       'portfolio': [{
         'category': 'testing',
-        'repsAvailable': 3,
+        'reps': 3,
         'id': 'testing',
         'investments': [{
           'userId': 'bar',

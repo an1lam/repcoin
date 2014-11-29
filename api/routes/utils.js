@@ -36,10 +36,10 @@ var utils = {
       var indexA = this.getCategoryIndex(a, category);
       var indexB = this.getCategoryIndex(b, category);
       
-      var directScoreA = a.categories[indexA].directScore;
-      var directScoreB = b.categories[indexB].directScore;
+      var percentileA = a.categories[indexA].percentile;
+      var percentileB = b.categories[indexB].percentile;
       
-      return directScoreB - directScoreA;
+      return percentileB - percentileA;
     }.bind(this)
   },
 
@@ -124,7 +124,7 @@ var utils = {
                          percentage : Number(amount/toUserCategoryTotal * 100) };
 
       portfolio[index].investments.push(investment);
-      portfolio[index].repsAvailable -= amount;
+      portfolio[index].reps -= amount;
     // Otherwise, the investment is a revoke
     } else {
       var j = -1;   
@@ -150,7 +150,7 @@ var utils = {
       var roi = (revenue - amount)/amount;
 
       // Adjust the investor's reps
-      portfolio[index].repsAvailable += revenue;
+      portfolio[index].reps += revenue;
 
       // Update the amount
       investment.amount -= amount;
@@ -174,6 +174,35 @@ var utils = {
       portfolio[index].roi = this.updateROI(portfolio[index].roi, amount * roi);
     }
     return portfolio;
+  },
+
+  // Given a transaction, update all of the percentages for investors
+  updateInvestorPercentagesAndValuations: function(investors, expertCategoryTotal, category, username) {
+    var investor, j, errs;
+    var length = investors.length;
+    for (var i = 0; i < length; i++) {
+      j = -1;
+      investor = investors[i];
+      j = this.getPortfolioIndex(investor, category);
+      if (j === -1) {
+        continue;
+      }
+
+      var len = investor.portfolio[j].investments.length;
+      for (var q = 0; q < len; q++) {
+        var investment = investor.portfolio[j].investments[q];
+        if (investment.user === username) {
+
+          // Reset the percentage
+          investment.percentage = 100 * investment.amount/expertCategoryTotal;
+
+          // Reset the valuation
+          investment.valuation = Math.floor(investment.percentage/100 * expertCategoryTotal);
+          investor.portfolio[j].investments[q] = investment;
+        }
+      }
+    }
+    return investors; 
   },
 
   // Given a revoke that just happened, update roi
@@ -291,16 +320,23 @@ var utils = {
       var j = indexDict[experts[i]._id];
       var reps = experts[i].categories[j].reps;
       var percentile = percentileDict[reps];
-      experts[i].categories[j].directScore = percentile;
+      experts[i].categories[j].percentile = percentile;
     }
     return cb(null);
   },
 
-  // Given a category name, update the percentiles for all the investors in that category
-  updateInvestorPercentiles: function(category, cb) {
+  // Given a category name, update the percentiles, percentages, and valuations for all investors
+  updateInvestors: function(category, cb, username, expertCategoryTotal) {
     var self = this;
     var investorsPromise = User.findInvestorByCategory(category, function() {});
     investorsPromise.then(function(investors) {
+
+      // If parameters are avaiable, update all the investor percentages and valuations
+      if (username && expertCategoryTotal) {
+        investors = self.updateInvestorPercentagesAndValuations(investors, expertCategoryTotal, category, username);
+      }
+
+      // Sort the investors by roi in increasing order
       var roiComparator = self.getROIComparator(category);
       investors.sort(roiComparator);
       self.getInvestorPercentiles(investors, category, function(err) {

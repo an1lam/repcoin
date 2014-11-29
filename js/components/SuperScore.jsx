@@ -42,12 +42,12 @@ var SuperScore = React.createClass({
     var categories = props.user.categories;
     for (var i = 0; i < categories.length; i++) {
       if (categories[i].name === props.user.defaultCategory) {
-        this.setState({ defaultDirectRep: categories[i].directScore });
+        this.setState({ percentile: categories[i].percentile });
         this.setState({ category: categories[i].name });
         return;
       }
     } 
-    this.setState({ category: null, defaultDirectRep: null });
+    this.setState({ category: null, percentile: null });
   },
 
   render: function() {
@@ -68,7 +68,7 @@ var SuperScore = React.createClass({
           <div className="panel-heading">
             <div className="superText">{this.state.category}</div>
             <div className="superText">:</div>
-            <div className="superText">{this.state.defaultDirectRep}</div>
+            <div className="superText">{this.state.percentile}</div>
           </div> 
         </div>;
       } else {
@@ -86,7 +86,7 @@ var SuperScore = React.createClass({
           <div className="panel-heading">
             <div className="superText">{this.state.category}</div>
             <div className="superText">:</div>
-            <div className="superText">{this.state.defaultDirectRep}</div>
+            <div className="superText">{this.state.percentile}</div>
           </div> 
         </div>;
       }

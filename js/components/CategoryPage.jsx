@@ -24,6 +24,10 @@ var CategoryPage = React.createClass({
     this.resetCurrentUser();
   },
 
+  componentWillUnmount: function () {
+    PubSub.unsubscribe('userupdate', this.resetCurrentUser);
+  },
+
   componentWillReceiveProps: function(newProps) {
     this.setCategory(newProps.params.category);
   },

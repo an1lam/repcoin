@@ -42,7 +42,7 @@ var SuperScoreInput = React.createClass({
         <select onChange={this.handleChange} ref="defaultCategory" className="form-control">
           <option key='0'>Choose a category!</option>
           {this.props.user.categories.map(function(category) {
-            return <option key={category.id} value={category.name}>{category.name} : {category.directScore}</option>; 
+            return <option key={category.id} value={category.name}>{category.name} : {category.percentile}</option>; 
           })}
         </select>
         <button type="button" className="btn btn-default" onClick={this.propagateReset} >Cancel</button>
