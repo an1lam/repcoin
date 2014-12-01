@@ -30,17 +30,17 @@ describe('Rendering the Modal', function() {
     // Make sure that the table has rendered mock currentUser's transactions
     var cells = TestUtils.scryRenderedDOMComponentsWithTag(
       ModalComponent, 'td');
-    expect(cells[0].getDOMNode().textContent).toEqual("testing");
-    expect(cells[1].getDOMNode().textContent).toEqual("10");
-    expect(cells[2].getDOMNode().textContent).toEqual("100");
+    expect(cells[0].getDOMNode().textContent).toEqual("1");
+    expect(cells[1].getDOMNode().textContent).toEqual("testing");
+    expect(cells[2].getDOMNode().textContent).toEqual("10");
+    expect(cells[3].getDOMNode().textContent).toEqual("100");
   });
   
   it('renders the correct category-to-invest-in', function() {
     // Category-to-invest in renders our testing category
     var options = TestUtils.scryRenderedDOMComponentsWithTag(
       ModalComponent, 'option');
-    expect(options[0].getDOMNode().value).toEqual("give");
-    expect(options[2].getDOMNode().textContent).toEqual("testing (3)")
+    expect(options[0].getDOMNode().textContent).toEqual("testing (3 available)")
   });
 
   it('creates a give transaction correctly', function () {
@@ -48,12 +48,13 @@ describe('Rendering the Modal', function() {
     var amountInput = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'reps_text-input').getDOMNode();
     amountInput.value = 1;
+    var error = TestUtils.findRenderedDOMComponentWithClass(
+      ModalComponent, 'modal_error').getDOMNode();
     var form = TestUtils.findRenderedDOMComponentWithTag(ModalComponent, 'form')
       .getDOMNode();
-    var error = TestUtils.findRenderedDOMComponentWithClass(
-      ModalComponent, 'error').getDOMNode();
     TestUtils.Simulate.submit(form);
     expect(error.textContent).toEqual('');
+    var id;
     expect($.ajax).toHaveBeenCalledWith({
       url: '/api/transactions',
       type: 'POST',
@@ -63,6 +64,7 @@ describe('Rendering the Modal', function() {
         category: 'testing',
         amount: 1,
         anonymous: false,
+        id: id,
       },
       success: jasmine.any(Function),
       error: jasmine.any(Function)
@@ -75,16 +77,16 @@ describe('Rendering the Modal', function() {
     var amountInput = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'reps_text-input').getDOMNode();
     amountInput.value = 10;
+    var error = TestUtils.findRenderedDOMComponentWithClass(
+      ModalComponent, 'modal_error').getDOMNode();
 
+    // TODO: figure out how to setState now that there is no dropdown
     var giveRevokeSelectComponent = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'give-revoke-select').getDOMNode();
     giveRevokeSelectComponent.value = 'revoke';
 
     var form = TestUtils.findRenderedDOMComponentWithTag(ModalComponent, 'form')
       .getDOMNode();
-    var error = TestUtils.findRenderedDOMComponentWithClass(
-      ModalComponent, 'error').getDOMNode();
-
     TestUtils.Simulate.submit(form);
 
     expect(error.textContent).toEqual('');
@@ -110,12 +112,13 @@ describe('Rendering the Modal', function() {
       ModalComponent, 'reps_text-input').getDOMNode();
     amountInput.value = 2;
 
+    // TODO: figure out how to setState now that there is no dropdown
     var giveRevokeSelectComponent = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'give-revoke-select').getDOMNode();
     giveRevokeSelectComponent.value = 'revoke';
 
     var error = TestUtils.findRenderedDOMComponentWithClass(
-      ModalComponent, 'error').getDOMNode();
+      ModalComponent, 'modal_error').getDOMNode();
     var form = TestUtils.findRenderedDOMComponentWithTag(ModalComponent, 'form')
       .getDOMNode();
     TestUtils.Simulate.submit(form);

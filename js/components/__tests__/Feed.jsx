@@ -34,5 +34,4 @@ describe('Render the Feed', function() {
     expect(fromNames[0].getDOMNode().textContent).toEqual('foo');
     expect(toNames[0].getDOMNode().textContent).toEqual('bar');
   });
-
 });
