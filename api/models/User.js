@@ -16,17 +16,19 @@ var passwordValidator = [
 var phoneValidator = [
   validate({
     validator: function(val) {
-      return phone(val, 'USA').length > 0;  
+      return phone(val, 'USA').length > 0;
     },
     message: 'Invalid phone number'
   })
 ];
 
 var UserSchema = new Schema({
+  // User's first and last name
   firstname: {type: String, required: true, trim: true },
   lastname: {type: String, required: true, trim: true },
   username: {type: String, required: true, trim: true },
   password: {type: String, required: true, validate: passwordValidator },
+  // We use this field for logging in and logging out
   email: {type: String, required: true, unique: true, trim: true },
   phoneNumber: {type: String, required: true, unique: true, trim: true, validate: phoneValidator },
   about: {type: String, trim: true },
@@ -55,10 +57,10 @@ var UserSchema = new Schema({
     investments: [{
       // The time of the investment
       timeStamp : {type: Date, default: Date.now, required: true },
-      
+
       // The id of the user invested in
       userId: {type: Schema.Types.ObjectId, required: true },
-  
+
       // The name of the user invested in
       user: {type: String, required: true },
 
