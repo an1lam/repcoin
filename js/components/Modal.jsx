@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
@@ -11,7 +11,7 @@ var Modal = React.createClass({
 
   getInitialState: function() {
     return { give: true,
-             error: "" };
+             error: '' };
   },
 
   // Validate a give
@@ -121,10 +121,10 @@ var Modal = React.createClass({
     var amount = Number(this.refs.amount.getDOMNode().value);
     var choice = this.refs.choice.getDOMNode().value;
     var anonymous = this.refs.anonymous.getDOMNode().checked;
-    var give = this.state.give;
-  
+
+    console.log("about to do a transaction and give is: " + this.state.give);
     // Determine if we should give or revoke    
-    if (give) {
+    if (this.state.give) {
       this.validateAndGive(choice, amount, anonymous);
     } else {
       this.validateAndRevoke(choice, amount, anonymous);

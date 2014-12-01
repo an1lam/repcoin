@@ -86,6 +86,17 @@ module.exports = {
       'categories': [{
         'name': 'testing'
       }],
+      'portfolio': [{
+        'category': 'testing',
+        'reps': 10,
+        'investments': [{
+          'user': 'foo',
+          'userId': 'foo',
+          'amount': 100,
+          '_id': '1',
+          'valuation': 200,
+        }],
+      }],
     }
   }
 };

@@ -79,11 +79,8 @@ describe('Rendering the Modal', function() {
     amountInput.value = 10;
     var error = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'modal_error').getDOMNode();
-
-    // TODO: figure out how to setState now that there is no dropdown
-    var giveRevokeSelectComponent = TestUtils.findRenderedDOMComponentWithClass(
-      ModalComponent, 'give-revoke-select').getDOMNode();
-    giveRevokeSelectComponent.value = 'revoke';
+   
+    spyOn(ModalComponent, 'getInitialState').andReturn({ give: false, error: '' });
 
     var form = TestUtils.findRenderedDOMComponentWithTag(ModalComponent, 'form')
       .getDOMNode();
@@ -106,24 +103,20 @@ describe('Rendering the Modal', function() {
     expect(mockHideFunction).toHaveBeenCalled();
   });
   
-  it('doesn\'t allow the user to revoke reps unless the amount is valid',
+  it('does not allow the user to revoke reps unless the amount is valid',
   function() {
     var amountInput = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'reps_text-input').getDOMNode();
     amountInput.value = 2;
-
-    // TODO: figure out how to setState now that there is no dropdown
-    var giveRevokeSelectComponent = TestUtils.findRenderedDOMComponentWithClass(
-      ModalComponent, 'give-revoke-select').getDOMNode();
-    giveRevokeSelectComponent.value = 'revoke';
-
+    ModalComponent.clickRevoke();
+    console.log(ModalComponent.state.give);
     var error = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'modal_error').getDOMNode();
     var form = TestUtils.findRenderedDOMComponentWithTag(ModalComponent, 'form')
       .getDOMNode();
     TestUtils.Simulate.submit(form);
 
-    expect(error.textContent).toEqual('You don\'t have that many reps in that category');
+    expect(error.textContent).toEqual('You do not have enough reps!');
     expect(mockHideFunction).not.toHaveBeenCalled();
   });
 });
