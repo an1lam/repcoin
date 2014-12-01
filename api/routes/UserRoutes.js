@@ -1,6 +1,13 @@
 'use strict';
+
+// Models
 var User = require('../models/User.js');
+var VerificationToken = require('../models/VerificationToken.js');
+
+// Modules
 var utils = require('./utils.js');
+
+var transporter = require('../../config/mailer.js').transporterFactory();
 
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
@@ -33,7 +40,7 @@ module.exports = function(router, isAuthenticated, acl) {
           }
         });
       }
- 
+
       // Get the users normally
       else {
         User.findPublic({}, function(err, users) {
@@ -77,6 +84,25 @@ module.exports = function(router, isAuthenticated, acl) {
             return res.status(501).send('Error');
           }
         } else {
+          var verificationString = utils.generateVerificationToken();
+
+          var verificationToken = new VerificationToken({
+              user: user.email,
+              string: verificationString,
+          });
+
+          verificationToken.save(function(err) {
+
+            var mailOptions = utils.generateVerificationEmailOptions(user.email, verificationString);
+            // TODO: Do we want to add these to some sort of mail queue eventually?
+            transporter.sendMail(mailOptions, function(err, info) {
+              if (err) {
+                res.status(404).send("Unable to send verification email");
+              }
+
+            });
+          });
+
           req.login(user, function(err) {
             if (err) {
               return res.status(400).send(err);
@@ -167,7 +193,7 @@ module.exports = function(router, isAuthenticated, acl) {
          }
        });
     });
- 
+
   ///////// Get n leaders for a category ///////
   router.route('/users/:categoryName/leaders/:count')
     .get(isAuthenticated, function(req, res) {
@@ -185,7 +211,7 @@ module.exports = function(router, isAuthenticated, acl) {
         }
       });
     });
- 
+
   /////////// Add an expert category if it is not already added
   router.route('/users/:user_id/expert')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
@@ -218,7 +244,7 @@ module.exports = function(router, isAuthenticated, acl) {
           }
       });
     });
- 
+
   /////////// Add an investor category if it not already added
   router.route('/users/:user_id/investor')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
