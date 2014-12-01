@@ -27,5 +27,5 @@ module.exports = function(agenda) {
   });
 
   agenda.every('0 0 * * *', 'incrementUserReps');
-  agenda.now('setPreviousPercentileToCurrent');
+  agenda.every('0 0 * * *', 'setPreviousPercentileToCurrent');
 };
