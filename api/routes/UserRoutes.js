@@ -1,6 +1,13 @@
 // Routes to manipulate Users
+
+// Models
 var User = require('../models/User.js');
+var VerificationToken = require('../models/VerificationToken.js');
+
+// Modules
 var utils = require('./utils.js');
+
+var transporter = require('../../config/mailer.js').transporterFactory();
 
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
@@ -33,7 +40,7 @@ module.exports = function(router, isAuthenticated) {
           }
         });
       }
- 
+
       // Get the users normally
       else {
         User.find(function(err, users) {
@@ -74,9 +81,28 @@ module.exports = function(router, isAuthenticated) {
             res.status(501).send("Phone number is already taken");
           // Otherwise, send back generic "Error" message
           } else {
-            res.status(501).send("Error");
+            res.status(501).send(err);
           }
         } else {
+          var verificationString = utils.generateVerificationToken();
+
+          var verificationToken = new VerificationToken({
+              user: user.email,
+              string: verificationString,
+          });
+
+          verificationToken.save(function(err) {
+
+            var mailOptions = utils.generateVerificationEmailOptions(user.email, verificationString);
+            // TODO: Do we want to add these to some sort of mail queue eventually?
+            transporter.sendMail(mailOptions, function(err, info) {
+              if (err) {
+                res.status(404).send("Unable to send verification email");
+              }
+
+            });
+          });
+
           req.login(user, function(err) {
             if (err) {
               res.status(400).send(err);
@@ -145,7 +171,7 @@ module.exports = function(router, isAuthenticated) {
          }
        });
     });
- 
+
   ///////// Get n leaders for a category ///////
   router.route('/users/:categoryName/leaders/:count')
     .get(isAuthenticated, function(req, res) {
@@ -159,7 +185,7 @@ module.exports = function(router, isAuthenticated) {
         }
       });
     });
- 
+
   /////////// Add an expert category if it is not already added
   router.route('/users/:userId/expert')
     .put(isAuthenticated, function(req, res) {
@@ -188,7 +214,7 @@ module.exports = function(router, isAuthenticated) {
           }
       });
     });
- 
+
   /////////// Add an investor category if it not already added
   router.route('/users/:userId/investor')
     .put(isAuthenticated, function(req, res) {
