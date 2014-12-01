@@ -17,7 +17,7 @@ module.exports = function() {
     handleHide: 'hide.bs.modal',
     handleHidden: 'hidden.bs.modal'
   };
- 
+
   return {
     propTypes: {
       handleShow: React.PropTypes.func,
@@ -29,7 +29,7 @@ module.exports = function() {
       show: React.PropTypes.bool,
       remote: React.PropTypes.string
     },
- 
+
     getDefaultProps: function() {
       return {
         backdrop: true,
@@ -38,7 +38,7 @@ module.exports = function() {
         remote: ''
       };
     },
- 
+
     componentDidMount: function() {
       var $modal = $(this.getDOMNode()).modal({
         backdrop: this.props.backdrop,
@@ -55,7 +55,7 @@ module.exports = function() {
         }
       }.bind(this));
     },
- 
+
     componentWillUnmount: function() {
       var $modal = $(this.getDOMNode());
       handlerProps.forEach(function(prop) {
@@ -67,19 +67,19 @@ module.exports = function() {
         }
       }.bind(this));
     },
- 
+
     hide: function() {
       $(this.getDOMNode()).modal('hide');
     },
- 
+
     show: function() {
       $(this.getDOMNode()).modal('show');
     },
- 
+
     toggle: function() {
       $(this.getDOMNode()).modal('toggle');
     },
- 
+
     renderCloseButton: function() {
       return <button
         type="button"

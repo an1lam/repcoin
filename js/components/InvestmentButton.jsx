@@ -11,19 +11,11 @@ var InvestmentButton = React.createClass({
   },
 
   handleShowModal: function() {
-    this.setState({ showModal: true });
-  },
-
-  handleHideModal: function() {
-    $('body').removeClass('modal-open');
-    this.setState({ showModal: false });
+    this.refs.modal.show();
   },
 
   render: function() {
-    var modal = '';
-    if (this.state.showModal) {
-      modal = <Modal ref="modal" show={true} hide={this.handleHideModal} user={this.props.user} currentUser={this.props.currentUser} className="modal-open"/>;
-    }
+    var modal = <Modal ref="modal" show={false} user={this.props.user} currentUser={this.props.currentUser} className="modal-open"/>;
 
     return (
       <div className="InvestmentButton">
