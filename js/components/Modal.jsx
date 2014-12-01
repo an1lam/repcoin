@@ -122,7 +122,6 @@ var Modal = React.createClass({
     var choice = this.refs.choice.getDOMNode().value;
     var anonymous = this.refs.anonymous.getDOMNode().checked;
 
-    console.log("about to do a transaction and give is: " + this.state.give);
     // Determine if we should give or revoke    
     if (this.state.give) {
       this.validateAndGive(choice, amount, anonymous);
@@ -261,8 +260,8 @@ var Modal = React.createClass({
             <div className="modal-body">
                 <div className="row">
                   <div className="btn-group giverevoke" role="group">
-                    <button type="button" ref="give" className="btn btn-default givebtn" onClick={this.clickGive}>Give</button>
-                    <button type="button" ref="revoke" className="btn btn-default" onClick={this.clickRevoke}>Revoke</button>
+                    <button type="button" ref="give" className="givebtn btn btn-default givebtn" onClick={this.clickGive}>Give</button>
+                    <button type="button" ref="revoke" className="revokebtn btn btn-default" onClick={this.clickRevoke}>Revoke</button>
                   </div>
                   <div className="anonymous">
                     <strong>Anonymous</strong>: <input type="checkbox"

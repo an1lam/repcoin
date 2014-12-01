@@ -18,8 +18,8 @@ describe('Rendering the Modal', function() {
         Modal,
         {
           'hide': mockHideFunction,
-          'currentUser': TestHelper.mockUsers.to,
-          'user': TestHelper.mockUsers.from,
+          'currentUser': TestHelper.mockUsers.from,
+          'user': TestHelper.mockUsers.to,
         }
       );
       ModalComponent = TestUtils.renderIntoDocument(TestModal);
@@ -54,7 +54,6 @@ describe('Rendering the Modal', function() {
       .getDOMNode();
     TestUtils.Simulate.submit(form);
     expect(error.textContent).toEqual('');
-    var id;
     expect($.ajax).toHaveBeenCalledWith({
       url: '/api/transactions',
       type: 'POST',
@@ -64,7 +63,7 @@ describe('Rendering the Modal', function() {
         category: 'testing',
         amount: 1,
         anonymous: false,
-        id: id,
+        id: undefined,
       },
       success: jasmine.any(Function),
       error: jasmine.any(Function)
@@ -79,13 +78,16 @@ describe('Rendering the Modal', function() {
     amountInput.value = 10;
     var error = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'modal_error').getDOMNode();
-   
-    spyOn(ModalComponent, 'getInitialState').andReturn({ give: false, error: '' });
+
+    var revokeButton = TestUtils.findRenderedDOMComponentWithClass(
+      ModalComponent, 'revokebtn').getDOMNode();
+    TestUtils.Simulate.click(revokeButton);   
 
     var form = TestUtils.findRenderedDOMComponentWithTag(ModalComponent, 'form')
       .getDOMNode();
     TestUtils.Simulate.submit(form);
 
+    var id = TestHelper.mockUsers.from.portfolio[0].investments[0]._id;
     expect(error.textContent).toEqual('');
     expect($.ajax).toHaveBeenCalledWith({
       url: '/api/transactions',
@@ -96,6 +98,7 @@ describe('Rendering the Modal', function() {
         category: 'testing',
         amount: -10,
         anonymous: false,
+        id: id,
       },
       success: jasmine.any(Function),
       error: jasmine.any(Function)
@@ -107,16 +110,19 @@ describe('Rendering the Modal', function() {
   function() {
     var amountInput = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'reps_text-input').getDOMNode();
-    amountInput.value = 2;
-    ModalComponent.clickRevoke();
-    console.log(ModalComponent.state.give);
+    amountInput.value = 100;
     var error = TestUtils.findRenderedDOMComponentWithClass(
       ModalComponent, 'modal_error').getDOMNode();
+    var revokeButton = TestUtils.findRenderedDOMComponentWithClass(
+      ModalComponent, 'revokebtn').getDOMNode();
+    TestUtils.Simulate.click(revokeButton);
     var form = TestUtils.findRenderedDOMComponentWithTag(ModalComponent, 'form')
       .getDOMNode();
     TestUtils.Simulate.submit(form);
 
-    expect(error.textContent).toEqual('You do not have enough reps!');
+    var amount = TestHelper.mockUsers.from.portfolio[0].investments[0].amount;
+    var msg = 'That investment only has ' + amount + ' reps in it';
+    expect(error.textContent).toEqual(msg);
     expect(mockHideFunction).not.toHaveBeenCalled();
   });
 });

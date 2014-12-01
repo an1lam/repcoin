@@ -65,9 +65,12 @@ module.exports = {
   },
   
   mockUsers: {
-    "to": {
+    'from': {
       '_id': 'foo',
       'username': 'foo',
+      'categories': [{
+        'name': 'testing',
+      }],
       'portfolio': [{
         'category': 'testing',
         'reps': 3,
@@ -77,10 +80,11 @@ module.exports = {
           'user': 'bar',
           'amount': 10,
           'valuation': 100,
+          '_id': '2',
         }],
       }],
     },
-    'from': {
+    'to': {
       'username': 'bar',
       '_id': 'bar',
       'categories': [{
