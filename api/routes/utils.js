@@ -392,7 +392,7 @@ var utils = {
 
   generateVerificationToken: function() {
 
-    // Generate the token using rand and the username
+    // Generate the token using a random string of bytes
     return crypto.randomBytes(12).toString('hex');
   },
 
