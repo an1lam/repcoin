@@ -1,13 +1,18 @@
 "use strict";
+
+var agenda = require('agenda');
+var bodyParser = require('body-parser');
 var express = require('express');
 var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
+var nodemailer = require('nodemailer');
 var session = require('express-session');
-var passport = require('passport');
-var agenda = require('agenda');
+var passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy;
 var path = require('path');
-var LocalStrategy = require('passport-local').Strategy;
+
+// Configure passport
 require('./config/pass.js')(passport, LocalStrategy);
+var mailerConfig = require('./config/mailer.js');
 
 // Get CWD
 var STATIC_PATH = path.join(process.env.PWD, 'public');
@@ -51,19 +56,39 @@ app.get('/', function(req, res) {
   res.render('index.html');
 });
 
+// Nodemailer Setup
+var transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: mailerConfig.fromUser,
+});
+
+// Send an email to me when our server starts on Heroku.
+if (process.env.NODE_ENV === 'production') {
+  var mailOptions = {
+    from: 'repcoin2015@gmail.com',
+    to: 'stephenmalina@gmail.com',
+    subject: 'Server online',
+    text: 'Server started or rebooted.',
+  };
+
+  transporter.sendMail(mailOptions, function(err, info) {
+    if (err) {
+      console.log("He's dead Jim! Here's why ", err);
+    } else {
+      console.log('Message sent: ' + info.response);
+    }
+  });
+}
+
 /////////// Routes /////////////////////////
-
-// Users
-var userRouter = express.Router();
-var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth);
-
-// Categories
-var categoryRouter = express.Router();
-var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth);
 
 // Authentication
 var authRouter = express.Router();
 var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
+
+// Categories
+var categoryRouter = express.Router();
+var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth);
 
 // Transactions
 var transactionRouter = express.Router();
@@ -73,6 +98,10 @@ var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transaction
 var uploadsRouter = express.Router();
 var uploadRoutes = require('./api/routes/UploadRoutes.js')(uploadsRouter, auth);
 
+// Users
+var userRouter = express.Router();
+var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth);
+
 app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter, uploadsRouter ]);
 
 // Start the server unless we are running a test
@@ -81,6 +110,7 @@ if (!module.parent) {
     var mongoUrl = db.production_url;
   }
   else {
+    process.env.NODE_ENV = "development";
     var mongoUrl = db.development_url;
   }
   mongoose.connect(mongoUrl);
