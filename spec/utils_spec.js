@@ -1,5 +1,6 @@
 process.env.NODE_ENV = 'test';
 var utils = require('../api/routes/utils.js');
+var urlConfig = require('../config/url.js');
 
 var Category = require('../api/models/Category.js');
 var Transaction = require('../api/models/Transaction.js');
@@ -715,7 +716,7 @@ describe('Utils: ', function() {
         from: jasmine.any(String),
         to: 'test@test.com',
         subject: jasmine.any(String),
-        text: "Hi,\n please confirm your new account for Repcoin at this URL: http://repcoin.com/verify/test \n Thanks," + 
+        text: "Hi,\n please confirm your new account for Repcoin at this URL: " + urlConfig[process.env.NODE_ENV] + "verify/test \n Thanks," + 
               "\nThe Repcoin Team",
 
       });
