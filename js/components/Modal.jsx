@@ -1,65 +1,86 @@
-"use strict";
+'use strict';
 
-var React = require('react');
-var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
-var auth = require('../auth.jsx');
-var PubSub = require('pubsub-js');
 var $ = require('jquery');
+var auth = require('../auth.jsx');
+var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
+var PubSub = require('pubsub-js');
+var React = require('react');
 
 var Modal = React.createClass({
   mixins: [ModalMixin],
 
   getInitialState: function() {
-    return { error: "" };
+    return { give: true,
+             error: '' };
   },
 
-  validateAndCreateTransaction: function(
-    categoryName, reps, anonymous, giveOrRevoke
-  ) {
-    var transactionCategory;
-    for (var i = 0; i < this.props.user.categories.length; i++) {
-      var currentCategory = this.props.user.categories[i];
-      if (currentCategory.name === categoryName) {
-        transactionCategory = currentCategory;
+  // Validate a give
+  validateAndGive: function(category, amount, anonymous) {
+    // Validate that the category is possible
+    var category;
+    var categories = this.props.user.categories;
+    var length = categories.length;
+    for (var i = 0; i < length; i++) {
+      if (categories[i].name === category) {
+        category = categories[i];
+        break;
       }
     }
-    if (giveOrRevoke === 'give') {
-      if (!transactionCategory || transactionCategory.reps < reps) {
-        this.setState({error: true});
-      } else {
-        this.setState({error: false});
-        this.createTransaction(
-          this.props.user, this.props.currentUser, categoryName, reps,
-          anonymous);
-      }
-    } else {
-      var currentUserPortfolio = this.props.currentUser.portfolio;
-      for (var i = 0; i < currentUserPortfolio.length; i++) {
-        if (currentUserPortfolio[i].category === categoryName) {
-          var categoryInvestments = currentUserPortfolio[i].investments;
-          for (var j = 0; j < categoryInvestments.length; j++) {
-            // Confirm that the amount we are revoking is equal
-            // to some fraction of the valuation that matches reps values
-            var isValidSellAmount = reps % (categoryInvestments[i].valuation / categoryInvestments[i].amount) === 0;
-            if (
-              categoryInvestments[j].user === this.props.user.username &&
-              categoryInvestments[j].valuation > reps &&
-              isValidSellAmount && transactionCategory
-            ) {
-              this.setState({error: false});
-              this.createTransaction(
-                this.props.user, this.props.currentUser, categoryName, -reps,
-                anonymous);
-              return;
-            }
-          }
-        }
-      }
-      this.setState({error: true});
+    // If the category was not found, throw an error
+    if (!category) {
+      this.setState({error: 'Category was not found for ' + this.props.user.username });
+      return;
     }
+
+    // Get the portfolio index if the investment is possible
+    var portIndex = -1;
+    var portfolio = this.props.currentUser.portfolio;
+    length = portfolio.length;
+    for (var i = 0; i < length; i++) {
+      if (portfolio[i].category === category.name) {
+        portIndex = i;
+      }
+    }
+    if (portIndex === -1) {
+      this.setState({error: 'You are not an investor for ' + category.name });
+      return;
+    }
+  
+    // Make sure the investor has enough reps
+    var amount = parseInt(amount);
+    if (portfolio[portIndex].reps < amount) {
+      this.setState({error: 'You do not have enough reps!'});
+      return;
+    }
+
+    this.setState({error: null});
+    this.createTransaction(this.props.user, this.props.currentUser, 
+      category.name, amount, anonymous);
+  },
+ 
+
+  validateAndRevoke: function(number, amount, anonymous) {
+    var investmentList = this.getInvestmentList(); 
+    var number = parseInt(number);
+    var amount = parseInt(amount);
+    var investment = investmentList[number-1].investment;
+    var category = investmentList[number-1].category;
+ 
+    // Make sure this investment has at least the amount
+    if (investment.amount < amount) {
+      this.setState({ error: 'That investment only has ' + investment.amount + ' reps in it'});
+      return;
+    }
+
+    var id = investment._id;
+    this.setState({error: null });
+    this.createTransaction(this.props.user, this.props.currentUser, 
+      category, amount * -1, anonymous, id);
   },
 
-  createTransaction: function(toUser, fromUser, category, amount, anonymous) {
+  // Creates a transaction
+  // Amount should be negative if revoke
+  createTransaction: function(toUser, fromUser, category, amount, anonymous, investmentId) {
     var to = { "name": toUser.username, "id": toUser._id };
     var from = { "name": fromUser.username, "anonymous": anonymous, "id": fromUser._id };
     $.ajax({
@@ -71,6 +92,7 @@ var Modal = React.createClass({
         category: category,
         amount: amount,
         anonymous: anonymous,
+        id: investmentId,
       },
       success: function(transaction) {
         $.ajax({
@@ -96,12 +118,87 @@ var Modal = React.createClass({
 
   handleSubmit: function(event) {
     event.preventDefault();
-    var reps = Number(this.refs.amount.getDOMNode().value);
-    var categoryName = this.refs.category.getDOMNode().value;
+    var amount = Number(this.refs.amount.getDOMNode().value);
+    var choice = this.refs.choice.getDOMNode().value;
     var anonymous = this.refs.anonymous.getDOMNode().checked;
-    var giveOrRevoke = this.refs.giveOrRevoke.getDOMNode().value;
-    this.validateAndCreateTransaction(
-      categoryName, reps, anonymous, giveOrRevoke);
+
+    // Determine if we should give or revoke    
+    if (this.state.give) {
+      this.validateAndGive(choice, amount, anonymous);
+    } else {
+      this.validateAndRevoke(choice, amount, anonymous);
+    }
+  },
+
+  clickGive: function(e) {
+    this.setState({give: true });
+  },
+
+  clickRevoke: function(e) {
+    this.setState({give: false });
+  },
+
+  // Get all of the investments the currentUser has in this user
+  getInvestmentList: function() {
+    var investmentList = [];
+    var length = this.props.currentUser.portfolio.length;
+    var portfolio = this.props.currentUser.portfolio;
+    for (var i = 0; i < length; i++) {
+      var investments = portfolio[i].investments; 
+      var category = portfolio[i].category;
+      var len = investments.length;
+      for (var j = 0; j < len; j++) {
+        if (investments[j].user === this.props.user.username) {
+          investmentList.push({ investment: investments[j], category: category });
+        }
+      }
+    }
+    return investmentList;
+  },
+
+  // Get the rows for the investment table
+  getInvestmentTableRows: function(investmentList) {
+    var rows = [];
+    var length = investmentList.length;
+    var count = 1;
+    for (var i = 0; i < length; i++) {
+      rows.push(<tr key={investmentList[i]._id}>
+        <td>{count}</td>
+        <td>{investmentList[i].category}</td>
+        <td>{investmentList[i].investment.amount}</td>
+        <td>{investmentList[i].investment.valuation}</td>
+      </tr>);
+      count++;
+    }
+    return rows;
+  },
+
+  getInvestmentNumbers: function(investmentList) {
+    var investmentNumbers = [];
+    var length = investmentList.length;
+    for (var i = 0; i < length; i++) {
+      investmentNumbers.push(
+        <option key={i+1} value={i+1}>{i+1}</option>
+      );
+    }
+    return investmentNumbers;
+  },
+
+  getInvestmentCategories: function() {
+    // TODO: use the investmentList to create this and avoid too many loops
+    var portfolio = this.props.currentUser.portfolio;
+    var categories = this.props.user.categories;
+    var portLen = portfolio.length;
+    var catLen = categories.length;
+    var categoriesList = [];
+    for (var i = 0; i < catLen; i++) {
+      for (var j = 0; j < portLen; j++) {
+        if (portfolio[j].category === categories[i].name && portfolio[j].reps > 0) {
+          categoriesList.push(<option key={categories[i].id} value={categories[i].name}>{categories[i].name} ({portfolio[j].reps} available)</option>);
+        }
+      }
+    }
+    return categoriesList; 
   },
 
   render: function() {
@@ -109,39 +206,48 @@ var Modal = React.createClass({
       'zIndex': 1050,
     };
 
-    var error = this.state.error ? 'You don\'t have that many reps in that category':'';
-    var currentUserPortfolio = this.props.currentUser.portfolio;
-    var valuationTable = '';
-    var valuationData = [];
-    var categories = this.props.user.categories.map(function(category) {
-      for (var i = 0; i < currentUserPortfolio.length; i++) {
-        if (currentUserPortfolio[i].category === category.name && currentUserPortfolio[i].reps > 0) {
-          var categoryInvestments = currentUserPortfolio[i].investments;
-          for (var j = 0; j < categoryInvestments.length; j++) {
-            if (categoryInvestments[j].user === this.props.user.username) {
-              valuationData.push(<tr key={categoryInvestments[j]._id}>
-                <td>{category.name}</td>
-                <td>{categoryInvestments[j].amount}</td>
-                <td>{categoryInvestments[j].valuation}</td>
-              </tr>);
-            }
-          }
-          return <option key={category.id} value={category.name}>{category.name} ({currentUserPortfolio[i].reps})</option>;
-        }
-      }
-    }.bind(this));
-    if (valuationData.length > 0) {
-      valuationTable = (
+    var action = this.state.give ? 'Give' : 'Revoke'; // The text for the action button
+    var error = this.state.error ?
+      <div className="alert alert-danger" role="alert">
+        <p>{this.state.error}</p>
+      </div>  : ''; // The text for an error
+
+    var investmentList = this.getInvestmentList(); // The list of investments
+    var categories = this.getInvestmentCategories(); // The valid categories
+    var investmentNumbers = this.getInvestmentNumbers(investmentList); // The investment numbers
+
+    // The dropdown box will be investment numbers or categories 
+    var choiceText = this.state.give ? 'Categories:' : 'Investment Number:'; 
+    var choices = this.state.give ? categories : investmentNumbers;
+    var choiceDropdown =
+      <div className="choices-dropdown">
+        <strong className="modal_text">{choiceText}</strong>
+          <select ref="choice" className="form-control">
+            {choices}
+          </select>
+      </div>;
+
+    // Create the investment table if any investments exist
+    var investmentTable = '';
+    var investmentTableRows = this.getInvestmentTableRows(investmentList);
+    if (investmentTableRows.length > 0) {
+      investmentTable = (
         <table className="table table-bordered reps_table-nonfluid">
           <thead>
-            <tr><th>Category</th><th>Amount</th><th>Valuation</th></tr>
+            <tr>
+              <th>No.</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Valuation</th>
+            </tr>
           </thead>
           <tbody>
-            {valuationData}
+            {investmentTableRows}
           </tbody>
         </table>
       );
     }
+
     return (
       <div className="modal reps_modal">
         <div className="modal-dialog" style={modalStyleOverride}>
@@ -151,38 +257,36 @@ var Modal = React.createClass({
               <span><h3> {this.props.user.username} </h3></span>
             </div>
             <form onSubmit={this.handleSubmit} className="navbar-form">
-            <div className="modal-body container">
-                <div className="give-revoke-dropwdown">
-                  <select ref="giveOrRevoke"
-                    className="form-control give-revoke-select">
-                    <option value="give">Give</option>
-                    <option value="revoke">Revoke</option>
-                  </select>
-                </div>
-                <div className="categories-dropdown">
-                  <div className="reps_padder">
+            <div className="modal-body">
+                <div className="row">
+                  <div className="btn-group giverevoke" role="group">
+                    <button type="button" ref="give" className="givebtn btn btn-default givebtn" onClick={this.clickGive}>Give</button>
+                    <button type="button" ref="revoke" className="revokebtn btn btn-default" onClick={this.clickRevoke}>Revoke</button>
+                  </div>
+                  <div className="anonymous">
                     <strong>Anonymous</strong>: <input type="checkbox"
                       ref="anonymous" className="reps_checkbox" />
                   </div>
-                  <strong className="reps_form-label">Categories:</strong>
-                  <select ref="category" className="form-control">
-                    {categories}
-                  </select>
-                  <div className="reps_padder">
-                    <strong className="reps_form-label">Amount:</strong>
-                    <input
-                      type="text" placeholder="10"
-                      className="form-control reps_text-input" ref="amount">
-                    </input>
-                  </div>
-                  <div>
-                    <button type="submit" className="btn btn-lg btn-primary reps_invest-button">Invest</button>
-                  </div>
-
                 </div>
-                {valuationTable}
-                <div className="error">
-                  {error}
+                <div className="row">
+                  <div className="menu-options">
+                    {choiceDropdown}
+                    <div>
+                      <strong className="modal_text">Amount:</strong>
+                      <input type="text" placeholder="10" className="form-control reps_text-input" ref="amount"/>
+                    </div>
+                  </div>
+                  <div className="investmentTable panel panel-default">
+                    {investmentTable}
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="modal_submit">
+                    <button type="submit" className="btn btn-lg btn-primary">{action}</button>
+                  </div>
+                  <div className="modal_error">
+                    {error}
+                  </div>
                 </div>
               </div>
             </form>

@@ -356,22 +356,54 @@ html, body {
 }
 
 /* Modal ///////////////////////// */
+.modal-dialog {
+  width:650px;
+}
+
 .reps_modal table {
   width: auto;
   padding-left: 10px;
 }
 
-.reps_modal .categories-dropdown {
-  float: left;
+.reps_modal .choices-dropdown {
   padding-top: 10px;
   padding-bottom: 10px;
-  padding-right: 60px;
 }
 
 .reps_modal .reps_form-label {
   float: left;
 }
 
+.modal_submit {
+  display:inline-block;
+  width:
+}
+
+.modal_error {
+  float:right;
+}
+
+.modal_text {
+  padding-right:5px;
+  padding-top:10px;
+  padding-bottom:10px;
+}
+
+.menu-options {
+  float:left;
+}
+
+.anonymous {
+  float:right; 
+}
+
+.giverevoke {
+  display:inline;
+}
+
+.investmentTable {
+  float:right;
+}
 /* PictureUploadModal ////////////// */
 
 /* Hide file input */

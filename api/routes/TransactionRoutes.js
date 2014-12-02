@@ -11,6 +11,7 @@ module.exports = function(router, isAuthenticated) {
     var to = req.body.to;
     var amount = Number(req.body.amount);
     var categoryName = req.body.category;
+    var investmentId = req.body.id;
     var categoryIndex = -1;
     var portfolioIndex = -1;
 
@@ -73,9 +74,9 @@ module.exports = function(router, isAuthenticated) {
           return res.status(400).send("Unable to find portfolioIndex");
         }
         var portfolio = utils.updateInvestorPortfolio(fromUser.portfolio,
-          categoryName, to, amount, toUserCategoryTotal);
+          categoryName, to, amount, toUserCategoryTotal, investmentId);
         if (!portfolio) {
-          return res.status(400).send("Invalid transaction");
+          return res.status(400).send("Error updating portfolio");
         }
         fromUser.portfolio = portfolio;
         transaction.save(function(err) {

@@ -130,7 +130,7 @@ var utils = {
       var j = -1;   
       var length = portfolio[index].investments.length;
       for (var i = 0; i < length; i++) {
-        if (portfolio[index].investments[i]._id ===  id) {
+        if (String(portfolio[index].investments[i]._id) ===  String(id)) {
           j = i;
           break; 
         }
