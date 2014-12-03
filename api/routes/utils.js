@@ -5,6 +5,33 @@ var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 
 var utils = {
+  // Validate that the transaction inputs are valid
+  updateTransactionInputs: function(req) {
+    // Check that all of the inputs are present
+    if (!req.body.from ||
+        !req.body.from.id ||
+        !req.body.from.name ||
+        !req.body.to ||
+        !req.body.to.id ||
+        !req.body.to.name ||
+        !req.body.amount ||
+        !req.body.category) {
+      return false;
+    }
+
+    // Check that the amount is a valid integer
+    var amount = Number(req.body.amount);
+    if (isNaN(amount) || amount % 1 !== 0) {
+      return false;
+    }
+
+    // Check that there a revoke has an associated id
+    if (amount < 0 && !req.body.id) {
+      return false;
+    }
+    return true;
+  },
+
   // Sort users by ROI for a given category, increasing order
   getROIComparator: function(category) {
     return function(a, b) {

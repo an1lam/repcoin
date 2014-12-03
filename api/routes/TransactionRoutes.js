@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 var Category = require('../models/Category.js');
 var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
@@ -7,6 +7,11 @@ var utils = require('./utils.js');
 // Routes that end in /transactions
 module.exports = function(router, isAuthenticated) {
   function createTransaction(req, res) {
+    // Validate the inputs given to createTransaction
+    if (!utils.validateTransactionInputs(req)) {
+      return res.status(412).send('Invalid transaction inputs');
+    }
+
     var from = req.body.from;
     var to = req.body.to;
     var amount = Number(req.body.amount);
@@ -17,12 +22,12 @@ module.exports = function(router, isAuthenticated) {
 
     // Check that there is a user logged in
     if (!req.user) {
-      return res.status(400).send("No user logged in");
+      return res.status(400).send('No user logged in');
     }
 
     // Check that the user is the same as from
     if (req.user._id != req.body.from.id) {
-      return res.status(400).send("Incorrect user: " + from.name + "does not match " + req.user.username);
+      return res.status(400).send('Incorrect user: ' + from.name + 'does not match ' + req.user.username);
     }
 
     var transaction = new Transaction({
@@ -61,7 +66,7 @@ module.exports = function(router, isAuthenticated) {
           }
 
           if (categoryIndex === -1) {
-            return res.status(400).send("Unable to find corresponding category");
+            return res.status(400).send('Unable to find corresponding category');
           }
           toUser = utils.addInvestorToExpertCategory(touser, from.id, from.name, categoryIndex);
           return fromUserPromise;
@@ -71,12 +76,12 @@ module.exports = function(router, isAuthenticated) {
       }).then(function(fromUser) {
         portfolioIndex = utils.getPortfolioIndex(fromUser, categoryName);
         if (portfolioIndex === -1) {
-          return res.status(400).send("Unable to find portfolioIndex");
+          return res.status(400).send('Unable to find portfolioIndex');
         }
         var portfolio = utils.updateInvestorPortfolio(fromUser.portfolio,
           categoryName, to, amount, toUserCategoryTotal, investmentId);
         if (!portfolio) {
-          return res.status(400).send("Error updating portfolio");
+          return res.status(400).send('Error updating portfolio');
         }
         fromUser.portfolio = portfolio;
         transaction.save(function(err) {
