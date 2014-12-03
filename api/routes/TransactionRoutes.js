@@ -210,20 +210,20 @@ module.exports = function(router, isAuthenticated, acl) {
       });
    });
 
-  router.route('/transactions/users/:userId/all')
+  router.route('/transactions/users/:user_id/all')
     // Get all of the transactions to or from a given user
     .get(isAuthenticated, function(req, res) {
-      Transaction.findByUserIdAll(req.params.userId).then(function(transactions) {
+      Transaction.findByUserIdAll(req.params.user_id).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
         return res.status(503).send(err);
       });
     });
 
-  router.route('/transactions/users/:userId/all/public')
+  router.route('/transactions/users/:user_id/all/public')
     // Get all of the public transactions to or from a given user
     .get(isAuthenticated, function(req, res) {
-      Transaction.findByUserIdAllPublic(req.params.userId).then(function(transactions) {
+      Transaction.findByUserIdAllPublic(req.params.user_id).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
         return res.status(503).send(err);
@@ -232,9 +232,9 @@ module.exports = function(router, isAuthenticated, acl) {
 
 
   // Get all of the transactions to a given user
-  router.route('/transactions/users/:userId/to/public')
+  router.route('/transactions/users/:user_id/to/public')
     .get(isAuthenticated, function(req, res) {
-      Transaction.findByUserIdTo(req.params.userId).then(function(transactions) {
+      Transaction.findByUserIdTo(req.params.user_id).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
         return res.status(503).send(err);
@@ -242,9 +242,9 @@ module.exports = function(router, isAuthenticated, acl) {
     });
 
   // Get all of the transactions from a given user
-  router.route('/transactions/users/:userId/from')
+  router.route('/transactions/users/:user_id/from')
     .get(isAuthenticated, function(req, res) {
-      Transaction.findByUserIdFrom(req.params.userId).then(function(transactions) {
+      Transaction.findByUserIdFrom(req.params.user_id).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
         return res.status(503).send(err);
@@ -252,9 +252,9 @@ module.exports = function(router, isAuthenticated, acl) {
     });
 
   // Get all of the public transactions from a given user
-  router.route('/transactions/users/:userId/from/public')
+  router.route('/transactions/users/:user_id/from/public')
     .get(isAuthenticated, function(req, res) {
-      Transaction.findByUserIdFromPublic(req.params.userId).then(function(transactions) {
+      Transaction.findByUserIdFromPublic(req.params.user_id).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
         return res.status(503).send(err);
@@ -262,9 +262,9 @@ module.exports = function(router, isAuthenticated, acl) {
     });
 
   // Get all of the public transactions between users
-  router.route('/transactions/users/:userId/us/public')
+  router.route('/transactions/users/:user_id/us/public')
     .get(isAuthenticated, function(req, res) {
-      Transaction.findByUserIdUsPublic(req.params.userId).then(function(transactions) {
+      Transaction.findByUserIdUsPublic(req.params.user_id).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
         return res.status(503).send(err);

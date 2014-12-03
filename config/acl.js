@@ -27,6 +27,9 @@ var acl = {
 
   // Check if the user making a transaction is from or admin
   isAdminOrFrom: function(req, res, next) {
+    if (!req.body.from) {
+      return res.status(412).send('Invalid parameters to make transaction');
+    } 
     var fromId = req.body.from.id;
     var userId = req.session.passport.user;
     if (whitelist[userId] || (fromId === userId)) {

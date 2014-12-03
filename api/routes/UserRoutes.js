@@ -168,7 +168,7 @@ module.exports = function(router, isAuthenticated, acl) {
  
   /////////// Add an expert category if it is not already added
   router.route('/users/:user_id/expert')
-    .put(isAuthenticated, isAdminOrSelf, function(req, res) {
+    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
       User.findOneAndUpdate(
         {_id: req.params.user_id, "categories.name": {$ne: req.body.name}},
         {$push: {categories: req.body}},
@@ -197,7 +197,7 @@ module.exports = function(router, isAuthenticated, acl) {
  
   /////////// Add an investor category if it not already added
   router.route('/users/:user_id/investor')
-    .put(isAuthenticated, isAdminOrSelf, function(req, res) {
+    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
       User.findOneAndUpdate(
         {_id: req.params.user_id, "portfolio.category": {$ne: req.body.category}},
         {$push: { portfolio: req.body}},
