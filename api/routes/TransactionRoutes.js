@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 var Category = require('../models/Category.js');
 var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 var utils = require('./utils.js');
 
 // Routes that end in /transactions
-module.exports = function(router, isAuthenticated) {
+module.exports = function(router, isAuthenticated, acl) {
   function createTransaction(req, res) {
     var from = req.body.from;
     var to = req.body.to;
@@ -80,19 +80,19 @@ module.exports = function(router, isAuthenticated) {
         fromUser.portfolio = portfolio;
         transaction.save(function(err) {
           if (err) {
-            res.status(400).send(err);
+            return res.status(400).send(err);
           } else {
             toUser.save(function(err) {
               if (err) {
                 Transaction.findOneAndRemove({'id': transaction.id});
-                res.status(400).send(err);
+                return res.status(400).send(err);
               } else {
                 fromUser.save(function(err) {
                   if (err) {
                     Transaction.findOneAndRemove({'id': transaction.id});
                     toUser.categories[categoryIndex].reps -= amount;
                     toUser.save();
-                    res.status(400).send(err);
+                    return res.status(400).send(err);
                   } else {
                     category.save(function(err) {
                       if (err) {
@@ -101,7 +101,7 @@ module.exports = function(router, isAuthenticated) {
                         toUser.save();
                         fromUser.portfolio[portfolioIndex].reps += amount;
                         fromUser.save();
-                        res.status(400).send(err);
+                        return res.status(400).send(err);
                       } else {
                         // Update the expert percentiles
                         utils.updateExpertPercentiles(category.name, function(err) {
@@ -152,15 +152,15 @@ module.exports = function(router, isAuthenticated) {
     .get(isAuthenticated, function(req, res) {
       Transaction.find(function(err, transactions) {
         if (err) {
-          res.send(err);
+          return res.status(503).send(err);
         } else {
-          res.json(transactions);
+          return res.status(200).send(transactions);
         }
       });
     })
 
     // Create a new transaction
-    .post(isAuthenticated, function(req, res) {
+    .post(isAuthenticated, acl.isAdminOrFrom, function(req, res) {
       createTransaction(req, res);
     });
 
@@ -170,18 +170,18 @@ module.exports = function(router, isAuthenticated) {
     .get(isAuthenticated, function(req, res) {
       Transaction.findById(req.params.transaction_id, function(err, transaction) {
         if (err) {
-          res.status(400).send(err);
+          return res.status(503).send(err);
         } else {
-          res.send(transaction);
+          return res.status(200).send(transaction);
         }
       });
     })
 
     // Update the transaction with this id
-    .put(isAuthenticated, function(req, res) {
+    .put(isAuthenticated, acl.isAdmin, function(req, res) {
       Transaction.findById(req.params.transaction_id, function(err, transaction) {
         if (err) {
-          res.status(400).send(err);
+          return res.status(503).send(err);
         } else {
           transaction.to          = req.body.to;
           transaction.from        = req.body.from;
@@ -189,9 +189,9 @@ module.exports = function(router, isAuthenticated) {
           transaction.category    = req.body.category;
           transaction.save(function(err) {
             if (err) {
-              res.status(400).send(err);
+              return res.status(503).send(err);
             } else {
-              res.send(transaction);
+              return res.status(200).send(transaction);
             }
           });
         }
@@ -199,13 +199,13 @@ module.exports = function(router, isAuthenticated) {
     })
 
    // Delete the transaction with this id
-   .delete(isAuthenticated, function(req, res) {
+   .delete(isAuthenticated, acl.isAdmin, function(req, res) {
       // Remove the transaction
       Transaction.remove({ _id: req.params.transaction_id }, function(err, transaction) {
         if (err) {
-          res.send(err);
+          return res.status(503).send(err);
         } else {
-          res.send('Successfully deleted transaction');
+          return res.status(200).send('Successfully deleted transaction');
         }
       });
    });
@@ -214,9 +214,9 @@ module.exports = function(router, isAuthenticated) {
     // Get all of the transactions to or from a given user
     .get(isAuthenticated, function(req, res) {
       Transaction.findByUserIdAll(req.params.userId).then(function(transactions) {
-        res.send(transactions);
+        return res.status(200).send(transactions);
       }, function(err) {
-        res.status(501).send(err);
+        return res.status(503).send(err);
       });
     });
 
@@ -224,9 +224,9 @@ module.exports = function(router, isAuthenticated) {
     // Get all of the public transactions to or from a given user
     .get(isAuthenticated, function(req, res) {
       Transaction.findByUserIdAllPublic(req.params.userId).then(function(transactions) {
-        res.send(transactions);
+        return res.status(200).send(transactions);
       }, function(err) {
-        res.status(501).send(err);
+        return res.status(503).send(err);
       });
     });
 
@@ -235,9 +235,9 @@ module.exports = function(router, isAuthenticated) {
   router.route('/transactions/users/:userId/to/public')
     .get(isAuthenticated, function(req, res) {
       Transaction.findByUserIdTo(req.params.userId).then(function(transactions) {
-        res.send(transactions);
+        return res.status(200).send(transactions);
       }, function(err) {
-        res.status(501).send(err);
+        return res.status(503).send(err);
       });
     });
 
@@ -245,9 +245,9 @@ module.exports = function(router, isAuthenticated) {
   router.route('/transactions/users/:userId/from')
     .get(isAuthenticated, function(req, res) {
       Transaction.findByUserIdFrom(req.params.userId).then(function(transactions) {
-        res.send(transactions);
+        return res.status(200).send(transactions);
       }, function(err) {
-        res.status(501).send(err);
+        return res.status(503).send(err);
       });
     });
 
@@ -255,9 +255,9 @@ module.exports = function(router, isAuthenticated) {
   router.route('/transactions/users/:userId/from/public')
     .get(isAuthenticated, function(req, res) {
       Transaction.findByUserIdFromPublic(req.params.userId).then(function(transactions) {
-        res.send(transactions);
+        return res.status(200).send(transactions);
       }, function(err) {
-        res.status(501).send(err);
+        return res.status(503).send(err);
       });
     });
 
@@ -265,9 +265,9 @@ module.exports = function(router, isAuthenticated) {
   router.route('/transactions/users/:userId/us/public')
     .get(isAuthenticated, function(req, res) {
       Transaction.findByUserIdUsPublic(req.params.userId).then(function(transactions) {
-        res.send(transactions);
+        return res.status(200).send(transactions);
       }, function(err) {
-        res.status(501).send(err);
+        return res.status(503).send(err);
       });
     });
 
@@ -275,9 +275,9 @@ module.exports = function(router, isAuthenticated) {
   router.route('/transactions/categories/:categoryName')
     .get(isAuthenticated, function(req, res) {
       Transaction.findByCategory(req.params.categoryName).then(function(transactions) {
-        res.send(transactions);
+        return res.status(200).send(transactions);
       }, function(err) {
-        res.status(501).send(err);
+        return res.status(503).send(err);
       });
     });
 };

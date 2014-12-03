@@ -12,24 +12,24 @@ module.exports = function(router, passport) {
   */
   router.route('/loggedin')
     .get(function(req, res) {
-      res.send(req.isAuthenticated());
+      return res.send(req.isAuthenticated());
     });
 
   // Get the current user. Null if no user logged in
   router.route('/user')
     .get(function(req, res) {
-      res.send(req.user);
+      return res.send(req.user);
     });
 
   router.route('/login')
     .post(passport.authenticate('local'), function(req, res) {
        var user = req.user || {};
-       res.send(user);
+       return res.send(user);
     });
 
   router.route('/logout')
     .post(function(req, res) {
       req.logout();
-      res.status(200).end();
+      return res.status(200).end();
     });
 };

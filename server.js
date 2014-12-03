@@ -36,7 +36,6 @@ console.log('Serving static files from ' + __dirname + '/public');
 app.set('views', STATIC_PATH);
 app.engine('.html', require('jade').__express);
 
-
 app.use(session({
   secret: 'ubermensch',
   resave: true,
@@ -51,11 +50,14 @@ app.get('/', function(req, res) {
   res.render('index.html');
 });
 
+// ACL middleware
+var acl = require('./config/acl.js');
+
 /////////// Routes /////////////////////////
 
 // Users
 var userRouter = express.Router();
-var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth);
+var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth, acl);
 
 // Categories
 var categoryRouter = express.Router();

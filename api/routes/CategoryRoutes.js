@@ -5,24 +5,21 @@ var Category = require('../models/Category.js');
 
 // Routes that end in /categories
 // -------------------------------------------------------------
-module.exports = function(router, isAuthenticated) {
+module.exports = function(router, isAuthenticated, acl) {
   router.route('/categories')
     // Get all the categories
     .get(isAuthenticated, function(req, res) {
       if (req.query.searchTerm) {
         Category.findBySearchTerm(req.query.searchTerm).then(function(categories) {
-          res.json(categories);
-          return;
+          return res.status(200).send(categories);
         }, function(err) {
-          res.status(501).send(err);
+          return res.status(503).send(err);
         });
       } else {
         Category.find().exec().then(function(categories) {
-          res.json(categories);
-          return;
+          return res.status(200).send(categories);
         }, function(err) {
-          res.status(501).send(err);
-          return;
+          return res.status(503).send(err);
         });
       }
     })
@@ -42,9 +39,9 @@ module.exports = function(router, isAuthenticated) {
 
       category.save( function(err) {
         if (err) {
-          res.status(400).send(err);
+          return res.status(503).send(err);
         } else {
-          res.send(category);
+          return res.status(200).send(category);
         }
       });
     });
@@ -54,9 +51,9 @@ router.route('/categories/:categoryName')
   // Get the category with this name
   .get(isAuthenticated, function(req, res) {
     Category.findByName(req.params.categoryName).then(function(category) {
-      res.send(category);
+      return res.status(200).send(category);
     }, function(err) {
-      res.status(501).send(err);
+      return res.status(503).send(err);
     });
   });
 
@@ -66,18 +63,21 @@ router.route('/categories/:categoryName')
     .get(isAuthenticated, function(req, res) {
       Category.findById(req.params.category_id, function(err, category) {
         if (err) {
-          res.status(400).send(err);
+          return res.status(503).send(err);
         } else {
-          res.send(category);
+          return res.status(200).send(category);
         }
       });
     })
 
     // Update the category with this id
-    .put(isAuthenticated, function(req, res) {
+    // TODO: Create separate routes so some users can update safe category parts
+    .put(isAuthenticated, acl.isAdmin, function(req, res) {
       Category.findById(req.params.category_id, function(err, category) {
         if (err) {
-          res.status(400).send(err);
+          return res.status(503).send(err);
+        } else if (!category) {
+          return res.status(503).send('No category was found');
         } else {
           category.name       = req.body.name || category.name;
           category.color      = req.body.color || category.color;
@@ -87,9 +87,9 @@ router.route('/categories/:categoryName')
           category.investors  = req.body.investors || category.investors; 
           category.save(function(err) {
             if (err) {
-              res.status(400).send(err);
+              return res.status(503).send(err);
             } else {
-              res.send(category);
+              return res.status(200).send(category);
             }
           });
         }
@@ -97,13 +97,13 @@ router.route('/categories/:categoryName')
     })
 
     // Delete the category with this id
-    .delete(isAuthenticated, function(req, res) {
+    .delete(isAuthenticated, acl.isAdmin, function(req, res) {
        // Remove the category
        Category.remove({ _id: req.params.category_id }, function(err, category) {
          if (err) {
-           res.send(err);
+           return res.status(503).send(err);
          } else {
-           res.send('Successfully deleted category');
+           return res.status(200).send('Successfully deleted category');
          }
        });
     });
