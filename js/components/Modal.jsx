@@ -122,6 +122,12 @@ var Modal = React.createClass({
     var choice = this.refs.choice.getDOMNode().value;
     var anonymous = this.refs.anonymous.getDOMNode().checked;
 
+    // Make sure a valid number was entered
+    if (isNaN(amount) || amount % 1 !== 0) {
+      this.setState({ error: 'Amount must be a valid integer'});
+      return;
+    }
+
     // Determine if we should give or revoke    
     if (this.state.give) {
       this.validateAndGive(choice, amount, anonymous);
