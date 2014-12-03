@@ -274,12 +274,16 @@ html, body {
 }
 
 /* Set the fixed height of the footer here */
-#footer {
+.footer {
   height: 60px;
   width:100%;
   position:absolute;
   bottom:0;
   left:0;
+}
+
+.footerrow {
+  margin-top:100px;
 }
 
 .categoriesHeader {

@@ -8,7 +8,7 @@ var Link = Router.Link;
 var Footer = React.createClass({
   render: function() {
     return (
-<div className="navbar navbar-default btn-group navbar-fixed-bottom" role="navigation" id="footer">
+<div className="footer navbar navbar-default btn-group navbar-fixed-bottom" role="navigation">
         <div className="container-fluid">
           <ul className="nav navbar-nav navbar-right">
             <li><Link to="home">Home</Link></li>
