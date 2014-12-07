@@ -36,7 +36,6 @@ console.log('Serving static files from ' + __dirname + '/public');
 app.set('views', STATIC_PATH);
 app.engine('.html', require('jade').__express);
 
-
 app.use(session({
   secret: 'ubermensch',
   resave: true,
@@ -51,15 +50,18 @@ app.get('/', function(req, res) {
   res.render('index.html');
 });
 
+// ACL middleware
+var acl = require('./config/acl.js');
+
 /////////// Routes /////////////////////////
 
 // Users
 var userRouter = express.Router();
-var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth);
+var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth, acl);
 
 // Categories
 var categoryRouter = express.Router();
-var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth);
+var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth, acl);
 
 // Authentication
 var authRouter = express.Router();
@@ -67,7 +69,7 @@ var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
 
 // Transactions
 var transactionRouter = express.Router();
-var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transactionRouter, auth);
+var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transactionRouter, auth, acl);
 
 // Uploads
 var uploadsRouter = express.Router();
