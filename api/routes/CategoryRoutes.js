@@ -58,6 +58,29 @@ router.route('/categories/:categoryName')
   });
 
 ///////// Routes that have /categories/:category_id ////////
+  router.route('/categories/:category_id/public')
+    // Update the category with this id, only public fields are possible
+    .put(isAuthenticated, function(req, res) {
+      Category.findById(req.params.category_id, function(err, category) {
+        if (err) {
+          return res.status(503).send(err);
+        } else if (!catgory) {
+          return res.status(503).send('No category was found');
+        } else {
+          category.color      = req.body.color || category.color;
+          category.ownerName  = req.body.ownerName || category.ownerName;
+          category.quotes     = req.body.quotes || category.quotes;
+          category.save(function(err) {
+            if (err) {
+              return res.status(503).send(err);
+            } else {
+              return res.status(200).send(category);
+            }
+          });
+        }
+      });
+    })
+
   router.route('/categories/:category_id')
     // Get the category with this id
     .get(isAuthenticated, function(req, res) {
