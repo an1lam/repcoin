@@ -85,7 +85,7 @@ var SearchPage = React.createClass({
             {results}
           </div>
         </div>
-        <div className="row">
+        <div className="row footerrow">
           <Footer />
         </div>
       </div>
