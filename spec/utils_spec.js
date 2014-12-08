@@ -6,6 +6,49 @@ var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 
 describe('Utils: ', function() {
+  describe('updateTransactionInputs: ', function() {
+    it('returns true if inputs are correct', function() {
+      var req = { body : {
+        from      : { id: '1', name: 'foo' },
+        to        : { id: '2', name: 'bar' },
+        amount    : 10,
+        category  : 'foo'
+      }};
+
+      var result = utils.updateTransactionInputs(req);
+      expect(result).toEqual(true);  
+    });
+
+    it('returns false if amount is incorrect', function() {
+      var req = { body : {
+        from      : { id: '1', name: 'foo' },
+        to        : { id: '2', name: 'bar' },
+        amount    : 10.1,
+        category  : 'foo'
+      }};
+
+      var result = utils.updateTransactionInputs(req);
+      expect(result).toEqual(false);  
+
+      req.body.amount = 'foo';
+      var result = utils.updateTransactionInputs(req);
+      expect(result).toEqual(false);  
+    });
+
+    it('returns false if no id is supplied for a revoke', function() {
+      var req = { body : {
+        from      : { id: '1', name: 'foo' },
+        to        : { id: '2', name: 'bar' },
+        amount    : -1,
+        category  : 'foo'
+      }};
+
+      var result = utils.updateTransactionInputs(req);
+      expect(result).toEqual(false);  
+    });
+
+  });
+
   describe('updateExpertPercentiles: ', function() {
     beforeEach(function() {
       cb = jasmine.createSpy();
