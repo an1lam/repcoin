@@ -1,10 +1,10 @@
-// Routes to manipulate Users
+'use strict';
 var User = require('../models/User.js');
 var utils = require('./utils.js');
 
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
-module.exports = function(router, isAuthenticated) {
+module.exports = function(router, isAuthenticated, acl) {
   router.route('/users/list/byids')
     // Get all of the users for the given list
     .get(isAuthenticated, function(req, res) {
@@ -27,9 +27,9 @@ module.exports = function(router, isAuthenticated) {
       if (req.query.searchTerm) {
         User.findBySearchTerm(req.query.searchTerm, function(err, users) {
           if (err) {
-            res.send(err);
+            return res.status(501).send(err);
           } else {
-            res.json(users);
+            return res.status(200).send(users);
           }
         });
       }
@@ -38,9 +38,9 @@ module.exports = function(router, isAuthenticated) {
       else {
         User.find(function(err, users) {
           if (err) {
-            res.send(err);
+            return res.status(501).send(err);
           } else {
-            res.json(users);
+            return res.status(200).send(users);
           }
         });
       }
@@ -61,27 +61,27 @@ module.exports = function(router, isAuthenticated) {
           // Mongoose validation errors are put in err.errors
           if (err.errors) {
             if (err.errors.phoneNumber) {
-              res.status(501).send(err.errors.phoneNumber.message);
+              return res.status(501).send(err.errors.phoneNumber.message);
             } else if (err.errors.password) {
-              res.status(501).send(err.errors.password.message);
+              return res.status(501).send(err.errors.password.message);
             } else {
-              res.status(501).send("Fields cannot be blank");
+              return res.status(501).send("Fields cannot be blank");
             }
           // If the error is not from Mongoose, try parsing MongoDB errors
           } else if (err.err.indexOf('email') !== -1) {
-            res.status(501).send("Email is already taken");
+            return res.status(501).send("Email is already taken");
           } else if (err.err.indexOf('phoneNumber') !== -1) {
-            res.status(501).send("Phone number is already taken");
+            return res.status(501).send("Phone number is already taken");
           // Otherwise, send back generic "Error" message
           } else {
-            res.status(501).send("Error");
+            return res.status(501).send("Error");
           }
         } else {
           req.login(user, function(err) {
             if (err) {
-              res.status(400).send(err);
+              return res.status(400).send(err);
             } else {
-              res.send(user);
+              return res.status(200).send(user);
             }
           });
         }
@@ -93,20 +93,24 @@ module.exports = function(router, isAuthenticated) {
     // Get the user with the provided id
     .get(isAuthenticated, function(req, res) {
       User.findById(req.params.user_id, function(err, user) {
-        if (err){
-          res.send(err);
+        if (err) {
+          return res.status(501).send(err);
+        } else if (!user) {
+          return res.status(501).send('No user was found');
         } else {
-          res.send(user);
+          return res.status(200).send(user);
         }
       });
     })
 
     // Update the user with this id
     // This route cannot be used to change the user's categories or portfolio
-    .put(isAuthenticated, function(req, res) {
+    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
       User.findById(req.params.user_id, function(err, user) {
         if (err) {
-          res.send(err);
+          return res.status(501).send(err);
+        } else if (!user) {
+          return res.status(501).send('No user was found');
         } else {
           user.about            = req.body.about || user.about;
           user.username         = req.body.username || user.username;
@@ -125,9 +129,9 @@ module.exports = function(router, isAuthenticated) {
 
           user.save(function(err) {
             if (err) {
-              res.send(err);
+              return res.status(501).send(err);
             } else {
-              res.send(user);
+              return res.status(200).send(user);
             }
           });
         }
@@ -135,13 +139,15 @@ module.exports = function(router, isAuthenticated) {
     })
 
     // Delete the user with this id
-    .delete(isAuthenticated, function(req, res) {
+    .delete(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
        // Remove the user
        User.remove({ _id: req.params.user_id }, function(err, user) {
          if (err) {
-           res.send(err);
+           return res.status(501).send(err);
+         } else if (!user) {
+           return res.status(501).send('No user was found');
          } else {
-           res.send('Successfully deleted user');
+           return res.status(200).send('Successfully deleted user');
          }
        });
     });
@@ -161,10 +167,10 @@ module.exports = function(router, isAuthenticated) {
     });
  
   /////////// Add an expert category if it is not already added
-  router.route('/users/:userId/expert')
-    .put(isAuthenticated, function(req, res) {
+  router.route('/users/:user_id/expert')
+    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
       User.findOneAndUpdate(
-        {_id: req.params.userId, "categories.name": {$ne: req.body.name}},
+        {_id: req.params.user_id, "categories.name": {$ne: req.body.name}},
         {$push: {categories: req.body}},
         function(err, user) {
           if (err) {
@@ -176,7 +182,7 @@ module.exports = function(router, isAuthenticated) {
               if (err) {
                 return res.status(501).send(err);
               } else {
-                User.findById(req.params.userId, function(err, user) {
+                User.findById(req.params.user_id, function(err, user) {
                   if (err) {
                     return res.status(501).send(err);
                   } else {
@@ -190,10 +196,10 @@ module.exports = function(router, isAuthenticated) {
     });
  
   /////////// Add an investor category if it not already added
-  router.route('/users/:userId/investor')
-    .put(isAuthenticated, function(req, res) {
+  router.route('/users/:user_id/investor')
+    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
       User.findOneAndUpdate(
-        {_id: req.params.userId, "portfolio.category": {$ne: req.body.category}},
+        {_id: req.params.user_id, "portfolio.category": {$ne: req.body.category}},
         {$push: { portfolio: req.body}},
         function(err, user) {
           if (err) {
@@ -205,7 +211,7 @@ module.exports = function(router, isAuthenticated) {
               if (err) {
                 return res.status(501).send(err);
               } else {
-                User.findById(req.params.userId, function(err, user) {
+                User.findById(req.params.user_id, function(err, user) {
                   if (err) {
                     return res.status(501).send(err);
                   } else {
