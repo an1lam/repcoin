@@ -11,7 +11,7 @@ module.exports = function(router, isAuthenticated, acl) {
       if (!req.query.idList) {
         return res.status(501).send("No id list provided");
       }
-      User.find({ '_id': { $in: req.query.idList }}, function(err, users) {
+      User.findPublic({ '_id': { $in: req.query.idList }}, function(err, users) {
         if (err) {
           return res.status(501).send(err);
         } else {
@@ -25,7 +25,7 @@ module.exports = function(router, isAuthenticated, acl) {
     .get(isAuthenticated, function(req, res) {
       // Check if we want to get the users with a search term
       if (req.query.searchTerm) {
-        User.findBySearchTerm(req.query.searchTerm, function(err, users) {
+        User.findBySearchTermPublic(req.query.searchTerm, function(err, users) {
           if (err) {
             return res.status(501).send(err);
           } else {
@@ -36,7 +36,7 @@ module.exports = function(router, isAuthenticated, acl) {
  
       // Get the users normally
       else {
-        User.find(function(err, users) {
+        User.findPublic({}, function(err, users) {
           if (err) {
             return res.status(501).send(err);
           } else {
@@ -92,7 +92,7 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/users/:user_id')
     // Get the user with the provided id
     .get(isAuthenticated, function(req, res) {
-      User.findById(req.params.user_id, function(err, user) {
+      var cb = function(err, user) {
         if (err) {
           return res.status(501).send(err);
         } else if (!user) {
@@ -100,7 +100,16 @@ module.exports = function(router, isAuthenticated, acl) {
         } else {
           return res.status(200).send(user);
         }
-      });
+      };
+
+      // TODO: flesh out acl to work not just as middleware to avoid repetition
+      // Return all fields if the user requested is the requesting
+      if (req.params.user_id === req.session.passport.user) {
+        User.findById(req.params.user_id, cb);
+      } else {
+        // Otherwise, return only public information
+        User.findByIdPublic(req.params.user_id, cb);
+      }
     })
 
     // Update the user with this id
@@ -155,7 +164,7 @@ module.exports = function(router, isAuthenticated, acl) {
   ///////// Get n leaders for a category ///////
   router.route('/users/:categoryName/leaders/:count')
     .get(isAuthenticated, function(req, res) {
-      User.findNLeaders(req.params.categoryName, parseInt(req.params.count), function(err, leaders) {
+      User.findNLeadersPublic(req.params.categoryName, parseInt(req.params.count), function(err, leaders) {
         if (err) {
           return res.status(400).send(err);
         } else {
