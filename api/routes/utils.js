@@ -1,10 +1,52 @@
-"use strict";
+'use strict';
 
 var Category = require('../models/Category.js');
 var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 
 var utils = {
+  // Validate an array of user links
+  validateUserLinks: function(links) {
+    var length = links.length;
+    for (var i = 0; i < length; i++) {
+      var link = links[i];
+
+      // Check the title
+      if (!link.title || link.title.length > 50 || link.title.trim().length === 0) {
+        return false;
+      }
+      // Check the url
+      if (!link.url || link.url.length > 2083 || link.url.trim().length === 0) {
+        return false;
+      }
+    }
+    return true;
+  },
+
+  // Validate inputs to update a user
+  // TODO: Add more checks
+  validateUserInputs: function(req) {
+    // About must be less than 200 characters and cannot be whitespace
+    if (req.body.about) {
+      if (req.body.about.trim().length === 0 ||
+          req.body.about.length > 200) {
+        return false;
+      }
+    }
+    return true;
+  },
+
+  // Validate inputs to create a new category
+  validateCategoryInputs: function(req) {
+    // Check that all of the inputs are presemnt
+    if (!req.body.name ||
+        !req.body.ownerName ||
+        !req.body.quotes) {
+      return false;
+    }
+    return true;
+  },
+
   // Validate that the transaction inputs are valid
   updateTransactionInputs: function(req) {
     // Check that all of the inputs are present
@@ -256,7 +298,7 @@ var utils = {
     // Set the index for the 0th expert
     var index = this.getPortfolioIndex(investors[0], category);
     if (index === -1) {
-      return cb("Could not find portfolio index for user " + investors[0].username);
+      return cb('Could not find portfolio index for user ' + investors[0].username);
     }
     indexDict[investors[0]._id] = index;
 
@@ -267,7 +309,7 @@ var utils = {
     for (var i = 1; i < length; i += 1) {
       index = this.getPortfolioIndex(investors[i], category);
       if (index === -1) {
-        return cb("Could not find portfolio index for user " + investors[i].username);
+        return cb('Could not find portfolio index for user ' + investors[i].username);
       }
       indexDict[investors[i]._id] = index;
 
@@ -313,7 +355,7 @@ var utils = {
     // Set the index for the 0th expert
     var index = this.getCategoryIndex(experts[0], category);
     if (index === -1) {
-      return cb("Could not find category index for user " + experts[0].username);
+      return cb('Could not find category index for user ' + experts[0].username);
     }
     indexDict[experts[0]._id] = index;
 
@@ -323,7 +365,7 @@ var utils = {
     for (var i = 1; i < length; i += 1) {
       index = this.getCategoryIndex(experts[i], category);
       if (index === -1) {
-        return cb("Could not find category index for user " + experts[i].username);
+        return cb('Could not find category index for user ' + experts[i].username);
       }
       indexDict[experts[i]._id] = index;
 

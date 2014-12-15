@@ -2,6 +2,7 @@
 // Routes to manipulate categories
 
 var Category = require('../models/Category.js');
+var utils = require('./utils.js');
 
 // Routes that end in /categories
 // -------------------------------------------------------------
@@ -26,6 +27,11 @@ module.exports = function(router, isAuthenticated, acl) {
 
     // Create a new category
     .post(isAuthenticated, function(req, res) {
+      // Validate the inputs
+      if (!utils.validateCategoryInputs(req)) {
+        return res.status(412).send('Invalid inputs');
+      }
+
       var category = new Category({
         name        : req.body.name,
         ownerName   : req.body.ownerName,
