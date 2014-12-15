@@ -98,18 +98,16 @@ module.exports = function(router, isAuthenticated, acl) {
             transporter.sendMail(mailOptions, function(err, info) {
               if (err) {
                 res.status(404).send("Unable to send verification email");
+              } else {
+                res.send(200);
               }
-
             });
           });
-
-          req.login(user, function(err) {
-            if (err) {
-              return res.status(400).send(err);
-            } else {
-              return res.status(200).send(user);
-            }
-          });
+          /* New Behavior: Send the email and redirect the user to a totally different screen.
+          * On the backend, this simply means sending a status of 200.
+          * On the frontend, our router should redirect the user to a page stating we have sent
+          * them a confirmation email.
+          * */
         }
       });
     });

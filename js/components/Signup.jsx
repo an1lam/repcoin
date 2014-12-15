@@ -22,13 +22,13 @@ var Signup = React.createClass({
     var password = this.refs.password.getDOMNode().value;
     var password2 = this.refs.password2.getDOMNode().value;
     var data = { firstname: firstname, lastname: lastname, email: email, phoneNumber: phoneNumber, password: password };
-   
+
     if (email !== email2) {
       this.setState({ error: 'Emails do not match' });
       return;
     }
     if (password !== password2) {
-      this.setState({ error: 'Passwords do not match' })
+      this.setState({ error: 'Passwords do not match' });
       return;
     }
 
@@ -36,10 +36,10 @@ var Signup = React.createClass({
       url: '/api/users',
       type: 'POST',
       data: data,
-      success: function(user) {
-        auth.storeCurrentUser(user, function(user) {
-          this.transitionTo('/home');
-        }.bind(this));
+      success: function() {
+        // Redirect
+        debugger;
+        this.transitionTo("/confirmation");
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText !== "Error") {

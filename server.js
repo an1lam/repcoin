@@ -100,7 +100,7 @@ var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
 
 // Categories
 var categoryRouter = express.Router();
-var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth);
+var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth, acl);
 
 // Transactions
 var transactionRouter = express.Router();
@@ -108,11 +108,11 @@ var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transaction
 
 // Uploads
 var uploadsRouter = express.Router();
-var uploadRoutes = require('./api/routes/UploadRoutes.js')(uploadsRouter, auth);
+var uploadRoutes = require('./api/routes/UploadRoutes.js')(uploadsRouter, auth, acl);
 
 // Users
 var userRouter = express.Router();
-var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth);
+var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth, acl);
 
 app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter, uploadsRouter ]);
 
