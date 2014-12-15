@@ -6,6 +6,64 @@ var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 
 describe('Utils: ', function() {
+  describe('validateUserLinks: ', function() {
+    it('returns true if inputs are correct', function() {
+      var links = [
+        { title: 'foo', url: 'bar' },
+        { title: 'blue', url: 'red' }
+      ];
+      var result = utils.validateUserLinks(links);
+      expect(result).toEqual(true);
+    });
+
+    it('returns false if a title is incorrect', function() {
+      var links = [
+        { title: '', url: 'bar' },
+        { title: 'blue', url: 'red' }
+      ];
+      var result = utils.validateUserLinks(links);
+      expect(result).toEqual(false);
+
+      links = [
+        { url: 'bar' },
+        { title: 'blue', url: 'red' }
+      ];
+      result = utils.validateUserLinks(links);
+      expect(result).toEqual(false);
+    });
+
+    it('returns false if a url is incorrect', function() {
+      var links = [
+        { title: 'foo', url: '' },
+        { title: 'blue', url: 'red' }
+      ];
+      var result = utils.validateUserLinks(links);
+      expect(result).toEqual(false);
+
+      links = [
+        { title: 'foo' },
+        { title: 'blue', url: 'red' }
+      ];
+      result = utils.validateUserLinks(links);
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('validateUserInputs: ', function() {
+    it('returns true if inputs are correct', function() {
+      var req = { body: { about: 'Hello!' }};
+      var result = utils.validateUserInputs(req);
+      expect(result).toEqual(true);
+    });
+
+    it('returns false if about is incorrect', function() {
+      var req = { body: { about: '    ' }};
+      var result = utils.validateUserInputs(req);
+      expect(result).toEqual(false);
+    });
+
+  });
+
   describe('updateTransactionInputs: ', function() {
     it('returns true if inputs are correct', function() {
       var req = { body : {

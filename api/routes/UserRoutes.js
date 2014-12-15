@@ -9,7 +9,7 @@ module.exports = function(router, isAuthenticated, acl) {
     // Get all of the users for the given list
     .get(isAuthenticated, function(req, res) {
       if (!req.query.idList) {
-        return res.status(501).send("No id list provided");
+        return res.status(412).send('No id list provided');
       }
       User.find({ '_id': { $in: req.query.idList }}, function(err, users) {
         if (err) {
@@ -65,16 +65,16 @@ module.exports = function(router, isAuthenticated, acl) {
             } else if (err.errors.password) {
               return res.status(501).send(err.errors.password.message);
             } else {
-              return res.status(501).send("Fields cannot be blank");
+              return res.status(501).send('Fields cannot be blank');
             }
           // If the error is not from Mongoose, try parsing MongoDB errors
           } else if (err.err.indexOf('email') !== -1) {
-            return res.status(501).send("Email is already taken");
+            return res.status(501).send('Email is already taken');
           } else if (err.err.indexOf('phoneNumber') !== -1) {
-            return res.status(501).send("Phone number is already taken");
-          // Otherwise, send back generic "Error" message
+            return res.status(501).send('Phone number is already taken');
+          // Otherwise, send back generic 'Error' message
           } else {
-            return res.status(501).send("Error");
+            return res.status(501).send('Error');
           }
         } else {
           req.login(user, function(err) {
@@ -106,6 +106,10 @@ module.exports = function(router, isAuthenticated, acl) {
     // Update the user with this id
     // This route cannot be used to change the user's categories or portfolio
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
+      if (!utils.validateUserInputs(req)) {
+        return res.status(412).send('Invalid inputs');
+      }
+
       User.findById(req.params.user_id, function(err, user) {
         if (err) {
           return res.status(501).send(err);
@@ -120,7 +124,10 @@ module.exports = function(router, isAuthenticated, acl) {
           user.picture          = req.body.picture || user.picture;
 
           if (req.body.links) {
-            if (req.body.links[0] == "EMPTY") {
+            if (!utils.validateUserLinks(req.body.links)) {
+              return res.status(412).send('Invalid link inputs');
+            } 
+            if (req.body.links[0] == 'EMPTY') {
               user.links = [];
             } else {
               user.links = req.body.links;
@@ -170,13 +177,13 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/users/:user_id/expert')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
       User.findOneAndUpdate(
-        {_id: req.params.user_id, "categories.name": {$ne: req.body.name}},
+        {_id: req.params.user_id, 'categories.name': {$ne: req.body.name}},
         {$push: {categories: req.body}},
         function(err, user) {
           if (err) {
             return res.status(501).send(err);
           } else if (!user) {
-            return res.status(501).send("User is already an expert for this category");
+            return res.status(501).send('User is already an expert for this category');
           } else {
             utils.updateExpertPercentiles(req.body.name, function(err) {
               if (err) {
@@ -199,13 +206,13 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/users/:user_id/investor')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
       User.findOneAndUpdate(
-        {_id: req.params.user_id, "portfolio.category": {$ne: req.body.category}},
+        {_id: req.params.user_id, 'portfolio.category': {$ne: req.body.category}},
         {$push: { portfolio: req.body}},
         function(err, user) {
           if (err) {
             return res.status(501).send(err);
           } else if (!user) {
-            return res.status(501).send("User is already an investor for this category");
+            return res.status(501).send('User is already an investor for this category');
           } else {
             utils.updateInvestors(req.body.category, function(err) {
               if (err) {
