@@ -266,7 +266,7 @@ module.exports = function(router, isAuthenticated, acl) {
   // Get all of the public transactions between users
   router.route('/transactions/users/:user_id/us/public')
     .get(isAuthenticated, function(req, res) {
-      Transaction.findByUserIdUsPublic(req.params.user_id).then(function(transactions) {
+      Transaction.findByUserIdUsPublic(req.params.user_id, req.session.passport.user).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
         return res.status(503).send(err);
