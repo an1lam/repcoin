@@ -31,23 +31,6 @@ var TransactionSchema = new Schema({
   timeStamp : { type: Date, default: Date.now, required: true }, 
 });
 
-// Get all of the transactions for a given query, obscuring anonymous fields
-TransactionSchema.statics.findPublic = function(query, cb) {
-  return this.aggregate([
-    { $match: query },
-    { $project: privateFilter }
-  ], cb);
-};
-
-// Get a transaction with the given id, obscuring anonymous fields
-TransactionSchema.statics.findByIdPublic = function(id, cb) {
-  return this.aggregate([
-    { $match: { _id: mongoose.Types.ObjectId(id) }},
-    { $project: privateFilter }
-  ], cb);
-};
-
-
 // Get all transactions involving a given user
 // Sorted from most recent to least recent
 TransactionSchema.statics.findByUserIdAll = function(userId) {
@@ -62,7 +45,7 @@ TransactionSchema.statics.findByUserIdFrom = function(userId) {
 
 // Get filtered transactions based on conditions, obscuring private fields
 // Sorted from most recent to least recent
-TransactionSchema.statics.findFilteredTransactionsPublic = function(conditions) {
+TransactionSchema.statics.findPublic = function(conditions) {
   return this.aggregate([
     { $match: conditions },
     { $project: privateFilter },
@@ -70,11 +53,16 @@ TransactionSchema.statics.findFilteredTransactionsPublic = function(conditions) 
   ]).exec();
 };
 
+// Get a transaction with the given id, obscuring anonymous fields
+TransactionSchema.statics.findByIdPublic = function(id) {
+  return this.findPublic( { _id: mongoose.Types.ObjectId(id) });
+};
+
 // Get all public transactions to a given user
 TransactionSchema.statics.findByUserIdToPublic = function(userId) {
   userId = mongoose.Types.ObjectId(userId);
   var to = { "to.id" : userId };
-  return this.findFilteredTransactionsPublic(to)
+  return this.findPublic(to)
 };
 
 // Get all public transactions involving a given user
@@ -85,14 +73,14 @@ TransactionSchema.statics.findByUserIdAllPublic = function(userId) {
            { "from.id" : userId, "from.anonymous" : false }
          ]
   };
-  return this.findFilteredTransactionsPublic(all);
+  return this.findPublic(all);
 };
 
 // Get all public transactions from a given user
 TransactionSchema.statics.findByUserIdFromPublic = function(userId) {
     userId = mongoose.Types.ObjectId(userId);
     var from = {"from.id" : userId, "from.anonymous": false };
-    return this.findFilteredTransactionsPublic(from);
+    return this.findPublic(from);
 };
 
 // Get all public transactions between two users 
@@ -103,13 +91,13 @@ TransactionSchema.statics.findByUserIdUsPublic = function(userId1, userId2) {
       $or: [ { "from.id" : userId1, "from.anonymous": false, "to.id" : userId2 },              { "from.id": userId2, "from.anonymous": false, "to.id": userId1 } 
           ]
     };
-    return this.findFilteredTransactionsPublic(between);
+    return this.findPublic(between);
 };
 
 // Get all transactions for a given category
 // Sorted from most recent to least recent
-TransactionSchema.statics.findByCategory = function(category) {
-  return this.find( { category : category }).sort({ "timeStamp": -1 }).exec();
+TransactionSchema.statics.findByCategoryPublic = function(category) {
+  return this.findPublic({ category: category});
 };
 
 module.exports = mongoose.model('Transaction', TransactionSchema);

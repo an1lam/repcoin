@@ -156,12 +156,10 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/transactions')
     // Get all the transactions, obscuring private fields
     .get(isAuthenticated, function(req, res) {
-      Transaction.findPublic({}, function(err, transactions) {
-        if (err) {
-          return res.status(503).send(err);
-        } else {
-          return res.status(200).send(transactions);
-        }
+      Transaction.findPublic({}).then(function(transactions) {
+        return res.status(200).send(transactions);
+      }, function(err) {
+        return res.status(503).send(err);
       });
     })
 
@@ -174,12 +172,10 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/transactions/:transaction_id')
     // Get the transaction with this id
     .get(isAuthenticated, function(req, res) {
-      Transaction.findByIdPublic(req.params.transaction_id, function(err, transaction) {
-        if (err) {
-          return res.status(503).send(err);
-        } else {
-          return res.status(200).send(transaction);
-        }
+      Transaction.findByIdPublic(req.params.transaction_id).then(function(transaction) {
+        return res.status(200).send(transaction);
+      }, function(err) {
+        return res.status(503).send(err);
       });
     })
 
