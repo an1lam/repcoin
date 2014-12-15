@@ -5,6 +5,16 @@ var mongoose = require('mongoose'),
 var validate = require('mongoose-validator');
 var phone = require('phone');
 
+// All of the fields that should be kept private
+var privateFields = {
+  "email": 0,
+  "password": 0,
+  "phoneNumber": 0,
+  "portfolio.reps": 0,
+  "portfolio.investments": 0,
+  "timeStamp": 0
+};
+
 var passwordValidator = [
   validate({
     validator: 'isLength',
@@ -146,13 +156,23 @@ UserSchema.methods.comparePassword = function(candidatePassword) {
   return bcrypt.compareSync(candidatePassword, this.password);
 };
 
-// Get all the users whose first or last name start with searchTerm
-UserSchema.statics.findBySearchTerm = function(searchTerm, cb) {
-  return this.find({ "username": { $regex: new RegExp('\\b' + searchTerm, 'i') }}, cb);
+// Get all the users, obscuring private fields
+UserSchema.statics.findPublic = function(query, cb) {
+  return this.find(query, privateFields, cb); 
 };
 
-UserSchema.statics.findNLeaders = function(category, count, cb) {
-  return this.find( { "categories.name": category } ).limit(parseInt(count)).exec(cb);
+// Get the user with a given id, obscuring private fields
+UserSchema.statics.findByIdPublic = function(id, cb) {
+  return this.findById(id, privateFields, cb); 
+};
+
+// Get all the users whose first or last name start with searchTerm
+UserSchema.statics.findBySearchTermPublic = function(searchTerm, cb) {
+  return this.find({ "username": { $regex: new RegExp('\\b' + searchTerm, 'i') }}, privateFields, cb);
+};
+
+UserSchema.statics.findNLeadersPublic = function(category, count, cb) {
+  return this.find( { "categories.name": category }, privateFields ).limit(parseInt(count)).exec(cb);
 };
 
 // Find all the users who are experts in a category
