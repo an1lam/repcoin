@@ -1,12 +1,11 @@
-/** @jsx React.DOM */
-"use strict";
+'use strict';
 
-var React = require('react');
-var PubSub = require('pubsub-js');
 var $ = require('jquery');
 var auth = require('../auth.jsx');
-var LinkInput = require('./LinkInput.jsx');
 var LinkDelete = require('./LinkDelete.jsx');
+var LinkInput = require('./LinkInput.jsx');
+var PubSub = require('pubsub-js');
+var React = require('react');
 
 var LinkItem = React.createClass({
   getInitialState: function() {

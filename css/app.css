@@ -179,7 +179,7 @@
   padding-left:35px;
 }
 
-.editBox {
+.addCategoryBox {
   float:right;
 }
 
@@ -479,5 +479,11 @@ input.cropit-image-zoom-input {
 
 textarea {
   resize:none;
+}
+
+/* Categories Table //////////////*/
+.del-expert-cat-btn {
+  margin-top:10px;
+  width:100%;
 }
 
