@@ -38,7 +38,6 @@ var Signup = React.createClass({
       data: data,
       success: function() {
         // Redirect
-        debugger;
         this.transitionTo("/confirmation");
       }.bind(this),
       error: function(xhr, status, err) {

@@ -716,7 +716,7 @@ describe('Utils: ', function() {
         from: jasmine.any(String),
         to: 'test@test.com',
         subject: jasmine.any(String),
-        text: "Hi,\n please confirm your new account for Repcoin at this URL: " + urlConfig[process.env.NODE_ENV] + "verify/test \n Thanks," + 
+        text: "Hi,\n please confirm your new account for Repcoin at this URL: " + urlConfig[process.env.NODE_ENV] + "#/verify/test \n Thanks," + 
               "\nThe Repcoin Team",
 
       });

@@ -11,6 +11,7 @@ var LoginPage = require('./components/LoginPage.jsx');
 var ProfilePage = require('./components/ProfilePage.jsx');
 var React = require('react');
 var SearchPage = require('./components/SearchPage.jsx');
+var VerificationPage = require('./components/VerificationPage.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -57,6 +58,7 @@ var routes = (
     <Route name="login" handler={LoginPage} />
     <Route name="profile" path="/user/:userId" handler={ProfilePage}/>
     <Route name="search" path="/search/:query" handler={SearchPage}/>
+    <Route name="verification" path="/verify/:token" handler={VerificationPage} />
   </Routes>
 );
 

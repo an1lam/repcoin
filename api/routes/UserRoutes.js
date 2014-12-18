@@ -99,7 +99,7 @@ module.exports = function(router, isAuthenticated, acl) {
               if (err) {
                 res.status(404).send("Unable to send verification email");
               } else {
-                res.send(200);
+                res.status(200).end();
               }
             });
           });
@@ -159,7 +159,7 @@ module.exports = function(router, isAuthenticated, acl) {
           if (req.body.links) {
             if (!utils.validateUserLinks(req.body.links)) {
               return res.status(412).send('Invalid link inputs');
-            } 
+            }
             if (req.body.links[0] == 'EMPTY') {
               user.links = [];
             } else {
@@ -273,6 +273,29 @@ module.exports = function(router, isAuthenticated, acl) {
               }
             });
           }
+      });
+    });
+
+  // Verify a user who has signed up for the site
+  router.route('/verify')
+    .post(function(req, res) {
+      var token = req.body.verificationToken;
+      VerificationToken.findOneAndRemove({"string": token}, function(err, verifiedUser) {
+        if (err) {
+          return res.status(404).send(err);
+        } else if (!verifiedUser.user) {
+          return res.status(412).send("User verfication token not found in DB");
+        }
+
+        User.findOneAndUpdate(
+          {"email": verifiedUser.user}, {"verified": true},
+          function(err, user) {
+            if (err) {
+              return res.status(404).send(err);
+            }
+            return res.send(user);
+          }
+        );
       });
     });
 };

@@ -16,6 +16,9 @@ module.exports = function(passport, LocalStrategy) {
         if (!user.comparePassword(password)) {
           return done(null, false, { message: 'Incorrect email and password combination' });
         }
+        if (!user.verified) {
+          return done(null, false, { message: 'User needs to verify their account before log in'});
+        }
         return done(null, user);
       });
     }
@@ -30,4 +33,4 @@ module.exports = function(passport, LocalStrategy) {
       done(err, user);
     });
   });
-}
+};
