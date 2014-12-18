@@ -154,14 +154,12 @@ module.exports = function(router, isAuthenticated, acl) {
   }
 
   router.route('/transactions')
-    // Get all the transactions
+    // Get all the transactions, obscuring private fields
     .get(isAuthenticated, function(req, res) {
-      Transaction.find(function(err, transactions) {
-        if (err) {
-          return res.status(503).send(err);
-        } else {
-          return res.status(200).send(transactions);
-        }
+      Transaction.findPublic({}).then(function(transactions) {
+        return res.status(200).send(transactions);
+      }, function(err) {
+        return res.status(503).send(err);
       });
     })
 
@@ -174,12 +172,10 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/transactions/:transaction_id')
     // Get the transaction with this id
     .get(isAuthenticated, function(req, res) {
-      Transaction.findById(req.params.transaction_id, function(err, transaction) {
-        if (err) {
-          return res.status(503).send(err);
-        } else {
-          return res.status(200).send(transaction);
-        }
+      Transaction.findByIdPublic(req.params.transaction_id).then(function(transaction) {
+        return res.status(200).send(transaction);
+      }, function(err) {
+        return res.status(503).send(err);
       });
     })
 
@@ -218,7 +214,7 @@ module.exports = function(router, isAuthenticated, acl) {
 
   router.route('/transactions/users/:user_id/all')
     // Get all of the transactions to or from a given user
-    .get(isAuthenticated, function(req, res) {
+    .get(isAuthenticated, acl.isAdmin, function(req, res) {
       Transaction.findByUserIdAll(req.params.user_id).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
@@ -226,8 +222,8 @@ module.exports = function(router, isAuthenticated, acl) {
       });
     });
 
+  // Get all of the public transactions to or from a given user
   router.route('/transactions/users/:user_id/all/public')
-    // Get all of the public transactions to or from a given user
     .get(isAuthenticated, function(req, res) {
       Transaction.findByUserIdAllPublic(req.params.user_id).then(function(transactions) {
         return res.status(200).send(transactions);
@@ -237,10 +233,10 @@ module.exports = function(router, isAuthenticated, acl) {
     });
 
 
-  // Get all of the transactions to a given user
+  // Get all of the public transactions to a given user
   router.route('/transactions/users/:user_id/to/public')
     .get(isAuthenticated, function(req, res) {
-      Transaction.findByUserIdTo(req.params.user_id).then(function(transactions) {
+      Transaction.findByUserIdToPublic(req.params.user_id).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
         return res.status(503).send(err);
@@ -249,7 +245,7 @@ module.exports = function(router, isAuthenticated, acl) {
 
   // Get all of the transactions from a given user
   router.route('/transactions/users/:user_id/from')
-    .get(isAuthenticated, function(req, res) {
+    .get(isAuthenticated, acl.isAdmin, function(req, res) {
       Transaction.findByUserIdFrom(req.params.user_id).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
@@ -270,7 +266,7 @@ module.exports = function(router, isAuthenticated, acl) {
   // Get all of the public transactions between users
   router.route('/transactions/users/:user_id/us/public')
     .get(isAuthenticated, function(req, res) {
-      Transaction.findByUserIdUsPublic(req.params.user_id).then(function(transactions) {
+      Transaction.findByUserIdUsPublic(req.params.user_id, req.session.passport.user).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
         return res.status(503).send(err);
@@ -280,7 +276,7 @@ module.exports = function(router, isAuthenticated, acl) {
   // Get all of the public transactions for a given category
   router.route('/transactions/categories/:categoryName')
     .get(isAuthenticated, function(req, res) {
-      Transaction.findByCategory(req.params.categoryName).then(function(transactions) {
+      Transaction.findByCategoryPublic(req.params.categoryName).then(function(transactions) {
         return res.status(200).send(transactions);
       }, function(err) {
         return res.status(503).send(err);
