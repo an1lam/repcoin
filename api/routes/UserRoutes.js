@@ -264,9 +264,6 @@ module.exports = function(router, isAuthenticated, acl) {
         } else {
           // Save all of the investors in the category
           var investors = utils.getInvestors(user, categoryName);
-          if (!investors) {
-            return res.status(412).send('No investors found for category: ' + categoryName);
-          }
           utils.reimburseInvestors(investors, categoryName, user._id, function(err) { 
             if (err) {
               return res.status(501).send(err);

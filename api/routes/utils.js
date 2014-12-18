@@ -31,6 +31,10 @@ var utils = {
 
   // Given investors for an expert category, reimburse them for the category
   reimburseInvestors: function(investors, categoryName, userId, cb) {
+    // If the list of investors is empty, simply return
+    if (investors.length === 0) {
+      return cb(null);
+    }
     var self = this;
 
     // Get a list of user ids

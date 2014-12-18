@@ -73,6 +73,12 @@ describe('Utils: ', function() {
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(['ERROR!']);
     }); 
+
+    it('properly handles empty list of investors', function() {
+      utils.reimburseInvestors([], 'Coding', '123', cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
+    });
   });
 
   describe('reimburseInvestor: ', function() {
