@@ -20,7 +20,59 @@ describe('Utils: ', function() {
   });
 
   describe('reimburseInvestors: ', function() {
-      
+    beforeEach(function() {
+      cb = jasmine.createSpy();
+    });
+
+    var investments = [
+      { userId: '123', valuation: 10 },
+      { userId: '456', valuation: 8 }
+    ];
+    var users = [{ portfolio: [{ category: 'Coding', reps: 0, investments: investments }] }];
+    it('properly reimburses investors', function() {
+      spyOn(utils, 'saveAll').andCallFake(function(users, cb) {
+        return cb([]);
+      });
+      spyOn(User, 'find').andCallFake(function(selector, cb) {
+        return cb(null, users);
+      });
+
+      var categoryName = 'Coding';
+      var userId = '123';
+      var investors = [ { name: 'Foo', id: 'bar' }];
+      utils.reimburseInvestors(investors, 'Coding', '123', cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
+    }); 
+
+    it('properly handles error from finding investors', function() {
+      spyOn(User, 'find').andCallFake(function(selector, cb) {
+        return cb('ERROR!', null);
+      });
+
+      var categoryName = 'Coding';
+      var userId = '123';
+      var investors = [ { name: 'Foo', id: 'bar' }];
+      utils.reimburseInvestors(investors, 'Coding', '123', cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith('ERROR!');
+    }); 
+
+    it('properly handles error from saving investors', function() {
+      spyOn(User, 'find').andCallFake(function(selector, cb) {
+        return cb(null, users);
+      });
+      spyOn(utils, 'saveAll').andCallFake(function(users, cb) {
+        return cb(['ERROR!']);
+      });
+
+      var categoryName = 'Coding';
+      var userId = '123';
+      var investors = [ { name: 'Foo', id: 'bar' }];
+      utils.reimburseInvestors(investors, 'Coding', '123', cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(['ERROR!']);
+    }); 
   });
 
   describe('reimburseInvestor: ', function() {
@@ -87,7 +139,7 @@ describe('Utils: ', function() {
 
   });
 
-  describe('updateTransactionInputs: ', function() {
+  describe('validateTransactionInputs: ', function() {
     it('returns true if inputs are correct', function() {
       var req = { body : {
         from      : { id: '1', name: 'foo' },
@@ -96,7 +148,7 @@ describe('Utils: ', function() {
         category  : 'foo'
       }};
 
-      var result = utils.updateTransactionInputs(req);
+      var result = utils.validateTransactionInputs(req);
       expect(result).toEqual(true);  
     });
 
@@ -108,11 +160,11 @@ describe('Utils: ', function() {
         category  : 'foo'
       }};
 
-      var result = utils.updateTransactionInputs(req);
+      var result = utils.validateTransactionInputs(req);
       expect(result).toEqual(false);  
 
       req.body.amount = 'foo';
-      var result = utils.updateTransactionInputs(req);
+      var result = utils.validateTransactionInputs(req);
       expect(result).toEqual(false);  
     });
 
@@ -124,7 +176,7 @@ describe('Utils: ', function() {
         category  : 'foo'
       }};
 
-      var result = utils.updateTransactionInputs(req);
+      var result = utils.validateTransactionInputs(req);
       expect(result).toEqual(false);  
     });
 

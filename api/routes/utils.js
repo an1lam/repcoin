@@ -16,7 +16,7 @@ var utils = {
         var z = investor.portfolio[j].investments.length;
         for (var p = 0; p < z; p++) {
           var investment = investor.portfolio[j].investments[p];
-          if (investment.userId === userId) {
+          if (String(investment.userId) === String(userId)) {
             // Give the investor the valuation
             investor.portfolio[j].reps += investment.valuation; 
           } else {
@@ -43,18 +43,19 @@ var utils = {
     // Update each user
     User.find({ '_id': { $in: ids }}, function(err, users) {
       if (err) {
-        return cb([err]);
+        return cb(err);
       } else {
-        // Search through the user's portfolio
+        var newUsers = [];
+        // Search through each user's portfolio
         length = users.length;
         for (var i = 0; i < length; i++) {
-          user = users[i];
-          self.reimburseInvestor(user);
+          var user = users[i];
+          newUsers.push(self.reimburseInvestor(user, categoryName, userId));
         }
 
         // Finally, save all the modified investors
-        self.saveAll(users, function(errs) {
-          if (errs) {
+        self.saveAll(newUsers, function(errs) {
+          if (errs.length > 0) {
             return cb(errs);
           } else {
             return cb(null);
@@ -155,7 +156,7 @@ var utils = {
   },
 
   // Validate that the transaction inputs are valid
-  updateTransactionInputs: function(req) {
+  validateTransactionInputs: function(req) {
     // Check that all of the inputs are present
     if (!req.body.from ||
         !req.body.from.id ||

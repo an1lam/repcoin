@@ -183,7 +183,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690871b1"),
         "timeStamp": {"$date": 1413480838},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -260,7 +260,14 @@
       "id": ObjectId("6434171b7f9cea5969085da1"),
       "percentile": 42,
       "previousPercentile": 39,
-      "reps": 27
+      "reps": 27,
+      "investors": [
+        {
+          "id": "5439a8221e25afaf21b2adb3",
+          "name": "Matt Ritter",
+          "_id": "54933a1d3c11222446bce29c"
+        }
+      ]
     }]
 },
 {

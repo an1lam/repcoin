@@ -255,6 +255,7 @@ module.exports = function(router, isAuthenticated, acl) {
   // Delete an expert category
   router.route('/users/:user_id/:category_name/delete')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
+      var categoryName = req.params.category_name;
       User.findById(req.params.user_id, function(err, user) {
         if (err) {
           return res.status(501).send(err);
@@ -262,18 +263,22 @@ module.exports = function(router, isAuthenticated, acl) {
           return res.status(501).send('No user was found');
         } else {
           // Save all of the investors in the category
-          var investors = utils.getInvestors(user, req.params.category_name);
+          var investors = utils.getInvestors(user, categoryName);
           if (!investors) {
-            return res.status(412).send('User does not have expert category: ' + req.params.category_name);
+            return res.status(412).send('No investors found for category: ' + categoryName);
           }
-          utils.reimburseInvestors(investors, categoryName, user._id);
-
-          user = utils.deleteExpertCategory(user, req.params.category_name); 
-          user.save(function(err) {
+          utils.reimburseInvestors(investors, categoryName, user._id, function(err) { 
             if (err) {
               return res.status(501).send(err);
             } else {
-              return res.status(200).send(user);
+              user = utils.deleteExpertCategory(user, categoryName); 
+              user.save(function(err) {
+                if (err) {
+                  return res.status(501).send(err);
+                } else {
+                  return res.status(200).send(user);
+                }
+              });
             }
           });
         }

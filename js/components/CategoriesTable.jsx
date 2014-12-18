@@ -1,52 +1,78 @@
 'use strict';
 
 var $ = require('jquery');
+var auth = require('../auth.jsx');
 var CategoriesHeader = require('./CategoriesHeader');
 var CategoriesItem = require('./CategoriesItem');
 var CategoryInput = require('./CategoryInput');
 var ExpertCategoryDelete = require('./ExpertCategoryDelete.jsx');
+var PubSub = require('pubsub-js');
 var React = require('react');
 
 var CategoriesTable = React.createClass({
   getInitialState: function() {
-    return { showAddCategory: false,
-             showAddCategoryBtn: false,
-             showDeleteCategory: false,
+    return { addMode: false,
+             editHover: false,
+             deleteMode: false,
+             showDeleteBox: false,
              categoryToDelete: '',
              error: null };
   },
 
   handleMouseOver: function() {
-    if (!this.state.showDeleteCategory) {
-      this.setState({ showAddCategoryBtn: true });
+    if (!this.state.showDeleteBox && !this.state.addMode && !this.state.deleteMode) {
+      this.setState({ editHover: true });
     }
   },
 
   handleMouseLeave: function() {
-    this.setState({ showAddCategoryBtn: false });
+    this.setState({ editHover: false });
   },
 
-  handleClick: function() {
-    this.setState({ showAddCategory: true, error: null });
+  handleAddClick: function() {
+    this.setState({ addMode: true, editHover: false, deleteMode: false, showDeleteBox: false, error: null });
   },
 
-  showDeleteCategory: function(categoryToDelete) {
+  handleDeleteClick: function() {
+    this.setState({ deleteMode: true, editHover: false, addMode: false, showDeleteBox: false, error: null });
+  },
+
+  handleCancelClick: function() {
+    this.setState({ deleteMode: false, addMode: false, showDeleteBox: false, error: null });
+  },
+
+  showDeleteBox: function(categoryToDelete) {
     this.setState({ categoryToDelete: categoryToDelete,
-                    showDeleteCategory: true,
+                    showDeleteBox: true,
                     error: null });
   },
 
   closeInputBox: function() {
-    this.setState({ showAddCategory: false });
+    this.setState({ addMode: false });
   },
 
   closeDeleteBox: function() {
-    this.setState({ showDeleteCategory: false });
+    this.setState({ showDeleteBox: false, deleteMode: false });
   },
 
-  deleteExpertCategory: function() {
-    console.log("DELETING " + this.state.categoryToDelete.name);
-    this.setState({ showDeleteCategory: false });
+  deleteExpertCategory: function(e) {
+    e.preventDefault();
+    var url = '/api/users/' + this.props.currentUser._id + '/'
+      + this.state.categoryToDelete.name + '/delete'; 
+    $.ajax({
+      url: url,
+      type: 'PUT',
+      success: function(user) {
+        auth.storeCurrentUser(user, function(user) {
+          return user;
+        });
+        PubSub.publish('profileupdate');
+        this.setState({ deleteMode: false, showDeleteBox: false });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }.bind(this)
+    });
   },
 
   setError: function(error) {
@@ -60,19 +86,24 @@ var CategoriesTable = React.createClass({
     var deleteCategory= '';
     
     if (this.props.currentUser._id === this.props.user._id) {
-      if (this.state.showAddCategoryBtn) {
-        edit = <div className="addCategoryBox" onClick={this.handleClick}>
-                 <button className="btn btn-default btn-small">
-                   <span className="glyphicon glyphicon-plus"></span>
-                 </button>
-               </div>;
-      }
+      if (this.state.editHover) {
+        edit = <div className="editCategoriesBtn">
+          <a onClick={this.handleAddClick}><span className="pencil glyphicon glyphicon-plus"></span></a>
+          <p className="divider"> | </p>
+          <a onClick={this.handleDeleteClick}><span className="remove glyphicon glyphicon-remove"></span></a>
+        </div>;
+      } else if (this.state.addMode || this.state.deleteMode || this.state.showDeleteBox) {
+        edit = <div className="editCategoriesBtn">
+          <button className="btn btn-default" onClick={this.handleCancelClick}>Cancel</button>
+        </div>;  
+      } 
 
-      if (this.state.showDeleteCategory) {
-        deleteCategory = <ExpertCategoryDelete onReset={this.closeDeleteBox} onDelete={this.deleteExpertCategory} name={this.state.categoryToDelete.name}/>;
+      if (this.state.showDeleteBox) {
+        deleteCategory = <ExpertCategoryDelete onReset={this.closeDeleteBox}
+          onDelete={this.deleteExpertCategory} name={this.state.categoryToDelete.name}/>;
       }
      
-      if (this.state.showAddCategory) {
+      if (this.state.addMode) {
         addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={true} setError={this.setError} />;
       }
     }
@@ -100,7 +131,7 @@ var CategoriesTable = React.createClass({
             </tr>
             {this.props.user.categories.map(function(category) {
               return <CategoriesItem key={category.id} category={category} includeReps={includeReps}
-                loggedIn={true} showDeleteCategory={this.showDeleteCategory} deletePrompt={this.state.showDeleteCategory}/>;
+                deleteMode={this.state.deleteMode} showDeleteBox={this.showDeleteBox} />
             }.bind(this))}
           </tbody>
         </table>
