@@ -653,6 +653,13 @@ describe('Utils: ', function() {
       mainCB = jasmine.createSpy();
     });
 
+    it('should simply return if there are 0 docs passed in', function() {
+      var docs = [];
+      utils.saveAll(docs, mainCB);
+      expect(mainCB.callCount).toEqual(1);
+      expect(mainCB).toHaveBeenCalledWith([]);
+    });
+
     it('should not call the callback until the docs have been saved', function() {
       var mockSave = function(cb) {
         setTimeout(function() {
@@ -675,6 +682,7 @@ describe('Utils: ', function() {
 
       expect(saveLogic.callCount).toEqual(2);
       expect(mainCB.callCount).toEqual(1);
+      expect(mainCB).toHaveBeenCalledWith([]);
     });
 
     it('should accumulate errors and pass them to the callback', function() {
