@@ -97,7 +97,7 @@ module.exports = function(router, isAuthenticated, acl) {
             // TODO: Do we want to add these to some sort of mail queue eventually?
             transporter.sendMail(mailOptions, function(err, info) {
               if (err) {
-                res.status(404).send("Unable to send verification email");
+                res.status(554).send(err);
               } else {
                 res.status(200).end();
               }
