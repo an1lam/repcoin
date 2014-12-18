@@ -140,14 +140,19 @@ var utils = {
   saveAll: function(docs, cb) {
     var errs = [];
     var done = 0;
-    for (var i = 0; i < docs.length; i++) {
+    var length = docs.length;
+    if (length === 0) {
+      cb(errs);
+    }
+
+    for (var i = 0; i < length; i++) {
       docs[i].save(function(err) {
         if (err) {
           errs.push(err);
         }
         done++;
 
-        if (done === docs.length) {
+        if (done === length) {
           cb(errs);
         }
       });
