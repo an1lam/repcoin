@@ -171,6 +171,10 @@ module.exports = function(router, isAuthenticated, acl) {
   ///////// Get n leaders for a category ///////
   router.route('/users/:categoryName/leaders/:count')
     .get(isAuthenticated, function(req, res) {
+      if (!utils.validateLeadersCountInputs(req)) {
+        return res.status(412).send('Invalid inputs');
+      }
+
       User.findNLeadersPublic(req.params.categoryName, parseInt(req.params.count), function(err, leaders) {
         if (err) {
           return res.status(400).send(err);
@@ -185,6 +189,10 @@ module.exports = function(router, isAuthenticated, acl) {
   /////////// Add an expert category if it is not already added
   router.route('/users/:user_id/expert')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
+      if (!utils.validateAddExpertCategoryInputs(req)) {
+        return res.status(412).send('Invalid inputs');
+      }
+
       User.findOneAndUpdate(
         {_id: req.params.user_id, 'categories.name': {$ne: req.body.name}},
         {$push: {categories: req.body}},
@@ -214,6 +222,10 @@ module.exports = function(router, isAuthenticated, acl) {
   /////////// Add an investor category if it not already added
   router.route('/users/:user_id/investor')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
+      if (!utils.validateAddInvestorCategoryInputs(req)) {
+        return res.status(412).send('Invalid inputs');
+      }
+
       User.findOneAndUpdate(
         {_id: req.params.user_id, 'portfolio.category': {$ne: req.body.category}},
         {$push: { portfolio: req.body}},

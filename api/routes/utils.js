@@ -88,6 +88,30 @@ var utils = {
     return user;
   },
 
+  // Validate the inputs for /users/:categoryName/leaders/:count
+  validateLeadersCountInputs: function(req) {
+    if (isNaN(parseInt(req.params.count))) {
+      return false;
+    }
+    return true;
+  },
+
+  // Validate inputs for /users/:user_id/expert
+  validateAddExpertCategoryInputs: function(req) {
+    if (!req.body || !req.body.name ) {
+      return false;
+    }
+    return true;
+  },
+
+  // Validate inputs for /users/:user_id/investor
+  validateAddInvestorCategoryInputs: function(req) {
+    if (!req.body || !req.body.category) {
+      return false;
+    }
+    return true;
+  },
+
   // Validate an array of user links
   validateUserLinks: function(links) {
     var length = links.length;

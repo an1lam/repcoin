@@ -19,6 +19,10 @@ describe('Utils: ', function() {
     });
   });
 
+  describe('reimburseInvestors: ', function() {
+      
+  });
+
   describe('reimburseInvestor: ', function() {
     it('properly reimburses investments pertaining to this user and category', function() {
       var investments = [
