@@ -290,9 +290,9 @@ module.exports = function(router, isAuthenticated, acl) {
       }
       VerificationToken.findOneAndRemove({"string": token}, function(err, verifiedUser) {
         if (err) {
-          return res.status(404).send(err);
+          return res.status(501).send(err);
         } else if (!verifiedUser.user) {
-          return res.status(412).send("User verfication token not found in DB");
+          return res.status(501).send("User verfication token not found in DB");
         }
 
         User.findOneAndUpdate(
