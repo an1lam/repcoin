@@ -85,7 +85,7 @@ router.route('/categories/:categoryName')
           });
         }
       });
-    })
+    });
 
   router.route('/categories/:category_id')
     // Get the category with this id

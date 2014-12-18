@@ -2,6 +2,7 @@
 
 var AboutPage = require('./components/AboutPage.jsx');
 var auth = require('./auth.jsx');
+var ConfirmationPage = require('./components/ConfirmationPage.jsx');
 var ContactUsPage = require('./components/ContactUsPage.jsx');
 var CategoriesPage = require('./components/CategoriesPage.jsx');
 var CategoryPage = require('./components/CategoryPage.jsx');
@@ -10,6 +11,7 @@ var LoginPage = require('./components/LoginPage.jsx');
 var ProfilePage = require('./components/ProfilePage.jsx');
 var React = require('react');
 var SearchPage = require('./components/SearchPage.jsx');
+var VerificationPage = require('./components/VerificationPage.jsx');
 
 var Router = require('react-router');
 var Route = Router.Route;
@@ -48,13 +50,15 @@ var routes = (
   <Routes>
     <DefaultRoute handler={LoginPage} />
     <Route name="about" handler={AboutPage} />
-    <Route name="contactUs" handler={ContactUsPage} />
     <Route name="categories" handler={CategoriesPage} />
     <Route name="category" path="/categories/:category" handler={CategoryPage}/>
+    <Route name="contactUs" handler={ContactUsPage} />
+    <Route name="confirmation" handler={ConfirmationPage} />
     <Route name="home" handler={HomePage} />
     <Route name="login" handler={LoginPage} />
     <Route name="profile" path="/user/:userId" handler={ProfilePage}/>
     <Route name="search" path="/search/:query" handler={SearchPage}/>
+    <Route name="verification" path="/verify/:token" handler={VerificationPage} />
   </Routes>
 );
 

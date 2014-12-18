@@ -1,6 +1,13 @@
 'use strict';
+
+// Models
 var User = require('../models/User.js');
+var VerificationToken = require('../models/VerificationToken.js');
+
+// Modules
 var utils = require('./utils.js');
+
+var transporter = require('../../config/mailer.js').transporterFactory();
 
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
@@ -33,7 +40,7 @@ module.exports = function(router, isAuthenticated, acl) {
           }
         });
       }
- 
+
       // Get the users normally
       else {
         User.findPublic({}, function(err, users) {
@@ -77,13 +84,34 @@ module.exports = function(router, isAuthenticated, acl) {
             return res.status(501).send('Error');
           }
         } else {
-          req.login(user, function(err) {
-            if (err) {
-              return res.status(400).send(err);
-            } else {
-              return res.status(200).send(user);
-            }
+          var verificationString = utils.generateVerificationToken();
+
+          var verificationToken = new VerificationToken({
+              user: user.email,
+              string: verificationString,
           });
+
+          verificationToken.save(function(err) {
+
+            if (err) {
+              return res.status(501).send("Unable to save new verificationToken");
+            }
+
+            var mailOptions = utils.generateVerificationEmailOptions(user.email, verificationString);
+
+            transporter.sendMail(mailOptions, function(err, info) {
+              if (err) {
+                return res.status(554).send(err);
+              } else {
+                return res.status(200).end();
+              }
+            });
+          });
+          /* New Behavior: Send the email and redirect the user to a totally different screen.
+          * On the backend, this simply means sending a status of 200.
+          * On the frontend, our router should redirect the user to a page stating we have sent
+          * them a confirmation email.
+          * */
         }
       });
     });
@@ -135,7 +163,7 @@ module.exports = function(router, isAuthenticated, acl) {
           if (req.body.links) {
             if (!utils.validateUserLinks(req.body.links)) {
               return res.status(412).send('Invalid link inputs');
-            } 
+            }
             if (req.body.links[0] == 'EMPTY') {
               user.links = [];
             } else {
@@ -167,7 +195,7 @@ module.exports = function(router, isAuthenticated, acl) {
          }
        });
     });
- 
+
   ///////// Get n leaders for a category ///////
   router.route('/users/:categoryName/leaders/:count')
     .get(isAuthenticated, function(req, res) {
@@ -185,7 +213,7 @@ module.exports = function(router, isAuthenticated, acl) {
         }
       });
     });
- 
+
   /////////// Add an expert category if it is not already added
   router.route('/users/:user_id/expert')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
@@ -218,7 +246,7 @@ module.exports = function(router, isAuthenticated, acl) {
           }
       });
     });
- 
+
   /////////// Add an investor category if it not already added
   router.route('/users/:user_id/investor')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
@@ -249,6 +277,33 @@ module.exports = function(router, isAuthenticated, acl) {
               }
             });
           }
+      });
+    });
+
+  // Verify a user who has signed up for the site
+  router.route('/verify')
+    .post(function(req, res) {
+      var token = req.body.verificationToken;
+
+      if (!token) {
+        return res.status(412).send('No verification token provided');
+      }
+      VerificationToken.findOneAndRemove({"string": token}, function(err, verifiedUser) {
+        if (err) {
+          return res.status(404).send(err);
+        } else if (!verifiedUser.user) {
+          return res.status(412).send("User verfication token not found in DB");
+        }
+
+        User.findOneAndUpdate(
+          {"email": verifiedUser.user}, {"verified": true},
+          function(err, user) {
+            if (err) {
+              return res.status(404).send(err);
+            }
+            return res.send(user);
+          }
+        );
       });
     });
 };
