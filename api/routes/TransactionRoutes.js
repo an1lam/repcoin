@@ -51,6 +51,7 @@ module.exports = function(router, isAuthenticated, acl) {
       .then(function(categoryP) {
         categoryP.repsLiquid = categoryP.repsLiquid - amount;
         categoryP.repsInvested = categoryP.repsInvested + amount;
+        categoryP.reps = categoryP.repsLiquid + categoryP.repsInvested;
         category = categoryP;
         return toUserPromise;
       }, function(err) {
@@ -119,6 +120,7 @@ module.exports = function(router, isAuthenticated, acl) {
                             fromUser.save();
                             category.repsLiquid += amount;
                             category.repsInvested -= amount;
+                            categoryP.reps = categoryP.repsLiquid + categoryP.repsInvested;
                             category.save();
                             return res.status(400).send(err);
                           } else {
@@ -132,6 +134,7 @@ module.exports = function(router, isAuthenticated, acl) {
                                 fromUser.save();
                                 category.repsLiquid += amount;
                                 category.repsInvested -= amount;
+                                categoryP.reps = categoryP.repsLiquid + categoryP.repsInvested;
                                 category.save();
                                 return res.status(400).send(err);
                               } else {

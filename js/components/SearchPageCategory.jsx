@@ -14,7 +14,7 @@ var SearchPageCategory = React.createClass({
         <div>
           <h3>Experts:  {this.props.category.experts}</h3>
           <h3>Investors:  {this.props.category.investors}</h3>
-          <h3>Reps: {this.props.category.repsLiquid + this.props.category.repsInvested}</h3>
+          <h3>Reps: {this.props.category.reps}</h3>
         </div>
       </div>
     );
