@@ -93,13 +93,17 @@ module.exports = function(router, isAuthenticated, acl) {
 
           verificationToken.save(function(err) {
 
+            if (err) {
+              return res.status(501).send("Unable to save new verificationToken");
+            }
+
             var mailOptions = utils.generateVerificationEmailOptions(user.email, verificationString);
-            // TODO: Do we want to add these to some sort of mail queue eventually?
+
             transporter.sendMail(mailOptions, function(err, info) {
               if (err) {
-                res.status(554).send(err);
+                return res.status(554).send(err);
               } else {
-                res.status(200).end();
+                return res.status(200).end();
               }
             });
           });
@@ -280,6 +284,10 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/verify')
     .post(function(req, res) {
       var token = req.body.verificationToken;
+
+      if (!token) {
+        return res.status(412).send('No verification token provided');
+      }
       VerificationToken.findOneAndRemove({"string": token}, function(err, verifiedUser) {
         if (err) {
           return res.status(404).send(err);
