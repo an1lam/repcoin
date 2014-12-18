@@ -239,4 +239,32 @@ module.exports = function(router, isAuthenticated, acl) {
           }
       });
     });
+
+  // Delete an expert category
+  router.route('/users/:user_id/:category_name/delete')
+    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
+      User.findById(req.params.user_id, function(err, user) {
+        if (err) {
+          return res.status(501).send(err);
+        } else if (!user) {
+          return res.status(501).send('No user was found');
+        } else {
+          // Save all of the investors in the category
+          var investors = utils.getInvestors(user, req.params.category_name);
+          if (!investors) {
+            return res.status(412).send('User does not have expert category: ' + req.params.category_name);
+          }
+          utils.reimburseInvestors(investors, categoryName, user._id);
+
+          user = utils.deleteExpertCategory(user, req.params.category_name); 
+          user.save(function(err) {
+            if (err) {
+              return res.status(501).send(err);
+            } else {
+              return res.status(200).send(user);
+            }
+          });
+        }
+      });
+    });
 };

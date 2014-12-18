@@ -5,6 +5,89 @@ var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 
 var utils = {
+  // Given an investor, category, and user, remove investments in that user
+  // Reimburse the investor for the valuation of those investments
+  reimburseInvestor: function(investor, categoryName, userId) {
+    var l = investor.portfolio.length;
+    for (var j = 0; j < l; j++) {
+      // If the category matches, search the investments
+      if (investor.portfolio[j].category === categoryName) {
+        var newInvestments = [];
+        var z = investor.portfolio[j].investments.length;
+        for (var p = 0; p < z; p++) {
+          var investment = investor.portfolio[j].investments[p];
+          if (investment.userId === userId) {
+            // Give the investor the valuation
+            investor.portfolio[j].reps += investment.valuation; 
+          } else {
+            newInvestments.push(investment);
+          }
+        }
+        investor.portfolio[j].investments = newInvestments;
+      }
+    }
+    return investor;
+  },
+
+  // Given investors for an expert category, reimburse them for the category
+  reimburseInvestors: function(investors, categoryName, userId, cb) {
+    var self = this;
+
+    // Get a list of user ids
+    var length = investors.length;
+    var ids = [];
+    for (var i = 0; i < length; i++) {
+      ids.push(investors[i].id);
+    }
+
+    // Update each user
+    User.find({ '_id': { $in: ids }}, function(err, users) {
+      if (err) {
+        return cb([err]);
+      } else {
+        // Search through the user's portfolio
+        length = users.length;
+        for (var i = 0; i < length; i++) {
+          user = users[i];
+          self.reimburseInvestor(user);
+        }
+
+        // Finally, save all the modified investors
+        self.saveAll(users, function(errs) {
+          if (errs) {
+            return cb(errs);
+          } else {
+            return cb(null);
+          }
+        });
+      }
+    });
+  },
+
+  // Get investors for a given user and expert category
+  getInvestors: function(user, categoryName) {
+    var length = user.categories.length;
+    for (var i = 0; i < length; i++) {
+      if (categoryName === user.categories[i].name) {
+        return user.categories[i].investors;
+      }
+    }
+    return null;
+  },
+
+  // Delete an expert category
+  deleteExpertCategory: function(user, categoryName) {
+    var length = user.categories.length;
+    var newCategories = [];
+    for (var i = 0; i < length; i++) {
+      if (categoryName !== user.categories[i].name) {
+        newCategories.push(user.categories[i]);
+      }
+    }
+    user.categories = newCategories;
+    return user;
+  },
+
   // Validate an array of user links
   validateUserLinks: function(links) {
     var length = links.length;

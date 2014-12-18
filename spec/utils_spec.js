@@ -6,6 +6,40 @@ var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 
 describe('Utils: ', function() {
+  describe('getInvestors: ', function() {
+    var user = { categories: [{ name: 'Coding', investors: ['foo']}] };
+    it('returns investors for a user categoryName', function() {
+      var result = utils.getInvestors(user, 'Coding');
+      expect(result).toEqual(['foo']);
+    });
+
+    it('returns null when no investors are found', function() {
+      var result = utils.getInvestors(user, 'Ballet');
+      expect(result).toEqual(null);
+    });
+  });
+
+  describe('reimburseInvestor: ', function() {
+    it('properly reimburses investments pertaining to this user and category', function() {
+      var investments = [
+        { userId: '123', valuation: 10 },
+        { userId: '456', valuation: 8 }
+      ];
+      var investor = { portfolio: [{ category: 'Coding', reps: 0, investments: investments }] };
+      var result = utils.reimburseInvestor(investor, 'Coding', '123');
+      var expected = { portfolio: [{ category: 'Coding', reps: 10, investments: [investments[1]] }] };
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('deleteExpertCategory: ', function() {
+    it('deletes the category from the expert categories', function() {
+      var user = { categories: [{ name: 'Coding' }] };
+      var result = utils.deleteExpertCategory(user, 'Coding');
+      expect(result).toEqual({ categories: [] });
+    });
+  });
+
   describe('validateUserLinks: ', function() {
     it('returns true if inputs are correct', function() {
       var links = [{ title: 'foo', url: 'bar' }];
