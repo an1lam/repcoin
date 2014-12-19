@@ -58,7 +58,7 @@ var CategoriesTable = React.createClass({
   deleteExpertCategory: function(e) {
     e.preventDefault();
     var url = '/api/users/' + this.props.currentUser._id + '/'
-      + this.state.categoryToDelete.name + '/delete'; 
+      + this.state.categoryToDelete.name + '/expert/delete';
     $.ajax({
       url: url,
       type: 'PUT',

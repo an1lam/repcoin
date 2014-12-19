@@ -7,6 +7,19 @@ var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 
 describe('Utils: ', function() {
+  describe('getExperts: ', function() {
+    var user = { portfolio: [{ category: 'Coding', investments: ['foo']}] };
+    it('returns investor\'s experts for a given categoryName', function() {
+      var result = utils.getExperts(user, 'Coding');
+      expect(result).toEqual(['foo']);
+    });
+
+    it('returns null when no experts are found', function() {
+      var result = utils.getExperts(user, 'Ballet');
+      expect(result).toEqual(null);
+    });
+  });
+
   describe('getInvestors: ', function() {
     var user = { categories: [{ name: 'Coding', investors: ['foo']}] };
     it('returns investors for a user categoryName', function() {

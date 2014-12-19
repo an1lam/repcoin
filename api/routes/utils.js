@@ -79,7 +79,18 @@ var utils = {
     });
   },
 
-  // Get investors for a given user and expert category
+  // Get experts for a given user and category
+  getExperts: function(user, categoryName) {
+    var length = user.portfolio.length;
+    for (var i = 0; i < length; i++) {
+      if (categoryName === user.portfolio[i].category) {
+        return user.portfolio[i].investments;
+      }
+    }
+    return null;
+  },
+
+  // Get investors for a given user and category
   getInvestors: function(user, categoryName) {
     var length = user.categories.length;
     for (var i = 0; i < length; i++) {

@@ -281,7 +281,7 @@ module.exports = function(router, isAuthenticated, acl) {
     });
 
   // Delete an expert category
-  router.route('/users/:user_id/:category_name/delete')
+  router.route('/users/:user_id/:category_name/expert/delete')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
       var categoryName = req.params.category_name;
       User.findById(req.params.user_id, function(err, user) {
@@ -290,8 +290,38 @@ module.exports = function(router, isAuthenticated, acl) {
         } else if (!user) {
           return res.status(501).send('No user was found');
         } else {
-          // Save all of the investors in the category
+          // Reimburse the user's investors in the category
           var investors = utils.getInvestors(user, categoryName);
+          utils.reimburseInvestors(investors, categoryName, user._id, function(err) {
+            if (err) {
+              return res.status(501).send(err);
+            } else {
+              user = utils.deleteExpertCategory(user, categoryName);
+              user.save(function(err) {
+                if (err) {
+                  return res.status(501).send(err);
+                } else {
+                  return res.status(200).send(user);
+                }
+              });
+            }
+          });
+        }
+      });
+    });
+
+  // Delete an investor category
+  router.route('/users/:user_id/:category_name/investor/delete')
+    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
+      var categoryName = req.params.category_name;
+      User.findById(req.params.user_id, function(err, user) {
+        if (err) {
+          return res.status(501).send(err);
+        } else if (!user) {
+          return res.status(501).send('No user was found');
+        } else {
+          // Update all of the experts invested in by this user for the category
+          var experts = utils.getExperts(user, categoryName);
           utils.reimburseInvestors(investors, categoryName, user._id, function(err) {
             if (err) {
               return res.status(501).send(err);
