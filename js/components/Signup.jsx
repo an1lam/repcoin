@@ -15,7 +15,8 @@ var Signup = React.createClass({
            };
   },
 
-  handleSubmit: function() {
+  handleSubmit: function(e) {
+    e.preventDefault();
     var firstname = this.refs.firstname.getDOMNode().value.trim();
     var lastname = this.refs.lastname.getDOMNode().value.trim();
     var email = this.refs.email.getDOMNode().value.trim();
