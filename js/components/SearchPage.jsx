@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 var $ = require('jquery');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var Footer = require('./Footer.jsx');
@@ -13,7 +13,7 @@ var SearchPage = React.createClass({
   getInitialState: function() {
     return {};
   },
- 
+
   componentDidMount: function() {
     this.setResults(this.props.params.query);
   },
@@ -42,7 +42,7 @@ var SearchPage = React.createClass({
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-      }.bind(this) 
+      }.bind(this)
     });
   },
 
@@ -52,7 +52,7 @@ var SearchPage = React.createClass({
     var bName = b.name ? b.name : b.firstname;
     if (aName < bName) {
       return -1;
-    } 
+    }
     if (bName < aName) {
       return 1;
     }
@@ -74,7 +74,14 @@ var SearchPage = React.createClass({
   },
 
   render: function() {
-    var results = this.state.results ? this.generateResultList() : '';
+    var results = '';
+    if (this.state.results) {
+      if (this.state.results.length === 0) {
+        results = <div><p className="no-results">Sorry, no results were found for '{this.props.params.query}'</p></div>;
+      } else {
+        results = this.generateResultList();
+      }
+    }
     return (
       <div className="searchPage">
         <div className="row">
