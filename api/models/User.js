@@ -123,6 +123,13 @@ var UserSchema = new Schema({
     default: "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
     required: true
   },
+
+  // Indicates whether the user has verified their account post-signup
+  verified: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
   timeStamp : {type: Date, default: Date.now, required: true },
 });
 

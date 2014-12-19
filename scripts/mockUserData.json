@@ -60,6 +60,7 @@
     "title": "Website"
   }],
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
+  "verified": "false",
   "timeStamp": {"$date": 1413480832}
 },
 {
@@ -125,6 +126,7 @@
     "title": "Facebook"
    }],
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
+  "verified": "false",
   "timeStamp": {"$date": 1413480932}
 },
 {
@@ -136,6 +138,7 @@
   "email": "matt@matt.com",
   "phoneNumber": "9089172739",
   "timeStamp": "2014-10-11T21:58:58.692Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
@@ -215,6 +218,7 @@
   "email": "stephen@stephen.com",
   "phoneNumber": "9082339244",
   "timeStamp": "2014-10-11T21:59:07.496Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "about": "Aspiring rock and roll musician, rhythm guitarist, hobbyist developer",
   "links": [{
@@ -279,6 +283,7 @@
   "email": "sarah@sarah.com",
   "phoneNumber": "9176878574",
   "timeStamp": "2014-10-12T06:52:26.059Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
@@ -335,6 +340,7 @@
   "email": "trent@trent.com",
   "phoneNumber": "6316970018",
   "timeStamp": "2014-10-12T06:52:35.722Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
@@ -391,6 +397,7 @@
   "email": "adam@adam.com",
   "phoneNumber": "9089174967",
   "timeStamp": "2014-10-12T06:52:43.105Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
@@ -447,6 +454,7 @@
   "email": "john@john.com",
   "phoneNumber": "6036464000",
   "timeStamp": "2014-10-12T06:52:51.775Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
@@ -503,6 +511,7 @@
   "email": "jean@jean.com",
   "phoneNumber": "2019832514",
   "timeStamp": "2014-10-12T06:53:01.535Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
@@ -559,6 +568,7 @@
   "email": "sofia@sofia.com",
   "phoneNumber": "9144203818",
   "timeStamp": "2014-10-12T06:53:09.540Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
@@ -620,6 +630,7 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
   }],
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "portfolio": [
     {
@@ -672,6 +683,7 @@
   "email": "bob@bob.com",
   "phoneNumber": "3104333781",
   "timeStamp": "2014-10-18T15:53:56.176Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
@@ -728,6 +740,7 @@
   "email": "brian@brian.com",
   "phoneNumber": "6176401975",
   "timeStamp": "2014-10-18T15:57:22.133Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
@@ -784,6 +797,7 @@
   "email": "michaela@michaela.com",
   "phoneNumber": "8473238007",
   "timeStamp": "2014-10-18T15:58:38.658Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
@@ -840,6 +854,7 @@
   "email": "peter@peter.com",
   "phoneNumber": "9177038670",
   "timeStamp": "2014-10-18T15:59:18.982Z",
+  "verified": "false",
   "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",

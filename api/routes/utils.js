@@ -1,8 +1,18 @@
 'use strict';
 
+// Modules
+var crypto = require('crypto');
+var nodeUtil = require('util');
+
+// Models
 var Category = require('../models/Category.js');
 var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
+var VerificationToken = require('../models/VerificationToken.js');
+
+// Config
+var verificationEmailConfig = require('../../config/mailer.js').verificationEmail;
+var urlConfig = require('../../config/url.js');
 
 var utils = {
   // Given an investor, category, and user, remove investments in that user
@@ -191,11 +201,11 @@ var utils = {
     return function(a, b) {
       var indexA = this.getPortfolioIndex(a, category);
       var indexB = this.getPortfolioIndex(b, category);
-      
+
       var roiA = a.portfolio[indexA].roi.value;
       var roiB = b.portfolio[indexB].roi.value;
       return roiA - roiB;
-    }.bind(this)
+    }.bind(this);
   },
 
   // Sort users by reps for a given category, increasing order
@@ -203,12 +213,12 @@ var utils = {
     return function(a, b) {
       var indexA = this.getCategoryIndex(a, category);
       var indexB = this.getCategoryIndex(b, category);
-      
+
       var repsA = a.categories[indexA].reps;
       var repsB = b.categories[indexB].reps;
-      
+
       return repsA - repsB;
-    }.bind(this)
+    }.bind(this);
   },
 
   // Sort users by direct score for a given category, decreasing order
@@ -216,26 +226,31 @@ var utils = {
     return function(a, b) {
       var indexA = this.getCategoryIndex(a, category);
       var indexB = this.getCategoryIndex(b, category);
-      
+
       var percentileA = a.categories[indexA].percentile;
       var percentileB = b.categories[indexB].percentile;
-      
+
       return percentileB - percentileA;
-    }.bind(this)
+    }.bind(this);
   },
 
   // Save an array of documents
   saveAll: function(docs, cb) {
     var errs = [];
     var done = 0;
-    for (var i = 0; i < docs.length; i++) {
+    var length = docs.length;
+    if (length === 0) {
+      cb(errs);
+    }
+
+    for (var i = 0; i < length; i++) {
       docs[i].save(function(err) {
         if (err) {
           errs.push(err);
         }
         done++;
 
-        if (done === docs.length) {
+        if (done === length) {
           cb(errs);
         }
       });
@@ -308,12 +323,12 @@ var utils = {
       portfolio[index].reps -= amount;
     // Otherwise, the investment is a revoke
     } else {
-      var j = -1;   
+      var j = -1;
       var length = portfolio[index].investments.length;
       for (var i = 0; i < length; i++) {
         if (String(portfolio[index].investments[i]._id) ===  String(id)) {
           j = i;
-          break; 
+          break;
         }
       }
 
@@ -321,7 +336,7 @@ var utils = {
       if (j === -1) {
         return null;
       }
-      
+
       amount *= -1;
       var investment = portfolio[index].investments[j];
       var prevAmount = investment.amount;
@@ -383,7 +398,7 @@ var utils = {
         }
       }
     }
-    return investors; 
+    return investors;
   },
 
   // Given a revoke that just happened, update roi
@@ -559,7 +574,24 @@ var utils = {
     }, function(err) {
       return cb(err);
     });
-  }
+  },
+
+  generateVerificationToken: function() {
+
+    // Generate the token using rand and the username
+    return crypto.randomBytes(12).toString('hex');
+  },
+
+  generateVerificationEmailOptions: function(email, randomString) {
+    var url = urlConfig[process.env.NODE_ENV] + "#/verify/" + randomString;
+    return {
+      from: verificationEmailConfig.from,
+      to: email,
+      subject: verificationEmailConfig.subject,
+      text: nodeUtil.format(verificationEmailConfig.text, url),
+    };
+  },
+
 };
 
 module.exports = utils;

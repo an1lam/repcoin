@@ -1,5 +1,6 @@
- process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'test';
 var utils = require('../api/routes/utils.js');
+var urlConfig = require('../config/url.js');
 
 var Category = require('../api/models/Category.js');
 var Transaction = require('../api/models/Transaction.js');
@@ -416,7 +417,7 @@ describe('Utils: ', function() {
 
     it('should correctly update roi when it has an arbitrary value', function() {
       var oldROI = { length: 4, value: 2.5 };
-      var roiFromRevoke = 1.2
+      var roiFromRevoke = 1.2;
       var roi = utils.updateROI(oldROI, roiFromRevoke);
       expect(roi).toEqual({ length: 5, value: 2.24 });
     });
@@ -436,7 +437,7 @@ describe('Utils: ', function() {
         { _id: '2', portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
       ];
 
-      utils.getInvestorPercentiles(investors, category, cb); 
+      utils.getInvestorPercentiles(investors, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
       expect(investors[0].portfolio[0].percentile).toEqual(50);
@@ -453,7 +454,7 @@ describe('Utils: ', function() {
         { _id: '4', portfolio: [ { category: category, roi: { value: 20, length: 2 } }] },
       ];
 
-      utils.getInvestorPercentiles(investors, category, cb); 
+      utils.getInvestorPercentiles(investors, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
       expect(investors[0].portfolio[0].percentile).toEqual(12);
@@ -472,7 +473,7 @@ describe('Utils: ', function() {
         { _id: '1', portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
       ];
 
-      utils.getInvestorPercentiles(investors, category, cb); 
+      utils.getInvestorPercentiles(investors, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
       expect(investors[0].portfolio[0].percentile).toEqual(50);
@@ -483,7 +484,7 @@ describe('Utils: ', function() {
       investors = [
         { _id: '1', portfolio: [ { category: 'A', roi: { value: 10, length: 2 } }], username: 'Matt Ritter' },
       ];
-      utils.getInvestorPercentiles(investors, category, cb); 
+      utils.getInvestorPercentiles(investors, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith('Could not find portfolio index for user Matt Ritter');
     });
@@ -491,11 +492,11 @@ describe('Utils: ', function() {
     it('should return an error if any investor does not have the category', function() {
       category = 'Coding';
       investors = [
-        { _id: '1', username: 'Matt Ritter', portfolio: [ { category: category, roi: { value: 10, length: 2 } }], username: 'Matt Ritter' },
+        { _id: '1', username: 'Matt Ritter', portfolio: [ { category: category, roi: { value: 10, length: 2 } }], },
         { _id: '2', username: 'Bob', portfolio: [ { category: 'A', roi: { value: 10, length: 2 } }] },
       ];
 
-      utils.getInvestorPercentiles(investors, category, cb); 
+      utils.getInvestorPercentiles(investors, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith('Could not find portfolio index for user Bob');
     });
@@ -503,7 +504,7 @@ describe('Utils: ', function() {
 
   describe('getExpertPercentiles: ', function() {
     var experts, category, cb;
-    
+
     beforeEach(function() {
       cb = jasmine.createSpy();
     });
@@ -514,7 +515,7 @@ describe('Utils: ', function() {
         { _id: '1', categories: [ { name: category, reps: 10 }] },
         { _id: '2', categories: [ { name: category, reps: 10 }] },
       ];
-      utils.getExpertPercentiles(experts, category, cb); 
+      utils.getExpertPercentiles(experts, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
       expect(experts[0].categories[0].percentile).toEqual(50);
@@ -529,7 +530,7 @@ describe('Utils: ', function() {
         { _id: '3', categories: [ { name: category, reps: 14 }] },
         { _id: '4', categories: [ { name: category, reps: 16 }] },
       ];
-      utils.getExpertPercentiles(experts, category, cb); 
+      utils.getExpertPercentiles(experts, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
       expect(experts[0].categories[0].percentile).toEqual(12);
@@ -543,7 +544,7 @@ describe('Utils: ', function() {
       experts = [
         { _id: '1', categories: [ { name: category, reps: 10 }] },
       ];
-      utils.getExpertPercentiles(experts, category, cb); 
+      utils.getExpertPercentiles(experts, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
       expect(experts[0].categories[0].percentile).toEqual(50);
@@ -554,7 +555,7 @@ describe('Utils: ', function() {
       experts = [
         { _id: '1', username: 'Matt Ritter', categories: [] },
       ];
-      utils.getExpertPercentiles(experts, category, cb); 
+      utils.getExpertPercentiles(experts, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith('Could not find category index for user Matt Ritter');
     });
@@ -565,7 +566,7 @@ describe('Utils: ', function() {
         { _id: '1', username: 'Matt Ritter', categories: [{ name: category, reps: 10 }] },
         { _id: '2', username: 'Bob', categories: [] },
       ];
-      utils.getExpertPercentiles(experts, category, cb); 
+      utils.getExpertPercentiles(experts, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith('Could not find category index for user Bob');
     });
@@ -575,7 +576,7 @@ describe('Utils: ', function() {
     var portfolio, category, toUser, amount, toUserCategoryTotal;
 
     it('should return null if the user is not an investor for this category', function() {
-      portfolio = [{ category: 'Ballet' }]; 
+      portfolio = [{ category: 'Ballet' }];
       category = 'Coding';
       var result = utils.updateInvestorPortfolio(portfolio, category, toUser, amount, toUserCategoryTotal);
       expect(result).toEqual(null);
@@ -594,15 +595,15 @@ describe('Utils: ', function() {
       amount = 10;
       toUserCategoryTotal = 20;
       toUser = { id: '123', name: 'Matt' };
-      
+
       var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal);
-      var newInvestment = { user: 'Matt', userId: '123', amount: 10, valuation: 10, percentage: 50 }; 
-      expect(p[0].investments).toEqual([newInvestment]); 
+      var newInvestment = { user: 'Matt', userId: '123', amount: 10, valuation: 10, percentage: 50 };
+      expect(p[0].investments).toEqual([newInvestment]);
       expect(p[0].reps).toEqual(90);
     });
 
     it('should update the existing investment and roi if revoke', function() {
-      var existingInvestment = { _id: '1', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 }; 
+      var existingInvestment = { _id: '1', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 };
       existingPortfolio = [{ reps: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [existingInvestment] }];
       amount = -2;
       toUserCategoryTotal = 998;
@@ -617,11 +618,11 @@ describe('Utils: ', function() {
       expect(p[0].investments[0].valuation).toEqual(79);
       expect(p[0].roi).toEqual(expectedROI);
       expect(p[0].reps).toEqual(120);
-    }); 
+    });
 
     it('should remove the investment if it is entirely revoked', function() {
-      var existingInvestment = { _id: '1', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 }; 
-      var existingInvestment2 = { _id: '2', user: "Bob", userId: "456", amount: 10, valuation: 100, percentage: 10 }; 
+      var existingInvestment = { _id: '1', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 };
+      var existingInvestment2 = { _id: '2', user: "Bob", userId: "456", amount: 10, valuation: 100, percentage: 10 };
       existingPortfolio = [{ reps: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [existingInvestment, existingInvestment2] }];
       amount = -10;
       toUserCategoryTotal = 990;
@@ -632,7 +633,7 @@ describe('Utils: ', function() {
       expect(p[0].investments.length).toEqual(1);
       expect(p[0].investments[0]._id).toEqual('2');
       expect(p[0].reps).toEqual(200);
-    }); 
+    });
   });
 
   describe('addInvestorToExpertCategory', function() {
@@ -662,7 +663,8 @@ describe('Utils: ', function() {
     var categories = [
       { name: 'Ballet' },
       { name: 'Coding' },
-    ]
+    ];
+
     var expert = { categories: categories };
     it('should return the index of the category if present', function() {
       var i = utils.getCategoryIndex(expert, 'Coding');
@@ -685,7 +687,8 @@ describe('Utils: ', function() {
     var portfolio = [
       { category: 'Ballet' },
       { category: 'Coding' },
-    ]
+    ];
+
     var investor = { portfolio: portfolio };
     it('should return the index of the category if present', function() {
       var i = utils.getPortfolioIndex(investor, 'Coding');
@@ -710,10 +713,10 @@ describe('Utils: ', function() {
       var expertCategoryTotal = 100;
       var username = 'Matt';
 
-      var investment1 = { user: 'Matt', userId: '123', amount: 8, valuation: 14, percentage: 20 }; 
-      var investment2 = { user: 'Matt', userId: '123', amount: 5, valuation: 12, percentage: 15 }; 
-      var investment3 = { user: 'Matt', userId: '123', amount: 20, valuation: 11, percentage: 10 }; 
-      var investment4 = { user: 'Bob', userId: '456', amount: 10, valuation: 10, percentage: 14 }; 
+      var investment1 = { user: 'Matt', userId: '123', amount: 8, valuation: 14, percentage: 20 };
+      var investment2 = { user: 'Matt', userId: '123', amount: 5, valuation: 12, percentage: 15 };
+      var investment3 = { user: 'Matt', userId: '123', amount: 20, valuation: 11, percentage: 10 };
+      var investment4 = { user: 'Bob', userId: '456', amount: 10, valuation: 10, percentage: 14 };
 
       var investors = [
         { _id: '1', portfolio: [ { category: category, investments: [investment1] }] },
@@ -722,10 +725,10 @@ describe('Utils: ', function() {
         { _id: '4', portfolio: [ { category: category, investments: [investment4] }] },
       ];
 
-      var result1 = { user: 'Matt', userId: '123', amount: 8, valuation: 8, percentage: 8 }; 
-      var result2 = { user: 'Matt', userId: '123', amount: 5, valuation: 5, percentage: 5 }; 
-      var result3 = { user: 'Matt', userId: '123', amount: 20, valuation: 20, percentage: 20 }; 
-      var result4 = { user: 'Bob', userId: '456', amount: 10, valuation: 10, percentage: 14 }; 
+      var result1 = { user: 'Matt', userId: '123', amount: 8, valuation: 8, percentage: 8 };
+      var result2 = { user: 'Matt', userId: '123', amount: 5, valuation: 5, percentage: 5 };
+      var result3 = { user: 'Matt', userId: '123', amount: 20, valuation: 20, percentage: 20 };
+      var result4 = { user: 'Bob', userId: '456', amount: 10, valuation: 10, percentage: 14 };
 
       var expectedInvestors = [
         { _id: '1', portfolio: [ { category: category, investments: [result1] }] },
@@ -734,7 +737,7 @@ describe('Utils: ', function() {
         { _id: '4', portfolio: [ { category: category, investments: [result4] }] },
       ];
 
-      var results = utils.updateInvestorPercentagesAndValuations(investors, expertCategoryTotal, category, username); 
+      var results = utils.updateInvestorPercentagesAndValuations(investors, expertCategoryTotal, category, username);
       expect(results).toEqual(expectedInvestors);
     });
   });
@@ -744,6 +747,13 @@ describe('Utils: ', function() {
       jasmine.Clock.useMock();
       saveLogic = jasmine.createSpy();
       mainCB = jasmine.createSpy();
+    });
+
+    it('should simply return if there are 0 docs passed in', function() {
+      var docs = [];
+      utils.saveAll(docs, mainCB);
+      expect(mainCB.callCount).toEqual(1);
+      expect(mainCB).toHaveBeenCalledWith([]);
     });
 
     it('should not call the callback until the docs have been saved', function() {
@@ -768,6 +778,7 @@ describe('Utils: ', function() {
 
       expect(saveLogic.callCount).toEqual(2);
       expect(mainCB.callCount).toEqual(1);
+      expect(mainCB).toHaveBeenCalledWith([]);
     });
 
     it('should accumulate errors and pass them to the callback', function() {
@@ -790,6 +801,29 @@ describe('Utils: ', function() {
       jasmine.Clock.tick(101);
 
       expect(mainCB).toHaveBeenCalledWith(['1', '2']);
+    });
+  });
+
+  describe('generateVerificationToken', function() {
+    it('should generate a verification token with length 24', function() {
+      expect(utils.generateVerificationToken().length).toEqual(24);
+    });
+
+    it ('should generate unique tokens', function() {
+      expect(utils.generateVerificationToken()).not.toEqual(utils.generateVerificationToken());
+    });
+  });
+
+  describe('generateVerificationEmailOptions', function() {
+    it('should add the url to the text', function() {
+      expect(utils.generateVerificationEmailOptions('test@test.com', 'test')).toEqual({
+        from: jasmine.any(String),
+        to: 'test@test.com',
+        subject: jasmine.any(String),
+        text: "Hi,\n please confirm your new account for Repcoin at this URL: " + urlConfig[process.env.NODE_ENV] + "#/verify/test \n Thanks," + 
+              "\nThe Repcoin Team",
+
+      });
     });
   });
 });
