@@ -94,7 +94,7 @@ module.exports = function(router, isAuthenticated, acl) {
           verificationToken.save(function(err) {
 
             if (err) {
-              return res.status(501).send("Unable to save new verificationToken");
+              return res.status(501).send('Unable to save new verificationToken');
             }
 
             var mailOptions = utils.generateVerificationEmailOptions(user.email, verificationString);
@@ -288,20 +288,26 @@ module.exports = function(router, isAuthenticated, acl) {
       if (!token) {
         return res.status(412).send('No verification token provided');
       }
-      VerificationToken.findOneAndRemove({"string": token}, function(err, verifiedUser) {
+      VerificationToken.findOneAndRemove({ 'string': token }, function(err, verifiedUser) {
         if (err) {
           return res.status(501).send(err);
-        } else if (!verifiedUser.user) {
-          return res.status(501).send("User verfication token not found in DB");
+        } else if (!verifiedUser || !verifiedUser.user) {
+          return res.status(501).send('User verfication token not found in DB');
         }
 
         User.findOneAndUpdate(
-          {"email": verifiedUser.user}, {"verified": true},
+          { 'email': verifiedUser.user }, { 'verified': true },
           function(err, user) {
             if (err) {
               return res.status(404).send(err);
             }
-            return res.send(user);
+            req.login(user, function(err) {
+              if (err) {
+                return res.status(400).send(err);
+              } else {
+                return res.status(200).send(user);
+              }
+            });
           }
         );
       });

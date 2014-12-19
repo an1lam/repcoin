@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 var auth = require('../auth.jsx');
 var React = require('react');
 var Router = require('react-router');
@@ -20,8 +20,7 @@ var Login = React.createClass({
     auth.logIn(email, password, function(loggedIn) {
       if (loggedIn) {
         this.transitionTo('/home');
-      }
-      else {
+      } else {
         return this.setState({error: true});
       }
     }.bind(this));
@@ -36,7 +35,9 @@ var Login = React.createClass({
           <div className="input-group">
             <input type="password" ref="password" className="form-control" placeholder="Password"></input>
             <span className="input-group-btn">
-              <button type="submit" className="btn btn-default"><span className="glyphicon glyphicon-ok"></span></button>  
+              <button type="submit" className="btn btn-default">
+                <span className="glyphicon glyphicon-ok"></span>
+              </button>
             </span>
           </div>
           {errors}

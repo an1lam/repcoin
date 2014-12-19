@@ -4,9 +4,9 @@
 # Writes data from the mock json files in this directory to reps_development
 # Pass --saved to use saved json data files. Pass --mock to use mock json data files
 # ex. ./populateTestDB.sh -- mock
-# 
+#
 # To destroy existing data in reps_development, pass --destroy as an argument
-# ex: ./populateTestDB.sh --mock --destroy 
+# ex: ./populateTestDB.sh --mock --destroy
 
 mock=$1
 if [ "$mock" = "--mock" ];
@@ -19,7 +19,7 @@ if [ "$mock" = "--saved" ];
   then
   echo "Using saved data files...";
   data="saved";
-fi 
+fi
 
 destroy=$2
 if [ "$destroy" = "--destroy" ];

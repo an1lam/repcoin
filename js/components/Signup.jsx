@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 var $ = require('jquery');
 var auth = require('../auth.jsx');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
@@ -10,7 +10,9 @@ var Signup = React.createClass({
   mixins: [Navigation],
 
   getInitialState: function() {
-    return { error: null };
+    return { error: null,
+             verification: null
+           };
   },
 
   handleSubmit: function() {
@@ -37,11 +39,10 @@ var Signup = React.createClass({
       type: 'POST',
       data: data,
       success: function() {
-        // Redirect
-        this.transitionTo("/confirmation");
+        this.setState({ error: null, verification: 'Verification email sent!' });
       }.bind(this),
       error: function(xhr, status, err) {
-        if (xhr.responseText !== "Error") {
+        if (xhr.responseText !== 'Error') {
           this.setState({ error: xhr.responseText });
         }
         console.error(xhr.responseText);
@@ -50,9 +51,13 @@ var Signup = React.createClass({
   },
 
   render: function() {
-    var error = this.state.error ? <div className="alert alert-danger" role="alert"><p>{this.state.error}</p></div> : '';
+    var verification = this.state.verification ? <div className="alert alert-success" role="alert">
+      <p>{this.state.verification}</p></div> : '';
+    var error = this.state.error ? <div className="alert alert-danger" role="alert">
+      <p>{this.state.error}</p></div> : '';
     return (
       <div className="signup col-md-2 col-md-offset-5">
+        {verification}
         {error}
         <form onSubmit={this.handleSubmit}>
           <input type="text" ref="firstname" className="form-control" placeholder="First name"></input>

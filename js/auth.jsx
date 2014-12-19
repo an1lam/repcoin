@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-"use strict";
+'use strict';
 var $ = require('jquery');
 var React = require('react');
 var Router = require('react-router');
@@ -33,11 +33,11 @@ var auth = {
   storeCurrentUser: function(user, cb) {
     window.localStorage.setItem('currentUser', JSON.stringify(user));
     cb(user);
-  }, 
+  },
 
   getCurrentUser: function(cb) {
     function getCurrentUserLocal(cb) {
-      if (typeof window.localStorage === "undefined") {
+      if (typeof window.localStorage === 'undefined') {
         return false;
       }
       var currentUser = JSON.parse(window.localStorage.getItem('currentUser'));
@@ -68,7 +68,7 @@ var auth = {
   },
 
   loggedIn: function() {
-    return !!window.localStorage.getItem('currentUser'); 
+    return !!window.localStorage.getItem('currentUser');
   },
 
   logOut: function(cb) {
