@@ -28,7 +28,7 @@ var utils = {
           var investment = investor.portfolio[j].investments[p];
           if (String(investment.userId) === String(userId)) {
             // Give the investor the valuation
-            investor.portfolio[j].reps += investment.valuation; 
+            investor.portfolio[j].reps += investment.valuation;
           } else {
             newInvestments.push(investment);
           }

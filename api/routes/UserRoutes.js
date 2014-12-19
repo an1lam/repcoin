@@ -322,11 +322,11 @@ module.exports = function(router, isAuthenticated, acl) {
         } else {
           // Update all of the experts invested in by this user for the category
           var experts = utils.getExperts(user, categoryName);
-          utils.reimburseInvestors(investors, categoryName, user._id, function(err) {
+          utils.removeInvestors(experts, categoryName, user._id, function(err) {
             if (err) {
               return res.status(501).send(err);
             } else {
-              user = utils.deleteExpertCategory(user, categoryName);
+              user = utils.deleteInvestorCategory(user, categoryName);
               user.save(function(err) {
                 if (err) {
                   return res.status(501).send(err);
