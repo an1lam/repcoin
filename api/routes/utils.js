@@ -15,6 +15,28 @@ var verificationEmailConfig = require('../../config/mailer.js').verificationEmai
 var urlConfig = require('../../config/url.js');
 
 var utils = {
+  // Determines if a user is an expert for a given category
+  isExpert: function(user, category) {
+    var length = user.categories.length;
+    for (var i = 0; i < length; i++) {
+      if (user.categories[i].name === category) {
+        return true;
+      }
+    }
+    return false;
+  },
+
+  // Determines if a user is an investor for a given category
+  isInvestor: function(user, category) {
+    var length = user.portfolio.length;
+    for (var i = 0; i < length; i++) {
+      if (user.portfolio[i].category === category) {
+        return true;
+      }
+    }
+    return false;
+  },
+
   // Given an expert, category, and userId, remove investments from that userId
   // The expert keeps the reps it had from that investment
   removeInvestor: function(expert, categoryName, userId) {

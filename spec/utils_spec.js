@@ -7,6 +7,32 @@ var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 
 describe('Utils: ', function() {
+  describe('isExpert: ', function() {
+    var user = { categories: [{ name: 'Coding' }] };
+    it('returns true if the user is an expert', function() {
+      var result = utils.isExpert(user, 'Coding');
+      expect(result).toEqual(true);
+    });
+
+    it('returns false if the user is not an expert', function() {
+      var result = utils.isExpert(user, 'Ballet');
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('isInvestor: ', function() {
+    var user = { portfolio: [{ category: 'Coding' }] };
+    it('returns true if the user is an investor', function() {
+      var result = utils.isInvestor(user, 'Coding');
+      expect(result).toEqual(true);
+    });
+
+    it('returns false if the user is not an investor', function() {
+      var result = utils.isInvestor(user, 'Ballet');
+      expect(result).toEqual(false);
+    });
+  });
+
   describe('getInvestorsExperts: ', function() {
     var user = {portfolio: [
       { category: 'Coding', investments: [

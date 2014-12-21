@@ -289,6 +289,9 @@ module.exports = function(router, isAuthenticated, acl) {
           return res.status(501).send(err);
         } else if (!user) {
           return res.status(501).send('No user was found');
+        // If the user is not an expert for this category, just return the user
+        } else if (!utils.isExpert(user, categoryName)) {
+          return res.status(200).send(user);
         } else {
           // Reimburse the user's investors in the category
           var investors = utils.getInvestors(user, categoryName);
@@ -319,6 +322,9 @@ module.exports = function(router, isAuthenticated, acl) {
           return res.status(501).send(err);
         } else if (!user) {
           return res.status(501).send('No user was found');
+        // If the user is not investor for the category, just return the user
+        } else if (!utils.isInvestor(user, categoryName)) {
+          return res.status(200).send(user);
         } else {
           // Update all of the experts invested in by this user for the category
           var expertIds = utils.getInvestorsExperts(user, categoryName);

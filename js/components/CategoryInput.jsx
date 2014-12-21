@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var auth = require('../auth.jsx');
 var CategorySearch = require('./CategorySearch.jsx');
@@ -24,7 +24,7 @@ var CategoryInput = React.createClass({
   // Create a new category
   createCategory: function(categoryName, cb) {
     var category = { name: categoryName,
-                     ownerName: this.props.user.username }; 
+                     ownerName: this.props.user.username };
     $.ajax({
       url: '/api/categories/',
       type: 'POST',
@@ -52,7 +52,7 @@ var CategoryInput = React.createClass({
       error: function(xhr, status, err) {
         console.error(categoryName, status, err.toString());
       }.bind(this)
-    }); 
+    });
   },
 
   setInvestorCategory: function(category) {
@@ -73,7 +73,7 @@ var CategoryInput = React.createClass({
           this.incrementSubscribers(category, true);
           PubSub.publish('profileupdate');
         } else {
-          this.props.setError("Already an investor for " + category.name);
+          this.props.setError('Already an investor for ' + category.name);
         }
         this.props.onReset();
       }.bind(this),
@@ -81,7 +81,7 @@ var CategoryInput = React.createClass({
         console.error(status, err.toString());
         this.props.onReset();
       }.bind(this)
-    });  
+    });
   },
 
   setExpertCategory: function(category) {
@@ -102,7 +102,7 @@ var CategoryInput = React.createClass({
           this.incrementSubscribers(category, false);
           PubSub.publish('profileupdate');
         } else {
-          this.props.setError("Already an expert in " + category.name);
+          this.props.setError('Already an expert in ' + category.name);
         }
         this.props.onReset();
       }.bind(this),
@@ -128,7 +128,7 @@ var CategoryInput = React.createClass({
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-      }.bind(this) 
+      }.bind(this)
     });
   },
 
@@ -154,7 +154,7 @@ var CategoryInput = React.createClass({
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-      }.bind(this) 
+      }.bind(this)
     });
   },
 
