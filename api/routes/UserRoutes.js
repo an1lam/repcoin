@@ -321,8 +321,8 @@ module.exports = function(router, isAuthenticated, acl) {
           return res.status(501).send('No user was found');
         } else {
           // Update all of the experts invested in by this user for the category
-          var experts = utils.getExperts(user, categoryName);
-          utils.removeInvestors(experts, categoryName, user._id, function(err) {
+          var expertIds = utils.getInvestorsExperts(user, categoryName);
+          utils.updateInvestorsExperts(expertIds, categoryName, user._id, function(err) {
             if (err) {
               return res.status(501).send(err);
             } else {

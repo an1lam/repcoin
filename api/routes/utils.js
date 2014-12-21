@@ -15,9 +15,33 @@ var verificationEmailConfig = require('../../config/mailer.js').verificationEmai
 var urlConfig = require('../../config/url.js');
 
 var utils = {
-  // Given an investor, category, and user, remove investments in that user
+  // Given an expert, category, and userId, remove investments from that userId
+  // The expert keeps the reps it had from that investment
+  removeInvestor: function(expert, categoryName, userId) {
+    var l = expert.categories.length;
+    for (var j = 0; j < l; j++) {
+
+      // If the category matches, search the investors
+      if (expert.categories[j].name === categoryName) {
+        var newInvestors = [];
+        var z = expert.categories[j].investors.length;
+        for (var p = 0; p < z; p++) {
+
+          // Copy over the investor unless it is the one we want to remove
+          var investor = expert.categories[j].investors[p];
+          if (String(investor.id) !== String(userId)) {
+            newInvestors.push(investor);
+          }
+        }
+        expert.categories[j].investors = newInvestors;
+      }
+    }
+    return expert;
+  },
+
+  // Given an investor, category, and expertId, remove investments in that expert
   // Reimburse the investor for the valuation of those investments
-  reimburseInvestor: function(investor, categoryName, userId) {
+  reimburseInvestor: function(investor, categoryName, expertId) {
     var l = investor.portfolio.length;
     for (var j = 0; j < l; j++) {
       // If the category matches, search the investments
@@ -26,7 +50,7 @@ var utils = {
         var z = investor.portfolio[j].investments.length;
         for (var p = 0; p < z; p++) {
           var investment = investor.portfolio[j].investments[p];
-          if (String(investment.userId) === String(userId)) {
+          if (String(investment.userId) === String(expertId)) {
             // Give the investor the valuation
             investor.portfolio[j].reps += investment.valuation;
           } else {
@@ -39,8 +63,42 @@ var utils = {
     return investor;
   },
 
-  // Given investors for an expert category, reimburse them for the category
-  reimburseInvestors: function(investors, categoryName, userId, cb) {
+  // Given experts ids invested by an investor
+  // For each expert, remove investments from that investor
+  updateInvestorsExperts: function(expertIds, categoryName, investorId, cb) {
+    // If the list of experts is empty, simply return
+    if (expertIds.length === 0) {
+      return cb(null);
+    }
+    var self = this;
+
+    // Update each user
+    User.find({ '_id': { $in: expertIds }}, function(err, experts) {
+      if (err) {
+        return cb(err);
+      } else {
+        var newExperts = [];
+        // Search through each expert's portfolio
+        var length = experts.length;
+        for (var i = 0; i < length; i++) {
+          var expert = experts[i];
+          newExperts.push(self.removeInvestor(expert, categoryName, investorId));
+        }
+
+        // Finally, save all the modified investors
+        self.saveAll(newExperts, function(errs) {
+          if (errs.length > 0) {
+            return cb(errs);
+          } else {
+            return cb(null);
+          }
+        });
+      }
+    });
+  },
+
+  // Given investors for an expert and category, reimburse them for the category
+  reimburseInvestors: function(investors, categoryName, expertId, cb) {
     // If the list of investors is empty, simply return
     if (investors.length === 0) {
       return cb(null);
@@ -64,7 +122,7 @@ var utils = {
         length = users.length;
         for (var i = 0; i < length; i++) {
           var user = users[i];
-          newUsers.push(self.reimburseInvestor(user, categoryName, userId));
+          newUsers.push(self.reimburseInvestor(user, categoryName, expertId));
         }
 
         // Finally, save all the modified investors
@@ -79,15 +137,26 @@ var utils = {
     });
   },
 
-  // Get experts for a given user and category
-  getExperts: function(user, categoryName) {
+  // Get an investor's experts' ids for a given category
+  getInvestorsExperts: function(user, categoryName) {
+    var expertIds = {};
     var length = user.portfolio.length;
     for (var i = 0; i < length; i++) {
       if (categoryName === user.portfolio[i].category) {
-        return user.portfolio[i].investments;
+        var len = user.portfolio[i].investments.length;
+        for (var j = 0; j < len; j++) {
+          var id = user.portfolio[i].investments[j].userId;
+          if (!(id in expertIds)) {
+            expertIds[id] = true;
+          }
+        }
       }
     }
-    return null;
+    var ids = [];
+    for (var key in expertIds) {
+      ids.push(key);
+    }
+    return ids;
   },
 
   // Get investors for a given user and category
@@ -99,6 +168,19 @@ var utils = {
       }
     }
     return null;
+  },
+
+  // Delete an investor category
+  deleteInvestorCategory: function(user, categoryName) {
+    var length = user.portfolio.length;
+    var newPortfolio = [];
+    for (var i = 0; i < length; i++) {
+      if (categoryName !== user.portfolio[i].category) {
+        newPortfolio.push(user.portfolio[i]);
+      }
+    }
+    user.portfolio = newPortfolio;
+    return user;
   },
 
   // Delete an expert category

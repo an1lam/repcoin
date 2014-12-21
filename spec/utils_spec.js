@@ -7,16 +7,20 @@ var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 
 describe('Utils: ', function() {
-  describe('getExperts: ', function() {
-    var user = { portfolio: [{ category: 'Coding', investments: ['foo']}] };
-    it('returns investor\'s experts for a given categoryName', function() {
-      var result = utils.getExperts(user, 'Coding');
+  describe('getInvestorsExperts: ', function() {
+    var user = {portfolio: [
+      { category: 'Coding', investments: [
+        { userId: 'foo' }, { userId: 'foo' }]}
+    ]};
+
+    it('returns investor\'s experts\' ids for a given categoryName', function() {
+      var result = utils.getInvestorsExperts(user, 'Coding');
       expect(result).toEqual(['foo']);
     });
 
-    it('returns null when no experts are found', function() {
-      var result = utils.getExperts(user, 'Ballet');
-      expect(result).toEqual(null);
+    it('returns an empty set when no experts are found', function() {
+      var result = utils.getInvestorsExperts(user, 'Ballet');
+      expect(result).toEqual({});
     });
   });
 
@@ -30,6 +34,61 @@ describe('Utils: ', function() {
     it('returns null when no investors are found', function() {
       var result = utils.getInvestors(user, 'Ballet');
       expect(result).toEqual(null);
+    });
+  });
+
+  describe('updateInvestorsExperts: ', function() {
+    beforeEach(function() {
+      cb = jasmine.createSpy();
+    });
+
+    var investors = [
+      { id: '123' },
+      { id: '456' }
+    ];
+    var users = [{ categories: [{ name: 'Coding', reps: 0, investors: investors }] }];
+    it('properly removes investor', function() {
+      spyOn(utils, 'saveAll').andCallFake(function(users, cb) {
+        return cb([]);
+      });
+      spyOn(User, 'find').andCallFake(function(selector, cb) {
+        return cb(null, users);
+      });
+
+      var expectedUsers = [{ categories: [{ name: 'Coding', reps: 0, investors: [{ id: '456' }] }] }];
+      utils.updateInvestorsExperts(['foo'], 'Coding', '123', cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
+      expect(utils.saveAll).toHaveBeenCalledWith(expectedUsers, jasmine.any(Function));
+    });
+
+    it('properly handles error from finding experts', function() {
+      spyOn(User, 'find').andCallFake(function(selector, cb) {
+        return cb('ERROR!', null);
+      });
+
+      utils.updateInvestorsExperts(['foo'], 'Coding', '123', cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith('ERROR!');
+    });
+
+    it('properly handles error from saving investors', function() {
+      spyOn(User, 'find').andCallFake(function(selector, cb) {
+        return cb(null, users);
+      });
+      spyOn(utils, 'saveAll').andCallFake(function(users, cb) {
+        return cb(['ERROR!']);
+      });
+
+      utils.updateInvestorsExperts(['foo'], 'Coding', '123', cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(['ERROR!']);
+    });
+
+    it('properly handles empty list of experts', function() {
+      utils.updateInvestorsExperts([], 'Coding', '123', cb);
+      expect(cb.callCount).toEqual(1);
+      expect(cb).toHaveBeenCalledWith(null);
     });
   });
 
@@ -50,27 +109,25 @@ describe('Utils: ', function() {
       spyOn(User, 'find').andCallFake(function(selector, cb) {
         return cb(null, users);
       });
-
-      var categoryName = 'Coding';
-      var userId = '123';
       var investors = [ { name: 'Foo', id: 'bar' }];
+
+      var expectedUsers = [{ portfolio: [{ category: 'Coding', reps: 10, investments: [investments[1]] }] }];
       utils.reimburseInvestors(investors, 'Coding', '123', cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
-    }); 
+      expect(utils.saveAll).toHaveBeenCalledWith(expectedUsers, jasmine.any(Function));
+    });
 
     it('properly handles error from finding investors', function() {
       spyOn(User, 'find').andCallFake(function(selector, cb) {
         return cb('ERROR!', null);
       });
 
-      var categoryName = 'Coding';
-      var userId = '123';
       var investors = [ { name: 'Foo', id: 'bar' }];
       utils.reimburseInvestors(investors, 'Coding', '123', cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith('ERROR!');
-    }); 
+    });
 
     it('properly handles error from saving investors', function() {
       spyOn(User, 'find').andCallFake(function(selector, cb) {
@@ -80,18 +137,29 @@ describe('Utils: ', function() {
         return cb(['ERROR!']);
       });
 
-      var categoryName = 'Coding';
-      var userId = '123';
       var investors = [ { name: 'Foo', id: 'bar' }];
       utils.reimburseInvestors(investors, 'Coding', '123', cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(['ERROR!']);
-    }); 
+    });
 
     it('properly handles empty list of investors', function() {
       utils.reimburseInvestors([], 'Coding', '123', cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
+    });
+  });
+
+  describe('removeInvestor: ', function() {
+    it('properly removes the investor for the given category', function() {
+      var investors = [
+        { id: '123', name: 'Bob' },
+        { id: '456', name: 'Matt' }
+      ];
+      var expert = { categories: [{ name: 'Coding', reps: 10, investors: investors }] };
+      var result = utils.removeInvestor(expert, 'Coding', '123');
+      var expected = { categories: [{ name: 'Coding', reps: 10, investors: [investors[1]] }] };
+      expect(result).toEqual(expected);
     });
   });
 
@@ -105,6 +173,14 @@ describe('Utils: ', function() {
       var result = utils.reimburseInvestor(investor, 'Coding', '123');
       var expected = { portfolio: [{ category: 'Coding', reps: 10, investments: [investments[1]] }] };
       expect(result).toEqual(expected);
+    });
+  });
+
+  describe('deleteInvestorCategory: ', function() {
+    it('deletes the category from the portfolio', function() {
+      var user = { portfolio: [{ category: 'Coding' }] };
+      var result = utils.deleteInvestorCategory(user, 'Coding');
+      expect(result).toEqual({ portfolio: [] });
     });
   });
 
