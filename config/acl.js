@@ -3,7 +3,7 @@ var whitelist = require('./whitelist.js');
 
 // Express middleware to check for acl privileges based on a whitelist
 var acl = {
- 
+
   // Check if the user has admin privileges
   isAdmin: function(req, res, next) {
     var userId = req.session.passport.user;
@@ -29,7 +29,7 @@ var acl = {
   isAdminOrFrom: function(req, res, next) {
     if (!req.body.from) {
       return res.status(412).send('Invalid parameters to make transaction');
-    } 
+    }
     var fromId = req.body.from.id;
     var userId = req.session.passport.user;
     if (whitelist[userId] || (fromId === userId)) {
