@@ -1,13 +1,7 @@
-/** @jsx React.DOM */
-"use strict"; 
-
+'use strict'; 
 var React = require('react');
-var $ = require('jquery');
 
 var LinkDelete = React.createClass({
-  getInitialState: function() {
-    return {};
-  },
 
   propogateDelete: function(event) {
     event.preventDefault();

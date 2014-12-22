@@ -179,7 +179,12 @@
   padding-left:35px;
 }
 
-.editBox {
+.editCategoriesBtn .divider {
+  display:inline;
+}
+
+.editCategoriesBtn {
+  display:inline;
   float:right;
 }
 
@@ -298,6 +303,10 @@ html, body {
   margin-top:10px;
   margin-bottom:10px;
   margin-left:10px;
+}
+
+.editBox {
+  float:right;
 }
 
 .categoriesItem {
@@ -479,5 +488,11 @@ input.cropit-image-zoom-input {
 
 textarea {
   resize:none;
+}
+
+/* Categories Table //////////////*/
+.del-expert-cat-btn {
+  margin-top:10px;
+  width:100%;
 }
 
