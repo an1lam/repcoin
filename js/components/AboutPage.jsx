@@ -10,24 +10,19 @@ var AboutPage = React.createClass({
     return (
       <div className="aboutPage">
         <Toolbar />
-        <div className="aboutContent text-center container-fluid">
-          <h2>About Reps</h2>
+        <div className="aboutContent container-fluid">
+          <h2>About Repcoin</h2>
           <div className="aboutReps">
-            <p>Reps are the canonical source of reputation for the digital age.</p>
+            <p>Repcoin is the first market-based approach to reputation. Use it to discover talent and prove yourself in your field.</p>
 
-            <p>On the Reps site, we allow users to allocate their Reps to other users for different categories based on
-            their knowledge of that users expertise in a category.</p>
+            <p>Repcoin hosts a centralized, unbiased source of reputation for experts and investors on countless topics.</p>
+            <p>Sign up as an expert and showcase your talent for a given skill. Sign up as an investor and prove your eye for the best in the field.</p>
 
-            <p>Each user possesses three scores, the Direct Score, the Crowd Score, and the Expert Score.</p>
+            <p>Repcoin ranks experts and investors within a given category on a bell curve. Your expert percentile is determined by the investments you receive, and your investor percentile is derived from the return on your investments.</p>
 
-            <p><h4>The Direct Score</h4></p>
-            <p>The Direct score consists of the number of Reps other users have allocated towards you in a given category.</p>
-            <p><h4>The Expert Score</h4></p>
-            <p>The Expert score consists of the accuracy of your Rep allocations.</p>
-            <p><h4>The Crowd Score</h4></p>
-            <p>The Crowd score is determined by measuring the notoriety of the users who rate you and applying a scaling factor
-            to your Direct Score based on that metric.</p>
+            <p>Your Repcoin reputation is portable. Display it on third party sites and use it as a pure rating for your skill.</p>
 
+            <p>Choose your categories and start contributing to the purest metric of success on the web!</p>
           </div>
         </div>
         <Footer />
