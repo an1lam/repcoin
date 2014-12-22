@@ -8,6 +8,4 @@ npm-debug.log
 bower_components
 .zedstate
 /*.env
-config/mailer.js
-config/whitelist.js
 tags
