@@ -5,7 +5,7 @@ var auth = require('../auth.jsx');
 var CategoriesHeader = require('./CategoriesHeader');
 var CategoriesItem = require('./CategoriesItem');
 var CategoryInput = require('./CategoryInput');
-var ExpertCategoryDelete = require('./ExpertCategoryDelete.jsx');
+var CategoryDelete = require('./CategoryDelete.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
 
@@ -58,7 +58,7 @@ var CategoriesTable = React.createClass({
   deleteExpertCategory: function(e) {
     e.preventDefault();
     var url = '/api/users/' + this.props.currentUser._id + '/'
-      + this.state.categoryToDelete.name + '/delete'; 
+      + this.state.categoryToDelete.name + '/expert/delete';
     $.ajax({
       url: url,
       type: 'PUT',
@@ -84,7 +84,7 @@ var CategoriesTable = React.createClass({
     var edit = '';
     var addCategory = '';
     var deleteCategory= '';
-    
+
     if (this.props.currentUser._id === this.props.user._id) {
       if (this.state.editHover) {
         edit = <div className="editCategoriesBtn">
@@ -95,14 +95,14 @@ var CategoriesTable = React.createClass({
       } else if (this.state.addMode || this.state.deleteMode || this.state.showDeleteBox) {
         edit = <div className="editCategoriesBtn">
           <button className="btn btn-default" onClick={this.handleCancelClick}>Cancel</button>
-        </div>;  
-      } 
+        </div>;
+      }
 
       if (this.state.showDeleteBox) {
-        deleteCategory = <ExpertCategoryDelete onReset={this.closeDeleteBox}
+        deleteCategory = <CategoryDelete onReset={this.closeDeleteBox} investor={false}
           onDelete={this.deleteExpertCategory} name={this.state.categoryToDelete.name}/>;
       }
-     
+
       if (this.state.addMode) {
         addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={true} setError={this.setError} />;
       }

@@ -1,6 +1,5 @@
 'use strict';
 
-var ExpertCategoryDelete = require('./ExpertCategoryDelete.jsx');
 var InvestorList = require('./InvestorList.jsx');
 var React = require('react');
 var ScoreBar = require('./ScoreBar.jsx');

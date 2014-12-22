@@ -13,15 +13,7 @@
       "category": "Rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
-      "investments": [{
-        "_id": ObjectId("1434171b7f9cea59690851b1"),
-        "timeStamp": {"$date": 1413480832},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
-        "user": "Kanye West",
-        "amount": 20,
-        "valuation": 20,
-        "percentage": 10
-      }]
+      "investments": []
     },
     {
       "reps": 11,
