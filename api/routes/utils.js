@@ -591,7 +591,6 @@ var utils = {
       text: nodeUtil.format(verificationEmailConfig.text, url),
     };
   },
-
 };
 
 module.exports = utils;
