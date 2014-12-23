@@ -143,12 +143,14 @@ UserSchema.pre('save', function(next) {
   // generate a salt
   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
     if (err) {
+      winston.log('error', 'Error generating salt');
       return next(err);
     }
 
     // hash the password along with our new salt
     bcrypt.hash(user.password, salt, function(err, hash) {
         if (err) {
+          winston.log('error', 'Error hashing password for user: %s', user.email);
           return next(err);
         }
 
@@ -165,12 +167,12 @@ UserSchema.methods.comparePassword = function(candidatePassword) {
 
 // Get all the users, obscuring private fields
 UserSchema.statics.findPublic = function(query, cb) {
-  return this.find(query, privateFields, cb); 
+  return this.find(query, privateFields, cb);
 };
 
 // Get the user with a given id, obscuring private fields
 UserSchema.statics.findByIdPublic = function(id, cb) {
-  return this.findById(id, privateFields, cb); 
+  return this.findById(id, privateFields, cb);
 };
 
 // Get all the users whose first or last name start with searchTerm

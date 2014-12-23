@@ -1,4 +1,6 @@
 var User = require('../models/User.js');
+var winston = require('winston');
+
 module.exports = function(agenda) {
   agenda.define('incrementUserReps', function(job, done) {
     var i = 0;
@@ -9,7 +11,7 @@ module.exports = function(agenda) {
         });
         user.save();
       });
-      console.log("Incrementing %d users' reps by 5.", users.length);
+      winston.log('info', 'Incrementing %d users\' reps by 5.', users.length);
     });
   });
 
@@ -22,7 +24,7 @@ module.exports = function(agenda) {
         });
         user.save();
       });
-      console.log("Updating %d users' previous percentiles.", users.length);
+      winston.log('info', 'Updating %d users\' previous percentiles.', users.length);
     });
   });
 
