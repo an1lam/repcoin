@@ -44,12 +44,8 @@
     "react-tools": "~0.12.0",
     "reactify": "~0.15.2",
     "reduce": "~1.0.1",
-<<<<<<< HEAD
     "watchify": "^2.1.0",
     "winston": "^0.8.3"
-=======
-    "watchify": "^2.1.0"
->>>>>>> dfcf609ef0d8d4e85b388be4dd899d767b58cbcc
   },
   "devDependencies": {
     "should": "^4.0.4",
