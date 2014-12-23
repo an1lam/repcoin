@@ -12,6 +12,12 @@ module.exports = {
     text: 'Hi!\n\n Please confirm your new account for Repcoin by clicking this URL: %s \n\n\n Thanks,\nThe Repcoin Team',
   },
 
+  passwordResetEmail: {
+    from: process.env.REPCOIN_EMAIL,
+    subject: 'Reset your password for Repcoin.',
+    text: 'Hi,\n\nYou\'ve requested that we let you reset your password. Go here: %s\n\nThanks,\nThe Repcoin Team',
+  },
+
   transporterFactory: function() {
     var self = this;
     return nodemailer.createTransport({

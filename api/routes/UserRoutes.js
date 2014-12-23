@@ -2,6 +2,7 @@
 
 // Models
 var User = require('../models/User.js');
+var PasswordResetToken = require('../models/PasswordResetToken.js');
 var VerificationToken = require('../models/VerificationToken.js');
 
 // Modules
@@ -155,10 +156,9 @@ module.exports = function(router, isAuthenticated, acl) {
           });
         }
       });
-    });
+    })
 
-/////// Routes that have /users/:user_id ///////////
-  router.route('/users/:user_id')
+/////// Routes that have /users/:user_id /////////// router.route('/users/:user_id')
     // Get the user with the provided id
     .get(isAuthenticated, function(req, res) {
       winston.log('info', 'GET /users/%s', req.params.user_id);
@@ -418,6 +418,45 @@ module.exports = function(router, isAuthenticated, acl) {
             }
           });
         }
+      });
+    });
+
+  // Reset a user's password by sending them an email with a reset link
+  router.route('/resetPassword')
+    .post(function(req, res) {
+      var email = req.body.email;
+      if (!email) {
+        return res.status(412).send('No email address provided');
+      }
+
+      User.findOne({'email': email }, function(err, user) {
+        if (err) {
+          return res.status(412).send('No user with that email address.');
+        }
+
+        var randomString = utils.generateVerificationToken();
+        var resetToken = new PasswordResetToken({
+          user: user.email,
+          string: randomString,
+        });
+
+        resetToken.save(function(err) {
+          if (err) {
+            return res.status(501).send(err);
+          }
+
+          // Send an email with a link to reset the user's password
+          var mailOptions = utils.generatePasswordResetEmailOptions(
+            user.email, randomString);
+
+          transporter.sendMail(mailOptions, function(err, info) {
+            if (err) {
+              return res.status(554).send(err);
+            } else {
+              return res.status(200).end();
+            }
+          });
+        });
       });
     });
 

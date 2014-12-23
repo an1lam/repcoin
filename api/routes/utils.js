@@ -12,6 +12,7 @@ var VerificationToken = require('../models/VerificationToken.js');
 
 // Config
 var verificationEmailConfig = require('../../config/mailer.js').verificationEmail;
+var passwordResetEmailConfig = require('../../config/mailer.js').passwordResetEmail;
 var urlConfig = require('../../config/url.js');
 var winston = require('winston');
 
@@ -742,6 +743,16 @@ var utils = {
       to: email,
       subject: verificationEmailConfig.subject,
       text: nodeUtil.format(verificationEmailConfig.text, url),
+    };
+  },
+
+  generatePasswordResetEmailOptions: function(email, randomString) {
+    var url = urlConfig[process.env.NODE_ENV] + '#/passwordReset/' + randomString;
+    return {
+      from: passwordResetEmailConfig.from,
+      to: email,
+      subject: passwordResetEmailConfig.subject,
+      text: nodeUtil.format(passwordResetEmailConfig.text, url),
     };
   },
 };
