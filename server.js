@@ -9,19 +9,23 @@ var session = require('express-session');
 var passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy;
 var path = require('path');
-
 // Configure passport
 require('./config/pass.js')(passport, LocalStrategy);
 var mailerConfig = require('./config/mailer.js');
+var winston = require('winston');
+
+winston.info('Starting up application');
 
 // Get CWD
 var STATIC_PATH = path.join(process.env.PWD, 'public');
 
 // Mock authentication if test environment
 if (!module.parent) {
- var auth = require('./config/auth.js');
+  winston.info('Using config/auth');
+  var auth = require('./config/auth.js');
 } else {
- var auth = function(req, res, next) { res.status(200).end(); };
+  winston.info('Test environment found; using mock auth');
+  var auth = function(req, res, next) { res.status(200).end(); };
 }
 
 var app = express();
@@ -36,7 +40,7 @@ var db = require('./config/db');
 var port = process.env.PORT || 8080; // set up our port
 
 app.use(express.static(STATIC_PATH));
-console.log('Serving static files from ' + __dirname + '/public');
+winston.log('info', 'Serving static files from %s', __dirname + '/public');
 
 app.set('views', STATIC_PATH);
 app.engine('.html', require('jade').__express);
@@ -70,7 +74,7 @@ var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, a
 
 // Nodemailer Setup
 var transporter = nodemailer.createTransport({
-  service: 'Gmail',
+  service: process.env.REPCOIN_EMAIL_SERVICE,
   auth: mailerConfig.fromUser,
 });
 
@@ -85,9 +89,9 @@ if (process.env.NODE_ENV === 'production') {
 
   transporter.sendMail(mailOptions, function(err, info) {
     if (err) {
-      console.log("He's dead Jim! Here's why ", err);
+      winston.log('info', 'He\'s dead Jim! Here\'s why %s', err);
     } else {
-      console.log('Message sent: ' + info.response);
+      winston.log('info', 'Email sent: %s', info.response);
     }
   });
 }
@@ -119,14 +123,16 @@ app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter, uplo
 // Start the server unless we are running a test
 if (!module.parent) {
   if (process.env.NODE_ENV === 'production') {
+    winston.log('info', 'Starting the server with environment: %s', process.env.NODE_ENV);
     var mongoUrl = db.production_url;
   }
   else {
     process.env.NODE_ENV = "development";
+    winston.log('info', 'Starting the server with environment: %s', process.env.NODE_ENV);
     var mongoUrl = db.development_url;
   }
   mongoose.connect(mongoUrl);
-  console.log('Listening at port ' + port);
+  winston.log('info', 'Listening at port %d', port);
   app.listen(port); // startup our app at http://localhost:8080
 }
 
