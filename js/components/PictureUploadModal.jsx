@@ -2,6 +2,13 @@
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
+var cloudinary = require('cloudinary');
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET_KEY
+});
+
 var PubSub = require('pubsub-js');
 var cropit = require('cropit');
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
@@ -57,7 +64,7 @@ var PictureUploadModal = React.createClass({
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-      }.bind(this) 
+      }.bind(this)
     });
   },
 
@@ -82,7 +89,7 @@ var PictureUploadModal = React.createClass({
       error: function(xhr, status, err) {
         console.error(status, err.toString());
       }.bind(this)
-    });  
+    });
   },
 
   deleteOldPhoto: function(link, cb) {
@@ -133,7 +140,7 @@ var PictureUploadModal = React.createClass({
                 <input type="range" className="cropit-image-zoom-input" />
                 <input type="file" className="cropit-image-input" />
               </div>
-            </div> 
+            </div>
             <div className="modal-footer">
               <button onClick={this.handleClick} type="button" className="btn btn-default">Select an image</button>
               <button onClick={this.handleSave} type="button" className="btn btn-primary">Save!</button>

@@ -28,7 +28,7 @@ var PictureBox = React.createClass({
   },
 
   handleClick: function() {
-    this.setState({ showModal: true }); 
+    this.setState({ showModal: true });
   },
 
   handleImgError: function() {
