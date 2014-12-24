@@ -1,4 +1,4 @@
-var User = require('../api/models/User.js'); 
+var User = require('../api/models/User.js');
 
 module.exports = function(passport, LocalStrategy) {
   passport.use(new LocalStrategy({
@@ -7,8 +7,8 @@ module.exports = function(passport, LocalStrategy) {
     },
     function(username, password, done) {
       User.findOne({ email: username }, function(err, user) {
-        if (err) { 
-          return done(err); 
+        if (err) {
+          return done(err);
         }
         if (!user) {
           return done(null, false, { message: 'Unrecognized email address' });

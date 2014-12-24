@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 // Fields to include and obscure for public transaction information
-// Used in an aggregate() to appropriately filter documents 
+// Used in an aggregate() to appropriately filter documents
 var privateFilter = {
   "to.name": 1,
   "to.id": 1,
@@ -28,7 +28,7 @@ var TransactionSchema = new Schema({
   },
   amount : { type: Number, required: true },
   category : { type: String, required: true },
-  timeStamp : { type: Date, default: Date.now, required: true }, 
+  timeStamp : { type: Date, default: Date.now, required: true },
 });
 
 // Get all transactions involving a given user
@@ -83,13 +83,14 @@ TransactionSchema.statics.findByUserIdFromPublic = function(userId) {
     return this.findPublic(from);
 };
 
-// Get all public transactions between two users 
+// Get all public transactions between two users
 TransactionSchema.statics.findByUserIdUsPublic = function(userId1, userId2) {
     userId1 = mongoose.Types.ObjectId(userId1);
     userId2 = mongoose.Types.ObjectId(userId2);
     var between = {
-      $or: [ { "from.id" : userId1, "from.anonymous": false, "to.id" : userId2 },              { "from.id": userId2, "from.anonymous": false, "to.id": userId1 } 
-          ]
+      $or: [ { "from.id" : userId1, "from.anonymous": false, "to.id" : userId2 },
+        { "from.id": userId2, "from.anonymous": false, "to.id": userId1 }
+      ]
     };
     return this.findPublic(between);
 };

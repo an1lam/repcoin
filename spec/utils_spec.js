@@ -935,9 +935,11 @@ describe('Utils: ', function() {
         from: jasmine.any(String),
         to: 'test@test.com',
         subject: jasmine.any(String),
-        text: 'Hi!\n\n Please confirm your new account for Repcoin by clicking this URL: '
-          + urlConfig[process.env.NODE_ENV] + '#/verify/test '
-          + '\n\n\n Thanks,\nThe Repcoin Team',
+        text:
+          'Hi!\n\n Please confirm your new account for Repcoin by clicking ' +
+          'this URL: ' + urlConfig[process.env.NODE_ENV] + '#/verify/test' +
+          ' \n\n\n Thanks,\nThe Repcoin Team',
+
       });
     });
   });

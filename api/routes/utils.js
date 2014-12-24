@@ -13,6 +13,7 @@ var VerificationToken = require('../models/VerificationToken.js');
 // Config
 var verificationEmailConfig = require('../../config/mailer.js').verificationEmail;
 var urlConfig = require('../../config/url.js');
+var winston = require('winston');
 
 var utils = {
   // Determines if a user is an expert for a given category
@@ -97,6 +98,7 @@ var utils = {
     // Update each user
     User.find({ '_id': { $in: expertIds }}, function(err, experts) {
       if (err) {
+        winston.log('error', 'utils.updateInvestorExperts: error finding experts: %s', err);
         return cb(err);
       } else {
         var newExperts = [];
@@ -110,6 +112,7 @@ var utils = {
         // Finally, save all the modified investors
         self.saveAll(newExperts, function(errs) {
           if (errs.length > 0) {
+            winston.log('error', 'utils.updateInvestorExperts: error saving all experts: %s', errs);
             return cb(errs);
           } else {
             return cb(null);
@@ -137,6 +140,7 @@ var utils = {
     // Update each user
     User.find({ '_id': { $in: ids }}, function(err, users) {
       if (err) {
+        winston.log('error', 'utils.reimburseInvestors: error finding investors: %s', err);
         return cb(err);
       } else {
         var newUsers = [];
@@ -150,6 +154,7 @@ var utils = {
         // Finally, save all the modified investors
         self.saveAll(newUsers, function(errs) {
           if (errs.length > 0) {
+            winston.log('error', 'utils.reimburseInvestors: error saving investors: %s', errs);
             return cb(errs);
           } else {
             return cb(null);
@@ -361,6 +366,7 @@ var utils = {
     for (var i = 0; i < length; i++) {
       docs[i].save(function(err) {
         if (err) {
+          winston.log('error', 'utils.saveAll: error saving doc: %s', err);
           errs.push(err);
         }
         done++;
@@ -652,10 +658,12 @@ var utils = {
       investors.sort(roiComparator);
       self.getInvestorPercentiles(investors, category, function(err) {
         if (err) {
+          winston.log('error', 'utils.updateInvestors: error getting investor percentiles: %s', err);
           return cb(err);
         }
         self.saveAll(investors, function(errs) {
           if (errs.length > 0) {
+            winston.log('error', 'utils.updateInvestors: error saving investors: %s', err);
             return cb(errs);
           } else {
             return cb(null);
@@ -663,6 +671,7 @@ var utils = {
         });
       });
     }, function(err) {
+      winston.log('error', 'utils.updateInvestors: error getting investorsPromise: %s', err);
       return cb(err);
     });
   },
@@ -676,10 +685,12 @@ var utils = {
       experts.sort(repsComparator);
       self.getExpertPercentiles(experts, category, function(err) {
         if (err) {
+          winston.log('error', 'utils.updateExperts: error getting expert percentiles: %s', err);
           return cb(err);
         }
         self.saveAll(experts, function(errs) {
           if (errs.length > 0) {
+            winston.log('error', 'utils.updateExperts: error saving experts: %s', err);
             return cb(errs);
           } else {
             return cb(null);
@@ -687,6 +698,7 @@ var utils = {
         });
       });
     }, function(err) {
+      winston.log('error', 'utils.updateExperts: error getting expertsPromise: %s', err);
       return cb(err);
     });
   },

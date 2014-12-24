@@ -1,5 +1,6 @@
 // api/routes/AuthRoutes.js
 // Routes to login, logout, and signup
+var winston = require('winston');
 
 module.exports = function(router, passport) {
   /*
@@ -12,19 +13,22 @@ module.exports = function(router, passport) {
   */
   router.route('/loggedin')
     .get(function(req, res) {
-      return res.send(req.isAuthenticated());
+      return res.status(200).send(req.isAuthenticated());
     });
 
   // Get the current user. Null if no user logged in
   router.route('/user')
     .get(function(req, res) {
-      return res.send(req.user);
+      return res.status(200).send(req.user);
     });
 
   router.route('/login')
     .post(passport.authenticate('local'), function(req, res) {
-       var user = req.user || {};
-       return res.send(user);
+      if (req.user) {
+        winston.log('info', 'Logged in user: %s', req.body.email);
+      }
+      var user = req.user || {};
+      return res.status(200).send(user);
     });
 
   router.route('/logout')
