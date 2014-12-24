@@ -33,7 +33,6 @@ module.exports = function(router, passport) {
 
   router.route('/logout')
     .post(function(req, res) {
-      winston.log('info', 'Logged out user: %s', req.user.email);
       req.logout();
       return res.status(200).end();
     });
