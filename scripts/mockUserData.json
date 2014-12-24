@@ -51,7 +51,6 @@
     "url": "https://www.kanyewest.com",
     "title": "Website"
   }],
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "verified": "false",
   "timeStamp": {"$date": 1413480832}
 },
@@ -117,7 +116,6 @@
     "url": "https://www.facebook.com",
     "title": "Facebook"
    }],
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "verified": "false",
   "timeStamp": {"$date": 1413480932}
 },
@@ -131,7 +129,6 @@
   "phoneNumber": "9089172739",
   "timeStamp": "2014-10-11T21:58:58.692Z",
   "verified": "true",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -211,7 +208,6 @@
   "phoneNumber": "9082339244",
   "timeStamp": "2014-10-11T21:59:07.496Z",
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "about": "Aspiring rock and roll musician, rhythm guitarist, hobbyist developer",
   "links": [{
     "url": "https://www.facebook.com",
@@ -276,7 +272,6 @@
   "phoneNumber": "9176878574",
   "timeStamp": "2014-10-12T06:52:26.059Z",
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -333,7 +328,6 @@
   "phoneNumber": "6316970018",
   "timeStamp": "2014-10-12T06:52:35.722Z",
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -390,7 +384,6 @@
   "phoneNumber": "9089174967",
   "timeStamp": "2014-10-12T06:52:43.105Z",
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -447,7 +440,6 @@
   "phoneNumber": "6036464000",
   "timeStamp": "2014-10-12T06:52:51.775Z",
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -504,7 +496,6 @@
   "phoneNumber": "2019832514",
   "timeStamp": "2014-10-12T06:53:01.535Z",
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -561,7 +552,6 @@
   "phoneNumber": "9144203818",
   "timeStamp": "2014-10-12T06:53:09.540Z",
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -623,7 +613,6 @@
     "title": "Facebook"
   }],
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "portfolio": [
     {
       "reps": 10,
@@ -676,7 +665,6 @@
   "phoneNumber": "3104333781",
   "timeStamp": "2014-10-18T15:53:56.176Z",
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -733,7 +721,6 @@
   "phoneNumber": "6176401975",
   "timeStamp": "2014-10-18T15:57:22.133Z",
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -790,7 +777,6 @@
   "phoneNumber": "8473238007",
   "timeStamp": "2014-10-18T15:58:38.658Z",
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"
@@ -847,7 +833,6 @@
   "phoneNumber": "9177038670",
   "timeStamp": "2014-10-18T15:59:18.982Z",
   "verified": "false",
-  "picture": "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
   "links": [{
     "url": "https://www.facebook.com",
     "title": "Facebook"

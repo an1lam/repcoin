@@ -259,6 +259,12 @@ describe('Utils: ', function() {
       expect(result).toEqual(false);
     });
 
+    it('returns false if picture is incorrect', function() {
+      var req = { body: { about: 'Hello!', picture: { url: 'foo'} }};
+      var result = utils.validateUserInputs(req);
+      expect(result).toEqual(false);
+    });
+
   });
 
   describe('validateTransactionInputs: ', function() {
