@@ -216,6 +216,12 @@ describe('Utils: ', function() {
       var result = utils.deleteExpertCategory(user, 'Coding');
       expect(result).toEqual({ categories: [] });
     });
+
+    it('resets the defaultCategory if it was the deleted category', function() {
+      var user = { defaultCategory: 'Coding', categories: [{ name: 'Coding' }] };
+      var result = utils.deleteExpertCategory(user, 'Coding');
+      expect(result).toEqual({ defaultCategory: undefined, categories: [] });
+    });
   });
 
   describe('validateUserLinks: ', function() {

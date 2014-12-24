@@ -39,14 +39,17 @@ var SuperScore = React.createClass({
   },
 
   setCategoryAndRep: function(props) {
+    if (!props.user.defaultCategory) {
+      this.setState({ category: null, percentile: null });
+      return;
+    }
     var categories = props.user.categories;
     for (var i = 0; i < categories.length; i++) {
       if (categories[i].name === props.user.defaultCategory) {
-        this.setState({ percentile: categories[i].percentile });
-        this.setState({ category: categories[i].name });
+        this.setState({ percentile: categories[i].percentile, category: categories[i].name });
         return;
       }
-    } 
+    }
     this.setState({ category: null, percentile: null });
   },
 
@@ -69,7 +72,7 @@ var SuperScore = React.createClass({
             <div className="superText">{this.state.category}</div>
             <div className="superText">:</div>
             <div className="superText">{this.state.percentile}</div>
-          </div> 
+          </div>
         </div>;
       } else {
         superScore = <div className="defaultPanel panel panel-default">
@@ -87,11 +90,11 @@ var SuperScore = React.createClass({
             <div className="superText">{this.state.category}</div>
             <div className="superText">:</div>
             <div className="superText">{this.state.percentile}</div>
-          </div> 
+          </div>
         </div>;
       }
     }
-    
+
     return (
       <div className="superScore" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         {superScore}
