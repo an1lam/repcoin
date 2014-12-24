@@ -45,7 +45,7 @@ var Modal = React.createClass({
       this.setState({error: 'You are not an investor for ' + category.name });
       return;
     }
-  
+
     // Make sure the investor has enough reps
     var amount = parseInt(amount);
     if (portfolio[portIndex].reps < amount) {
@@ -54,18 +54,18 @@ var Modal = React.createClass({
     }
 
     this.setState({error: null});
-    this.createTransaction(this.props.user, this.props.currentUser, 
+    this.createTransaction(this.props.user, this.props.currentUser,
       category.name, amount, anonymous);
   },
- 
+
 
   validateAndRevoke: function(number, amount, anonymous) {
-    var investmentList = this.getInvestmentList(); 
+    var investmentList = this.getInvestmentList();
     var number = parseInt(number);
     var amount = parseInt(amount);
     var investment = investmentList[number-1].investment;
     var category = investmentList[number-1].category;
- 
+
     // Make sure this investment has at least the amount
     if (investment.amount < amount) {
       this.setState({ error: 'That investment only has ' + investment.amount + ' reps in it'});
@@ -74,7 +74,7 @@ var Modal = React.createClass({
 
     var id = investment._id;
     this.setState({error: null });
-    this.createTransaction(this.props.user, this.props.currentUser, 
+    this.createTransaction(this.props.user, this.props.currentUser,
       category, amount * -1, anonymous, id);
   },
 
@@ -127,7 +127,7 @@ var Modal = React.createClass({
       return;
     }
 
-    // Determine if we should give or revoke    
+    // Determine if we should give or revoke
     if (this.state.give) {
       this.validateAndGive(choice, amount, anonymous);
     } else {
@@ -149,7 +149,7 @@ var Modal = React.createClass({
     var length = this.props.currentUser.portfolio.length;
     var portfolio = this.props.currentUser.portfolio;
     for (var i = 0; i < length; i++) {
-      var investments = portfolio[i].investments; 
+      var investments = portfolio[i].investments;
       var category = portfolio[i].category;
       var len = investments.length;
       for (var j = 0; j < len; j++) {
@@ -199,11 +199,12 @@ var Modal = React.createClass({
     for (var i = 0; i < catLen; i++) {
       for (var j = 0; j < portLen; j++) {
         if (portfolio[j].category === categories[i].name && portfolio[j].reps > 0) {
-          categoriesList.push(<option key={categories[i].id} value={categories[i].name}>{categories[i].name} ({portfolio[j].reps} available)</option>);
+          var key = categories[i].id + portfolio[j].reps;
+          categoriesList.push(<option key={key} value={categories[i].name}>{categories[i].name} ({portfolio[j].reps} available)</option>);
         }
       }
     }
-    return categoriesList; 
+    return categoriesList;
   },
 
   render: function() {
@@ -221,8 +222,8 @@ var Modal = React.createClass({
     var categories = this.getInvestmentCategories(); // The valid categories
     var investmentNumbers = this.getInvestmentNumbers(investmentList); // The investment numbers
 
-    // The dropdown box will be investment numbers or categories 
-    var choiceText = this.state.give ? 'Categories:' : 'Investment Number:'; 
+    // The dropdown box will be investment numbers or categories
+    var choiceText = this.state.give ? 'Categories:' : 'Investment Number:';
     var choices = this.state.give ? categories : investmentNumbers;
     var choiceDropdown =
       <div className="choices-dropdown">
