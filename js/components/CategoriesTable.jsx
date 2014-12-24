@@ -114,8 +114,11 @@ var CategoriesTable = React.createClass({
         includeReps = true;
         repsHeader = <th>Reps</th>;
     }
+
+    // The key for the expert table will change if a category is deleted
+    var key = this.props.user._id + this.props.user.categories.length;
     return (
-      <div key={this.props.user._id} className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
+      <div key={key} className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <CategoriesHeader user={this.props.user} />
         {edit}
         {error}
