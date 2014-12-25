@@ -1,7 +1,8 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
+
 var PubSub = require('pubsub-js');
 var cropit = require('cropit');
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
@@ -11,7 +12,7 @@ var PictureUploadModal = React.createClass({
   mixins: [ModalMixin],
 
   componentDidMount: function() {
-    var imageSrc = this.props.user.picture;
+    var imageSrc = this.props.user.picture.url;
     $(".image-cropper").cropit({
       imageBackground: true,
       imageState: { src: imageSrc },
@@ -24,48 +25,33 @@ var PictureUploadModal = React.createClass({
     $('.cropit-image-input').click();
   },
 
-  dataURItoBlob: function(dataURI) {
-    var type = dataURI.split(';')[0].split(":")[1];
-    var binary = atob(dataURI.split(',')[1]);
-    var array = [];
-    for (var i = 0; i < binary.length; i++) {
-      array.push(binary.charCodeAt(i));
-    }
-    return new Blob([new Uint8Array(array)], {type: type});
-  },
-
   savePicture: function(uri) {
-    var blob = this.dataURItoBlob(uri);
-    if (!blob) {
-      console.error("Unable to convert data URI to file");
-      return;
-    }
-    var url = '/api/upload';
-    var data = new FormData();
-    var date = new Date();
-    var type = blob.type.split('/')[1];
-    data.append(this.props.user._id + date.getTime() + '.' + type, blob);
+    var url = '/api/' + this.props.user._id + '/upload';
+    var data = { uri: uri };
     $.ajax({
       url: url,
-      cache: false,
-      processData: false,
-      contentType: false,
       type: 'POST',
       data: data,
-      success: function(pictureLink) {
-        this.updateUserPhoto(pictureLink);
+      success: function(result) {
+        this.updateUserPhoto(result);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-      }.bind(this) 
+      }.bind(this)
     });
   },
 
-  updateUserPhoto: function(pictureLink) {
-    var url = '/api/users/' + this.props.user._id;
-    var oldLink = this.props.user.picture;
+  updateUserPhoto: function(result) {
     var user = this.props.user;
-    user.picture = pictureLink;
+    var url = '/api/users/'+ user._id;
+
+    var oldPublicId;
+    if (user.picture) {
+      var oldPublicId = user.picture.public_id;
+    }
+
+    // Give the user the new photo information
+    user.picture = { url: result.url, public_id: result.public_id};
     $.ajax({
       url: url,
       type: 'PUT',
@@ -74,7 +60,7 @@ var PictureUploadModal = React.createClass({
         auth.storeCurrentUser(user, function(user) {
           return user;
         });
-        this.deleteOldPhoto(oldLink, function() {
+        this.deleteOldPhoto(oldPublicId, function() {
           PubSub.publish('profileupdate');
           this.props.hide();
         }.bind(this));
@@ -82,16 +68,14 @@ var PictureUploadModal = React.createClass({
       error: function(xhr, status, err) {
         console.error(status, err.toString());
       }.bind(this)
-    });  
+    });
   },
 
-  deleteOldPhoto: function(link, cb) {
-    var url = '/api/remove';
-    var data = { filename: link };
+  deleteOldPhoto: function(public_id, cb) {
+    var url = '/api/' + this.props.user._id + '/remove/' + public_id;
     $.ajax({
       url: url,
       type: 'PUT',
-      data: data,
       success: function() {
         cb();
       }.bind(this),
@@ -133,7 +117,7 @@ var PictureUploadModal = React.createClass({
                 <input type="range" className="cropit-image-zoom-input" />
                 <input type="file" className="cropit-image-input" />
               </div>
-            </div> 
+            </div>
             <div className="modal-footer">
               <button onClick={this.handleClick} type="button" className="btn btn-default">Select an image</button>
               <button onClick={this.handleSave} type="button" className="btn btn-primary">Save!</button>

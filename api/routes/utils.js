@@ -273,6 +273,13 @@ var utils = {
   // Validate inputs to update a user
   // TODO: Add more checks
   validateUserInputs: function(req) {
+    // A valid picture must have both the url and public_id
+    if (req.body.picture) {
+      if (!req.body.picture.url || !req.body.picture.public_id) {
+        return false;
+      }
+    }
+
     // About must be less than 200 characters and cannot be whitespace
     if (req.body.about) {
       if (req.body.about.trim().length === 0 ||

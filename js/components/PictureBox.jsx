@@ -28,7 +28,7 @@ var PictureBox = React.createClass({
   },
 
   handleClick: function() {
-    this.setState({ showModal: true }); 
+    this.setState({ showModal: true });
   },
 
   handleImgError: function() {
@@ -51,9 +51,10 @@ var PictureBox = React.createClass({
       }
     }
 
+    var imgUrl = this.props.user.picture && this.props.user.picture.url || DEFAULT_LINK;
     return (
       <div className="pictureBox" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
-        <img className="img-thumbnail" src={this.props.user.picture} onError={this.handleImgError} ></img>
+        <img className="img-thumbnail" src={imgUrl} onError={this.handleImgError} ></img>
       {edit}
       {modal}
       </div>

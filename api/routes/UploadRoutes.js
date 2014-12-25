@@ -1,32 +1,27 @@
-"use strict";
+'use strict';
 
-var Busboy = require('busboy');
-var fs = require('fs');
+var cloudinary = require('cloudinary');
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET_KEY
+});
+var winston = require('winston');
 
-module.exports = function(router, isAuthenticated) {
-  router.route('/upload')
-    .post(isAuthenticated, function(req, res) {
-      var busboy = new Busboy({ headers: req.headers });
-      var saveTo;
-      busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
-        saveTo = 'images/' + fieldname;
-        file.pipe(fs.createWriteStream('public/' + saveTo));
+module.exports = function(router, isAuthenticated, acl) {
+  router.route('/:user_id/upload')
+    .post(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
+      cloudinary.uploader.upload(req.body.uri, function(result) {
+        winston.log('info', 'Uploaded file with result: %s', result);
+        return res.send(result);
       });
-      busboy.on('finish', function() {
-        res.status(200).send(saveTo).end();
-      });
-      req.pipe(busboy);
     });
 
-  router.route('/remove')
-    .put(isAuthenticated, function(req, res) {
-      var oldFile = 'public/' + req.body.filename;
-      fs.unlink(oldFile, function(err) {
-        if (err) {
-          res.status(400).send(err);
-        } else {
-          res.status(200).send("Successfully deleted file");
-        }
+  router.route('/:user_id/remove/:public_id')
+    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
+      cloudinary.uploader.destroy(req.params.public_id, function(result) {
+        winston.log('info', 'Deleted file with result: %s', result);
+        return res.send(result);
       });
     });
 };

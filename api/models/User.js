@@ -119,9 +119,8 @@ var UserSchema = new Schema({
     }
   ],
   picture: {
-    type: String,
-    default: "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png",
-    required: true
+    url: { type: String },
+    public_id: { type: String }
   },
 
   // Indicates whether the user has verified their account post-signup
