@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
@@ -65,7 +65,7 @@ var PictureUploadModal = React.createClass({
           this.props.hide();
         }.bind(this));
       }.bind(this),
-      eror: function(xhr, status, err) {
+      error: function(xhr, status, err) {
         console.error(status, err.toString());
       }.bind(this)
     });
