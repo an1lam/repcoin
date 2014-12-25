@@ -212,6 +212,11 @@ var utils = {
 
   // Delete an expert category
   deleteExpertCategory: function(user, categoryName) {
+    // Check if the category is the user's default
+    if (categoryName === user.defaultCategory) {
+      user.defaultCategory = undefined;
+    }
+
     var length = user.categories.length;
     var newCategories = [];
     for (var i = 0; i < length; i++) {
