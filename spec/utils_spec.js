@@ -526,7 +526,6 @@ describe('Utils: ', function() {
       ];
 
       var percentileComparator = utils.getPercentileComparator('Coding', false);
-      console.log(percentileComparator);
       var results = users.sort(percentileComparator);
       expect(results.length).toEqual(4);
       expect(results).toEqual(expected);
