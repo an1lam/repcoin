@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var DEFAULT_LINK = "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png";
+var DEFAULT_LINK = 'http://res.cloudinary.com/repcoin/image/upload/v1419620814/default_profile_od0xw5.jpg';
 var PictureUploadModal = require('./PictureUploadModal');
 var React = require('react');
 

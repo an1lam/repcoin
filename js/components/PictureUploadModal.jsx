@@ -5,7 +5,7 @@ var auth = require('../auth.jsx');
 
 var PubSub = require('pubsub-js');
 var cropit = require('cropit');
-var DEFAULT_LINK = "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png";
+var DEFAULT_LINK = 'http://res.cloudinary.com/repcoin/image/upload/v1419620814/default_profile_od0xw5.jpg';
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
 var React = require('react');
 
@@ -26,7 +26,6 @@ var PictureUploadModal = React.createClass({
   handleClick: function(e) {
     e.preventDefault();
     this.setState({ pictureSelected: true });
-    debugger;
     $('.cropit-image-input').click();
   },
 
@@ -121,7 +120,7 @@ var PictureUploadModal = React.createClass({
                   <div className="cropit-image-preview"></div>
                 </div>
                 <input type="range" className="cropit-image-zoom-input" />
-                <input type="file" className="cropit-image-input" />
+                <input type="file" className="cropit-image-input" accept="image/*"/>
               </div>
             </div>
             <div className="modal-footer">
