@@ -47,7 +47,8 @@
     "reactify": "~0.15.2",
     "reduce": "~1.0.1",
     "watchify": "^2.1.0",
-    "winston": "^0.8.3"
+    "winston": "^0.8.3",
+    "newrelic": "~1.14.4"
   },
   "devDependencies": {
     "should": "^4.0.4",
