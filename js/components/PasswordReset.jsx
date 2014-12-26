@@ -5,8 +5,6 @@ var Router = require('react-router');
 var Navigation = Router.Navigation;
 
 var PasswordReset = React.createClass({
-  mixins: [Navigation],
-
   getInitialState: function() {
     return {
       error: false,
@@ -18,7 +16,7 @@ var PasswordReset = React.createClass({
     var email = this.refs.email.getDOMNode().value;
     $.ajax({
       type: 'POST',
-      url: '/api/resetPassword',
+      url: '/api/users/sendPasswordResetEmail',
       data: {
         'email': email
       },

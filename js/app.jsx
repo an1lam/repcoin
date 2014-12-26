@@ -7,6 +7,7 @@ var CategoriesPage = require('./components/CategoriesPage.jsx');
 var CategoryPage = require('./components/CategoryPage.jsx');
 var HomePage = require('./components/HomePage.jsx');
 var LoginPage = require('./components/LoginPage.jsx');
+var PasswordResetPage = require('./components/PasswordResetPage.jsx');
 var ProfilePage = require('./components/ProfilePage.jsx');
 var React = require('react');
 var SearchPage = require('./components/SearchPage.jsx');
@@ -56,6 +57,7 @@ var routes = (
     <Route name="login" handler={LoginPage} />
     <Route name="profile" path="/user/:userId" handler={ProfilePage}/>
     <Route name="search" path="/search/:query" handler={SearchPage}/>
+    <Route name="passwordReset" path="/passwordReset/:token" handler={PasswordResetPage} />
     <Route name="verification" path="/verify/:token" handler={VerificationPage} />
   </Routes>
 );

@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var PasswordResetTokenSchema = new Schema({
-  user   : { type: String, required: true, unique: true },
+  user   : { type: String, required: true, unique: false },
   string : { type: String, required: true, unique: true },
 });
 

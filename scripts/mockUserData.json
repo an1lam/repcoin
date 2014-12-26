@@ -204,10 +204,10 @@
   "firstname": "Stephen",
   "lastname": "Malina",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
-  "email": "stephen@stephen.com",
+  "email": "stephenmalina@gmail.com",
   "phoneNumber": "9082339244",
   "timeStamp": "2014-10-11T21:59:07.496Z",
-  "verified": "false",
+  "verified": "true",
   "about": "Aspiring rock and roll musician, rhythm guitarist, hobbyist developer",
   "links": [{
     "url": "https://www.facebook.com",
