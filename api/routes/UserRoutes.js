@@ -13,6 +13,32 @@ var transporter = require('../../config/mailer.js').transporterFactory();
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
 module.exports = function(router, isAuthenticated, acl) {
+
+  // Get leaders for a given category and count
+  // Set expert to true for expert category, false for investor
+  function getLeaders(req, res) {
+    if (!utils.validateLeadersCountInputs(req)) {
+      winston.log('info', 'Invalid inputs');
+      return res.status(412).send('Invalid inputs');
+    }
+
+    var categoryName = req.params.categoryName;
+    var count = req.params.count;
+    var expert = req.query.expert === '1';
+
+    User.findNLeadersPublic(categoryName, parseInt(count), expert, function(err, leaders) {
+      if (err) {
+        winston.log('error', 'Error finding users: %s', err);
+        return res.status(400).send(err);
+      } else {
+        // sort the users in decreasing order of directScore
+        var percentileComparator = utils.getPercentileComparator(categoryName, expert);
+        winston.log('info', 'Found %s leaders for category %s', count, categoryName);
+        return res.send(leaders.sort(percentileComparator));
+      }
+    });
+  };
+
   router.route('/users/list/byids')
     // Get all of the users for the given list
     .get(isAuthenticated, function(req, res) {
@@ -230,22 +256,7 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/users/:categoryName/leaders/:count')
     .get(isAuthenticated, function(req, res) {
       winston.log('info', 'GET /users/%s/leaders/%s', req.params.categoryName, req.params.count);
-      if (!utils.validateLeadersCountInputs(req)) {
-        winston.log('info', 'Invalid inputs');
-        return res.status(412).send('Invalid inputs');
-      }
-
-      User.findNLeadersPublic(req.params.categoryName, parseInt(req.params.count), function(err, leaders) {
-        if (err) {
-          winston.log('error', 'Error finding users: %s', err);
-          return res.status(400).send(err);
-        } else {
-          // sort the users in decreasing order of directScore
-          var directScoreComparator = utils.getDirectScoreComparator(req.params.categoryName);
-          winston.log('info', 'Found %s leaders for category %s', req.params.count, req.params.categoryName);
-          return res.send(leaders.sort(directScoreComparator));
-        }
-      });
+      getLeaders(req, res);
     });
 
   /////////// Add an expert category if it is not already added

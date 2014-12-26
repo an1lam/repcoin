@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
@@ -68,13 +68,14 @@ var CategoryPage = React.createClass({
         </div>
         <div className="row">
           <div className="col-md-3">
-            <LeaderTable category={this.props.params.category} />
+            <LeaderTable category={this.props.params.category} expert={true}/>
+            <LeaderTable category={this.props.params.category} expert={false}/>
           </div>
           <div className="col-md-8">
             <Feed category={this.props.params.category} parent="CategoryPage" />
           </div>
         </div>
-        <div className="row">
+        <div className="row footerrow">
           <Footer />
         </div>
       </div>

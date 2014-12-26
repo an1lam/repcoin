@@ -1,12 +1,10 @@
-/** @jsx React.DOM */
-"use strict";
-
-var Router = require('react-router');
+'use strict';
 
 var $ = require('jquery');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
-var Link = Router.Link;
 var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var LeaderTable = React.createClass({
   getInitialState: function() {
@@ -23,8 +21,11 @@ var LeaderTable = React.createClass({
 
   setLeaders: function(category) {
     var url = '/api/users/' + category + '/leaders/10';
+    var expert = this.props.expert ? 1 : 0;
+    var data = { expert: expert };
     $.ajax({
       url: url,
+      data: data,
       success: function(leaders) {
         this.setState({ leaders: leaders });
       }.bind(this),
@@ -48,10 +49,11 @@ return <tr key={leader._id} >
         <td>{percentile}</td>
       </tr>;
     }.bind(this));
+    var title = this.props.expert ? 'Leading Experts' : 'Leading Investors';
     return (
       <table className="table table-bordered">
         <thead>
-        <tr><th colSpan="3">{this.props.category} Leaders</th></tr>
+        <tr><th colSpan="3">{title}</th></tr>
         <tr>
           <th>Name</th>
           <th>Percentile</th>
