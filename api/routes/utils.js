@@ -298,8 +298,7 @@ var utils = {
   validateCategoryInputs: function(req) {
     // Check that all of the inputs are presemnt
     if (!req.body.name ||
-        !req.body.ownerName ||
-        !req.body.quotes) {
+        !req.body.ownerName) {
       return false;
     }
     return true;

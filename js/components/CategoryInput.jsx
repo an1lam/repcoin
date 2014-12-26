@@ -159,7 +159,7 @@ var CategoryInput = React.createClass({
   },
 
   render: function() {
-    var type = this.props.expert ? "expert" : "investor";
+    var type = this.props.expert ? 'expert' : 'investor';
     return (
       <div className="categoryInput">
         <CategorySearch onReset={this.props.onReset} query={this.state.query} search={this.search} handleClick={this.props.handleClick} getCategory={this.getCategory} setExpertCategory={this.setExpertCategory} setInvestorCategory={this.setInvestorCategory} type={type} />
