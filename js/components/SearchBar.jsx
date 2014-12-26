@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var React = require('react');
 var Router = require('react-router');
@@ -21,7 +21,7 @@ var SearchBar = React.createClass({
         }
       break;
       case 13: // enter
-        $(".searchbtn").click();      
+        $(".searchbtn").click();
       default: return;
     }
   },
@@ -40,7 +40,7 @@ var SearchBar = React.createClass({
         <div className="input-group">
           <input type="text" ref="searchInput" value={this.props.query} onChange={this.search} className="searchBarInput form-control" placeholder="Search" />
           <div className="input-group-btn">
-            <button onClick={this.handleClick} type="submit" className="searchbtn btn btn-default"><span className="glyphicon glyphicon-search"></span></button>  
+            <button onClick={this.handleClick} type="submit" className="searchbtn btn btn-default"><span className="glyphicon glyphicon-search"></span></button>
           </div>
         </div>
       </div>

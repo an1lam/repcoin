@@ -67,9 +67,14 @@ module.exports = function(router, isAuthenticated, acl) {
 router.route('/categories/:categoryName')
   // Get the category with this name
   .get(isAuthenticated, function(req, res) {
-    winston.log('info', 'GET /categories/%s', req.params.categoryName);
-    Category.findByName(req.params.categoryName).then(function(category) {
-      winston.log('info', 'Found category: %s', category.name);
+    var categoryName = req.params.categoryName;
+    winston.log('info', 'GET /categories/%s', categoryName);
+    Category.findByName(categoryName).then(function(category) {
+      if (category) {
+        winston.log('info', 'Found category: %s', category.name);
+      } else {
+        winston.log('info', 'No category found named: %s', categoryName);
+      }
       return res.status(200).send(category);
     }, function(err) {
       winston.log('error', 'Error finding category: %s', err);
@@ -124,7 +129,7 @@ router.route('/categories/:categoryName')
 
     // Update the category with this id
     // TODO: Create separate routes so some users can update safe category parts
-    .put(isAuthenticated, acl.isAdmin, function(req, res) {
+    .put(isAuthenticated, function(req, res) {
       winston.log('info', 'PUT /categories/%s', req.params.category_id);
       Category.findById(req.params.category_id, function(err, category) {
         if (err) {

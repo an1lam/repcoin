@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var React = require('react');
@@ -31,27 +31,27 @@ var CategorySearchDisplayTable = React.createClass({
 
       case 38: // up
         if (this.state.index === 0) {
-          var searchBarInput = "." + this.props.type + "search";
+          var searchBarInput = '.' + this.props.type + 'search';
           $(searchBarInput).focus();
         }
 
         else if (this.state.index > 0) {
-          var searchBarItem = "." + this.props.type + "searchItem-";
+          var searchBarItem = '.' + this.props.type + 'searchItem-';
           var i = this.state.index-1;
           this.setState({ index: i });
           $(searchBarItem + i).focus();
         }
       break;
-      
+
       case 40: // down
         if (this.state.index < this.state.maxIndex) {
-          var searchBarItem = "." + this.props.type + "searchItem-";
+          var searchBarItem = '.' + this.props.type + 'searchItem-';
           var i = this.state.index+1;
           this.setState({ index: i });
           $(searchBarItem + i).focus();
         }
       break;
-      
+
       default: return;
     }
     event.preventDefault();
@@ -66,16 +66,16 @@ var CategorySearchDisplayTable = React.createClass({
           {this.props.data.map(function(datum) {
             var name = searchBarItem + i;
             i += 1;
-            return <li key={datum._id} className="list-group-item"> 
+            return <li key={datum._id} className="list-group-item">
               <a href={datum.name} onClick={this.props.handleClick} onKeyDown={this.handleKeyDown} className={name}>
                 <SearchItem name={datum.name} index={i-1}/>
               </a>
               </li>;
           }.bind(this))}
-        </ul> 
+        </ul>
       </div>
     );
-  } 
+  }
 });
 
 module.exports = CategorySearchDisplayTable;
