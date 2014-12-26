@@ -1,5 +1,6 @@
 "use strict";
 
+require('newrelic');
 var agenda = require('agenda');
 var bodyParser = require('body-parser');
 var express = require('express');

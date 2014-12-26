@@ -9,3 +9,4 @@ bower_components
 .zedstate
 /*.env
 tags
+newrelic_agent.log
