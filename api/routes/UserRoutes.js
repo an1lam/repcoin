@@ -13,6 +13,80 @@ var transporter = require('../../config/mailer.js').transporterFactory();
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
 module.exports = function(router, isAuthenticated, acl) {
+  // Add an expert category to a given user
+  function addExpertCategory(req, res, category) {
+    var userId = req.params.user_id;
+    User.findOneAndUpdate(
+      {_id: userId, 'categories.name': {$ne: category.name}},
+      {$push: {categories: { name: category.name, id: category._id } }},
+      function(err, user) {
+        if (err) {
+          winston.log('error', 'Error finding user: %s', err);
+          return res.status(501).send(err);
+        } else if (!user) {
+          winston.log('info', 'User with id %s is already an expert for category %s',
+            userId, category.name);
+          return res.status(501).send('User is already an expert for this category');
+        } else {
+          // Add to the expert count
+          category.experts += 1;
+          category.save();
+          utils.updateExpertPercentiles(category.name, function(err) {
+            if (err) {
+              winston.log('error', 'Error updating expert percentiles: %s', err);
+              return res.status(501).send(err);
+            } else {
+              User.findById(userId, function(err, user) {
+                if (err) {
+                  winston.log('error', 'Error finding user: %s', err);
+                  return res.status(501).send(err);
+                } else {
+                  winston.log('info', 'Found user: %s', user.email);
+                  return res.status(200).send(user);
+                }
+              });
+            }
+          });
+        }
+    });
+  };
+
+  // Add an investor category to a given user
+  function addInvestorCategory(req, res, category) {
+    var userId = req.params.user_id;
+    User.findOneAndUpdate(
+      {_id: userId, 'portfolio.category': {$ne: category.name}},
+      {$push: { portfolio: { category: category.name, id: category._id } }},
+      function(err, user) {
+        if (err) {
+          winston.log('error', 'Error updating user: %s', err);
+          return res.status(501).send(err);
+        } else if (!user) {
+          winston.log('info', 'User with id %s is already an expert for category %s',
+            userId, category.name);
+          return res.status(501).send('User is already an investor for this category');
+        } else {
+          category.investors += 1;
+          category.save();
+          utils.updateInvestors(category.name, function(err) {
+            if (err) {
+              winston.log('error', 'Error updating investor percentiles: %s', err);
+              return res.status(501).send(err);
+            } else {
+              User.findById(userId, function(err, user) {
+                if (err) {
+                  winston.log('error', 'Error finding user: %s', err);
+                  return res.status(501).send(err);
+                } else {
+                  winston.log('info', 'Found user: %s', user.email);
+                  return res.status(200).send(user);
+                }
+              });
+            }
+          });
+        }
+    });
+  };
 
   // Get leaders for a given category and count
   // Set expert to true for expert category, false for investor
@@ -259,85 +333,59 @@ module.exports = function(router, isAuthenticated, acl) {
       getLeaders(req, res);
     });
 
-  /////////// Add an expert category if it is not already added
-  router.route('/users/:user_id/expert')
+  // Add an expert category if it is not already added
+  // Create the category if it does not exist
+  router.route('/users/:user_id/addexpert/:category_name')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
-      winston.log('info', 'PUT /users/%s/expert', req.params.user_id);
-      if (!utils.validateAddExpertCategoryInputs(req)) {
-        winston.log('info', 'Invalid inputs');
-        return res.status(412).send('Invalid inputs');
-      }
+      var categoryName = req.params.category_name;
+      winston.log('info', 'PUT /users/%s/addexpert/%s', userId, categoryName);
 
-      User.findOneAndUpdate(
-        {_id: req.params.user_id, 'categories.name': {$ne: req.body.name}},
-        {$push: {categories: req.body}},
-        function(err, user) {
-          if (err) {
-            winston.log('error', 'Error finding user: %s', err);
-            return res.status(501).send(err);
-          } else if (!user) {
-            winston.log('info', 'User with id %s is already an expert for category %s',
-              req.params.userId, req.body.name);
-            return res.status(501).send('User is already an expert for this category');
-          } else {
-            utils.updateExpertPercentiles(req.body.name, function(err) {
-              if (err) {
-                winston.log('error', 'Error updating expert percentiles: %s', err);
-                return res.status(501).send(err);
-              } else {
-                User.findById(req.params.user_id, function(err, user) {
-                  if (err) {
-                    winston.log('error', 'Error finding user: %s', err);
-                    return res.status(501).send(err);
-                  } else {
-                    winston.log('info', 'Found user: %s', user.email);
-                    return res.status(200).send(user);
-                  }
-                });
-              }
-            });
-          }
+      Category.findByName(categoryName).then(function(category) {
+        if (category) {
+          return addExpertCategory(req, res, category);
+        } else {
+          winston.log('info', 'Creating category: $s', categoryName);
+          var newCategory = { name: categoryName };
+          newCategory.save(function(err, category) {
+            if (err) {
+              winston.log('error', 'Error creating category: %s', err);
+              return res.status(503).send(err);
+            } else {
+              return addExpertCategory(req, res, category);
+            }
+          });
+        }
+      }, function(err) {
+        winston.log('error', 'Error finding category: %s', err);
+        return res.status(503).send(err);
       });
     });
 
-  /////////// Add an investor category if it not already added
-  router.route('/users/:user_id/investor')
+  // Add an investor category if it not already added
+  // Create the category if it does not exist
+  router.route('/users/:user_id/addinvestor/:category_name')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
-      winston.log('info', '/users/%s/investor', req.params.user_id);
-      if (!utils.validateAddInvestorCategoryInputs(req)) {
-        winston.log('info', 'Invalid inputs');
-        return res.status(412).send('Invalid inputs');
-      }
+      var categoryName = req.params.category_name;
+      winston.log('info', '/users/%s/addinvestor/%s', req.params.user_id, req.params.category_name);
 
-      User.findOneAndUpdate(
-        {_id: req.params.user_id, 'portfolio.category': {$ne: req.body.category}},
-        {$push: { portfolio: req.body}},
-        function(err, user) {
-          if (err) {
-            winston.log('error', 'Error updating user: %s', err);
-            return res.status(501).send(err);
-          } else if (!user) {
-            winston.log('info', 'User with id %s is already an expert for category %s',
-              req.params.userId, req.body.name);
-            return res.status(501).send('User is already an investor for this category');
-          } else {
-            utils.updateInvestors(req.body.category, function(err) {
-              if (err) {
-                winston.log('error', 'Error updating investor percentiles: %s', err);
-                return res.status(501).send(err);
-              } else {
-                User.findById(req.params.user_id, function(err, user) {
-                  if (err) {
-                    winston.log('error', 'Error finding user: %s', err);
-                    return res.status(501).send(err);
-                  } else {
-                    winston.log('info', 'Found user: %s', user.email);
-                    return res.status(200).send(user);
-                  }
-                });
-              }
-            });
-          }
+      Category.findByName(categoryName).then(function(category) {
+        if (category) {
+          return addInvestorCategory(req, res, category);
+        } else {
+          winston.log('info', 'Creating category: $s', categoryName);
+          var newCategory = { name: categoryName };
+          newCategory.save(function(err, category) {
+            if (err) {
+              winston.log('error', 'Error creating category: %s', err);
+              return res.status(503).send(err);
+            } else {
+              return addInvestorCategory(req, res, category);
+            }
+          });
+        }
+      }, function(err) {
+        winston.log('error', 'Error finding category: %s', err);
+        return res.status(503).send(err);
       });
     });
 

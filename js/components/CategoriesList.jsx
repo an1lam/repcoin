@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-"use strict";
+'use strict';
 
 var React = require('react');
 var Category = require('./Category.jsx');
@@ -19,7 +18,7 @@ var CategoriesList = React.createClass({
       return (
         // TODO : Style the categories with color somehow (background, text, etc)
         <div>
-          <Category category={category.name} quotes={category.quotes} />
+          <Category category={category.name} />
         </div>
       );
     });

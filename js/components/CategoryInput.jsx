@@ -17,61 +17,24 @@ var CategoryInput = React.createClass({
   handleClick: function(event) {
     event.preventDefault();
     var name = $(event.currentTarget).attr('href');
-    var cb = this.props.expert ? this.setExpertCategory : this.setInvestorCategory;
-    this.getCategory(name, cb);
+    if (this.props.expert) {
+      this.setExpertCategory(name);
+    } else {
+      this.setInvestorCategory(name);
+    }
   },
 
-  // Create a new category
-  createCategory: function(categoryName, cb) {
-    var category = { name: categoryName,
-                     ownerName: this.props.user.username };
+  setInvestorCategory: function(name) {
     $.ajax({
-      url: '/api/categories/',
-      type: 'POST',
-      data: category,
-      success: function(category) {
-        return cb(category);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(categoryName, status, err.toString());
-      }.bind(this)
-    });
-  },
-
-  // Get the category if one exists. Otherwise, create it.
-  getCategory: function(categoryName, cb) {
-    $.ajax({
-      url: '/api/categories/' + categoryName,
-      success: function(category) {
-        if (category) {
-          return cb(category);
-        } else {
-          return this.createCategory(categoryName, cb);
-        }
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(categoryName, status, err.toString());
-      }.bind(this)
-    });
-  },
-
-  setInvestorCategory: function(category) {
-    var newCategory = {
-      category: category.name,
-      id: category._id,
-    };
-    $.ajax({
-      url: '/api/users/' + this.props.user._id + '/investor',
+      url: '/api/users/' + this.props.user._id + '/addinvestor/' + name,
       type: 'PUT',
-      data: newCategory,
       success: function(user) {
         // No user means the user is already an investor
         if (user) {
           auth.storeCurrentUser(user, function(user) {
+            PubSub.publish('profileupdate');
             return user;
           });
-          this.incrementSubscribers(category, true);
-          PubSub.publish('profileupdate');
         } else {
           this.props.setError('Already an investor for ' + category.name);
         }
@@ -84,23 +47,17 @@ var CategoryInput = React.createClass({
     });
   },
 
-  setExpertCategory: function(category) {
-    var newCategory = {
-      name: category.name,
-      id: category._id,
-    };
+  setExpertCategory: function(name) {
     $.ajax({
-      url: '/api/users/' + this.props.user._id + '/expert',
+      url: '/api/users/' + this.props.user._id + '/addexpert/' + name,
       type: 'PUT',
-      data: newCategory,
       success: function(user) {
         // No user means the user is already an expert
         if (user) {
           auth.storeCurrentUser(user, function(user) {
+            PubSub.publish('profileupdate');
             return user;
           });
-          this.incrementSubscribers(category, false);
-          PubSub.publish('profileupdate');
         } else {
           this.props.setError('Already an expert in ' + category.name);
         }
@@ -109,25 +66,6 @@ var CategoryInput = React.createClass({
       error: function(xhr, status, err) {
         console.error(status, err.toString());
         this.props.onReset();
-      }.bind(this)
-    });
-  },
-
-  incrementSubscribers: function(category, isInvestor) {
-    if (isInvestor) {
-      category.investors = category.investors + 1;
-    } else {
-      category.experts = category.experts + 1;
-    }
-    $.ajax({
-      url: '/api/categories/' + category._id,
-      type: 'PUT',
-      data: category,
-      success: function(category) {
-        return;
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(status, err.toString());
       }.bind(this)
     });
   },

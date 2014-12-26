@@ -41,16 +41,13 @@ module.exports = function(router, isAuthenticated, acl) {
         return res.status(412).send('Invalid inputs');
       }
 
+      // Values will either be assigned defaults or undefined if nothing present
       var category = new Category({
         name        : req.body.name,
         ownerName   : req.body.ownerName,
-        quotes      : req.body.quotes
+        quotes      : req.body.quotes,
+        color       : req.body.color
       });
-
-      // If there is no specified color, Mongoose will give it the default
-      if (req.body.color) {
-        category.color = req.body.color;
-      }
 
       category.save( function(err) {
         if (err) {
@@ -82,78 +79,23 @@ router.route('/categories/:categoryName')
     });
   });
 
-///////// Routes that have /categories/:category_id ////////
-  router.route('/categories/:category_id/public')
-    // Update the category with this id, only public fields are possible
-    .put(isAuthenticated, function(req, res) {
-      winston.log('info', 'PUT /categories/%s/public', req.params.category_id);
-      Category.findById(req.params.category_id, function(err, category) {
-        if (err) {
-          winston.log('error', 'Error finding category: %s', err);
-          return res.status(503).send(err);
-        } else if (!category) {
-          winston.log('info', 'No category found for id: %s', req.params.category_id);
-          return res.status(503).send('No category was found');
-        } else {
-          winston.log('info', 'Updating category: %s', category.name);
-          category.color      = req.body.color || category.color;
-          category.ownerName  = req.body.ownerName || category.ownerName;
-          category.quotes     = req.body.quotes || category.quotes;
-          category.save(function(err) {
-            if (err) {
-              winston.log('error', 'Error saving category: %s', err);
-              return res.status(503).send(err);
-            } else {
-              winston.log('info', 'Saved category: %s', category.name);
-              return res.status(200).send(category);
-            }
-          });
-        }
-      });
-    });
-
   router.route('/categories/:category_id')
     // Get the category with this id
     .get(isAuthenticated, function(req, res) {
-      winston.log('info', 'GET /categories/:%s', req.params.category_id);
-      Category.findById(req.params.category_id, function(err, category) {
+      var categoryId = req.params.category_id;
+      winston.log('info', 'GET /categories/:%s', categoryId);
+      Category.findById(categoryId, function(err, category) {
         if (err) {
-          winston.log('error', 'Error finding category with id: %s', req.params.category_id);
+          winston.log('error', 'Error finding category with id: %s', categoryId);
           return res.status(503).send(err);
         } else {
+          if (category) {
+            winston.log('info', 'Found category: %s', category.name);
+          } else {
+            winston.log('info', 'No category found with id: %s', categoryId);
+          }
           winston.log('info', 'Found category: %s', category.name);
           return res.status(200).send(category);
-        }
-      });
-    })
-
-    // Update the category with this id
-    // TODO: Create separate routes so some users can update safe category parts
-    .put(isAuthenticated, function(req, res) {
-      winston.log('info', 'PUT /categories/%s', req.params.category_id);
-      Category.findById(req.params.category_id, function(err, category) {
-        if (err) {
-          winston.log('error', 'Error finding category: %s', err);
-          return res.status(503).send(err);
-        } else if (!category) {
-          winston.log('info', 'No category found with id: %s', req.params.category_id);
-          return res.status(503).send('No category was found');
-        } else {
-          category.name       = req.body.name || category.name;
-          category.color      = req.body.color || category.color;
-          category.ownerName  = req.body.ownerName || category.ownerName;
-          category.quotes     = req.body.quotes || category.quotes;
-          category.experts    = req.body.experts || category.experts;
-          category.investors  = req.body.investors || category.investors;
-          category.save(function(err) {
-            if (err) {
-              winston.log('error', 'Error saving category: %s', err);
-              return res.status(503).send(err);
-            } else {
-              winston.log('info', 'Saved category: %s', category.name);
-              return res.status(200).send(category);
-            }
-          });
         }
       });
     })
