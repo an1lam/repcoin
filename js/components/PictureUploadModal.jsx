@@ -5,6 +5,7 @@ var auth = require('../auth.jsx');
 
 var PubSub = require('pubsub-js');
 var cropit = require('cropit');
+var DEFAULT_LINK = "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png";
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
 var React = require('react');
 
@@ -12,16 +13,20 @@ var PictureUploadModal = React.createClass({
   mixins: [ModalMixin],
 
   componentDidMount: function() {
-    var imageSrc = this.props.user.picture.url;
+    var picture = this.props.user.picture;
+    var imageSrc = picture ? picture.url : DEFAULT_LINK;
     $(".image-cropper").cropit({
       imageBackground: true,
       imageState: { src: imageSrc },
-      exportZoom: 0.56
+      exportZoom: 0.56,
+      allowCrossOrigin: true
     });
   },
 
   handleClick: function(e) {
     e.preventDefault();
+    this.setState({ pictureSelected: true });
+    debugger;
     $('.cropit-image-input').click();
   },
 
@@ -92,7 +97,8 @@ var PictureUploadModal = React.createClass({
     var uri = $(".image-cropper").cropit('export', {
         type: 'image/jpeg',
         quality: .9,
-        originalSize: true
+        originalSize: true,
+        allowCrossOrigin: true
       });
     this.savePicture(uri);
   },

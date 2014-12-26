@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var DEFAULT_LINK = "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png";
