@@ -283,7 +283,7 @@ describe('Utils: ', function() {
       }};
 
       var result = utils.validateTransactionInputs(req);
-      expect(result).toEqual(true);  
+      expect(result).toEqual(true);
     });
 
     it('returns false if amount is incorrect', function() {
@@ -295,11 +295,11 @@ describe('Utils: ', function() {
       }};
 
       var result = utils.validateTransactionInputs(req);
-      expect(result).toEqual(false);  
+      expect(result).toEqual(false);
 
       req.body.amount = 'foo';
       var result = utils.validateTransactionInputs(req);
-      expect(result).toEqual(false);  
+      expect(result).toEqual(false);
     });
 
     it('returns false if no id is supplied for a revoke', function() {
@@ -311,7 +311,7 @@ describe('Utils: ', function() {
       }};
 
       var result = utils.validateTransactionInputs(req);
-      expect(result).toEqual(false);  
+      expect(result).toEqual(false);
     });
 
   });
@@ -489,7 +489,7 @@ describe('Utils: ', function() {
   });
 
   describe('percentileComparator: ', function() {
-    it('should correctly sort users by percentile in decreasing order', function() {
+    it('should correctly sort users by expert percentile in decreasing order if expert', function() {
       var users = [
         { _id: '1', categories: [{ name: 'Coding', percentile: 3 }] },
         { _id: '2', categories: [{ name: 'Coding', percentile: 5 }] },
@@ -504,7 +504,28 @@ describe('Utils: ', function() {
         { _id: '4', categories: [{ name: 'Coding', percentile: 1 }] },
       ];
 
-      var percentileComparator = utils.getDirectScoreComparator('Coding');
+      var percentileComparator = utils.getPercentileComparator('Coding', true);
+      var results = users.sort(percentileComparator);
+      expect(results.length).toEqual(4);
+      expect(results).toEqual(expected);
+    });
+
+    it('should correctly sort users by investor percentile in decreasing order if not expert', function() {
+      var users = [
+        { _id: '1', portfolio: [{ category: 'Coding', percentile: 3 }] },
+        { _id: '2', portfolio: [{ category: 'Coding', percentile: 5 }] },
+        { _id: '3', portfolio: [{ category: 'Coding', percentile: 3 }] },
+        { _id: '4', portfolio: [{ category: 'Coding', percentile: 1 }] },
+      ];
+
+      var expected = [
+        { _id: '2', portfolio: [{ category: 'Coding', percentile: 5 }] },
+        { _id: '1', portfolio: [{ category: 'Coding', percentile: 3 }] },
+        { _id: '3', portfolio: [{ category: 'Coding', percentile: 3 }] },
+        { _id: '4', portfolio: [{ category: 'Coding', percentile: 1 }] },
+      ];
+
+      var percentileComparator = utils.getPercentileComparator('Coding', false);
       var results = users.sort(percentileComparator);
       expect(results.length).toEqual(4);
       expect(results).toEqual(expected);

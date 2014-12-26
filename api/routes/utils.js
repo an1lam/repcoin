@@ -230,6 +230,10 @@ var utils = {
 
   // Validate the inputs for /users/:categoryName/leaders/:count
   validateLeadersCountInputs: function(req) {
+    if (!req.query || req.query.expert == null) {
+      return false;
+    }
+
     if (isNaN(parseInt(req.params.count))) {
       return false;
     }
@@ -354,13 +358,24 @@ var utils = {
   },
 
   // Sort users by direct score for a given category, decreasing order
-  getDirectScoreComparator: function(category) {
+  // Set expert to true to compare for an expert category, false for investor
+  getPercentileComparator: function(category, expert) {
     return function(a, b) {
-      var indexA = this.getCategoryIndex(a, category);
-      var indexB = this.getCategoryIndex(b, category);
+      var indexA, indexB, percentileA, percentileB;
 
-      var percentileA = a.categories[indexA].percentile;
-      var percentileB = b.categories[indexB].percentile;
+      if (expert) {
+        indexA = this.getCategoryIndex(a, category);
+        indexB = this.getCategoryIndex(b, category);
+
+        percentileA = a.categories[indexA].percentile;
+        percentileB = b.categories[indexB].percentile;
+      } else {
+        indexA = this.getPortfolioIndex(a, category);
+        indexB = this.getPortfolioIndex(b, category);
+
+        percentileA = a.portfolio[indexA].percentile;
+        percentileB = b.portfolio[indexB].percentile;
+      }
 
       return percentileB - percentileA;
     }.bind(this);

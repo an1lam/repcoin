@@ -179,8 +179,14 @@ UserSchema.statics.findBySearchTermPublic = function(searchTerm, cb) {
   return this.find({ "username": { $regex: new RegExp('\\b' + searchTerm, 'i') }}, privateFields, cb);
 };
 
-UserSchema.statics.findNLeadersPublic = function(category, count, cb) {
-  return this.find( { "categories.name": category }, privateFields ).limit(parseInt(count)).exec(cb);
+// Find N Leaders for a given category
+// Set expert to true for expert category, false for investor category
+UserSchema.statics.findNLeadersPublic = function(category, count, expert, cb) {
+  if (expert) {
+    return this.find( { "categories.name": category }, privateFields ).limit(parseInt(count)).exec(cb);
+  } else {
+    return this.find( { "portfolio.category": category }, privateFields ).limit(parseInt(count)).exec(cb);
+  }
 };
 
 // Find all the users who are experts in a category
