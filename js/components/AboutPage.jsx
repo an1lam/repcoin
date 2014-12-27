@@ -1,8 +1,8 @@
 'use strict';
 
-var React = require('react');
 var Footer = require('./Footer.jsx');
 var Toolbar = require('./Toolbar.jsx');
+var React = require('react');
 
 var AboutPage = React.createClass({
   render: function() {

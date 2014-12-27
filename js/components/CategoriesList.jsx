@@ -17,7 +17,7 @@ var CategoriesList = React.createClass({
       return (
         // TODO : Style the categories with color somehow (background, text, etc)
         <div key={category.name}>
-          <Category category={category.name} quotes={category.quotes} />
+          <Category category={category.name} />
         </div>
       );
     });

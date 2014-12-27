@@ -12,10 +12,6 @@ var VerificationPage = React.createClass({
     this.verifyUser(this.props.params.token);
   },
 
-  componentWillReceiveProps: function() {
-    this.verifyUser(this.props.params.token);
-  },
-
   getInitialState: function() {
     return {error: false};
   },

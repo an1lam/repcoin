@@ -12,7 +12,7 @@ var CategorySchema = new Schema({
   investors     : { type: Number, required: true, default: 0 },
   timeStamp     : { type: Date, default: Date.now },
   color         : { type: String, required: true, default: '#000' },
-  ownerName     : { type: String, required: true },
+  ownerName     : { type: String },
   quotes        : [{
                     text    : { type: String, required: true },
                     owner   : { type: String, required: true },

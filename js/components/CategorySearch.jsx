@@ -32,11 +32,10 @@ var CategorySearch = React.createClass({
     event.preventDefault();
     var categoryName = this.props.query;
     if (this.props.type === 'expert') {
-      var cb = this.props.setExpertCategory;
+      this.props.setExpertCategory(categoryName);
     } else {
-      var cb = this.props.setInvestorCategory;
+      this.props.setInvestorCategory(categoryName);
     }
-    this.props.getCategory(categoryName, cb);
   },
 
   render: function() {

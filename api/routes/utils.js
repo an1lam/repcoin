@@ -12,6 +12,7 @@ var VerificationToken = require('../models/VerificationToken.js');
 
 // Config
 var verificationEmailConfig = require('../../config/mailer.js').verificationEmail;
+var passwordResetEmailConfig = require('../../config/mailer.js').passwordResetEmail;
 var urlConfig = require('../../config/url.js');
 var winston = require('winston');
 
@@ -240,22 +241,6 @@ var utils = {
     return true;
   },
 
-  // Validate inputs for /users/:user_id/expert
-  validateAddExpertCategoryInputs: function(req) {
-    if (!req.body || !req.body.name ) {
-      return false;
-    }
-    return true;
-  },
-
-  // Validate inputs for /users/:user_id/investor
-  validateAddInvestorCategoryInputs: function(req) {
-    if (!req.body || !req.body.category) {
-      return false;
-    }
-    return true;
-  },
-
   // Validate an array of user links
   validateUserLinks: function(links) {
     var length = links.length;
@@ -296,9 +281,8 @@ var utils = {
 
   // Validate inputs to create a new category
   validateCategoryInputs: function(req) {
-    // Check that all of the inputs are presemnt
-    if (!req.body.name ||
-        !req.body.ownerName) {
+    // Check that all of the inputs are present
+    if (!req.body.name) {
       return false;
     }
     return true;
@@ -742,6 +726,16 @@ var utils = {
       to: email,
       subject: verificationEmailConfig.subject,
       text: nodeUtil.format(verificationEmailConfig.text, url),
+    };
+  },
+
+  generatePasswordResetEmailOptions: function(email, randomString) {
+    var url = urlConfig[process.env.NODE_ENV] + '#/passwordReset/' + randomString;
+    return {
+      from: passwordResetEmailConfig.from,
+      to: email,
+      subject: passwordResetEmailConfig.subject,
+      text: nodeUtil.format(passwordResetEmailConfig.text, url),
     };
   },
 };
