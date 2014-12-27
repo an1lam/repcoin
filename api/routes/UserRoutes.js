@@ -425,12 +425,15 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/users/sendPasswordResetEmail')
     .post(function(req, res) {
       var email = req.body.email;
+      winston.log('info', 'User with email %s resetting their password', email);
       if (!email) {
+        winston.log('error', 'No email provided in password reset request.');
         return res.status(412).send('No email address provided');
       }
 
       User.findOne({'email': email }, function(err, user) {
         if (err) {
+          winston.log('error', 'Failed to send password reset email to user %s: %s.', email, err);
           return res.status(412).send('No user with that email address.');
         }
 
@@ -442,6 +445,7 @@ module.exports = function(router, isAuthenticated, acl) {
 
         resetToken.save(function(err) {
           if (err) {
+            winston.log('error', 'Failed to save password reset token for user %s: %s.', email, err);
             return res.status(501).send(err);
           }
 
@@ -451,8 +455,10 @@ module.exports = function(router, isAuthenticated, acl) {
 
           transporter.sendMail(mailOptions, function(err, info) {
             if (err) {
+              winston.log('error', 'Failed to send email to user %s: %s', email, err);
               return res.status(554).send(err);
             } else {
+              winston.log('info', 'Successfully emailed user %s with password reset link.', email);
               return res.status(200).end();
             }
           });
@@ -469,15 +475,15 @@ module.exports = function(router, isAuthenticated, acl) {
         return res.status(412).send('No token provided');
       }
 
-      PasswordResetToken.findOneAndRemove({ 'string': token }, function(err, verifiedUser) {
+      PasswordResetToken.findOneAndRemove({ 'string': token }, function(err, passwordResetToken) {
         if (err) {
           winston.log('error', 'Error finding password reset token: %s', err);
           return res.status(501).send(err);
-        } else if (!(verifiedUser && verifiedUser.user)) {
+        } else if (!(passwordResetToken && passwordResetToken.user)) {
           winston.log('error', 'The user provided (%s) was invalid.', email);
           return res.status(501).send('User verfication token not found in DB');
         } else {
-          var email = verifiedUser.user;
+          var email = passwordResetToken.user;
           User.findOne(
             {'email': email}, function(err,user) {
               if (err) {
