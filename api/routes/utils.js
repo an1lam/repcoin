@@ -241,22 +241,6 @@ var utils = {
     return true;
   },
 
-  // Validate inputs for /users/:user_id/expert
-  validateAddExpertCategoryInputs: function(req) {
-    if (!req.body || !req.body.name ) {
-      return false;
-    }
-    return true;
-  },
-
-  // Validate inputs for /users/:user_id/investor
-  validateAddInvestorCategoryInputs: function(req) {
-    if (!req.body || !req.body.category) {
-      return false;
-    }
-    return true;
-  },
-
   // Validate an array of user links
   validateUserLinks: function(links) {
     var length = links.length;
@@ -297,9 +281,8 @@ var utils = {
 
   // Validate inputs to create a new category
   validateCategoryInputs: function(req) {
-    // Check that all of the inputs are presemnt
-    if (!req.body.name ||
-        !req.body.ownerName) {
+    // Check that all of the inputs are present
+    if (!req.body.name) {
       return false;
     }
     return true;
