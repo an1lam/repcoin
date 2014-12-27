@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-"use strict";
+'use strict';
 
 var Footer = require('./Footer.jsx');
 var Toolbar = require('./Toolbar.jsx');
