@@ -59,20 +59,28 @@ var CategoryPage = React.createClass({
       categoryPageHeader = <CategoryPageHeader category={this.state.category} currentUser={this.state.currentUser} />;
     }
     return (
-      <div>
+      <div className="categoryPage">
         <div className="row">
           <Toolbar />
         </div>
-        <div className="row">
+        <div className="row header">
           {categoryPageHeader}
         </div>
         <div className="row">
           <div className="col-md-3">
-            <LeaderTable category={this.props.params.category} expert={true}/>
-            <LeaderTable category={this.props.params.category} expert={false}/>
+            <div className="expert-table">
+              <LeaderTable category={this.props.params.category} expert={true}/>
+            </div>
           </div>
-          <div className="col-md-8">
-            <Feed category={this.props.params.category} parent="CategoryPage" />
+          <div className="col-md-6">
+            <div className="feed-table">
+              <Feed category={this.props.params.category} parent="CategoryPage" />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="investor-table">
+              <LeaderTable category={this.props.params.category} expert={false}/>
+            </div>
           </div>
         </div>
         <div className="row footerrow">

@@ -259,8 +259,27 @@
   font-size:26px;
 }
 
-/* Category Items /////////////////////////////////// */
+/* Category Page /////////////////////////////////// */
+.categoryPage .row {
+  margin-right:0px;
+}
 
+.categoryPage .header {
+  margin-bottom:20px;
+}
+
+.categoryPage .expert-table {
+  margin-left:25px;
+}
+
+.categoryPage .investor-table {
+  margin-left:25px;
+}
+
+.categoryPage .feed-table {
+  margin-left:25px;
+  margin-right:25px;
+}
 
 /* Footer Items ///////////////////////////////////// */
 
