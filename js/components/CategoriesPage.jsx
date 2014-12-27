@@ -1,10 +1,11 @@
-/** @jsx React.DOM */
-"use strict";
+'use strict';
 
 var $ = require('jquery');
-var React = require('react');
-var CategoriesList = require('./CategoriesList.jsx');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
+var Footer = require('./Footer.jsx');
+var CategoriesList = require('./CategoriesList.jsx');
+var React = require('react');
+var Toolbar = require('./Toolbar.jsx');
 
 var CategoriesPage = React.createClass({
   mixins: [AuthenticatedRoute],
@@ -28,8 +29,16 @@ var CategoriesPage = React.createClass({
 
   render: function() {
     return (
-      <div>
-        <CategoriesList categories={this.state.categories} />
+      <div className="categoriesPage">
+        <div className="row">
+          <Toolbar />
+        </div>
+        <div className="row">
+          <CategoriesList categories={this.state.categories} />
+        </div>
+        <div className="row">
+          <Footer />
+        </div>
       </div>
     );
   }
