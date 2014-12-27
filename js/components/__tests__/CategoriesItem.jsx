@@ -25,7 +25,7 @@ describe('Categories Item: ', function() {
     var tableData = TestUtils.scryRenderedDOMComponentsWithTag(
       categoriesItemComponent, 'td');
     expect(tableData.length).toEqual(4);
-    expect(tableData[0].getDOMNode().textContent).toEqual('foo');
+    expect(tableData[0].getDOMNode().textContent).toEqual('foo ');
   });
   
   it('has a score bar with a current score', function() {

@@ -121,6 +121,13 @@
   font-size: 200px;
 }
 
+.passwordResetButton {
+  margin-top:30px;
+  margin-right:40px;
+  margin-bottom:20px;
+  float:right;
+}
+
 .slogan {
   text-align: center;
 }

@@ -2,6 +2,7 @@
 
 // Models
 var User = require('../models/User.js');
+var PasswordResetToken = require('../models/PasswordResetToken.js');
 var VerificationToken = require('../models/VerificationToken.js');
 
 // Modules
@@ -37,7 +38,7 @@ module.exports = function(router, isAuthenticated, acl) {
         return res.send(leaders.sort(percentileComparator));
       }
     });
-  };
+  }
 
   router.route('/users/list/byids')
     // Get all of the users for the given list
@@ -155,10 +156,9 @@ module.exports = function(router, isAuthenticated, acl) {
           });
         }
       });
-    });
+    })
 
-/////// Routes that have /users/:user_id ///////////
-  router.route('/users/:user_id')
+/////// Routes that have /users/:user_id /////////// router.route('/users/:user_id')
     // Get the user with the provided id
     .get(isAuthenticated, function(req, res) {
       winston.log('info', 'GET /users/%s', req.params.user_id);
@@ -421,6 +421,99 @@ module.exports = function(router, isAuthenticated, acl) {
       });
     });
 
+  // Reset a user's password by sending them an email with a reset link
+  router.route('/users/sendPasswordResetEmail')
+    .post(function(req, res) {
+      var email = req.body.email;
+      winston.log('info', 'User with email %s resetting their password', email);
+      if (!email) {
+        winston.log('error', 'No email provided in password reset request.');
+        return res.status(412).send('No email address provided');
+      }
+
+      User.findOne({'email': email }, function(err, user) {
+        if (err) {
+          winston.log('error', 'Failed to send password reset email to user %s: %s.', email, err);
+          return res.status(412).send('No user with that email address.');
+        }
+
+        var randomString = utils.generateVerificationToken();
+        var resetToken = new PasswordResetToken({
+          user: user.email,
+          string: randomString,
+        });
+
+        resetToken.save(function(err) {
+          if (err) {
+            winston.log('error', 'Failed to save password reset token for user %s: %s.', email, err);
+            return res.status(501).send(err);
+          }
+
+          // Send an email with a link to reset the user's password
+          var mailOptions = utils.generatePasswordResetEmailOptions(
+            user.email, randomString);
+
+          transporter.sendMail(mailOptions, function(err, info) {
+            if (err) {
+              winston.log('error', 'Failed to send email to user %s: %s', email, err);
+              return res.status(554).send(err);
+            } else {
+              winston.log('info', 'Successfully emailed user %s with password reset link.', email);
+              return res.status(200).end();
+            }
+          });
+        });
+      });
+    });
+
+  router.route('/users/newPassword')
+    .post(function(req, res) {
+      var token = req.body.token;
+      var newPassword = req.body.password;
+
+      if (!(token && newPassword)) {
+        return res.status(412).send('No token provided');
+      }
+
+      PasswordResetToken.findOneAndRemove({ 'string': token }, function(err, passwordResetToken) {
+        if (err) {
+          winston.log('error', 'Error finding password reset token: %s', err);
+          return res.status(501).send(err);
+        } else if (!(passwordResetToken && passwordResetToken.user)) {
+          winston.log('error', 'The user provided (%s) was invalid.', email);
+          return res.status(501).send('User verfication token not found in DB');
+        } else {
+          var email = passwordResetToken.user;
+          User.findOne(
+            {'email': email}, function(err,user) {
+              if (err) {
+                winston.log('error', 'Error updating %s\'s password: %s', email, err);
+                return res.status(501).send(err);
+              }
+
+              user.password = newPassword;
+              user.save(function(err) {
+                if (err) {
+                  winston.log('Unable to save user: %s', err);
+                  return res.status(501).send(err);
+                }
+
+                req.login(user, function(err) {
+                  if (err) {
+                    winston.log('error', 'Error logging in user: %s', err);
+                    return res.status(400).send(err);
+                  } else {
+                    winston.log('info', 'Successully update password for user: %s', user.email);
+                    return res.status(200).send(user);
+                  }
+                });
+              });
+            }
+          );
+        }
+      });
+    });
+
   // Verify a user who has signed up for the site
   router.route('/verify')
     .post(function(req, res) {
@@ -445,8 +538,9 @@ module.exports = function(router, isAuthenticated, acl) {
           function(err, user) {
             if (err) {
               winston.log('error', 'Error updating user: %s', err);
-              return res.status(404).send(err);
+              return res.status(501).send(err);
             }
+
             req.login(user, function(err) {
               if (err) {
                 winston.log('error', 'Error logging in user: %s', err);
