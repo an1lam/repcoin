@@ -89,7 +89,6 @@ router.route('/categories/:categoryName')
           } else {
             winston.log('info', 'No category found with id: %s', categoryId);
           }
-          winston.log('info', 'Found category: %s', category.name);
           return res.status(200).send(category);
         }
       });
