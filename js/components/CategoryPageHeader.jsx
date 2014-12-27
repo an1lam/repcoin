@@ -82,7 +82,6 @@ var CategoryPageHeader = React.createClass({
       <div className="categoryPageHeader row">
         <div className="col-md-4 col-md-offset-4">
           <h1 className="text-center">{this.props.category.name}</h1>
-          </div>
         </div>
         <div className="col-md-2 col-md-offset-1">
           {expertBtn}

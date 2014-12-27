@@ -280,7 +280,7 @@ var utils = {
 
   // Validate inputs to create a new category
   validateCategoryInputs: function(req) {
-    // Check that all of the inputs are presemnt
+    // Check that all of the inputs are present
     if (!req.body.name) {
       return false;
     }

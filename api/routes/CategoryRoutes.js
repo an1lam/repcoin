@@ -42,12 +42,7 @@ module.exports = function(router, isAuthenticated, acl) {
       }
 
       // Values will either be assigned defaults or undefined if nothing present
-      var category = new Category({
-        name        : req.body.name,
-        ownerName   : req.body.ownerName,
-        quotes      : req.body.quotes,
-        color       : req.body.color
-      });
+      var category = new Category({ name : req.body.name });
 
       category.save( function(err) {
         if (err) {

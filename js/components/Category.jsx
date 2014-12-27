@@ -16,6 +16,7 @@ var Category = React.createClass({
     return (
       <div className="col-md-4">
         <h3><Link to="category" params={{category: this.props.category}}>{this.props.category}</Link></h3>
+      </div>
     );
   }
 });

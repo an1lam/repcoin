@@ -1,6 +1,7 @@
 'use strict';
 
 // Models
+var Category = require('../models/Category.js');
 var User = require('../models/User.js');
 var VerificationToken = require('../models/VerificationToken.js');
 
@@ -338,14 +339,14 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/users/:user_id/addexpert/:category_name')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
       var categoryName = req.params.category_name;
-      winston.log('info', 'PUT /users/%s/addexpert/%s', userId, categoryName);
+      winston.log('info', 'PUT /users/%s/addexpert/%s', req.params.user_id, categoryName);
 
       Category.findByName(categoryName).then(function(category) {
         if (category) {
           return addExpertCategory(req, res, category);
         } else {
-          winston.log('info', 'Creating category: $s', categoryName);
-          var newCategory = { name: categoryName };
+          winston.log('info', 'Creating category: %s', categoryName);
+          var newCategory = new Category({ name : categoryName });
           newCategory.save(function(err, category) {
             if (err) {
               winston.log('error', 'Error creating category: %s', err);
@@ -372,8 +373,8 @@ module.exports = function(router, isAuthenticated, acl) {
         if (category) {
           return addInvestorCategory(req, res, category);
         } else {
-          winston.log('info', 'Creating category: $s', categoryName);
-          var newCategory = { name: categoryName };
+          winston.log('info', 'Creating category: %s', categoryName);
+          var newCategory = new Category({ name : categoryName });
           newCategory.save(function(err, category) {
             if (err) {
               winston.log('error', 'Error creating category: %s', err);
