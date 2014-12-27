@@ -41,6 +41,9 @@ module.exports = function(router, isAuthenticated, acl) {
                 if (err) {
                   winston.log('error', 'Error finding user: %s', err);
                   return res.status(501).send(err);
+                } else if (!user) {
+                  winston.log('info', 'No user found with id: %s', userId);
+                  return res.status(501).send(err);
                 } else {
                   winston.log('info', 'Found user: %s', user.email);
                   return res.status(200).send(user);
@@ -77,6 +80,9 @@ module.exports = function(router, isAuthenticated, acl) {
               User.findById(userId, function(err, user) {
                 if (err) {
                   winston.log('error', 'Error finding user: %s', err);
+                  return res.status(501).send(err);
+                } else if (!user) {
+                  winston.log('info', 'No user found with id: %s', userId);
                   return res.status(501).send(err);
                 } else {
                   winston.log('info', 'Found user: %s', user.email);
