@@ -239,7 +239,8 @@ module.exports = function(router, isAuthenticated, acl) {
       });
     })
 
-/////// Routes that have /users/:user_id /////////// router.route('/users/:user_id')
+/////// Routes that have /users/:user_id ///////////
+  router.route('/users/:user_id')
     // Get the user with the provided id
     .get(isAuthenticated, function(req, res) {
       winston.log('info', 'GET /users/%s', req.params.user_id);
