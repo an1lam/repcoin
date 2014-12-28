@@ -116,6 +116,14 @@
   float:right;
 }
 
+.login-form {
+  z-index: 999;
+}
+
+.password-reset {
+  z-index: 1000;
+}
+
 .logo {
   font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;
   font-size: 200px;

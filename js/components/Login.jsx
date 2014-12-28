@@ -3,6 +3,7 @@ var auth = require('../auth.jsx');
 var React = require('react');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
+var PasswordReset = require('./PasswordReset.jsx');
 
 var Login = React.createClass({
   mixins: [Navigation],
@@ -10,6 +11,7 @@ var Login = React.createClass({
   getInitialState: function() {
     return {
       error: false,
+      forgotPassword: false
     };
   },
 
@@ -26,10 +28,20 @@ var Login = React.createClass({
     }.bind(this));
   },
 
+  handleForgotPasswordClick: function(e) {
+    e.preventDefault();
+    this.setState({ forgotPassword: true });
+  },
+
   render: function() {
     var errors = this.state.error ? <div className="alert alert-danger" role="alert"><strong>Invalid login credentials.</strong></div> : '';
-    return (
-      <div className="col-md-2 col-md-offset-10">
+
+    var loginDisplay = this.state.forgotPassword ?
+      <div className="login-form">
+        <PasswordReset />
+      </div> :
+
+      <div className="col-md-2 col-md-offset-10 login-form">
         <form onSubmit={this.handleSubmit}>
           <input type="text" ref="email" className="form-control" placeholder="Email Address"></input>
           <div className="input-group">
@@ -42,6 +54,12 @@ var Login = React.createClass({
           </div>
           {errors}
         </form>
+        <a onClick={this.handleForgotPasswordClick} href="#">Forgot your password?</a>
+      </div>;
+
+    return (
+      <div>
+        {loginDisplay}
       </div>
     );
   }
