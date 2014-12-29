@@ -1,12 +1,19 @@
 process.env.NODE_ENV = 'test';
 var utils = require('../api/routes/utils.js');
 var urlConfig = require('../config/url.js');
+var winston = require('winston');
 
 var Category = require('../api/models/Category.js');
 var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 
 describe('Utils: ', function() {
+  beforeEach(function() {
+    spyOn(winston, 'log').andCallFake(function(arg1, arg2, arg3, arg4) {
+      return;
+    });
+  });
+
   describe('isExpert: ', function() {
     var user = { categories: [{ name: 'Coding' }] };
     it('returns true if the user is an expert', function() {
