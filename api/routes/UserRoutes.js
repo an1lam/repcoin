@@ -172,6 +172,7 @@ module.exports = function(router, isAuthenticated, acl) {
 
 /////// Routes that have /users/:user_id ///////////
   router.get('/users/:user_id', isAuthenticated, UserHandler.users.userId.get);
+  router.delete('/users/:user_id', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.delete);
 
   router.route('/users/:user_id')
     // Update the user with this id
@@ -219,24 +220,6 @@ module.exports = function(router, isAuthenticated, acl) {
               return res.status(200).send(user);
             }
           });
-        }
-      });
-    })
-
-    // Delete the user with this id
-    .delete(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
-      winston.log('info', 'DELETE /users/%s', req.params.user_id);
-      // Remove the user
-      User.remove({ _id: req.params.user_id }, function(err, user) {
-        if (err) {
-          winston.log('error', 'Error finding user: %s', err);
-          return res.status(501).send(err);
-        } else if (!user) {
-          winston.log('info', 'No user found with id: %s', req.params.user_id);
-          return res.status(501).send('No user was found');
-        } else {
-          winston.log('info', 'Found user with id: %s', req.params.user_id);
-          return res.status(200).send('Successfully deleted user');
         }
       });
     });

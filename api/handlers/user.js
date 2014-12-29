@@ -81,6 +81,23 @@ var UserHandler = {
           // Otherwise, return only public information
           User.findByIdPublic(req.params.user_id, cb);
         }
+      },
+
+      delete: function(req, res) {
+        var userId = req.params.user_id;
+        winston.log('info', 'DELETE /users/%s', userId);
+        User.remove({ _id: userId }, function(err, user) {
+          if (err) {
+            winston.log('error', 'Error finding user: %s', err);
+            return res.status(501).send(err);
+          } else if (!user) {
+            winston.log('info', 'No user found with id: %s', userId);
+            return res.status(501).send('No user was found with id: ' + userId);
+          } else {
+            winston.log('info', 'Found user with id: %s', userId);
+            return res.status(200).send(user);
+          }
+        });
       }
     },
 

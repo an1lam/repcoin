@@ -219,6 +219,44 @@ describe('UserHandler: ', function() {
           expect(res.send).toHaveBeenCalledWith('Error');
         });
       });
+
+      describe('delete: ', function() {
+        it('properly deletes a given user', function() {
+          spyOn(User, 'remove').andCallFake(function(query, cb) {
+            return cb(null, { username: 'Matt' });
+          });
+          req.params = { user_id: '123' };
+          UserHandler.users.userId.delete(req, res);
+          expect(res.status.callCount).toEqual(1);
+          expect(res.send.callCount).toEqual(1);
+          expect(res.status).toHaveBeenCalledWith(200);
+          expect(res.send).toHaveBeenCalledWith({ username: 'Matt' });
+        });
+
+        it('properly handles deleting a user that is not found', function() {
+          spyOn(User, 'remove').andCallFake(function(query, cb) {
+            return cb(null, null);
+          });
+          req.params = { user_id: '123' };
+          UserHandler.users.userId.delete(req, res);
+          expect(res.status.callCount).toEqual(1);
+          expect(res.send.callCount).toEqual(1);
+          expect(res.status).toHaveBeenCalledWith(501);
+          expect(res.send).toHaveBeenCalledWith('No user was found with id: 123');
+        });
+
+        it('properly handles an error finding the user', function() {
+          spyOn(User, 'remove').andCallFake(function(query, cb) {
+            return cb('Error', null);
+          });
+          req.params = { user_id: '123' };
+          UserHandler.users.userId.delete(req, res);
+          expect(res.status.callCount).toEqual(1);
+          expect(res.send.callCount).toEqual(1);
+          expect(res.status).toHaveBeenCalledWith(501);
+          expect(res.send).toHaveBeenCalledWith('Error');
+        });
+      });
     });
   });
 });
