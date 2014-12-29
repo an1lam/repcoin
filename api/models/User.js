@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
   SALT_WORK_FACTOR = 10;
 var validate = require('mongoose-validator');
 var phone = require('phone');
+var winston = require('winston');
 
 // All of the fields that should be kept private
 var privateFields = {

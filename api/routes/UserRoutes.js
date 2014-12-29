@@ -99,50 +99,7 @@ module.exports = function(router, isAuthenticated, acl) {
     });
   };
 
-  // Get leaders for a given category and count
-  // Set expert to true for expert category, false for investor
-  function getLeaders(req, res) {
-    if (!utils.validateLeadersCountInputs(req)) {
-      winston.log('info', 'Invalid inputs');
-      return res.status(412).send('Invalid inputs');
-    }
-
-    var categoryName = req.params.categoryName;
-    var count = req.params.count;
-    var expert = req.query.expert === '1';
-
-    User.findNLeadersPublic(categoryName, parseInt(count), expert, function(err, leaders) {
-      if (err) {
-        winston.log('error', 'Error finding users: %s', err);
-        return res.status(400).send(err);
-      } else {
-        // sort the users in decreasing order of directScore
-        var percentileComparator = utils.getPercentileComparator(categoryName, expert);
-        winston.log('info', 'Found %s leaders for category %s', count, categoryName);
-        return res.send(leaders.sort(percentileComparator));
-      }
-    });
-  }
-
-  router.route('/users/list/byids')
-    // Get all of the users for the given list
-    .get(isAuthenticated, function(req, res) {
-      winston.log('info', 'GET /users/list/byids');
-      if (!req.query.idList) {
-        winston.log('info', 'No id list provided');
-        return res.status(412).send('No id list provided');
-      }
-      User.findPublic({ '_id': { $in: req.query.idList }}, function(err, users) {
-        if (err) {
-          winston.log('error', 'Error finding users: %s', err);
-          return res.status(501).send(err);
-        } else {
-          winston.log('info', 'Found users');
-          return res.status(200).send(users);
-        }
-      });
-   });
-
+  router.get('/users/list/byids', isAuthenticated, UserHandler.users.listByIds.get)
   router.get('/users', isAuthenticated, UserHandler.users.get);
 
   router.route('/users')
@@ -214,33 +171,9 @@ module.exports = function(router, isAuthenticated, acl) {
     })
 
 /////// Routes that have /users/:user_id ///////////
+  router.get('/users/:user_id', isAuthenticated, UserHandler.users.userId.get);
+
   router.route('/users/:user_id')
-    // Get the user with the provided id
-    .get(isAuthenticated, function(req, res) {
-      winston.log('info', 'GET /users/%s', req.params.user_id);
-      var cb = function(err, user) {
-        if (err) {
-          winston.log('error', 'Error getting user: %s', err);
-          return res.status(501).send(err);
-        } else if (!user) {
-          winston.log('info', 'No user found with id: %s', req.params.user_id);
-          return res.status(501).send('No user was found');
-        } else {
-          winston.log('info', 'Found user with id: %s', req.params.user_id);
-          return res.status(200).send(user);
-        }
-      };
-
-      // TODO: flesh out acl to work not just as middleware to avoid repetition
-      // Return all fields if the user requested is the requesting
-      if (req.params.user_id === req.session.passport.user) {
-        User.findById(req.params.user_id, cb);
-      } else {
-        // Otherwise, return only public information
-        User.findByIdPublic(req.params.user_id, cb);
-      }
-    })
-
     // Update the user with this id
     // This route cannot be used to change the user's categories or portfolio
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
@@ -308,12 +241,9 @@ module.exports = function(router, isAuthenticated, acl) {
       });
     });
 
-  ///////// Get n leaders for a category ///////
-  router.route('/users/:categoryName/leaders/:count')
-    .get(isAuthenticated, function(req, res) {
-      winston.log('info', 'GET /users/%s/leaders/%s', req.params.categoryName, req.params.count);
-      getLeaders(req, res);
-    });
+  // Get leaders for a given category and count
+  // Set expert to true for expert category, false for investor
+  router.get('/users/:categoryName/leaders/:count', isAuthenticated, UserHandler.users.leaders.get);
 
   // Add an expert category if it is not already added
   // Create the category if it does not exist
