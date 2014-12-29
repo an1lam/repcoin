@@ -490,7 +490,10 @@ module.exports = function(router, isAuthenticated, acl) {
       User.findOne({'email': email }, function(err, user) {
         if (err) {
           winston.log('error', 'Failed to send password reset email to user %s: %s.', email, err);
-          return res.status(412).send('No user with that email address.');
+          return res.status(503).send('Error finding user for ' + email + '. Please try again.');
+        } else if (!user) {
+          winston.log('info', 'Will not send password reset email to unrecognized address: %s', email);
+          return res.status(412).send('Unrecognized email address');
         }
 
         var randomString = utils.generateVerificationToken();
