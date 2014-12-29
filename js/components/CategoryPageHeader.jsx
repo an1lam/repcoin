@@ -82,12 +82,14 @@ var CategoryPageHeader = React.createClass({
       <div className="categoryPageHeader row">
         <div className="col-md-4 col-md-offset-4">
           <h1 className="text-center">{this.props.category.name}</h1>
+          <h4 className="text-center">Experts: {this.props.category.experts}</h4>
+          <h4 className="text-center">Investors: {this.props.category.investors}</h4>
+          <h4 className="text-center">Market Size: {this.props.category.reps} Reps</h4>
         </div>
         <div className="col-md-2 col-md-offset-1">
           {expertBtn}
           {investorBtn}
         </div>
-        <h4 className="text-center">Total reps in {this.props.category.name}: {this.props.category.reps}</h4>
       </div>
     );
   }

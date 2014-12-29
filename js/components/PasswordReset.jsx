@@ -7,7 +7,7 @@ var Navigation = Router.Navigation;
 var PasswordReset = React.createClass({
   getInitialState: function() {
     return {
-      error: false,
+      message: null,
     };
   },
 
@@ -27,27 +27,25 @@ var PasswordReset = React.createClass({
         });
       }.bind(this),
       error: function(xhr, status, err) {
-        this.setState({
-          message: 'Invalid information provided.'
-        });
+        this.setState({ message: xhr.responseText });
       }.bind(this),
     });
   },
 
   render: function() {
-    if (this.state.error) {
-      var errors = (
-        <div className="alert alert-danger" role="alert">
-          <strong>Invalid login credentials.</strong>
+    if (this.state.message) {
+      var msg = (
+        <div className="alert alert-info" role="alert">
+          <strong>{this.state.message}</strong>
         </div>
       );
     }
 
     return (
-      <div className="col-md-2 col-md-offset-10">
+      <div className="col-md-2 col-md-offset-10 password-reset">
         <form onSubmit={this.handleSubmit}>
           <div className="input-group">
-            <input type="text" ref="email" className="form-control" placeholder="Email Address">
+            <input type="text" ref="email" className="form-control" placeholder="Enter email address">
             </input>
             <span className="input-group-btn">
               <button type="submit" className="btn btn-default">
@@ -55,7 +53,7 @@ var PasswordReset = React.createClass({
               </button>
             </span>
           </div>
-          {errors}
+          {msg}
         </form>
       </div>
     );

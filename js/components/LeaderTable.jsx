@@ -51,18 +51,20 @@ return <tr key={leader._id} >
     }.bind(this));
     var title = this.props.expert ? 'Leading Experts' : 'Leading Investors';
     return (
-      <table className="table table-bordered">
-        <thead>
-        <tr><th colSpan="3">{title}</th></tr>
-        <tr>
-          <th>Name</th>
-          <th>Percentile</th>
-        </tr>
-        </thead>
-        <tbody>
-          {leaders}
-        </tbody>
-      </table>
+      <div className="panel panel-default">
+        <table className="table table-bordered">
+          <thead>
+          <tr><th colSpan="3">{title}</th></tr>
+          <tr>
+            <th>Name</th>
+            <th>Percentile</th>
+          </tr>
+          </thead>
+          <tbody>
+            {leaders}
+          </tbody>
+        </table>
+      </div>
     );
   }
 });

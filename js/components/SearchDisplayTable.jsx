@@ -39,7 +39,7 @@ var SearchDisplayTable = React.createClass({
           $(".searchItem-" + i).focus();
         }
       break;
-      
+
       case 40: // down
         if (this.state.index < this.state.maxIndex) {
           var i = this.state.index+1;
@@ -47,7 +47,7 @@ var SearchDisplayTable = React.createClass({
           $(".searchItem-" + i).focus();
         }
       break;
-      
+
       default: return;
     }
     event.preventDefault();
@@ -71,10 +71,10 @@ var SearchDisplayTable = React.createClass({
               </li>;
             }
           }.bind(this))}
-        </ul> 
+        </ul>
       </div>
     );
-  } 
+  }
 });
 
 module.exports = SearchDisplayTable;
