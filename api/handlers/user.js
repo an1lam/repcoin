@@ -83,6 +83,53 @@ var UserHandler = {
         }
       },
 
+      put: function(req, res) {
+        var userId = req.params.user_id;
+        winston.log('info', 'PUT /users/%s', userId);
+        if (!utils.validateUserInputs(req)) {
+          winston.log('info', 'Invalid inputs');
+          return res.status(412).send('Invalid inputs');
+        }
+
+        User.findById(userId, function(err, user) {
+          if (err) {
+            winston.log('error', 'Error finding user: %s', err);
+            return res.status(501).send(err);
+          } else if (!user) {
+            winston.log('info', 'No user found with id: %s', userId);
+            return res.status(501).send('No user found with id: ' + userId);
+          } else {
+            user.about            = req.body.about || user.about;
+            user.username         = req.body.username || user.username;
+            user.phoneNumber      = req.body.phoneNumber || user.phoneNumber;
+            user.defaultCategory  = req.body.defaultCategory || user.defaultCategory;
+            user.picture          = req.body.picture || user.picture;
+
+            if (req.body.links) {
+              if (!utils.validateUserLinks(req.body.links)) {
+                winston.log('info', 'Invalid link inputs: %s', req.body.links);
+                return res.status(412).send('Invalid link inputs');
+              }
+              if (req.body.links[0] == 'EMPTY') {
+                user.links = [];
+              } else {
+                user.links = req.body.links;
+              }
+            }
+
+            user.save(function(err, user) {
+              if (err) {
+                winston.log('error', 'Error saving user: %s', err);
+                return res.status(501).send(err);
+              } else {
+                winston.log('info', 'Saved user with id: %s', userId);
+                return res.status(200).send(user);
+              }
+            });
+          }
+        });
+      },
+
       delete: function(req, res) {
         var userId = req.params.user_id;
         winston.log('info', 'DELETE /users/%s', userId);
@@ -98,7 +145,89 @@ var UserHandler = {
             return res.status(200).send(user);
           }
         });
-      }
+      },
+
+      investorCategory: {
+        delete: function(req, res) {
+          var userId = req.params.user_id;
+          var categoryName = req.params.category_name;
+          winston.log('info', 'PUT /users/%s/%s/investor/delete', userId, categoryName);
+          User.findById(userId, function(err, user) {
+            if (err) {
+              winston.log('error', 'Error finding user: %s', err);
+              return res.status(501).send(err);
+            } else if (!user) {
+              winston.log('info', 'No user found with id: %s', userId);
+              return res.status(501).send('No user found with id: ' + userId);
+            // If the user is not investor for the category, just return the user
+            } else if (!utils.isInvestor(user, categoryName)) {
+              winston.log('info', 'User %s is already an investor for %s', userId, categoryName);
+              return res.status(200).send(user);
+            } else {
+              // Update all of the experts invested in by this user for the category
+              var expertIds = utils.getInvestorsExperts(user, categoryName);
+              utils.updateInvestorsExperts(expertIds, categoryName, user._id, function(err) {
+                if (err) {
+                  winston.log('error', 'Error updating investors\' experts: %s', err);
+                  return res.status(501).send(err);
+                } else {
+                  user = utils.deleteInvestorCategory(user, categoryName);
+                  user.save(function(err, user) {
+                    if (err) {
+                      winston.log('error', 'Error saving user: %s', err);
+                      return res.status(501).send(err);
+                    } else {
+                      winston.log('info', 'Saved user: %s', userId);
+                      return res.status(200).send(user);
+                    }
+                  });
+                }
+              });
+            }
+          });
+        },
+      },
+
+      expertCategory: {
+        delete: function(req, res) {
+          var categoryName = req.params.category_name;
+          var userId = req.params.user_id;
+          winston.log('info', 'PUT /users/%s/%s/expert/delete', userId, categoryName);
+          User.findById(userId, function(err, user) {
+            if (err) {
+              winston.log('error', 'Error finding user: %s', err);
+              return res.status(501).send(err);
+            } else if (!user) {
+              winston.log('info', 'No user found with id: %s', userId);
+              return res.status(501).send('No user found with id: ' + userId);
+            // If the user is not an expert for this category, just return the user
+            } else if (!utils.isExpert(user, categoryName)) {
+              winston.log('info', 'User %s is not an expert for %s', userId, categoryName);
+              return res.status(200).send(user);
+            } else {
+              // Reimburse the user's investors in the category
+              var investors = utils.getInvestors(user, categoryName);
+              utils.reimburseInvestors(investors, categoryName, user._id, function(err) {
+                if (err) {
+                  winston.log('error', 'Error reimbursing investors: %s', err);
+                  return res.status(501).send(err);
+                } else {
+                  user = utils.deleteExpertCategory(user, categoryName);
+                  user.save(function(err, user) {
+                    if (err) {
+                      winston.log('error', 'Error saving user: %s', err);
+                      return res.status(501).send(err);
+                    } else {
+                      winston.log('info', 'Saved user: %s', userId);
+                      return res.status(200).send(user);
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      },
     },
 
     // /users/:categoryName/leaders/:count
@@ -126,7 +255,7 @@ var UserHandler = {
           }
         });
       }
-    }
+    },
   }
 };
 

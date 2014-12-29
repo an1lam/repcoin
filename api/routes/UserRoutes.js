@@ -168,64 +168,13 @@ module.exports = function(router, isAuthenticated, acl) {
           });
         }
       });
-    })
-
-/////// Routes that have /users/:user_id ///////////
-  router.get('/users/:user_id', isAuthenticated, UserHandler.users.userId.get);
-  router.delete('/users/:user_id', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.delete);
-
-  router.route('/users/:user_id')
-    // Update the user with this id
-    // This route cannot be used to change the user's categories or portfolio
-    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
-      winston.log('info', 'PUT /users/%s', req.params.user_id);
-      if (!utils.validateUserInputs(req)) {
-        winston.log('info', 'Invalid inputs');
-        return res.status(412).send('Invalid inputs');
-      }
-
-      User.findById(req.params.user_id, function(err, user) {
-        if (err) {
-          winston.log('error', 'Error finding user: %s', err);
-          return res.status(501).send(err);
-        } else if (!user) {
-          winston.log('info', 'No user found with id: %s', req.params.user_id);
-          return res.status(501).send('No user was found');
-        } else {
-          user.about            = req.body.about || user.about;
-          user.username         = req.body.username || user.username;
-          user.password         = req.body.password || user.password;
-          user.phoneNumber      = req.body.phoneNumber || user.phoneNumber;
-          user.defaultCategory  = req.body.defaultCategory || user.defaultCategory;
-          user.picture          = req.body.picture || user.picture;
-
-          if (req.body.links) {
-            if (!utils.validateUserLinks(req.body.links)) {
-              winston.log('info', 'Invalid link inputs: %s', req.body.links);
-              return res.status(412).send('Invalid link inputs');
-            }
-            if (req.body.links[0] == 'EMPTY') {
-              user.links = [];
-            } else {
-              user.links = req.body.links;
-            }
-          }
-
-          user.save(function(err) {
-            if (err) {
-              winston.log('error', 'Error saving user: %s', err);
-              return res.status(501).send(err);
-            } else {
-              winston.log('info', 'Saved user with id: %s', req.params.user_id);
-              return res.status(200).send(user);
-            }
-          });
-        }
-      });
     });
 
-  // Get leaders for a given category and count
-  // Set expert to true for expert category, false for investor
+  router.get('/users/:user_id', isAuthenticated, UserHandler.users.userId.get);
+  router.delete('/users/:user_id', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.delete);
+  router.put('/users/:user_id', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.put);
+
+  // Get leaders for a given category and count. Set expert to '1' for expert category, else for investor
   router.get('/users/:categoryName/leaders/:count', isAuthenticated, UserHandler.users.leaders.get);
 
   // Add an expert category if it is not already added
@@ -284,85 +233,13 @@ module.exports = function(router, isAuthenticated, acl) {
       });
     });
 
-  // Delete an expert category
-  router.route('/users/:user_id/:category_name/expert/delete')
-    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
-      winston.log('info', 'PUT /users/%s/%s/expert/delete', req.params.user_id, req.params.category_name);
-      var categoryName = req.params.category_name;
-      User.findById(req.params.user_id, function(err, user) {
-        if (err) {
-          winston.log('error', 'Error finding user: %s', err);
-          return res.status(501).send(err);
-        } else if (!user) {
-          winston.log('info', 'No user found with id: %s', req.params.user_id);
-          return res.status(501).send('No user was found');
-        // If the user is not an expert for this category, just return the user
-        } else if (!utils.isExpert(user, categoryName)) {
-          winston.log('info', 'User %s is already an expert for %s', user.email, categoryName);
-          return res.status(200).send(user);
-        } else {
-          // Reimburse the user's investors in the category
-          var investors = utils.getInvestors(user, categoryName);
-          utils.reimburseInvestors(investors, categoryName, user._id, function(err) {
-            if (err) {
-              winston.log('error', 'Error reimbursing investors: %s', err);
-              return res.status(501).send(err);
-            } else {
-              user = utils.deleteExpertCategory(user, categoryName);
-              user.save(function(err) {
-                if (err) {
-                  winston.log('error', 'Error saving user: %s', err);
-                  return res.status(501).send(err);
-                } else {
-                  winston.log('info', 'Saved user: %s', user.email);
-                  return res.status(200).send(user);
-                }
-              });
-            }
-          });
-        }
-      });
-    });
+  // Delete an expert category for a user
+  router.put('/users/:user_id/:category_name/expert/delete', isAuthenticated, acl.isAdminOrSelf,
+    UserHandler.users.userId.expertCategory.delete);
 
-  // Delete an investor category
-  router.route('/users/:user_id/:category_name/investor/delete')
-    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
-      winston.log('info', 'PUT /users/%s/%s/investor/delete', req.params.user_id, req.params.category_name);
-      var categoryName = req.params.category_name;
-      User.findById(req.params.user_id, function(err, user) {
-        if (err) {
-          winston.log('error', 'Error finding user: %s', err);
-          return res.status(501).send(err);
-        } else if (!user) {
-          winston.log('info', 'No user found with id: %s', req.params.user_id);
-          return res.status(501).send('No user was found');
-        // If the user is not investor for the category, just return the user
-        } else if (!utils.isInvestor(user, categoryName)) {
-          winston.log('info', 'User %s is already an investor for %s', user.email, categoryName);
-          return res.status(200).send(user);
-        } else {
-          // Update all of the experts invested in by this user for the category
-          var expertIds = utils.getInvestorsExperts(user, categoryName);
-          utils.updateInvestorsExperts(expertIds, categoryName, user._id, function(err) {
-            if (err) {
-              winston.log('error', 'Error updating investors\' experts: %s', err);
-              return res.status(501).send(err);
-            } else {
-              user = utils.deleteInvestorCategory(user, categoryName);
-              user.save(function(err) {
-                if (err) {
-                  winston.log('error', 'Error saving user: %s', err);
-                  return res.status(501).send(err);
-                } else {
-                  winston.log('info', 'Saved user: %s', user.email);
-                  return res.status(200).send(user);
-                }
-              });
-            }
-          });
-        }
-      });
-    });
+  // Delete an investor category for a user
+  router.put('/users/:user_id/:category_name/investor/delete', isAuthenticated, acl.isAdminOrSelf,
+    UserHandler.users.userId.investorCategory.delete);
 
   // Reset a user's password by sending them an email with a reset link
   router.route('/users/sendPasswordResetEmail')
