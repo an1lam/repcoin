@@ -65,7 +65,6 @@ var LinkItem = React.createClass({
       url: url,
       type: 'PUT',
       data: user,
-      traditiona: true,
       success: function(user) {
         auth.storeCurrentUser(user, function(user) {
           return user;
