@@ -120,6 +120,11 @@
   z-index: 999;
 }
 
+.passwordResetTitle {
+  text-align: center;
+  margin-bottom:40px;
+}
+
 .password-reset {
   z-index: 1000;
 }
@@ -188,6 +193,7 @@
 /* Profile Page Items ////////////////////////////// */
 .linksBox h4 {
   display:inline-block;
+  margin-bottom:15px;
 }
 
 .linksBox {
@@ -267,6 +273,12 @@
   font-size:26px;
 }
 
+.category-delete {
+  margin-right:10px;
+  margin-left:10px;
+  margin-bottom:10px;
+}
+
 /* Category Page /////////////////////////////////// */
 .categoryPage .row {
   margin-right:0px;
@@ -337,7 +349,8 @@ html, body {
 }
 
 .editBox {
-  float:right;
+  display:inline-block;
+  margin-left:30px;
 }
 
 .categoriesItem {

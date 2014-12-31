@@ -9,7 +9,7 @@ var PasswordResetPage = React.createClass({
   mixins: [Navigation],
 
   getInitialState: function() {
-    return {error: ''};
+    return { error: null };
   },
 
   updateUserWithNewPassword: function() {
@@ -17,6 +17,9 @@ var PasswordResetPage = React.createClass({
     var token = this.props.params.token;
     var password1 = this.refs.password1.getDOMNode().value;
     var password2 = this.refs.password2.getDOMNode().value;
+
+    $(".pwd1").val('');
+    $(".pwd2").val('');
     if (password1 !== password2) {
       this.setState({error: 'The two passwords you entered don\'t match.'});
       return;
@@ -44,14 +47,16 @@ var PasswordResetPage = React.createClass({
   },
 
   render: function() {
+    var error = this.state.error ? <div className="alert alert-danger" role="alert">{this.state.error}</div> : '';
     return (
       <div className="passwordResetPage">
         <Toolbar />
-        <div className="col-md-3 col-md-offset-3">
+        <h1 className="passwordResetTitle">Choose a New Password</h1>
+        <div className="col-md-4 col-md-offset-4">
           <form onSubmit={this.updateUserWithNewPassword}>
-              <input type="password" ref="password1" className="form-control" placeholder="Password"></input>
+              <input type="password" ref="password1" className="form-control pwd2" placeholder="Password"></input>
               <div className="input-group">
-                <input type="password" ref="password2" className="form-control" placeholder="Confirm password"></input>
+                <input type="password" ref="password2" className="form-control pwd1" placeholder="Confirm password"></input>
                 <span className="input-group-btn">
                   <button type="submit" className="btn btn-default">
                     <span className="glyphicon glyphicon-ok"></span>
@@ -59,7 +64,7 @@ var PasswordResetPage = React.createClass({
                 </span>
               </div>
           </form>
-          {this.state.error}
+          {error}
         </div>
         <Footer />
       </div>
