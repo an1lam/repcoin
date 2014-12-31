@@ -8,10 +8,12 @@ var mongoose = require('mongoose');
 var nodemailer = require('nodemailer');
 var session = require('express-session');
 var passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy;
+  LocalStrategy = require('passport-local').Strategy,
+  FacebookStrategy = require('passport-facebook').Strategy,
+  FacebookTokenStrategy = require('passport-facebook-token').Strategy;
 var path = require('path');
 // Configure passport
-require('./config/pass.js')(passport, LocalStrategy);
+require('./config/pass.js')(passport, LocalStrategy, FacebookStrategy, FacebookTokenStrategy);
 var mailerConfig = require('./config/mailer.js');
 var winston = require('winston');
 

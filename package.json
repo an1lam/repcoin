@@ -33,10 +33,13 @@
     "karma-react-jsx-preprocessor": "~0.1.1",
     "mongoose": "~3.8.17",
     "mongoose-validator": "^1.0.2",
+    "newrelic": "~1.14.4",
     "nodemailer": "~1.3.0",
     "nodemon": "~1.2.1",
     "npm-watch": "0.0.0",
     "passport": "~0.2.1",
+    "passport-facebook": "^1.0.3",
+    "passport-facebook-token": "^0.4.0",
     "passport-local": "~1.0.0",
     "path": "~0.4.9",
     "phone": "^1.0.3",
@@ -47,8 +50,7 @@
     "reactify": "~0.15.2",
     "reduce": "~1.0.1",
     "watchify": "^2.1.0",
-    "winston": "^0.8.3",
-    "newrelic": "~1.14.4"
+    "winston": "^0.8.3"
   },
   "devDependencies": {
     "should": "^4.0.4",

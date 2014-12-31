@@ -11,6 +11,28 @@ module.exports = function(router, passport) {
   The incoming request to the middleware will inherently be signed
   as loggedin or not.
   */
+
+  router.post('/login/facebook/token',
+    passport.authenticate('facebook-token'),
+    function (req, res) {
+      // do something with req.user
+      res.send(req.user? 200 : 401);
+    }
+  );
+
+  // Redirect the user to Facebook for authentication.  When complete,
+  // Facebook will redirect the user back to the application at
+  //     /auth/facebook/callback
+  router.get('/login/facebook', passport.authenticate('facebook'));
+
+  // Facebook will redirect the user to this URL after approval.  Finish the
+  // authentication process by attempting to obtain an access token.  If
+  // access was granted, the user will be logged in.  Otherwise,
+  // authentication has failed.
+  router.get('/login/facebook/callback',
+    passport.authenticate('facebook', { successRedirect: '/',
+                                        failureRedirect: '/' }));
+
   router.route('/loggedin')
     .get(function(req, res) {
       return res.status(200).send(req.isAuthenticated());
