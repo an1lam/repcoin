@@ -44,7 +44,7 @@ var LinkItem = React.createClass({
 
   deleteLinkItem: function() {
     var url = '/api/users/' + this.props.user._id;
-    var links = []; 
+    var links = [];
     for (var i = 0; i < this.props.user.links.length; i++) {
       var link = this.props.user.links[i];
       if (link.url != this.props.link.url && link.title != this.props.link.title) {
@@ -80,7 +80,7 @@ var LinkItem = React.createClass({
   render: function() {
     var edit = '';
     var del = '';
-    var linkPlace = 
+    var linkPlace =
         <div className="text">
           <strong>{this.props.link.title}</strong>: <a href={this.props.link.url}>{this.props.link.url}</a>
         </div>;
@@ -95,11 +95,11 @@ var LinkItem = React.createClass({
       }
 
       if (this.state.showInput) {
-        linkPlace = <LinkInput currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeInputBox} title={this.props.link.title} url={this.props.link.url}/>;
+        linkPlace = <LinkInput user={this.props.user} reset={this.closeInputBox} title={this.props.link.title} url={this.props.link.url}/>;
       }
 
       if (this.state.showDelete) {
-        del = <LinkDelete currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeDeleteBox} onDelete={this.deleteLinkItem}/>; 
+        del = <LinkDelete currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeDeleteBox} onDelete={this.deleteLinkItem}/>;
       }
     }
 
@@ -108,7 +108,7 @@ var LinkItem = React.createClass({
         {linkPlace}
         {edit}
         {del}
-      </div> 
+      </div>
     );
   }
 });
