@@ -95,7 +95,7 @@ var LinkItem = React.createClass({
       }
 
       if (this.state.showInput) {
-        linkPlace = <LinkInput currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeInputBox} title={this.props.link.title} url={this.props.link.url}/>;
+        linkPlace = <LinkInput user={this.props.user} reset={this.closeInputBox} title={this.props.link.title} url={this.props.link.url}/>;
       }
 
       if (this.state.showDelete) {
