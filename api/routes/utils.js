@@ -244,6 +244,10 @@ var utils = {
   // Validate an array of user links
   validateUserLinks: function(links) {
     var length = links.length;
+    if (length === 1 && links[0] === 'EMPTY') {
+      return true;
+    }
+
     for (var i = 0; i < length; i++) {
       var link = links[i];
 

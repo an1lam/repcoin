@@ -257,6 +257,12 @@ describe('Utils: ', function() {
       result = utils.validateUserLinks(links);
       expect(result).toEqual(false);
     });
+
+    it('returns true if links are meant to be empty', function() {
+      var links = ['EMPTY'];
+      var result = utils.validateUserLinks(links);
+      expect(result).toEqual(true);
+    });
   });
 
   describe('validateUserInputs: ', function() {

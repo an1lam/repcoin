@@ -99,7 +99,7 @@ var LinkItem = React.createClass({
       }
 
       if (this.state.showDelete) {
-        del = <LinkDelete currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeDeleteBox} onDelete={this.deleteLinkItem}/>;
+        del = <LinkDelete reset={this.closeDeleteBox} delete={this.deleteLinkItem}/>;
       }
     }
 
