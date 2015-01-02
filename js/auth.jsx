@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 'use strict';
 var $ = require('jquery');
 var React = require('react');

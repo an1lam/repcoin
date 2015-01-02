@@ -88,7 +88,7 @@
     "preinstall": "./scripts/preinstall.sh",
     "postinstall": "./scripts/postinstall.sh",
     "lint": "jsxhint js/**/*.jsx && jshint api/**/*.js",
-    "watch": "npm run watch-html & npm run watch-css & npm run watch-images & npm run build-jsx",
+    "watch": "npm run watch-html & npm run watch-css & npm run watch-images & npm run build-jsx & npm run build-fonts",
     "build-jsx": "watchify --debug --extension=.jsx js/app.jsx -o public/app.js -dv",
     "build-css": "cp -r css public/",
     "build-html": "cp index.html public/index.html",

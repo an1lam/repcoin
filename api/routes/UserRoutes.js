@@ -258,6 +258,9 @@ module.exports = function(router, isAuthenticated, acl) {
         } else if (!user) {
           winston.log('info', 'Will not send password reset email to unrecognized address: %s', email);
           return res.status(412).send('Unrecognized email address');
+        } else if (user.facebookId) {
+          winston.log('info', 'User with email: %s is a facebook account', email);
+          return res.status(412).send('Users who sign up with facebook do not have a Repcoin email address');
         }
 
         var randomString = utils.generateVerificationToken();
