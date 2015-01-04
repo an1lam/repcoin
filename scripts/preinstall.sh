@@ -1,7 +1,6 @@
 #!/bin/bash
 mkdir public/
 mkdir public/css
-mkdir public/images
 mkdir public/fonts
 mkdir public/js
 mkdir public/js/lib
