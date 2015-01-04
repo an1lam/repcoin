@@ -16,7 +16,7 @@ module.exports = function(router, passport) {
       return res.status(200).send(req.isAuthenticated());
     });
 
-  // Get the current user. Null if no user logged in
+  // Get the current user.
   router.route('/user')
     .get(function(req, res) {
       return res.status(200).send(req.user);
