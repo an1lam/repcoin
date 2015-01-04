@@ -106,6 +106,11 @@ module.exports = function(router, isAuthenticated, acl) {
     // Create a new user
     .post(function(req, res) {
       winston.log('info', 'POST /users');
+
+      if (!utils.validateCreateUserInputs(req)) {
+        return res.status(412).send('Invalid inputs');
+      }
+
       var user = new User({
           firstname   : req.body.firstname,
           lastname    : req.body.lastname,

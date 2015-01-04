@@ -229,6 +229,19 @@ var utils = {
     return user;
   },
 
+  // Validate the inputs to create a new user through a POST /users
+  validateCreateUserInputs: function(req) {
+    if (!req.body ||
+        !req.body.firstname ||
+        !req.body.lastname ||
+        !req.body.password ||
+        !req.body.email ||
+        !req.body.phoneNumber) {
+      return false;
+    }
+    return true;
+  },
+
   // Validate the inputs for /users/:categoryName/leaders/:count
   validateLeadersCountInputs: function(req) {
     if (!req.query || req.query.expert == null) {
