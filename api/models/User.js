@@ -161,7 +161,6 @@ UserSchema.pre('save', function(next) {
 
   // Only hash the password if it has been modified (or is new)
   if (!user.isModified('password')) {
-    winston.info('User not modified');
     return next();
   }
 
