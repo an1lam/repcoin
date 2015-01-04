@@ -3,14 +3,12 @@ var mongoose = require('mongoose'),
   bcrypt = require('bcrypt'),
   SALT_WORK_FACTOR = 10;
 var validate = require('mongoose-validator');
-var phone = require('phone');
 var winston = require('winston');
 
 // All of the fields that should be kept private
 var privateFields = {
   "email": 0,
   "password": 0,
-  "phoneNumber": 0,
   "portfolio.reps": 0,
   "portfolio.investments": 0,
   "timeStamp": 0
@@ -24,15 +22,6 @@ var passwordValidator = [
   })
 ];
 
-var phoneValidator = [
-  validate({
-    validator: function(val) {
-      return phone(val, 'USA').length > 0;
-    },
-    message: 'Invalid phone number'
-  })
-];
-
 var UserSchema = new Schema({
   // User's first and last name
   firstname: {type: String, required: true, trim: true },
@@ -41,7 +30,6 @@ var UserSchema = new Schema({
   password: {type: String, required: true, validate: passwordValidator },
   // We use this field for logging in and logging out
   email: {type: String, required: true, unique: true, trim: true },
-  phoneNumber: {type: String, required: true, unique: true, trim: true, validate: phoneValidator },
   about: {type: String, trim: true },
 
   // A list of investments for various categories

@@ -101,7 +101,6 @@ var UserHandler = {
           } else {
             user.about            = req.body.about || user.about;
             user.username         = req.body.username || user.username;
-            user.phoneNumber      = req.body.phoneNumber || user.phoneNumber;
             user.defaultCategory  = req.body.defaultCategory || user.defaultCategory;
             user.picture          = req.body.picture || user.picture;
 

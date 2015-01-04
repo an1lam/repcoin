@@ -39,7 +39,6 @@
     "passport": "~0.2.1",
     "passport-local": "~1.0.0",
     "path": "~0.4.9",
-    "phone": "^1.0.3",
     "pubsub-js": "^1.5.0",
     "react": "~0.12.0",
     "react-router": "~0.10.0",
