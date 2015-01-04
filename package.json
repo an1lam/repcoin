@@ -38,7 +38,6 @@
     "nodemon": "~1.2.1",
     "npm-watch": "0.0.0",
     "passport": "~0.2.1",
-    "passport-facebook": "^1.0.3",
     "passport-facebook-token": "^0.4.0",
     "passport-local": "~1.0.0",
     "path": "~0.4.9",
