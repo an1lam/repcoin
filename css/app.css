@@ -16,10 +16,14 @@
 }
 
 .superScore .edit {
-  margin-right:12px;
+  margin-right:10px;
   margin-top:8px;
   display:inline;
   float:right;
+}
+
+.default-text {
+  font-size:12px;
 }
 
 .superText {

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var React = require('react');
@@ -75,10 +75,13 @@ var SuperScore = React.createClass({
           </div>
         </div>;
       } else {
+        var noCategories = this.props.user.categories.length === 0 ?
+          <p>You do not have any expert categories yet! Check out your expert table to add some.</p> : '';
         superScore = <div className="defaultPanel panel panel-default">
           {edit}
-          <div className="panel-body">
-            <em>Choose a default category!</em>
+          <div className="panel-body default-text">
+            <p>Put a default category here for the expert category that represents you best. When users search you, your default category will be displayed on your results page.</p>
+            {noCategories}
           </div>
         </div>;
       }
