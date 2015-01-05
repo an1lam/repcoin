@@ -2,8 +2,57 @@
 var winston = require('winston');
 var User = require('../models/User.js');
 var utils = require('../routes/utils.js');
+var VerificationToken = require('../models/VerificationToken.js');
 
 var UserHandler = {
+  // Route that verifies email
+  verify: {
+    post: function(req, res) {
+      winston.log('info', 'POST /verify');
+      var token = req.body.verificationToken;
+
+      if (!token) {
+        winston.log('info', 'No verification token provided');
+        return res.status(412).send('No verification token provided');
+      }
+      VerificationToken.findOne({ 'string': token }, function(err, verificationToken) {
+        if (err) {
+          winston.log('error', 'Error finding verification token: %s', err);
+          return res.status(501).send(err);
+        } else if (!verificationToken) {
+          winston.log('info', 'No verification token found');
+          return res.status(501).send('No verification token found');
+        } else if (verificationToken.triggered) {
+          winston.log('info', 'Verification token was already triggered');
+          var msg = 'Verification token has already been used. Please return to the home page and log in.';
+          return res.status(501).send(msg);
+        }
+        verificationToken.triggered = true;
+
+        User.findOneAndUpdate(
+          { 'email': verificationToken.user }, { 'verified': true },
+          function(err, user) {
+            if (err) {
+              winston.log('error', 'Error updating user: %s', err.toString());
+              return res.status(501).send(err);
+            }
+
+            verificationToken.save();
+            req.login(user, function(err) {
+              if (err) {
+                winston.log('error', 'Error logging in user: %s', err.toString());
+                return res.status(501).send(err);
+              } else {
+                winston.log('info', 'Successully verified user: %s', user._id.toString());
+                return res.status(200).send(user);
+              }
+            });
+          }
+        );
+      });
+    },
+  },
+
   // Routes with the url /users
   users: {
     get: function(req, res) {

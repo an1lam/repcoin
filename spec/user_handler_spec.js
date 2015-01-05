@@ -29,6 +29,9 @@ describe('UserHandler: ', function() {
       send: jasmine.createSpy().andCallFake(function(msg) {
         return this;
       }),
+      login: jasmine.createSpy().andCallFake(function(user) {
+        return user;
+      }),
       end: jasmine.createSpy()
     };
   });
@@ -36,6 +39,92 @@ describe('UserHandler: ', function() {
   afterEach(function() {
     expect(res.status.callCount).toEqual(1);
     expect(res.send.callCount).toEqual(1);
+  });
+
+  describe('verify: ', function() {
+    describe('post: ', function() {
+      it('handles no verification token', function() {
+        UserHandler.verify.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(412);
+        expect(res.send).toHaveBeenCalledWith('No verification token provided');
+      });
+
+      it('handles error finding verification token', function() {
+          req.body = { verificationToken : '123' };
+          spyOn(VerificationToken, 'findOne').andCallFake(function(query, cb) {
+            return cb('Error', null);
+          });
+          UserHandler.verify.post(req, res);
+          expect(res.status).toHaveBeenCalledWith(501);
+          expect(res.send).toHaveBeenCalledWith('Error');
+      });
+
+      it('handles a null verification token', function() {
+          req.body = { verificationToken : '123' };
+          spyOn(VerificationToken, 'findOne').andCallFake(function(query, cb) {
+            return cb(null, null);
+          });
+          UserHandler.verify.post(req, res);
+          expect(res.status).toHaveBeenCalledWith(501);
+          expect(res.send).toHaveBeenCalledWith('No verification token found');
+      });
+
+      it('handles a triggered verification token', function() {
+          req.body = { verificationToken : '123' };
+          spyOn(VerificationToken, 'findOne').andCallFake(function(query, cb) {
+            return cb(null, { triggered: true });
+          });
+          UserHandler.verify.post(req, res);
+          expect(res.status).toHaveBeenCalledWith(501);
+          var msg = 'Verification token has already been used. Please return to the home page and log in.';
+          expect(res.send).toHaveBeenCalledWith(msg);
+      });
+
+      it('handles error updating user', function() {
+          req.body = { verificationToken : '123' };
+          spyOn(VerificationToken, 'findOne').andCallFake(function(query, cb) {
+            return cb(null, { triggered: false });
+          });
+          spyOn(User, 'findOneAndUpdate').andCallFake(function(arg1, arg2, cb) {
+            return cb('Error', null);
+          });
+          UserHandler.verify.post(req, res);
+          expect(res.status).toHaveBeenCalledWith(501);
+          expect(res.send).toHaveBeenCalledWith('Error');
+      });
+
+      it('handles error logging in user', function() {
+          req.body = { verificationToken : '123' };
+          spyOn(VerificationToken, 'findOne').andCallFake(function(query, cb) {
+            return cb(null, { triggered: false, save: jasmine.createSpy().andReturn() });
+          });
+          spyOn(User, 'findOneAndUpdate').andCallFake(function(arg1, arg2, cb) {
+            return cb(null, { _id: '123' });
+          });
+          req.login = jasmine.createSpy().andCallFake(function(user, cb) {
+            return cb('Error');
+          });
+          UserHandler.verify.post(req, res);
+          expect(res.status).toHaveBeenCalledWith(501);
+          expect(res.send).toHaveBeenCalledWith('Error');
+      });
+
+      it('logs in the user', function() {
+          req.body = { verificationToken : '123' };
+          spyOn(VerificationToken, 'findOne').andCallFake(function(query, cb) {
+            return cb(null, { triggered: false, save: jasmine.createSpy().andReturn() });
+          });
+          spyOn(User, 'findOneAndUpdate').andCallFake(function(arg1, arg2, cb) {
+            return cb(null, { _id: '123' });
+          });
+          req.login = jasmine.createSpy().andCallFake(function(user, cb) {
+            return cb(null);
+          });
+          UserHandler.verify.post(req, res);
+          expect(res.status).toHaveBeenCalledWith(200);
+          expect(res.send).toHaveBeenCalledWith({ _id: '123' });
+      });
+    });
   });
 
   describe('users: ', function() {
