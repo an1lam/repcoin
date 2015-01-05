@@ -416,6 +416,10 @@ html, body {
 }
 
 /* Modal ///////////////////////// */
+.no-categories {
+  margin: 10px 10px 10px 10px;
+}
+
 .modal-dialog {
   width:650px;
 }
