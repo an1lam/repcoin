@@ -13,9 +13,9 @@ describe('Render the Feed', function() {
     spyOn($, "ajax").and.callFake(function(params) {
       params.success(responses[params.url]);
     });
+    var testFeedProps = {'userId': 'foo', 'parent': 'HomePage'};
     spyOn(auth, "getCurrentUser").and.returnValue({'userId': 'foo'});
-    TestFeed = TestHelper.makeStubbedDescriptor(
-      Feed, {'userId': 'foo', 'parent': 'HomePage'});
+    TestFeed = TestHelper.getRouterComponent();
     feedPage = TestUtils.renderIntoDocument(TestFeed);
   });
 

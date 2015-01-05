@@ -14,6 +14,7 @@ var SearchPage = require('./components/SearchPage.jsx');
 var VerificationPage = require('./components/VerificationPage.jsx');
 
 var Router = require('react-router');
+var RouteHandler = Router.RouteHandler;
 var Route = Router.Route;
 var Routes = Router.Routes;
 var Link = Router.Link;
@@ -39,15 +40,14 @@ var RepsApp = React.createClass({
   render: function() {
     return (
       <div className="repsApp">
-        {this.props.activeRouteHandler()}
+        <RouteHandler/>
       </div>
     );
   }
 });
 
-// TODO: Make multiple top level routes (Feed, Profile, About, etc.)
 var routes = (
-  <Routes>
+  <Route handler={RepsApp}>
     <DefaultRoute handler={LoginPage} />
     <Route name="about" handler={AboutPage} />
     <Route name="categories" handler={CategoriesPage} />
@@ -59,8 +59,8 @@ var routes = (
     <Route name="search" path="/search/:query" handler={SearchPage}/>
     <Route name="passwordReset" path="/passwordReset/:token" handler={PasswordResetPage} />
     <Route name="verification" path="/verify/:token" handler={VerificationPage} />
-  </Routes>
+  </Route>
 );
-
-
-React.renderComponent(routes, document.getElementById('repsapp'));
+Router.run(routes, Router.HistoryLocation, function (Handler) {
+  React.render(<Handler/>, document.getElementById('repsapp'));
+ });

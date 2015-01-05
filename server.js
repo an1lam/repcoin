@@ -80,24 +80,6 @@ var transporter = nodemailer.createTransport({
   auth: mailerConfig.fromUser,
 });
 
-// Send an email to me when our server starts on Heroku.
-if (process.env.NODE_ENV === 'production') {
-  var mailOptions = {
-    from: 'repcoin2015@gmail.com',
-    to: 'stephenmalina@gmail.com',
-    subject: 'Server online',
-    text: 'Server started or rebooted.',
-  };
-
-  transporter.sendMail(mailOptions, function(err, info) {
-    if (err) {
-      winston.log('info', 'He\'s dead Jim! Here\'s why %s', err);
-    } else {
-      winston.log('info', 'Email sent: %s', info.response);
-    }
-  });
-}
-
 /////////// Routes /////////////////////////
 
 // Authentication
