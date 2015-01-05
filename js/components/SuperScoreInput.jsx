@@ -37,7 +37,6 @@ var SuperScoreInput = React.createClass({
   },
 
   render: function() {
-    console.log(this.props.user.categories.length);
     var options = this.props.user.categories.length !== 0 ?
       <select onChange={this.handleChange} ref="defaultCategory" className="form-control">
         <option key='0'>Choose a category</option>
