@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var React = require('react');
 
@@ -6,7 +6,7 @@ var CategoriesHeader = React.createClass({
   render: function() {
     return (
       <div className="categoriesHeader">
-        <strong>{this.props.user.username + '\'s Categories'}</strong>
+        <strong>{this.props.user.username + '\'s Expert Categories'}</strong>
       </div>
     );
   }

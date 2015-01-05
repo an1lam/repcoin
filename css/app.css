@@ -276,6 +276,12 @@
   font-size:26px;
 }
 
+.add-category-text {
+  margin-right:10px;
+  margin-left:10px;
+  margin-bottom:10px;
+}
+
 .category-delete {
   margin-right:10px;
   margin-left:10px;
