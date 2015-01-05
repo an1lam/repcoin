@@ -5,7 +5,6 @@
   "username": "Kanye West",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "kanye@kanye.com",
-  "phoneNumber": "6036673255",
   "portfolio": [
     {
       "reps": 10,
@@ -61,7 +60,6 @@
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "arnold@arnold.com",
   "_id": ObjectId("5434171b7f9bea5969085da2"),
-  "phoneNumber": "2162998054",
   "portfolio": [
     {
       "reps": 10,
@@ -126,7 +124,6 @@
   "lastname": "Ritter",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "matt@matt.com",
-  "phoneNumber": "9089172739",
   "timeStamp": "2014-10-11T21:58:58.692Z",
   "verified": "true",
   "links": [{
@@ -205,7 +202,6 @@
   "lastname": "Malina",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "stephenmalina@gmail.com",
-  "phoneNumber": "9082339244",
   "timeStamp": "2014-10-11T21:59:07.496Z",
   "verified": "true",
   "about": "Aspiring rock and roll musician, rhythm guitarist, hobbyist developer",
@@ -269,7 +265,6 @@
   "lastname": "Rosenburg",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "sarah@sarah.com",
-  "phoneNumber": "9176878574",
   "timeStamp": "2014-10-12T06:52:26.059Z",
   "verified": "false",
   "links": [{
@@ -325,7 +320,6 @@
   "lastname": "Thompson",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "trent@trent.com",
-  "phoneNumber": "6316970018",
   "timeStamp": "2014-10-12T06:52:35.722Z",
   "verified": "false",
   "links": [{
@@ -381,7 +375,6 @@
   "lastname": "Baker",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "adam@adam.com",
-  "phoneNumber": "9089174967",
   "timeStamp": "2014-10-12T06:52:43.105Z",
   "verified": "false",
   "links": [{
@@ -437,7 +430,6 @@
   "lastname": "Randazzo",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "john@john.com",
-  "phoneNumber": "6036464000",
   "timeStamp": "2014-10-12T06:52:51.775Z",
   "verified": "false",
   "links": [{
@@ -493,7 +485,6 @@
   "lastname": "Walker",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "jean@jean.com",
-  "phoneNumber": "2019832514",
   "timeStamp": "2014-10-12T06:53:01.535Z",
   "verified": "false",
   "links": [{
@@ -549,7 +540,6 @@
   "lastname": "Cortez",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "sofia@sofia.com",
-  "phoneNumber": "9144203818",
   "timeStamp": "2014-10-12T06:53:09.540Z",
   "verified": "false",
   "links": [{
@@ -606,7 +596,6 @@
   "lastname": "Dalecki",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "jen@jen.com",
-  "phoneNumber": "7183079383",
   "timeStamp": "2014-10-12T06:53:16.300Z",
   "links": [{
     "url": "https://www.facebook.com",
@@ -662,7 +651,6 @@
   "lastname": "Trenton",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "bob@bob.com",
-  "phoneNumber": "3104333781",
   "timeStamp": "2014-10-18T15:53:56.176Z",
   "verified": "false",
   "links": [{
@@ -718,7 +706,6 @@
   "lastname": "Leventhal",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "brian@brian.com",
-  "phoneNumber": "6176401975",
   "timeStamp": "2014-10-18T15:57:22.133Z",
   "verified": "false",
   "links": [{
@@ -774,7 +761,6 @@
   "lastname": "Meyers",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "michaela@michaela.com",
-  "phoneNumber": "8473238007",
   "timeStamp": "2014-10-18T15:58:38.658Z",
   "verified": "false",
   "links": [{
@@ -830,7 +816,6 @@
   "lastname": "Piper",
   "password": "$2a$10$5Yf9wZyp0gpacBuJmspqmuxxAiACEoYpA1p4zJCLfFaGdeAkpnhKq",
   "email": "peter@peter.com",
-  "phoneNumber": "9177038670",
   "timeStamp": "2014-10-18T15:59:18.982Z",
   "verified": "false",
   "links": [{
