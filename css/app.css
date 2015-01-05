@@ -280,6 +280,12 @@
   font-size:26px;
 }
 
+.add-category-text {
+  margin-right:10px;
+  margin-left:10px;
+  margin-bottom:10px;
+}
+
 .category-delete {
   margin-right:10px;
   margin-left:10px;
@@ -420,6 +426,10 @@ html, body {
 }
 
 /* Modal ///////////////////////// */
+.no-categories {
+  margin: 10px 10px 10px 10px;
+}
+
 .modal-dialog {
   width:650px;
 }

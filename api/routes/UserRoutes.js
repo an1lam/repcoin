@@ -101,6 +101,7 @@ module.exports = function(router, isAuthenticated, acl) {
 
   router.get('/users/list/byids', isAuthenticated, UserHandler.users.listByIds.get)
   router.get('/users', isAuthenticated, UserHandler.users.get);
+  router.post('/verify', UserHandler.verify.post);
 
   router.route('/users')
     // Create a new user
@@ -340,44 +341,4 @@ module.exports = function(router, isAuthenticated, acl) {
       });
     });
 
-  // Verify a user who has signed up for the site
-  router.route('/verify')
-    .post(function(req, res) {
-      winston.log('info', 'POST /verify');
-      var token = req.body.verificationToken;
-
-      if (!token) {
-        winston.log('info', 'No verification token provided');
-        return res.status(412).send('No verification token provided');
-      }
-      VerificationToken.findOneAndRemove({ 'string': token }, function(err, verifiedUser) {
-        if (err) {
-          winston.log('error', 'Error finding verification token: %s', err);
-          return res.status(501).send(err);
-        } else if (!verifiedUser || !verifiedUser.user) {
-          winston.log('info', 'Verification token not found in DB');
-          return res.status(501).send('User verfication token not found in DB');
-        }
-
-        User.findOneAndUpdate(
-          { 'email': verifiedUser.user }, { 'verified': true },
-          function(err, user) {
-            if (err) {
-              winston.log('error', 'Error updating user: %s', err);
-              return res.status(501).send(err);
-            }
-
-            req.login(user, function(err) {
-              if (err) {
-                winston.log('error', 'Error logging in user: %s', err);
-                return res.status(400).send(err);
-              } else {
-                winston.log('info', 'Successully verified user: %s', user.email);
-                return res.status(200).send(user);
-              }
-            });
-          }
-        );
-      });
-    });
 };

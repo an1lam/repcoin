@@ -2,8 +2,10 @@
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
+var Footer = require('./Footer.jsx');
 var Navigation = require('react-router').Navigation;
 var React = require('react');
+var Toolbar = require('./Toolbar.jsx');
 
 var VerificationPage = React.createClass({
   mixins: [Navigation],
@@ -13,7 +15,7 @@ var VerificationPage = React.createClass({
   },
 
   getInitialState: function() {
-    return {error: false};
+    return { error: null };
   },
 
   verifyUser: function(token) {
@@ -30,16 +32,26 @@ var VerificationPage = React.createClass({
         }.bind(this));
       }.bind(this),
       error: function(xhr, status, err) {
-        this.setState({error: true});
+        this.setState({ error: xhr.responseText });
       }.bind(this),
     });
   },
 
   render: function() {
-    var error = this.state.error ? 'We were unable to verify your account.' : '';
+    var error = this.state.error ? <div className="alert alert-danger" role="alert">{this.state.error}</div> : '';
     return (
-      <div>
-        {error}
+      <div className="verificationPage">
+        <div className="row">
+          <Toolbar />
+        </div>
+        <div className="row">
+          <div className="col-md-4 col-md-offset-4">
+            {error}
+          </div>
+        </div>
+        <div className="row footerrow">
+          <Footer />
+        </div>
       </div>
     );
   },
