@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
@@ -37,15 +37,24 @@ var SuperScoreInput = React.createClass({
   },
 
   render: function() {
+    console.log(this.props.user.categories.length);
+    var options = this.props.user.categories.length !== 0 ?
+      <select onChange={this.handleChange} ref="defaultCategory" className="form-control">
+        <option key='0'>Choose a category</option>
+        {this.props.user.categories.map(function(category) {
+          return <option key={category.id} value={category.name}>{category.name} : {category.percentile}</option>;
+        })}
+      </select> :
+      <div className="defaultPanel panel panel-default">
+        <div className="panel-body default-text">
+          <p>You are not signed up for any expert categories yet. Add some to your profile via your Expert Categories Table.</p>
+        </div>
+      </div>;
+
     return (
       <div className="superScoreInput">
-        <select onChange={this.handleChange} ref="defaultCategory" className="form-control">
-          <option key='0'>Choose a category!</option>
-          {this.props.user.categories.map(function(category) {
-            return <option key={category.id} value={category.name}>{category.name} : {category.percentile}</option>; 
-          })}
-        </select>
-        <button type="button" className="btn btn-default" onClick={this.propagateReset} >Cancel</button>
+        {options}
+        <button type="button" className="btn btn-default" onClick={this.propagateReset}>Cancel</button>
       </div>
     );
   }
