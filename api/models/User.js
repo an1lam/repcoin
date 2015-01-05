@@ -7,6 +7,7 @@ var winston = require('winston');
 
 // All of the fields that should be kept private
 var privateFields = {
+  "facebookId": 0,
   "email": 0,
   "password": 0,
   "portfolio.reps": 0,
@@ -23,13 +24,12 @@ var passwordValidator = [
 ];
 
 var UserSchema = new Schema({
-  // User's first and last name
+  facebookId: { type: String, index: { unique: true, sparse: true } },
   firstname: {type: String, required: true, trim: true },
-  lastname: {type: String, required: true, trim: true },
+  lastname: {type: String, trim: true },
   username: {type: String, required: true, trim: true },
-  password: {type: String, required: true, validate: passwordValidator },
-  // We use this field for logging in and logging out
-  email: {type: String, required: true, unique: true, trim: true },
+  password: {type: String, validate: passwordValidator },
+  email: {type: String, index: { unique: true, sparse: true }, trim: true },
   about: {type: String, trim: true },
 
   // A list of investments for various categories
@@ -121,13 +121,34 @@ var UserSchema = new Schema({
   timeStamp : {type: Date, default: Date.now, required: true },
 });
 
+UserSchema.pre('validate', function(next) {
+  var user = this;
+  winston.log('info', 'Validating user: %s', (String) (user._id));
+
+  if (user.facebookId) {
+    return next();
+  }
+
+  if (!user.email) {
+    return next(new Error('Validation Error: Missing email'));
+  } else if (!user.password) {
+    return next(new Error('Validation Error: Missing password'));
+  } else if (!user.phoneNumber) {
+    return next(new Error('Validation Error: Missing phoneNumber'));
+  }
+  return next();
+});
+
 // TODO: Abstract this logic out into it's own function for testing purposes
 UserSchema.pre('save', function(next) {
   var user = this;
 
+  if (!user.password && user.facebookId) {
+    return next();
+  }
+
   // Only hash the password if it has been modified (or is new)
   if (!user.isModified('password')) {
-    winston.info('User not modified');
     return next();
   }
 
@@ -141,13 +162,13 @@ UserSchema.pre('save', function(next) {
     // hash the password along with our new salt
     bcrypt.hash(user.password, salt, function(err, hash) {
         if (err) {
-          winston.log('error', 'Error hashing password for user: %s', user.email);
+          winston.log('error', 'Error hashing password for user: %s', user._id);
           return next(err);
         }
 
         // Override the cleartext password with the hashed one
         user.password = hash;
-        next();
+        return next();
     });
   });
 });

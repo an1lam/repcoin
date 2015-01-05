@@ -98,6 +98,10 @@
 }
 
 /* LoginPage /////////////////////////////////////////// */
+.facebook-signup {
+  margin-bottom:10px;
+}
+
 .loginBody {
   text-align: center;
   top: 20%;

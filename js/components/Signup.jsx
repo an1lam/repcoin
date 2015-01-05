@@ -15,6 +15,75 @@ var Signup = React.createClass({
            };
   },
 
+  componentDidMount: function() {
+    // Configure to work with localhost or repcoin.net
+    if (document.domain === 'localhost') {
+      var appId = '898342783518783';
+    } else {
+      var appId = '894010190618709';
+    }
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : appId,
+        cookie     : true,  // enable cookies to allow the server to access
+                            // the session
+        xfbml      : true,  // parse social plugins on this page
+        version    : 'v2.1' // use version 2.1
+      });
+    };
+
+    // Load the SDK asynchronously
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  },
+
+  handleFacebookClick: function(e) {
+    e.preventDefault();
+    FB.getLoginStatus(this.statusCallback);
+  },
+
+  statusCallback: function(response) {
+    if (response.status === 'connected') {
+      this.loginUser(response.authResponse.accessToken);
+    } else {
+      FB.login(this.loginCallback, true);
+    }
+  },
+
+  loginCallback: function(response) {
+    if (response.status === 'connected') {
+      this.loginUser(response.authResponse.accessToken);
+      } else if (response.status === 'not_authorized') {
+      this.setState({ error: true, msg: 'Unauthorized credentials for facebook login' });
+    } else {
+      this.setState({ error: true, msg: 'Error logging into facebook' });
+    }
+  },
+
+  loginUser: function(accessToken) {
+    $.ajax({
+      url: '/api/login/facebook',
+      type: 'POST',
+      data: { access_token: accessToken },
+      success: function(user) {
+        auth.storeCurrentUser(user, function() {
+          this.transitionTo('/home');
+        }.bind(this));
+      }.bind(this),
+      error: function(xhr, status, err) {
+        if (xhr.responseText !== 'Error') {
+          this.setState({ error: true, msg: xhr.responseText });
+        }
+        console.error(xhr.responseText);
+      }.bind(this)
+    });
+  },
+
   handleSubmit: function(e) {
     e.preventDefault();
     var firstname = this.refs.firstname.getDOMNode().value.trim();
@@ -72,7 +141,11 @@ var Signup = React.createClass({
     }
     return (
       <div className="signup col-md-2 col-md-offset-5">
+        <div id="fb-root"></div>
         {msg}
+        <a className="facebook-signup btn btn-block btn-social btn-facebook" onClick={this.handleFacebookClick}>
+          <i className="fa fa-facebook"></i> Log in with facebook
+        </a>
         <form onSubmit={this.handleSubmit}>
           <input type="text" ref="firstname" className="form-control" placeholder="First name"></input>
           <input type="text" ref="lastname" className="form-control" placeholder="Last name"></input>
