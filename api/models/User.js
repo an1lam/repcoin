@@ -133,8 +133,6 @@ UserSchema.pre('validate', function(next) {
     return next(new Error('Validation Error: Missing email'));
   } else if (!user.password) {
     return next(new Error('Validation Error: Missing password'));
-  } else if (!user.phoneNumber) {
-    return next(new Error('Validation Error: Missing phoneNumber'));
   }
   return next();
 });
