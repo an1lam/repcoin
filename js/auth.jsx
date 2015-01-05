@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 'use strict';
 var $ = require('jquery');
 var React = require('react');
@@ -36,34 +35,37 @@ var auth = {
   },
 
   getCurrentUser: function(cb) {
-    function getCurrentUserLocal(cb) {
+    // Attempt to get the current user locally and check the server if that fails
+    var currentUser = getCurrentUserLocal();
+    if (!currentUser) {
+      return getCurrentUserRemote(cb);
+    } else {
+      cb(currentUser);
+    }
+
+    function getCurrentUserLocal() {
       if (typeof window.localStorage === 'undefined') {
-        return false;
+        return null;
       }
-      var currentUser = JSON.parse(window.localStorage.getItem('currentUser'));
-      if (!currentUser) {
-        return false;
-      } else {
-        cb(currentUser);
-        return true;
-      }
+      return JSON.parse(window.localStorage.getItem('currentUser'));
     }
 
     function getCurrentUserRemote(cb) {
       $.ajax({
         url:  '/api/user',
         success: function(user) {
-          window.localStorage.setItem('currentUser', JSON.stringify(user));
-          cb(user);
+          if (user) {
+            window.localStorage.setItem('currentUser', JSON.stringify(user));
+            cb(user);
+          } else {
+            cb(null);
+          }
         },
         error: function(xhr, status, err) {
-          console.error(this.props.userId, status, err.toString());
+          console.error(xhr.responseText);
           cb(null);
         }
       });
-    }
-    if (!getCurrentUserLocal(cb)) {
-      getCurrentUserRemote(cb);
     }
   },
 
@@ -75,16 +77,16 @@ var auth = {
     return $.ajax({
       url: 'api/logout',
       type: 'POST',
-      error: function(xhr, status, err) {
-        console.error(err);
-        if (cb) {
-          cb(true);
-        }
-      }.bind(this),
       success: function(user) {
         window.localStorage.removeItem('currentUser', JSON.stringify(user));
         if (cb) {
           cb(false);
+        }
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(xhr.responseText, err);
+        if (cb) {
+          cb(true);
         }
       }.bind(this),
     });

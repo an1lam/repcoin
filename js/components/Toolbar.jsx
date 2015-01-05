@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var auth = require('../auth.jsx');
 var InstantBox = require('./InstantBox.jsx');
@@ -23,8 +23,9 @@ var Toolbar = React.createClass({
   },
 
   render: function() {
-    var LogoutOrNothing = this.state.loggedIn ? <div className="logoutbtn"><Logout /></div> : "";
-    var profileLink = this.state.currentUser ? 
+    var logout = this.state.loggedIn ? <div className="logoutbtn"><Logout /></div> : '';
+    var instantBox = this.state.loggedIn ? <InstantBox /> : '';
+    var profileLink = this.state.currentUser ?
       <div className="profilelink"><Link to="profile" params={{userId: this.state.currentUser._id}}>{this.state.currentUser.firstname}</Link></div> : '';
     return (
       <div className="toolbar navbar navbar-default" role="navigation">
@@ -34,12 +35,12 @@ var Toolbar = React.createClass({
           </div>
         </div>
         <div className="col-md-3 col-md-offset-1">
-          <InstantBox />
+          {instantBox}
         </div>
         <div className="navbar navbar-right">
           <div className="navbar-header navbar-brand">
             {profileLink}
-            {LogoutOrNothing}
+            {logout}
           </div>
         </div>
       </div>

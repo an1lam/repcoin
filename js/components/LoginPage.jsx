@@ -1,6 +1,7 @@
 'use strict';
 
 var auth = require('../auth.jsx');
+var Footer = require('./Footer.jsx');
 var LoggedInRoute = require('../mixins/LoggedInRoute.jsx');
 var Login = require('./Login.jsx');
 var React = require('react');
@@ -28,18 +29,19 @@ var LoginPage = React.createClass({
 
     return (
       <div className="loginPage">
-        <div className="loginHeader row">
-          <div>
-          <button onClick={this.handleLoginClick} type="button" ref="login" className="loginButton btn btn-default">Log In</button>
-          {login}
-          </div>
-        </div>
         <div className="loginBody row">
+          <div>
+            <button onClick={this.handleLoginClick} type="button" ref="login" className="loginButton btn btn-default">Log In</button>
+            {login}
+          </div>
           <span className="logo">Repcoin</span>
           <span className="slogan">
             <h1>Find your expert.</h1>
           </span>
           <Signup />
+        </div>
+        <div className="row footerrow">
+          <Footer />
         </div>
       </div>
     );
