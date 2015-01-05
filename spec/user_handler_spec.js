@@ -257,7 +257,6 @@ describe('UserHandler: ', function() {
           var expectedUser = {
             about: 'foo',
             username: 'bar',
-            phoneNumber: '100',
             defaultCategory: 'Ballet',
             picture: { url: 'blah', public_id: 'boo' }
           };
