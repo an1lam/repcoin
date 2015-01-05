@@ -2,7 +2,6 @@ public/
 build/
 .DS_Store
 node_modules
-images/
 npm-debug.log
 *#*#*
 bower_components

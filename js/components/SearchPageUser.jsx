@@ -1,10 +1,11 @@
-"use strict";
+'use strict';
 
-var DEFAULT_LINK = "https://assets-cdn.github.com/images/modules/logos_page/Octocat.png";
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 var SuperScore = require('./SuperScore.jsx');
+
+var DEFAULT_LINK = 'http://res.cloudinary.com/repcoin/image/upload/v1419620814/default_profile_od0xw5.jpg';
 
 var SearchPageUser = React.createClass({
   handleImgError: function() {

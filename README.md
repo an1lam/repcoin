@@ -13,7 +13,7 @@ Establish an expert online presence by attracting investors for various topics.
 - Express middeleware
 - NodeJS backend
 - MongoDB database
-- Npm build system (migrating away from gulp)
+- Npm build system
 
 ## Codebase
 **/api**
@@ -28,7 +28,7 @@ Main application entry-point (i.e node server.js)
 ## Build System
 We are using [NPM](http://www.npmjs.org/) as our build system and package manager. To get our code
 set up you will have to create a few directories before you run the build. You must create a
-directory build, and within it add directories fonts, images, and css.
+directory called build and put project directories inside it.
 
 If this is your first time building our code, first run `npm run build-fonts` and `npm run
 build-images`. Finaly run, ```./scripts/connect-git-hooks.sh``` to make sure you have our pre-push

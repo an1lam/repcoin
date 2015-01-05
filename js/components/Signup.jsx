@@ -90,14 +90,12 @@ var Signup = React.createClass({
     var lastname = this.refs.lastname.getDOMNode().value.trim();
     var email = this.refs.email.getDOMNode().value.trim();
     var email2 = this.refs.email2.getDOMNode().value.trim();
-    var phoneNumber = this.refs.phoneNumber.getDOMNode().value.trim();
     var password = this.refs.password.getDOMNode().value;
     var password2 = this.refs.password2.getDOMNode().value;
     $(".pwd-field1").val('');
     $(".pwd-field2").val('');
 
-    if (!firstname || !lastname || !email || !email2 || !phoneNumber
-      || !password || !password2) {
+    if (!firstname || !lastname || !email || !email2 || !password || !password2) {
       this.setState({ error: true, msg: 'Fields cannot be blank' });
       return;
     }
@@ -116,7 +114,6 @@ var Signup = React.createClass({
       firstname: firstname,
       lastname: lastname,
       email: email,
-      phoneNumber: phoneNumber,
       password: password
     };
     $.ajax({
@@ -154,7 +151,6 @@ var Signup = React.createClass({
           <input type="text" ref="lastname" className="form-control" placeholder="Last name"></input>
           <input type="text" ref="email" className="form-control" placeholder="Email"></input>
           <input type="text" ref="email2" className="form-control" placeholder="Re-enter email"></input>
-          <input type="text" ref="phoneNumber" className="form-control" placeholder="Phone number"></input>
           <input type="password" ref="password" className="pwd-field1 form-control" placeholder="Password"></input>
           <input type="password" ref="password2" className="pwd-field2 form-control" placeholder="Re-enter password"></input>
           <button type="submit" className="signupSubmit btn btn-default">Sign Up</button>

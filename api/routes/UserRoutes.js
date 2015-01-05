@@ -117,7 +117,6 @@ module.exports = function(router, isAuthenticated, acl) {
           username    : req.body.firstname + ' ' + req.body.lastname,
           password    : req.body.password,
           email       : req.body.email,
-          phoneNumber : req.body.phoneNumber,
       });
       user.save( function(err) {
         if (err) {
@@ -125,9 +124,7 @@ module.exports = function(router, isAuthenticated, acl) {
 
           // Mongoose validation errors are put in err.errors
           if (err.errors) {
-            if (err.errors.phoneNumber) {
-              msg = err.errors.phoneNumber.message;
-            } else if (err.errors.password) {
+            if (err.errors.password) {
               msg = err.errors.password.message;
             } else {
               msg = 'Fields cannot be blank';
@@ -138,8 +135,6 @@ module.exports = function(router, isAuthenticated, acl) {
           // If the error is not from Mongoose, try parsing MongoDB errors
           } else if (err.err.indexOf('email') !== -1) {
             msg = 'Email is already taken';
-          } else if (err.err.indexOf('phoneNumber') !== -1) {
-            msg = 'Phone number is already taken';
           } else {
             // Otherwise, send back generic 'Error' message
             msg = 'Error';
