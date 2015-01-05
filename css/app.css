@@ -22,6 +22,10 @@
   float:right;
 }
 
+.superScore .default-text {
+  font-size:12px;
+}
+
 .superText {
   display:inline-block;
   margin-left:5px;

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var React = require('react');
@@ -77,8 +77,8 @@ var SuperScore = React.createClass({
       } else {
         superScore = <div className="defaultPanel panel panel-default">
           {edit}
-          <div className="panel-body">
-            <em>Choose a default category!</em>
+          <div className="panel-body default-text">
+            <p>Choose a default expert category!</p>
           </div>
         </div>;
       }

@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 var AboutInput = require('./AboutInput.jsx');
 var React = require('react');
 
 var AboutBox = React.createClass({
   getInitialState: function() {
-    return { 
+    return {
       showInput: false,
       showEdit: false
     };
@@ -35,10 +35,10 @@ var AboutBox = React.createClass({
 
     if (this.props.currentUser._id === this.props.user._id) {
       if (this.state.showInput) {
-        aboutBox = <AboutInput currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeInputBox} text={this.props.about} /> 
+        aboutBox = <AboutInput currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeInputBox} text={this.props.about} />
       } else {
-        aboutBox = this.props.user.about ? <p>{this.props.user.about}</p> : <em>Add a brief description of yourself!</em>; 
-      } 
+        aboutBox = this.props.user.about ? <p>{this.props.user.about}</p> : <em>Add a brief description of yourself!</em>;
+      }
 
       if (this.state.showEdit) {
         edit = <div className="edit">
@@ -52,7 +52,7 @@ var AboutBox = React.createClass({
         {edit}
         {aboutBox}
       </div>
-    );    
+    );
   }
 });
 
