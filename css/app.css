@@ -9,6 +9,12 @@
 }
 
 /* Feed Items ////////////////////////////////////// */
+.no-transactions-warning {
+  margin-top:10px;
+  margin-left:10px;
+  margin-right:10px;
+}
+
 .score {
   height: 28px;
   display:inline-block;

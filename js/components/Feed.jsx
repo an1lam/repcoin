@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var FeedHeader = require('./FeedHeader.jsx');
@@ -12,7 +12,7 @@ var Feed = React.createClass({
   },
 
   componentDidMount: function() {
-    this.setTransactions(this.state.filter); 
+    this.setTransactions(this.state.filter);
   },
 
   generateUrl: function(filter) {
@@ -61,6 +61,11 @@ var Feed = React.createClass({
 
   render: function() {
     var feedHeader = this.props.userId ? <FeedHeader onClick={this.handleClick}/> : '';
+    var feedText = '';
+    if (this.state.transactions.length === 0) {
+      var text = 'No transactions were found.';
+      feedText = <div className="alert alert-warning no-transactions-warning">{text}</div>;
+    }
     return (
       <div className="feed panel panel-default">
         <h3 className="feedTitle panel-title">Feed</h3>
@@ -70,6 +75,7 @@ var Feed = React.createClass({
             return <li key={transaction._id} className="list-group-item"><FeedItem transaction={transaction} /></li>;
           })}
         </ul>
+        {feedText}
       </div>
     );
   }
