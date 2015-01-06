@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var AboutBox = require('./AboutBox.jsx');
@@ -28,7 +28,7 @@ var ProfileBox = React.createClass({
           </div>
         </div>
         <div className="col-md-7">
-          <LinksBox currentUser={this.props.currentUser} user={this.props.user} links={this.props.user.links} />
+          <LinksBox currentUser={this.props.currentUser} user={this.props.user} />
         </div>
       </div>
     );

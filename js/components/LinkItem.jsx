@@ -70,6 +70,7 @@ var LinkItem = React.createClass({
           return user;
         });
         PubSub.publish('profileupdate');
+        this.closeDeleteBox();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
