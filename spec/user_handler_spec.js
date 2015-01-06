@@ -418,16 +418,6 @@ describe('UserHandler: ', function() {
             spyOn(Category, 'findByName').andReturn(categoryPromise);
           });
 
-          it('properly handles an error finding the category', function() {
-            spyOn(User, 'findById').andCallFake(function(query, cb) {
-              return cb('Error', null);
-            });
-            req.params = { user_id: '123', category_name: 'Foo' };
-            UserHandler.users.userId.investorCategory.delete(req, res);
-            expect(res.status).toHaveBeenCalledWith(501);
-            expect(res.send).toHaveBeenCalledWith('Error');
-          });
-
           it('properly handles an error finding the user', function() {
             spyOn(User, 'findById').andCallFake(function(query, cb) {
               return cb('Error', null);
