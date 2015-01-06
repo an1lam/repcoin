@@ -1,33 +1,10 @@
-var User = require('../models/User.js');
-var winston = require('winston');
+var utils = require('./utils.js');
 
 module.exports = function(agenda) {
-  agenda.define('incrementUserReps', function(job, done) {
-    var i = 0;
-    User.find(function(err, users) {
-      users.forEach(function(user) {
-        user.portfolio.forEach(function(category) {
-          category.reps += 5;
-        });
-        user.save();
-      });
-      winston.log('info', 'Incrementing %d users\' reps by 5.', users.length);
-    });
-  });
+  agenda.define('incrementInvestorReps', utils.incrementInvestorReps);
 
-  agenda.define('setPreviousPercentileToCurrent', function(job, done) {
-    var i = 0;
-    User.find(function(err, users) {
-      users.forEach(function(user) {
-        user.categories.forEach(function(category) {
-          category.previousPercentile = category.percentile;
-        });
-        user.save();
-      });
-      winston.log('info', 'Updating %d users\' previous percentiles.', users.length);
-    });
-  });
+  agenda.define('setPreviousPercentileToCurrent', utils.setPreviousPercentileToCurrent);
 
-  agenda.every('0 0 * * *', 'incrementUserReps');
+  agenda.every('0 0 * * *', 'incrementInvestorReps');
   agenda.every('0 0 * * *', 'setPreviousPercentileToCurrent');
 };
