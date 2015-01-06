@@ -42,136 +42,103 @@ module.exports = function(router, isAuthenticated, acl) {
       category    : categoryName
     });
 
-    var categoryPromise = Category.findByName(categoryName);
     var fromUserPromise = User.findById(from.id).exec();
     var toUserPromise = User.findById(to.id).exec();
 
     var toUserCategoryTotal;
     var toUser;
     var fromUser;
-    var category;
 
-    // Get the category
-    categoryPromise
-      .then(function(categoryP) {
-        categoryP.repsLiquid = categoryP.repsLiquid - amount;
-        categoryP.repsInvested = categoryP.repsInvested + amount;
-        categoryP.reps = categoryP.repsLiquid + categoryP.repsInvested;
-        category = categoryP;
-        return toUserPromise;
-      }, function(err) {
-        winston.log('error', 'Error retrieving category promise: %s', err);
-        return res.status(400).send(err);
-      // Deal with the to user
-      }).then(function(touser) {
-        for (var i = 0; i < touser.categories.length; i++) {
-          if (touser.categories[i].name === categoryName) {
-              touser.categories[i].reps = touser.categories[i].reps + amount;
-              toUserCategoryTotal = touser.categories[i].reps;
-              categoryIndex = i;
+    // Get the toUser
+    toUserPromise.then(function(touser) {
+      for (var i = 0; i < touser.categories.length; i++) {
+        if (touser.categories[i].name === categoryName) {
+            touser.categories[i].reps = touser.categories[i].reps + amount;
+            toUserCategoryTotal = touser.categories[i].reps;
+            categoryIndex = i;
+          }
+        }
+
+        if (categoryIndex === -1) {
+          winston.log('info', 'Unable to find corresponding category for user %s and %s', toUser.name, categoryName);
+          return res.status(400).send('Unable to find corresponding category');
+        }
+        toUser = utils.addInvestorToExpertCategory(touser, from.id, from.name, categoryIndex);
+        return fromUserPromise;
+    }, function(err) {
+      winston.log('error', 'Error retrieving toUser promise: %s', err);
+      return res.status(400).send(err);
+    // Deal with the from user
+    }).then(function(fromUser) {
+      portfolioIndex = utils.getPortfolioIndex(fromUser, categoryName);
+      if (portfolioIndex === -1) {
+        winston.log('info', 'Unable to find portfolio index for user %s and %s', fromUser.name, categoryName);
+        return res.status(400).send('Unable to find portfolioIndex');
+      }
+      var portfolio = utils.updateInvestorPortfolio(fromUser.portfolio,
+        categoryName, to, amount, toUserCategoryTotal, investmentId);
+      if (!portfolio) {
+        winston.log('error', 'Error updating portfolio for user: %s', fromUser.name);
+        return res.status(400).send('Error updating portfolio');
+      }
+      fromUser.portfolio = portfolio;
+      transaction.save(function(err) {
+        if (err) {
+          winston.log('error', 'Error saving transaction: %s', err);
+          return res.status(400).send(err);
+        } else {
+          toUser.save(function(err) {
+            if (err) {
+              winston.log('error', 'Error saving toUser: %s', err);
+              Transaction.findOneAndRemove({'id': transaction.id});
+              return res.status(400).send(err);
+            } else {
+              fromUser.save(function(err) {
+                if (err) {
+                  winston.log('error', 'Error saving fromUser: %s', err);
+                  Transaction.findOneAndRemove({'id': transaction.id});
+                  toUser.categories[categoryIndex].reps -= amount;
+                  toUser.save();
+                  return res.status(400).send(err);
+                } else {
+                  // Update the expert percentiles
+                  utils.updateExpertPercentiles(categoryName, function(err) {
+                    if (err) {
+                      winston.log('error', 'Error saving transaction: %s', err);
+                      Transaction.findOneAndRemove({'id': transaction.id});
+                      toUser.categories[categoryIndex].reps -= amount;
+                      toUser.save();
+                      fromUser.portfolio[portfolioIndex].reps += amount;
+                      fromUser.save();
+                      return res.status(400).send(err);
+                    } else {
+                      // Update the investor percentiles, valuations, and percentages
+                      utils.updateInvestors(categoryName, function(err) {
+                        if (err) {
+                          winston.log('error', 'Error updating investors: %s', err);
+                          Transaction.findOneAndRemove({'id': transaction.id});
+                          toUser.categories[categoryIndex].reps -= amount;
+                          toUser.save();
+                          fromUser.portfolio[portfolioIndex].reps += amount;
+                          fromUser.save();
+                          return res.status(400).send(err);
+                        } else {
+                          winston.log('info', 'Successfully created transaction: %s', transaction._id.toString());
+                          return res.send(transaction);
+                        }
+                      }, toUser.name, toUserCategoryTotal);
+                    }
+                  });
+                }
+              });
             }
-          }
-
-          if (categoryIndex === -1) {
-            winston.log('info', 'Unable to find corresponding category for user %s and %s', toUser.name, categoryName);
-            return res.status(400).send('Unable to find corresponding category');
-          }
-          toUser = utils.addInvestorToExpertCategory(touser, from.id, from.name, categoryIndex);
-          return fromUserPromise;
-      }, function(err) {
-        winston.log('error', 'Error retrieving toUser promise: %s', err);
-        return res.status(400).send(err);
-      // Deal with the from user
-      }).then(function(fromUser) {
-        portfolioIndex = utils.getPortfolioIndex(fromUser, categoryName);
-        if (portfolioIndex === -1) {
-          winston.log('info', 'Unable to find portfolio index for user %s and %s', fromUser.name, categoryName);
-          return res.status(400).send('Unable to find portfolioIndex');
+          });
         }
-        var portfolio = utils.updateInvestorPortfolio(fromUser.portfolio,
-          categoryName, to, amount, toUserCategoryTotal, investmentId);
-        if (!portfolio) {
-          winston.log('error', 'Error updating portfolio for user: %s', fromUser.name);
-          return res.status(400).send('Error updating portfolio');
-        }
-        fromUser.portfolio = portfolio;
-        transaction.save(function(err) {
-          if (err) {
-            winston.log('error', 'Error saving transaction: %s', err);
-            return res.status(400).send(err);
-          } else {
-            toUser.save(function(err) {
-              if (err) {
-                winston.log('error', 'Error saving toUser: %s', err);
-                Transaction.findOneAndRemove({'id': transaction.id});
-                return res.status(400).send(err);
-              } else {
-                fromUser.save(function(err) {
-                  if (err) {
-                    winston.log('error', 'Error saving fromUser: %s', err);
-                    Transaction.findOneAndRemove({'id': transaction.id});
-                    toUser.categories[categoryIndex].reps -= amount;
-                    toUser.save();
-                    return res.status(400).send(err);
-                  } else {
-                    category.save(function(err) {
-                      if (err) {
-                        winston.log('error', 'Error saving category: %s', err);
-                        Transaction.findOneAndRemove({'id': transaction.id});
-                        toUser.categories[categoryIndex].reps -= amount;
-                        toUser.save();
-                        fromUser.portfolio[portfolioIndex].reps += amount;
-                        fromUser.save();
-                        return res.status(400).send(err);
-                      } else {
-                        // Update the expert percentiles
-                        utils.updateExpertPercentiles(category.name, function(err) {
-                          if (err) {
-                            winston.log('error', 'Error saving transaction: %s', err);
-                            Transaction.findOneAndRemove({'id': transaction.id});
-                            toUser.categories[categoryIndex].reps -= amount;
-                            toUser.save();
-                            fromUser.portfolio[portfolioIndex].reps += amount;
-                            fromUser.save();
-                            category.repsLiquid += amount;
-                            category.repsInvested -= amount;
-                            categoryP.reps = categoryP.repsLiquid + categoryP.repsInvested;
-                            category.save();
-                            return res.status(400).send(err);
-                          } else {
-                            // Update the investor percentiles, valuations, and percentages
-                            utils.updateInvestors(category.name, function(err) {
-                              if (err) {
-                                winston.log('error', 'Error updating investors: %s', err);
-                                Transaction.findOneAndRemove({'id': transaction.id});
-                                toUser.categories[categoryIndex].reps -= amount;
-                                toUser.save();
-                                fromUser.portfolio[portfolioIndex].reps += amount;
-                                fromUser.save();
-                                category.repsLiquid += amount;
-                                category.repsInvested -= amount;
-                                categoryP.reps = categoryP.repsLiquid + categoryP.repsInvested;
-                                category.save();
-                                return res.status(400).send(err);
-                              } else {
-                                winston.log('info', 'Successfully created transaction: %s', transaction._id);
-                                return res.send(transaction);
-                              }
-                            }, toUser.name, toUserCategoryTotal);
-                          }
-                        });
-                      }
-                    });
-                  }
-                });
-              }
-            });
-          }
-        });
-      }, function(err) {
-        winston.log('error', 'Error getting fromUser: %s', err);
-        return res.status(400).send(err);
-      }).end();
+      });
+    }, function(err) {
+      winston.log('error', 'Error getting fromUser: %s', err);
+      return res.status(400).send(err);
+    }).end();
   }
 
   router.route('/transactions')

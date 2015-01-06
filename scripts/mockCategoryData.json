@@ -4,8 +4,6 @@
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
   "ownerName": "Kanye West",
-  "repsLiquid": 0,
-  "repsInvested": 0,
   "reps": 0,
   "experts": 0,
   "investors": 0,
@@ -14,7 +12,7 @@
       "owner": "Kanye West",
       "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
-    { 
+    {
       "text": "I love biology",
       "owner": "Matt Ritter",
       "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
@@ -26,9 +24,7 @@
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
   "ownerName": "Kanye West",
-  "repsLiquid": 0,
   "reps": 0,
-  "repsInvested": 0,
   "experts": 0,
   "investors": 0,
   "quotes": [{
@@ -36,7 +32,7 @@
       "owner": "Kanye West",
       "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
-    { 
+    {
       "text": "I love biology",
       "owner": "Matt Ritter",
       "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
@@ -48,9 +44,7 @@
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
   "ownerName": "Kanye West",
-  "repsLiquid": 0,
   "reps": 0,
-  "repsInvested": 0,
   "experts": 0,
   "investors": 0,
   "quotes": [{
@@ -58,7 +52,7 @@
       "owner": "Kanye West",
       "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
-    { 
+    {
       "text": "I love biology",
       "owner": "Matt Ritter",
       "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
@@ -70,9 +64,7 @@
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
   "ownerName": "Kanye West",
-  "repsLiquid": 0,
   "reps": 0,
-  "repsInvested": 0,
   "experts": 0,
   "investors": 0,
   "quotes": [{
@@ -80,7 +72,7 @@
       "owner": "Kanye West",
       "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
-    { 
+    {
       "text": "I love biology",
       "owner": "Matt Ritter",
       "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
@@ -92,9 +84,7 @@
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
   "ownerName": "Kanye West",
-  "repsLiquid": 0,
   "reps": 0,
-  "repsInvested": 0,
   "experts": 0,
   "investors": 0,
   "quotes": [{
@@ -102,7 +92,7 @@
       "owner": "Kanye West",
       "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
-    { 
+    {
       "text": "I love biology",
       "owner": "Matt Ritter",
       "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
@@ -114,9 +104,7 @@
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
   "ownerName": "Kanye West",
-  "repsLiquid": 0,
   "reps": 0,
-  "repsInvested": 0,
   "experts": 0,
   "investors": 0,
   "quotes": [{
@@ -124,7 +112,7 @@
       "owner": "Kanye West",
       "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
-    { 
+    {
       "text": "I love biology",
       "owner": "Matt Ritter",
       "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
@@ -136,9 +124,7 @@
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
   "ownerName": "Kanye West",
-  "repsLiquid": 0,
   "reps": 0,
-  "repsInvested": 0,
   "experts": 0,
   "investors": 0,
   "quotes": [{
@@ -146,7 +132,7 @@
       "owner": "Kanye West",
       "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
-    { 
+    {
       "text": "I love biology",
       "owner": "Matt Ritter",
       "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
@@ -158,9 +144,7 @@
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
   "ownerName": "Kanye West",
-  "repsLiquid": 0,
   "reps": 0,
-  "repsInvested": 0,
   "experts": 0,
   "investors": 0,
   "quotes": [{
@@ -168,7 +152,7 @@
       "owner": "Kanye West",
       "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
-    { 
+    {
       "text": "I love biology",
       "owner": "Matt Ritter",
       "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
@@ -180,15 +164,13 @@
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
   "ownerName": "Kanye West",
-  "repsLiquid": 0,
   "reps": 0,
-  "repsInvested": 0,
   "quotes": [{
       "text": "I love testing!",
       "owner": "Kanye West",
       "ownerId": ObjectId("543acfa788257fca61ff521b")
     },
-    { 
+    {
       "text": "I love biology",
       "owner": "Matt Ritter",
       "ownerId": ObjectId("5439a8221e25afaf21b2adb3")
