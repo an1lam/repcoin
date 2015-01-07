@@ -64,7 +64,7 @@ module.exports = function(router, isAuthenticated, acl) {
     var userId = req.params.user_id;
     User.findOneAndUpdate(
       {_id: userId, 'portfolio.category': {$ne: category.name}},
-      {$push: { portfolio: { category: category.name, id: category._id } }},
+      {$push: { portfolio: { category: category.name, id: category._id, reps: 5 } }},
       function(err, user) {
         if (err) {
           winston.log('error', 'Error updating user: %s', err);
@@ -75,6 +75,7 @@ module.exports = function(router, isAuthenticated, acl) {
           return res.status(501).send('User is already an investor for this category');
         } else {
           category.investors += 1;
+          category.reps += 5;
           category.save();
           utils.updateInvestors(category.name, function(err) {
             if (err) {
