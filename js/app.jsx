@@ -17,10 +17,12 @@ var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var Route = Router.Route;
 var Routes = Router.Routes;
+var State = Router.State;
 var Link = Router.Link;
 var DefaultRoute = Router.DefaultRoute;
 
 var RepsApp = React.createClass({
+  mixins: [State],
   getInitialState: function() {
     return {
       loggedIn: auth.loggedIn()
@@ -40,7 +42,7 @@ var RepsApp = React.createClass({
   render: function() {
     return (
       <div className="repsApp">
-        <RouteHandler/>
+        <RouteHandler {...this.props} />
       </div>
     );
   }
@@ -61,6 +63,6 @@ var routes = (
     <Route name="verification" path="/verify/:token" handler={VerificationPage} />
   </Route>
 );
-Router.run(routes, Router.HistoryLocation, function (Handler) {
-  React.render(<Handler/>, document.getElementById('repsapp'));
+Router.run(routes, function (Handler, state) {
+  React.render(<Handler params={state.params} query={state.query} />, document.getElementById('repsapp'));
  });
