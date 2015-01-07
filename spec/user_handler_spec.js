@@ -1,6 +1,7 @@
 process.env.NODE_ENV = 'test';
 var UserHandler = require('../api/handlers/user.js');
 
+var Category = require('../api/models/Category.js');
 var User = require('../api/models/User.js');
 var VerificationToken = require('../api/models/VerificationToken.js');
 
@@ -401,6 +402,22 @@ describe('UserHandler: ', function() {
 
       describe('investorCategory: ', function() {
         describe('delete: ', function() {
+          var categoryPromise;
+
+          beforeEach(function() {
+            categoryPromise = {
+              category: {
+                name: 'Coding',
+                investors: 2,
+                save: jasmine.createSpy().andReturn()
+              },
+              then: function(cb) {
+                return cb(this.category);
+              }
+            };
+            spyOn(Category, 'findByName').andReturn(categoryPromise);
+          });
+
           it('properly handles an error finding the user', function() {
             spyOn(User, 'findById').andCallFake(function(query, cb) {
               return cb('Error', null);
@@ -490,6 +507,7 @@ describe('UserHandler: ', function() {
             spyOn(utils, 'deleteInvestorCategory').andReturn(user);
             req.params = { user_id: '123', categoryName: 'Foo' };
             UserHandler.users.userId.investorCategory.delete(req, res);
+            expect(categoryPromise.category.investors).toEqual(1);
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.send).toHaveBeenCalledWith({ username: 'Matt' });
           });
@@ -498,6 +516,21 @@ describe('UserHandler: ', function() {
 
       describe('expertCategory: ', function() {
         describe('delete: ', function() {
+          var categoryPromise;
+          beforeEach(function() {
+            categoryPromise = {
+              category: {
+                name: 'Coding',
+                experts: 2,
+                save: jasmine.createSpy().andReturn()
+              },
+              then: function(cb) {
+                return cb(this.category);
+              }
+            };
+            spyOn(Category, 'findByName').andReturn(categoryPromise);
+          });
+
           it('properly handles an error finding the user', function() {
             spyOn(User, 'findById').andCallFake(function(query, cb) {
               return cb('Error', null);
@@ -587,6 +620,7 @@ describe('UserHandler: ', function() {
             spyOn(utils, 'deleteExpertCategory').andReturn(user);
             req.params = { user_id: '123', categoryName: 'Foo' };
             UserHandler.users.userId.expertCategory.delete(req, res);
+            expect(categoryPromise.category.experts).toEqual(1);
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.send).toHaveBeenCalledWith({ username: 'Matt' });
           });

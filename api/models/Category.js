@@ -5,8 +5,6 @@ var Schema = mongoose.Schema;
 
 var CategorySchema = new Schema({
   name          : { type: String, required: true, unique: true },
-  repsLiquid    : { type: Number, default: 0, required: true },
-  repsInvested  : { type: Number, default: 0, required: true },
   reps          : { type: Number, default: 0, required: true },
   experts       : { type: Number, required: true, default: 0 },
   investors     : { type: Number, required: true, default: 0 },

@@ -1,5 +1,6 @@
 'use strict';
 var winston = require('winston');
+var Category = require('../models/Category.js');
 var User = require('../models/User.js');
 var utils = require('../routes/utils.js');
 var VerificationToken = require('../models/VerificationToken.js');
@@ -200,38 +201,49 @@ var UserHandler = {
           var userId = req.params.user_id;
           var categoryName = req.params.category_name;
           winston.log('info', 'PUT /users/%s/%s/investor/delete', userId, categoryName);
-          User.findById(userId, function(err, user) {
-            if (err) {
-              winston.log('error', 'Error finding user: %s', err);
-              return res.status(501).send(err);
-            } else if (!user) {
-              winston.log('info', 'No user found with id: %s', userId);
-              return res.status(501).send('No user found with id: ' + userId);
-            // If the user is not investor for the category, just return the user
-            } else if (!utils.isInvestor(user, categoryName)) {
-              winston.log('info', 'User %s is already an investor for %s', userId, categoryName);
-              return res.status(200).send(user);
-            } else {
-              // Update all of the experts invested in by this user for the category
-              var expertIds = utils.getInvestorsExperts(user, categoryName);
-              utils.updateInvestorsExperts(expertIds, categoryName, user._id, function(err) {
-                if (err) {
-                  winston.log('error', 'Error updating investors\' experts: %s', err);
-                  return res.status(501).send(err);
-                } else {
-                  user = utils.deleteInvestorCategory(user, categoryName);
-                  user.save(function(err, user) {
-                    if (err) {
-                      winston.log('error', 'Error saving user: %s', err);
-                      return res.status(501).send(err);
-                    } else {
-                      winston.log('info', 'Saved user: %s', userId);
-                      return res.status(200).send(user);
-                    }
-                  });
-                }
-              });
-            }
+
+          // Decrement the number of investors in the category
+          var category = Category.findByName(categoryName).then(function(category) {
+            category.investors -= 1;
+
+            // Update the user and the experts that the user invested in
+            User.findById(userId, function(err, user) {
+              if (err) {
+                winston.log('error', 'Error finding user: %s', err);
+                return res.status(501).send(err);
+              } else if (!user) {
+                winston.log('info', 'No user found with id: %s', userId);
+                return res.status(501).send('No user found with id: ' + userId);
+              // If the user is not investor for the category, just return the user
+              } else if (!utils.isInvestor(user, categoryName)) {
+                winston.log('info', 'User %s is already an investor for %s', userId, categoryName);
+                return res.status(200).send(user);
+              } else {
+                // Update all of the experts invested in by this user for the category
+                var expertIds = utils.getInvestorsExperts(user, categoryName);
+                utils.updateInvestorsExperts(expertIds, categoryName, user._id, function(err) {
+                  if (err) {
+                    winston.log('error', 'Error updating investors\' experts: %s', err);
+                    return res.status(501).send(err);
+                  } else {
+                    user = utils.deleteInvestorCategory(user, categoryName);
+                    user.save(function(err, user) {
+                      if (err) {
+                        winston.log('error', 'Error saving user: %s', err);
+                        return res.status(501).send(err);
+                      } else {
+                        category.save();
+                        winston.log('info', 'Saved user: %s', userId);
+                        return res.status(200).send(user);
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }, function(err) {
+            winston.log('info', 'Error finding category: %s', categoryName);
+            return res.status(501).send(err);
           });
         },
       },
@@ -241,38 +253,47 @@ var UserHandler = {
           var categoryName = req.params.category_name;
           var userId = req.params.user_id;
           winston.log('info', 'PUT /users/%s/%s/expert/delete', userId, categoryName);
-          User.findById(userId, function(err, user) {
-            if (err) {
-              winston.log('error', 'Error finding user: %s', err);
-              return res.status(501).send(err);
-            } else if (!user) {
-              winston.log('info', 'No user found with id: %s', userId);
-              return res.status(501).send('No user found with id: ' + userId);
-            // If the user is not an expert for this category, just return the user
-            } else if (!utils.isExpert(user, categoryName)) {
-              winston.log('info', 'User %s is not an expert for %s', userId, categoryName);
-              return res.status(200).send(user);
-            } else {
-              // Reimburse the user's investors in the category
-              var investors = utils.getInvestors(user, categoryName);
-              utils.reimburseInvestors(investors, categoryName, user._id, function(err) {
-                if (err) {
-                  winston.log('error', 'Error reimbursing investors: %s', err);
-                  return res.status(501).send(err);
-                } else {
-                  user = utils.deleteExpertCategory(user, categoryName);
-                  user.save(function(err, user) {
-                    if (err) {
-                      winston.log('error', 'Error saving user: %s', err);
-                      return res.status(501).send(err);
-                    } else {
-                      winston.log('info', 'Saved user: %s', userId);
-                      return res.status(200).send(user);
-                    }
-                  });
-                }
-              });
-            }
+
+          // Decrement the number of investors in the category
+          var category = Category.findByName(categoryName).then(function(category) {
+            category.experts -= 1;
+
+            User.findById(userId, function(err, user) {
+              if (err) {
+                winston.log('error', 'Error finding user: %s', err);
+                return res.status(501).send(err);
+              } else if (!user) {
+                winston.log('info', 'No user found with id: %s', userId);
+                return res.status(501).send('No user found with id: ' + userId);
+              // If the user is not an expert for this category, just return the user
+              } else if (!utils.isExpert(user, categoryName)) {
+                winston.log('info', 'User %s is not an expert for %s', userId, categoryName);
+                return res.status(200).send(user);
+              } else {
+                // Reimburse the user's investors in the category
+                var investors = utils.getInvestors(user, categoryName);
+                utils.reimburseInvestors(investors, categoryName, user._id, function(err) {
+                  if (err) {
+                    winston.log('error', 'Error reimbursing investors: %s', err);
+                    return res.status(501).send(err);
+                  } else {
+                    user = utils.deleteExpertCategory(user, categoryName);
+                    user.save(function(err, user) {
+                      if (err) {
+                        winston.log('error', 'Error saving user: %s', err);
+                        return res.status(501).send(err);
+                      } else {
+                        winston.log('info', 'Saved user: %s', userId);
+                        return res.status(200).send(user);
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }, function(err) {
+            winston.log('info', 'Error finding category: %s', categoryName);
+            return res.status(501).send(err);
           });
         }
       },

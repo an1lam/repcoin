@@ -123,7 +123,6 @@ var UserSchema = new Schema({
 
 UserSchema.pre('validate', function(next) {
   var user = this;
-  winston.log('info', 'Validating user: %s', (String) (user._id));
 
   if (user.facebookId) {
     return next();
