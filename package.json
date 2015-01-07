@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "The first and best reputation market.",
   "author": "Stephen Malina and Matt Ritter",
-  "engines": "0.10.30",
+  "engines": { "node": "0.10.35" },
   "dependencies": {
     "agenda": "~0.6.22",
     "bcrypt": "^0.8.0",
