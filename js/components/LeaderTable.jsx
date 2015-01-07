@@ -35,20 +35,39 @@ var LeaderTable = React.createClass({
     });
   },
 
-  render: function() {
-    var leaders = '';
-    leaders = this.state.leaders.map(function(leader) {
-      var percentile;
-      for (var i = 0; i < leader.categories.length; i++) {
-        if (leader.categories[i].name.toLowerCase() === this.props.category.toLowerCase()) {
-          percentile = leader.categories[i].percentile;
+  getLeaderRows: function() {
+    var leaderRows = [];
+    var percentile, leader;
+    var length = this.state.leaders.length;
+    for (var i = 0; i < length; i++) {
+      leader = this.state.leaders[i];
+      if (this.props.expert) {
+        for (var j = 0; j < leader.categories.length; j++) {
+          if (leader.categories[j].name.toLowerCase() === this.props.category.toLowerCase()) {
+            percentile = leader.categories[j].percentile;
+            break;
+          }
+        }
+      } else {
+        for (var j = 0; j < leader.portfolio.length; j++) {
+          if (leader.portfolio[j].category.toLowerCase() === this.props.category.toLowerCase()) {
+            percentile = leader.portfolio[j].percentile;
+            break;
+          }
         }
       }
-return <tr key={leader._id} >
-  <td><Link to="profile" params={{userId: leader._id}}>{leader.username}</Link></td>
-        <td>{percentile}</td>
-      </tr>;
-    }.bind(this));
+      leaderRows.push(
+        <tr key={leader._id}>
+          <td><Link to="profile" params={{userId: leader._id}}>{leader.username}</Link></td>
+          <td>{percentile}</td>
+        </tr>
+      );
+    }
+    return leaderRows;
+  },
+
+  render: function() {
+    var leaders = this.getLeaderRows();
     var title = this.props.expert ? 'Leading Experts' : 'Leading Investors';
     return (
       <div className="panel panel-default">
