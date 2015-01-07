@@ -76,6 +76,11 @@ var PictureUploadModal = React.createClass({
   },
 
   deleteOldPhoto: function(public_id, cb) {
+    // Facebook photos will not have a public id, nothing to be deleted
+    if (!public_id) {
+      cb()
+    }
+
     var url = '/api/' + this.props.user._id + '/remove/' + public_id;
     $.ajax({
       url: url,
