@@ -20,12 +20,12 @@ var FeedItem = React.createClass({
     } else {
       from = <p className="fromName">Someone</p>;
     }
- 
-    var a = this.props.transaction.amount; 
+
+    var a = this.props.transaction.amount;
     var action = a < 0 ? "revoked" : "gave";
     var amount = a < 0 ? a * -1 : a;
     var repsPronoun = a < 0 ? "reps from" : "reps to";
-    
+
     var classes = "action " + this.props.transaction._id;
     return (
       <div className="feedItem">
