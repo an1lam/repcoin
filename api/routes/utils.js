@@ -505,10 +505,10 @@ var utils = {
       }
 
       // OldTotal/OldPercentage = newTotal/newPercentage (Proportional)
-      investment.percentage = Math.floor((investment.amount * investment.percentage)/prevAmount);
+      investment.percentage = Math.floor((investment.amount * investment.percentage) / prevAmount);
 
       // New valuation is the proportion of the old valuation relative to the proportion of the investment remaining
-      investment.valuation = investment.valuation * investment.amount/prevAmount;
+      investment.valuation = investment.valuation * investment.amount / prevAmount;
 
       // Update the date
       investment.timeStamp = Date.now();
