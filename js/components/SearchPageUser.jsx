@@ -14,7 +14,9 @@ var SearchPageUser = React.createClass({
 
   render: function() {
     var about = this.props.user.about || '';
-    var imgUrl = this.props.user.picture && this.props.user.picture.url || DEFAULT_LINK;
+    var imgUrl = this.props.user.picture && this.props.user.picture.url ?
+      this.props.user.picture.url :
+      DEFAULT_LINK;
     return (
       <div className="searchPageItem searchPageUser">
         <div>

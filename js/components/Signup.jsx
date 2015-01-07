@@ -71,15 +71,57 @@ var Signup = React.createClass({
       type: 'POST',
       data: { access_token: accessToken },
       success: function(user) {
-        auth.storeCurrentUser(user, function() {
-          this.transitionTo('/home');
-        }.bind(this));
+        this.getFacebookProfilePicture(user);
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText !== 'Error') {
           this.setState({ error: true, msg: xhr.responseText });
         }
         console.error(xhr.responseText);
+      }.bind(this)
+    });
+  },
+
+  getFacebookProfilePicture: function(user) {
+    var cb = function(user) {
+      auth.storeCurrentUser(user, function() {
+        this.transitionTo('/home');
+      }.bind(this));
+    }.bind(this);
+
+    FB.api('/me/picture',
+      {
+        'redirect': false,
+        'type': 'normal',
+        'width': 200,
+        'height': 200
+      },
+      function (response) {
+        if (response && !response.error) {
+          this.saveFacebookPhoto(user,
+            response.data.url, cb);
+        } else {
+          cb(user);
+        }
+      }.bind(this)
+    );
+  },
+
+  saveFacebookPhoto: function(user, link, cb) {
+    var url = '/api/users/'+ user._id;
+
+    // Mark facebook pictures as such with the special public_id
+    user.picture = { url: link, public_id: 'FACEBOOK' };
+    $.ajax({
+      url: url,
+      type: 'PUT',
+      data: user,
+      success: function(user) {
+        cb(user);
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+        cb(user)
       }.bind(this)
     });
   },

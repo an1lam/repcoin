@@ -109,7 +109,7 @@ var UserSchema = new Schema({
   ],
   picture: {
     url: { type: String },
-    public_id: { type: String }
+    public_id: { type: String } // Only for CDN pictures, not facebook
   },
 
   // Indicates whether the user has verified their account post-signup
