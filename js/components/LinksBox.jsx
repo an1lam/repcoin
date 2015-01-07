@@ -8,7 +8,7 @@ var React = require('react');
 
 var LinksBox = React.createClass({
   getInitialState: function() {
-    return { showEdit: false, showInput : false, user: null };
+    return { showEdit: false, showInput : false };
   },
 
   handleMouseOver: function() {
@@ -44,9 +44,10 @@ var LinksBox = React.createClass({
   },
 
   render: function() {
+    var isSelf = this.props.currentUser._id === this.props.user._id;
     var edit = '';
     var linkInput = '';
-    if (this.props.currentUser._id == this.props.user._id) {
+    if (isSelf) {
       if (this.state.showEdit) {
         edit = <div className="editBox" onClick={this.handleClick}>
                  <button className="btn btn-default btn-small">
@@ -62,7 +63,11 @@ var LinksBox = React.createClass({
 
     var linksList = '';
     if (!this.props.user.links || this.props.user.links.length === 0) {
-      var text = 'You currently have no content displayed. Add some links so that users can check out your skills!';
+      if (isSelf) {
+        var text = 'You currently have no content displayed. Add some links so that users can check out your skills!';
+      } else {
+        var text = this.props.user.username + ' currently has no content displayed.';
+      }
       linksList = <p>{text}</p>;
     } else {
       linksList = <ul className="list-group">{this.getLinkItems()}</ul>;

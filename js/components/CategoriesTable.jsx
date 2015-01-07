@@ -96,12 +96,13 @@ var CategoriesTable = React.createClass({
   },
 
   render: function() {
+    var isSelf = this.props.currentUser._id === this.props.user._id;
     var error = this.state.error ? <div className="alert alert-info" role="alert">{this.state.error}</div> : '';
     var edit = '';
     var addCategory = '';
     var deleteCategory= '';
 
-    if (this.props.currentUser._id === this.props.user._id) {
+    if (isSelf) {
       if (this.state.editHover) {
         edit = <div className="editCategoriesBtn">
           <a onClick={this.handleAddClick}><span className="pencil glyphicon glyphicon-plus"></span></a>
@@ -126,7 +127,7 @@ var CategoriesTable = React.createClass({
 
     var includeReps = false;
     var repsHeader = '';
-    if (this.props.currentUser.username === this.props.user.username) {
+    if (isSelf) {
         includeReps = true;
         repsHeader = <th>Reps</th>;
     }
@@ -137,8 +138,12 @@ var CategoriesTable = React.createClass({
     var categoryRows = this.getCategoriesItems(includeReps);
     var addCategoriesText = '';
     if (length === 0) {
-      var text = 'You are not an expert for any categories yet! Click the "+" ' +
-        'in the top right to add some. You can create any categories that you do not find.';
+      if (isSelf) {
+        var text = 'You are not an expert for any categories yet! Click the "+" ' +
+          'in the top right to add some. You can create any categories that you do not find.';
+      } else {
+        var text = this.props.user.username + ' is not an expert for any categories yet.';
+      }
       addCategoriesText = <div className="add-category-text">{text}</div>;
     }
 
