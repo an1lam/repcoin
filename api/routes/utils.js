@@ -489,7 +489,7 @@ var utils = {
       var prevAmount = investment.amount;
 
       // Revenue is the fraction sold times the valuation
-      var revenue = Math.floor(amount/prevAmount * investment.valuation);
+      var revenue = Math.floor(amount / prevAmount * investment.valuation);
       var roi = (revenue - amount)/amount;
 
       // Adjust the investor's reps
@@ -505,10 +505,10 @@ var utils = {
       }
 
       // OldTotal/OldPercentage = newTotal/newPercentage (Proportional)
-      investment.percentage = Math.floor((investment.amount * investment.percentage)/prevAmount);
+      investment.percentage = Math.floor((investment.amount * investment.percentage) / prevAmount);
 
-      // New valuation is the portion of the old percentage times category total
-      investment.valuation = Math.floor(toUserCategoryTotal * investment.percentage/100);
+      // New valuation is the proportion of the old valuation relative to the proportion of the investment remaining
+      investment.valuation = investment.valuation * investment.amount / prevAmount;
 
       // Update the date
       investment.timeStamp = Date.now();

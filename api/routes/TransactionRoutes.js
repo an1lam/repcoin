@@ -49,7 +49,7 @@ module.exports = function(router, isAuthenticated, acl) {
     var toUser;
     var fromUser;
 
-    // Get the toUser
+    // Modify the toUser given the investment being made
     toUserPromise.then(function(touser) {
       for (var i = 0; i < touser.categories.length; i++) {
         if (touser.categories[i].name === categoryName) {
@@ -70,6 +70,7 @@ module.exports = function(router, isAuthenticated, acl) {
       return res.status(400).send(err);
     // Deal with the from user
     }).then(function(fromUser) {
+      // Modify the from user given the investment being made
       portfolioIndex = utils.getPortfolioIndex(fromUser, categoryName);
       if (portfolioIndex === -1) {
         winston.log('info', 'Unable to find portfolio index for user %s and %s', fromUser.name, categoryName);
