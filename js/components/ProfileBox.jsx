@@ -6,7 +6,6 @@ var auth = require('../auth.jsx');
 var LinksBox = require('./LinksBox.jsx');
 var PictureBox = require('./PictureBox.jsx');
 var React = require('react');
-var SuperScore = require('./SuperScore.jsx');
 
 var ProfileBox = React.createClass({
 
@@ -22,9 +21,6 @@ var ProfileBox = React.createClass({
           </div>
           <div className="row">
             <AboutBox user={this.props.user} currentUser={this.props.currentUser}/>
-          </div>
-          <div className="row">
-            <div className="superScorePanel"><SuperScore user={this.props.user} currentUser={this.props.currentUser} /></div>
           </div>
         </div>
         <div className="col-md-7">
