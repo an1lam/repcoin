@@ -776,7 +776,7 @@ describe('Utils: ', function() {
       expect(p[0].investments.length).toEqual(1);
       expect(p[0].investments[0].amount).toEqual(8);
       expect(p[0].investments[0].percentage).toEqual(8);
-      expect(p[0].investments[0].valuation).toEqual(79);
+      expect(p[0].investments[0].valuation).toEqual(80);
       expect(p[0].roi).toEqual(expectedROI);
       expect(p[0].reps).toEqual(120);
     });
