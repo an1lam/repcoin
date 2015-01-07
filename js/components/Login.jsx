@@ -42,6 +42,9 @@ var Login = React.createClass({
       </div> :
 
       <div className="col-md-2 col-md-offset-10 login-form">
+        <a className="facebook-signup btn btn-block btn-social btn-facebook" onClick={this.handleFacebookClick}>
+          <i className="fa fa-facebook"></i> Log in with facebook
+        </a>
         <form onSubmit={this.handleSubmit}>
           <input type="text" ref="email" className="form-control" placeholder="Email Address"></input>
           <div className="input-group">
