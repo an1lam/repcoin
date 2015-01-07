@@ -29,8 +29,18 @@ var LinksBox = React.createClass({
     this.setState({ showInput: false });
   },
 
-  makeLinkItem: function(link) {
-    return <li key={link.title} className="list-group-item"><LinkItem link={link} currentUser={this.props.currentUser} user={this.props.user}/></li>;
+  getLinkItems: function() {
+    var links = this.props.user.links;
+    var linkItems = [];
+    var len = links.length;
+    for (var i = 0; i < len; i++) {
+      linkItems.push(this.makeLinkItem(i, links[i]));
+    }
+    return linkItems;
+  },
+
+  makeLinkItem: function(i, link) {
+    return <li key={i} className="list-group-item"><LinkItem link={link} currentUser={this.props.currentUser} user={this.props.user}/></li>;
   },
 
   render: function() {
@@ -50,20 +60,20 @@ var LinksBox = React.createClass({
       }
     }
 
-    var safeLinks = this.props.links ? this.props.links : [];
-    var links = '';
-    if (this.props.currentUser) {
-      links = safeLinks.map(this.makeLinkItem);
+    var linksList = '';
+    if (!this.props.user.links || this.props.user.links.length === 0) {
+      var text = 'You currently have no content displayed. Add some links so that users can check out your skills!';
+      linksList = <p>{text}</p>;
+    } else {
+      linksList = <ul className="list-group">{this.getLinkItems()}</ul>;
     }
 
-   return(
+    return(
       <div className="linksBox" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <h4>Content</h4>
         {edit}
         {linkInput}
-        <ul className="list-group">
-          {links}
-        </ul>
+        {linksList}
       </div>
     );
   }

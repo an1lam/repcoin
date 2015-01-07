@@ -67,11 +67,11 @@ var LinkInput = React.createClass({
           return user;
         });
         PubSub.publish('profileupdate');
-        this.reset();
+        this.props.reset();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-        this.reset();
+        this.props.reset();
       }.bind(this)
     });
   },
