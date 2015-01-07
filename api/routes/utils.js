@@ -489,7 +489,7 @@ var utils = {
       var prevAmount = investment.amount;
 
       // Revenue is the fraction sold times the valuation
-      var revenue = Math.floor(amount/prevAmount * investment.valuation);
+      var revenue = Math.floor(amount / prevAmount * investment.valuation);
       var roi = (revenue - amount)/amount;
 
       // Adjust the investor's reps
