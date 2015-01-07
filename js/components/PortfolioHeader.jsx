@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-"use strict";
+'use strict';
 
 var React = require('react');
 
@@ -7,7 +6,7 @@ var PortfolioHeader = React.createClass({
   render: function() {
     return (
       <div className="portfolioHeader">
-        <strong>Portfolio</strong>
+        <strong>{this.props.name}'s Investor Categories</strong>
       </div>
     );
   }
