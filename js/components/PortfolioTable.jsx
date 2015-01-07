@@ -131,7 +131,7 @@ var PortfolioTable = React.createClass({
 
     return (
       <div className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
-        <PortfolioHeader />
+        <PortfolioHeader name={this.props.user.username}/>
         {edit}
         {error}
         {addCategory}

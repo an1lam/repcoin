@@ -33,6 +33,9 @@ var CategoriesPage = React.createClass({
         <div className="row">
           <Toolbar />
         </div>
+        <div className="row categories-page-title">
+          <h1>Check out all of the existing categories on Repcoin.</h1>
+        </div>
         <div className="row">
           <CategoriesList categories={this.state.categories} />
         </div>

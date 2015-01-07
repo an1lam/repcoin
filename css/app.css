@@ -568,3 +568,7 @@ textarea {
   width:100%;
 }
 
+/* Categories Page //////////// */
+.categories-page-title {
+  text-align: center;
+}
