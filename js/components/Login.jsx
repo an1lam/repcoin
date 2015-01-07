@@ -33,6 +33,48 @@ var Login = React.createClass({
     this.setState({ forgotPassword: true });
   },
 
+  handleFacebookClick: function(e) {
+    e.preventDefault();
+    FB.getLoginStatus(this.statusCallback);
+  },
+
+  statusCallback: function(response) {
+    if (response.status === 'connected') {
+      this.loginUser(response.authResponse.accessToken);
+    } else {
+      FB.login(this.loginCallback, true);
+    }
+  },
+
+  loginCallback: function(response) {
+    if (response.status === 'connected') {
+      this.loginUser(response.authResponse.accessToken);
+      } else if (response.status === 'not_authorized') {
+      this.setState({ error: true, msg: 'Unauthorized credentials for facebook login' });
+    } else {
+      this.setState({ error: true, msg: 'Error logging into facebook' });
+    }
+  },
+
+  loginUser: function(accessToken) {
+    $.ajax({
+      url: '/api/login/facebook',
+      type: 'POST',
+      data: { access_token: accessToken },
+      success: function(user) {
+        auth.storeCurrentUser(user, function() {
+          this.transitionTo('/home');
+        }.bind(this));
+      }.bind(this),
+      error: function(xhr, status, err) {
+        if (xhr.responseText !== 'Error') {
+          this.setState({ error: true, msg: xhr.responseText });
+        }
+        console.error(xhr.responseText);
+      }.bind(this)
+    });
+  },
+
   render: function() {
     var errors = this.state.error ? <div className="alert alert-danger" role="alert"><strong>Invalid login credentials.</strong></div> : '';
 

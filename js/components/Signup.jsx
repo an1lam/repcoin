@@ -114,8 +114,10 @@ var Signup = React.createClass({
     }
     return (
       <div className="signup col-md-2 col-md-offset-5">
-        <div id="fb-root"></div>
         {msg}
+        <a className="facebook-signup btn btn-block btn-social btn-facebook" onClick={this.handleFacebookClick}>
+          <i className="fa fa-facebook"></i> Sign up with facebook
+        </a>
         <form onSubmit={this.handleSubmit}>
           <input type="text" ref="firstname" className="form-control" placeholder="First name"></input>
           <input type="text" ref="lastname" className="form-control" placeholder="Last name"></input>
