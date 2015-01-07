@@ -151,7 +151,6 @@ var UserHandler = {
           } else {
             user.about            = req.body.about || user.about;
             user.username         = req.body.username || user.username;
-            user.defaultCategory  = req.body.defaultCategory || user.defaultCategory;
             user.picture          = req.body.picture || user.picture;
 
             if (req.body.links) {

@@ -25,7 +25,6 @@ var SearchPageUser = React.createClass({
             <h2>{this.props.user.username}</h2>
           </Link>
           <p>{about}</p>
-          <SuperScore user={this.props.user} />
         </div>
       </div>
     );
