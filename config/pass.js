@@ -49,7 +49,6 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
             firstname: profile.displayName.split(' ')[0],
             username: profile.displayName,
             facebookId: profile.id,
-            email: profile.emails[0] ? profile.emails[0] : undefined,
             verified: true
           });
           user.save(function(err, user) {
