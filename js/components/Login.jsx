@@ -19,6 +19,7 @@ var Login = React.createClass({
     event.preventDefault();
     var email = this.refs.email.getDOMNode().value;
     var password = this.refs.password.getDOMNode().value;
+    $(".login-pwd").val('');
     auth.logIn(email, password, function(loggedIn) {
       if (loggedIn) {
         this.transitionTo('/home');
@@ -90,7 +91,7 @@ var Login = React.createClass({
         <form onSubmit={this.handleSubmit}>
           <input type="text" ref="email" className="form-control" placeholder="Email Address"></input>
           <div className="input-group">
-            <input type="password" ref="password" className="form-control" placeholder="Password"></input>
+            <input type="password" ref="password" className="form-control login-pwd" placeholder="Password"></input>
             <span className="input-group-btn">
               <button type="submit" className="btn btn-default">
                 <span className="glyphicon glyphicon-ok"></span>
