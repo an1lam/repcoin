@@ -983,7 +983,7 @@ describe('Utils: ', function() {
         subject: jasmine.any(String),
         text:
           'Hi!\n\n Please confirm your new account for Repcoin by clicking ' +
-          'this URL: ' + urlConfig[process.env.NODE_ENV] + '#/verify/test' +
+          'this URL: ' + urlConfig[process.env.NODE_ENV] + '#/verify/test/' +
           ' \n\n\n Thanks,\nThe Repcoin Team',
 
       });
