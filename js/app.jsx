@@ -24,19 +24,13 @@ var DefaultRoute = Router.DefaultRoute;
 var RepsApp = React.createClass({
   mixins: [State],
   getInitialState: function() {
-    return {
-      loggedIn: auth.loggedIn()
-    };
-  },
-
-  setStateOnAuth: function(loggedIn) {
-    this.setState({
-      loggedIn: loggedIn
-    });
+    return { loggedIn: false };
   },
 
   componentWillMount: function() {
-    auth.onChange = this.setStateOnAuth;
+    auth.loggedIn(function(loggedIn) {
+      this.setState({ loggedIn: loggedIn });
+    }.bind(this));
   },
 
   render: function() {

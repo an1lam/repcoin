@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var auth = require('../auth.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
 
@@ -16,10 +15,8 @@ var CategoryPageHeader = React.createClass({
       success: function(user) {
         // No user means the user is already an investor
         if (user) {
-          auth.storeCurrentUser(user, function(user) {
-            PubSub.publish('userupdate');
-            return user;
-          });
+          PubSub.publish('userupdate');
+          return user;
         }
       }.bind(this),
       error: function(xhr, status, err) {
@@ -37,10 +34,8 @@ var CategoryPageHeader = React.createClass({
       success: function(user) {
         // No user means the user is already an investor
         if (user) {
-          auth.storeCurrentUser(user, function(user) {
-            PubSub.publish('userupdate');
-            return user;
-          });
+          PubSub.publish('userupdate');
+          return user;
         }
       }.bind(this),
       error: function(xhr, status, err) {

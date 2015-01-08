@@ -1,6 +1,5 @@
 'use strict';
 var $ = require('jquery');
-var auth = require('../auth.jsx');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
 var React = require('react');
 var Router = require('react-router');
@@ -57,9 +56,7 @@ var Signup = React.createClass({
 
   getFacebookProfilePicture: function(user) {
     var cb = function(user) {
-      auth.storeCurrentUser(user, function() {
-        this.transitionTo('/home');
-      }.bind(this));
+      this.transitionTo('/home');
     }.bind(this);
 
     FB.api('/me/picture',

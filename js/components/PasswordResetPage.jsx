@@ -1,5 +1,4 @@
 'use strict';
-var auth = require('../auth.jsx');
 var Footer = require('./Footer.jsx');
 var Toolbar = require('./Toolbar.jsx');
 var Navigation = require('react-router').Navigation;
@@ -32,10 +31,7 @@ var PasswordResetPage = React.createClass({
       data: data,
       success: function(user) {
         // A successful response means user is already logged in
-        // We just need to store the user in the token
-        auth.storeCurrentUser(user, function() {
-          this.transitionTo('/home');
-        }.bind(this));
+        this.transitionTo('/home');
       }.bind(this),
       error: function(xhr, status, err) {
         console.log(xhr);

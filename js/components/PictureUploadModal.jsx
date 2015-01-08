@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var auth = require('../auth.jsx');
 
 var PubSub = require('pubsub-js');
 var cropit = require('cropit');
@@ -61,9 +60,6 @@ var PictureUploadModal = React.createClass({
       type: 'PUT',
       data: user,
       success: function(user) {
-        auth.storeCurrentUser(user, function(user) {
-          return user;
-        });
         this.deleteOldPhoto(oldPublicId, function() {
           PubSub.publish('profileupdate');
           this.props.hide();

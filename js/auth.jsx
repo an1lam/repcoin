@@ -16,8 +16,6 @@ var auth = {
         password: password
       },
       success: function(user) {
-        window.localStorage.setItem('currentUser', JSON.stringify(user));
-        // Add token to localStorage that just stores the login response
         cb(true);
         return true;
       },
@@ -29,48 +27,34 @@ var auth = {
     });
   },
 
-  storeCurrentUser: function(user, cb) {
-    window.localStorage.setItem('currentUser', JSON.stringify(user));
-    cb(user);
-  },
-
   getCurrentUser: function(cb) {
-    // Attempt to get the current user locally and check the server if that fails
-    var currentUser = getCurrentUserLocal();
-    if (!currentUser) {
-      return getCurrentUserRemote(cb);
-    } else {
-      cb(currentUser);
-    }
-
-    function getCurrentUserLocal() {
-      if (typeof window.localStorage === 'undefined') {
-        return null;
-      }
-      return JSON.parse(window.localStorage.getItem('currentUser'));
-    }
-
-    function getCurrentUserRemote(cb) {
-      $.ajax({
-        url:  '/api/user',
-        success: function(user) {
-          if (user) {
-            window.localStorage.setItem('currentUser', JSON.stringify(user));
-            cb(user);
-          } else {
-            cb(null);
-          }
-        },
-        error: function(xhr, status, err) {
-          console.error(xhr.responseText);
+    $.ajax({
+      url:  '/api/user',
+      success: function(user) {
+        if (user) {
+          cb(user);
+        } else {
           cb(null);
         }
-      });
-    }
+      },
+      error: function(xhr, status, err) {
+        console.error(xhr.responseText);
+        cb(null);
+      }
+    });
   },
 
-  loggedIn: function() {
-    return !!window.localStorage.getItem('currentUser');
+  loggedIn: function(cb) {
+    $.ajax({
+      url:  '/api/loggedin',
+      success: function(loggedIn) {
+        cb(loggedIn);
+      },
+      error: function(xhr, status, err) {
+        console.error(xhr.responseText);
+        cb(null);
+      }
+    });
   },
 
   logOut: function(cb) {
@@ -78,7 +62,6 @@ var auth = {
       url: 'api/logout',
       type: 'POST',
       success: function(user) {
-        window.localStorage.removeItem('currentUser', JSON.stringify(user));
         if (cb) {
           cb(false);
         }
