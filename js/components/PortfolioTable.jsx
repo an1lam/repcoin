@@ -16,7 +16,7 @@ var PortfolioTable = React.createClass({
              deleteMode: false,
              showDeleteBox: false,
              categoryToDelete: '',
-             error: null };
+             message: null };
   },
 
   handleMouseOver: function() {
@@ -30,21 +30,21 @@ var PortfolioTable = React.createClass({
   },
 
   handleAddClick: function() {
-    this.setState({ addMode: true, editHover: false, deleteMode: false, showDeleteBox: false, error: null });
+    this.setState({ addMode: true, editHover: false, deleteMode: false, showDeleteBox: false, message: null });
   },
 
   handleDeleteClick: function() {
-    this.setState({ deleteMode: true, editHover: false, addMode: false, showDeleteBox: false, error: null });
+    this.setState({ deleteMode: true, editHover: false, addMode: false, showDeleteBox: false, message: null });
   },
 
   handleCancelClick: function() {
-    this.setState({ deleteMode: false, addMode: false, showDeleteBox: false, error: null });
+    this.setState({ deleteMode: false, addMode: false, showDeleteBox: false, message: null });
   },
 
   showDeleteBox: function(categoryToDelete) {
     this.setState({ categoryToDelete: categoryToDelete,
                     showDeleteBox: true,
-                    error: null });
+                    message: null });
   },
 
   closeInputBox: function() {
@@ -75,8 +75,8 @@ var PortfolioTable = React.createClass({
     });
   },
 
-  setError: function(error) {
-    this.setState({ error: error });
+  setMessage: function(message) {
+    this.setState({ message: message });
   },
 
   getPortfolioItems: function() {
@@ -93,12 +93,12 @@ var PortfolioTable = React.createClass({
   },
 
   render: function() {
-    var error = this.state.error ? <div className="alert alert-info" role="alert">{this.state.error}</div> : '';
+    var isSelf = this.props.currentUser._id === this.props.user._id;
+    var message = this.state.message ? <div className="alert alert-info added-cat-msg" role="alert">{this.state.message}</div> : '';
     var edit = '';
     var addCategory = '';
     var deleteCategory = '';
-
-    if (this.props.currentUser._id === this.props.user._id) {
+    if (isSelf) {
       if (this.state.editHover) {
         edit = <div className="editCategoriesBtn">
           <a onClick={this.handleAddClick}><span className="pencil glyphicon glyphicon-plus"></span></a>
@@ -117,23 +117,32 @@ var PortfolioTable = React.createClass({
       }
 
       if (this.state.addMode) {
-        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={false} setError={this.setError} />;
+        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={false} setMessage={this.setMessage} />;
       }
     }
 
     var portfolioRows = this.getPortfolioItems();
     var addCategoriesText = '';
+
     if (this.props.user.portfolio.length === 0) {
-      var text = 'You are not an investor for any categories yet! Click the "+" ' +
-        'in the top right to add some. You can create any categories that you do not find.';
-      addCategoriesText = <div className="add-category-text">{text}</div>;
+      if (isSelf) {
+        var text = 'You are not an investor for any categories yet!';
+          addCategoriesText =
+            <div className="add-category-text">
+              {text}
+              <button className="no-cat-btn btn btn-primary" onClick={this.handleAddClick}>Add Categories</button>
+            </div>;
+      } else {
+        var text = this.props.user.username + ' is not an investor for any categories yet.';
+        addCategoriesText = <div className="add-category-text">{text}</div>;
+      }
     }
 
     return (
       <div className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
         <PortfolioHeader name={this.props.user.username}/>
         {edit}
-        {error}
+        {message}
         {addCategory}
         {deleteCategory}
         <table className="table table-bordered table-striped">

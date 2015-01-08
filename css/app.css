@@ -287,9 +287,8 @@
 }
 
 .add-category-text {
-  margin-right:10px;
-  margin-left:10px;
   margin-bottom:10px;
+  text-align: center;
 }
 
 .category-delete {
@@ -570,5 +569,15 @@ textarea {
 
 /* Categories Page //////////// */
 .categories-page-title {
+  text-align: center;
+}
+
+.no-cat-btn {
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.added-cat-msg {
   text-align: center;
 }
