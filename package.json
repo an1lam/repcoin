@@ -102,7 +102,7 @@
     "build-css": "cp -r css public/",
     "build-html": "cp index.html public/index.html",
     "watch-css": "nodemon -e css --watch css/ --exec 'cp -r css public/'",
-    "watch-html": "nodemon -e html --ignore public/ --watch index.html --exec 'cp index.html public/index.html'",
+    "watch-html": "nodemon -e html --watch index.html --exec 'cp index.html public/index.html'",
     "build-lib": "cp -r js/lib public/js/",
     "build-fonts": "cp -r fonts public/",
     "kill": "pkill -f npm & pkill -f node;",

@@ -5,22 +5,21 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
       usernameField: 'email',
       passwordField: 'password',
     },
-    function(username, password, next) {
+    function(username, password, done) {
       User.findOne({ email: username }, function(err, user) {
         if (err) {
-          return next(err, false);
+          return done(err);
         }
         if (!user) {
-          return next({ message: 'Unrecognized email address' }, false, {});
+          return done(null, false, { message: 'Unrecognized email address' });
         }
         if (!user.comparePassword(password)) {
-          return next({ message: 'Incorrect email and password combination' }, false, {});
+          return done(null, false, { message: 'Incorrect email and password combination' });
         }
         if (!user.verified) {
-          return next({ message: 'User needs to verify their account before log in'}, false, {});
+          return done(null, false, { message: 'User needs to verify their account before log in'});
         }
-
-        return next(null, user);
+        return done(null, user);
       });
     }
   ));
