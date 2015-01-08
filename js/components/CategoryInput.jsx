@@ -30,10 +30,13 @@ var CategoryInput = React.createClass({
       success: function(user) {
         // No user means the user is already an investor
         if (user) {
+          var msg = 'You are now an investor in ' + name + '. You have received 5 reps to start, ' +
+            'and you will get 5 more overnight once you\'ve spent those!';
+          this.props.setMessage(msg);
           PubSub.publish('profileupdate');
           return user;
         } else {
-          this.props.setError('Already an investor for ' + category.name);
+          this.props.setMessage('Already an investor for ' + name);
         }
         this.props.onReset();
       }.bind(this),
@@ -51,10 +54,12 @@ var CategoryInput = React.createClass({
       success: function(user) {
         // No user means the user is already an expert
         if (user) {
+          var msg = 'You are now an expert in ' + name;
+          this.props.setMessage(msg);
           PubSub.publish('profileupdate');
           return user;
         } else {
-          this.props.setError('Already an expert in ' + category.name);
+          this.props.setMessage('Already an expert in ' + name);
         }
         this.props.onReset();
       }.bind(this),

@@ -15,7 +15,7 @@ var CategoriesTable = React.createClass({
              deleteMode: false,
              showDeleteBox: false,
              categoryToDelete: '',
-             error: null };
+             message: null };
   },
 
   handleMouseOver: function() {
@@ -29,21 +29,21 @@ var CategoriesTable = React.createClass({
   },
 
   handleAddClick: function() {
-    this.setState({ addMode: true, editHover: false, deleteMode: false, showDeleteBox: false, error: null });
+    this.setState({ addMode: true, editHover: false, deleteMode: false, showDeleteBox: false, message: null });
   },
 
   handleDeleteClick: function() {
-    this.setState({ deleteMode: true, editHover: false, addMode: false, showDeleteBox: false, error: null });
+    this.setState({ deleteMode: true, editHover: false, addMode: false, showDeleteBox: false, message: null });
   },
 
   handleCancelClick: function() {
-    this.setState({ deleteMode: false, addMode: false, showDeleteBox: false, error: null });
+    this.setState({ deleteMode: false, addMode: false, showDeleteBox: false, message: null });
   },
 
   showDeleteBox: function(categoryToDelete) {
     this.setState({ categoryToDelete: categoryToDelete,
                     showDeleteBox: true,
-                    error: null });
+                    message: null });
   },
 
   closeInputBox: function() {
@@ -71,8 +71,8 @@ var CategoriesTable = React.createClass({
     });
   },
 
-  setError: function(error) {
-    this.setState({ error: error });
+  setMessage: function(message) {
+    this.setState({ message: message });
   },
 
   // Get the categories rows for the table
@@ -93,7 +93,7 @@ var CategoriesTable = React.createClass({
 
   render: function() {
     var isSelf = this.props.currentUser._id === this.props.user._id;
-    var error = this.state.error ? <div className="alert alert-info" role="alert">{this.state.error}</div> : '';
+    var message = this.state.message ? <div className="alert alert-info added-cat-msg" role="alert">{this.state.message}</div> : '';
     var edit = '';
     var addCategory = '';
     var deleteCategory= '';
@@ -117,7 +117,7 @@ var CategoriesTable = React.createClass({
       }
 
       if (this.state.addMode) {
-        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={true} setError={this.setError} />;
+        addCategory = <CategoryInput user={this.props.user} onReset={this.closeInputBox} expert={true} setMessage={this.setMessage} />;
       }
     }
 
@@ -135,19 +135,23 @@ var CategoriesTable = React.createClass({
     var addCategoriesText = '';
     if (length === 0) {
       if (isSelf) {
-        var text = 'You are not an expert for any categories yet! Click the "+" ' +
-          'in the top right to add some. You can create any categories that you do not find.';
+        var text = 'You are not an expert for any categories yet!';
+          addCategoriesText =
+            <div className="add-category-text">
+              {text}
+              <button className="no-cat-btn btn btn-primary" onClick={this.handleAddClick}>Add Categories</button>
+            </div>;
       } else {
         var text = this.props.user.username + ' is not an expert for any categories yet.';
+        addCategoriesText = <div className="add-category-text">{text}</div>;
       }
-      addCategoriesText = <div className="add-category-text">{text}</div>;
     }
 
     return (
       <div key={key} className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <CategoriesHeader user={this.props.user} />
         {edit}
-        {error}
+        {message}
         {addCategory}
         {deleteCategory}
         <table className="table table-bordered table-striped">

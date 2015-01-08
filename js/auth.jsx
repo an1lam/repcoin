@@ -21,7 +21,7 @@ var auth = {
       },
       error: function(xhr, status, err) {
         console.log(err);
-        cb(false);
+        cb(false, xhr.responseText);
         return false;
       }
     });
