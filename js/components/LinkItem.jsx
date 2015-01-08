@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var auth = require('../auth.jsx');
 var LinkDelete = require('./LinkDelete.jsx');
 var LinkInput = require('./LinkInput.jsx');
 var PubSub = require('pubsub-js');
@@ -66,9 +65,6 @@ var LinkItem = React.createClass({
       type: 'PUT',
       data: user,
       success: function(user) {
-        auth.storeCurrentUser(user, function(user) {
-          return user;
-        });
         PubSub.publish('profileupdate');
         this.closeDeleteBox();
       }.bind(this),

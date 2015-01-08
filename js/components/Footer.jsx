@@ -13,7 +13,9 @@ var Footer = React.createClass({
   },
 
   componentDidMount: function() {
-    this.setState({ loggedIn: auth.loggedIn() });
+    auth.loggedIn(function(loggedIn) {
+      this.setState({ loggedIn: loggedIn });
+    }.bind(this));
   },
 
   render: function() {

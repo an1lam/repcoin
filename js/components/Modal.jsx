@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var auth = require('../auth.jsx');
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
@@ -99,9 +98,6 @@ var Modal = React.createClass({
           url: '/api/users/' + fromUser._id,
           type: 'GET',
           success: function(user) {
-            auth.storeCurrentUser(user, function(user) {
-              return user;
-            });
             PubSub.publish('profileupdate');
           }.bind(this),
           error: function(xhr, status, err) {

@@ -63,9 +63,7 @@ var Login = React.createClass({
       type: 'POST',
       data: { access_token: accessToken },
       success: function(user) {
-        auth.storeCurrentUser(user, function() {
-          this.transitionTo('/home');
-        }.bind(this));
+        this.transitionTo('/home');
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText !== 'Error') {

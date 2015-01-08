@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var auth = require('../auth.jsx');
 var CategoryDelete = require('./CategoryDelete.jsx');
 var CategoryInput = require('./CategoryInput');
 var PortfolioHeader = require('./PortfolioHeader.jsx');
@@ -63,9 +62,6 @@ var PortfolioTable = React.createClass({
       url: url,
       type: 'PUT',
       success: function(user) {
-        auth.storeCurrentUser(user, function(user) {
-          return user;
-        });
         PubSub.publish('profileupdate');
         this.setState({ deleteMode: false, showDeleteBox: false });
       }.bind(this),

@@ -16,7 +16,10 @@ var Toolbar = React.createClass({
   },
 
   componentDidMount: function() {
-    this.setState({ loggedIn: auth.loggedIn() });
+    auth.loggedIn(function(loggedIn) {
+      this.setState({ loggedIn: loggedIn });
+    }.bind(this));
+
     auth.getCurrentUser(function(user) {
       this.setState({ currentUser: user });
     }.bind(this));
