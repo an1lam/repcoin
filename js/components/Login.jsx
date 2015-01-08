@@ -20,11 +20,11 @@ var Login = React.createClass({
     var email = this.refs.email.getDOMNode().value;
     var password = this.refs.password.getDOMNode().value;
     $(".login-pwd").val('');
-    auth.logIn(email, password, function(loggedIn, err) {
+    auth.logIn(email, password, function(loggedIn) {
       if (loggedIn) {
         this.transitionTo('/home');
       } else {
-        return this.setState({error: err});
+        return this.setState({error: true});
       }
     }.bind(this));
   },
@@ -77,7 +77,7 @@ var Login = React.createClass({
   },
 
   render: function() {
-    var errors = this.state.error ? <div className="alert alert-danger" role="alert"><strong>{this.state.error}</strong></div> : '';
+    var errors = this.state.error ? <div className="alert alert-danger" role="alert"><strong>Invalid login credentials.</strong></div> : '';
 
     var loginDisplay = this.state.forgotPassword ?
       <div className="login-form">
