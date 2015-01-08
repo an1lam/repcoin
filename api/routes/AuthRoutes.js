@@ -14,9 +14,6 @@ module.exports = function(router, passport) {
 
   router.post('/login/facebook',
     passport.authenticate('facebook-token'), function (req, res) {
-      if (req.user) {
-        winston.log('info', 'Logged in facebook user: %s', req.user.facebookId);
-      }
       var user = req.user || {};
       return res.status(200).send(user);
     });
@@ -33,12 +30,14 @@ module.exports = function(router, passport) {
     });
 
   router.route('/login')
-    .post(passport.authenticate('local'), function(req, res) {
-      if (req.user) {
-        winston.log('info', 'Logged in user: %s', req.body.email);
-      }
-      var user = req.user || {};
-      return res.status(200).send(user);
+    .post(function(req, res, next) {
+      passport.authenticate('local', function(err, user, info) {
+        if (!user || err) { return res.status(412).send(err.message); }
+        req.logIn(user, function(err) {
+          if (err) { return res.status(412).send(err.message); }
+          return res.status(200).send(user);
+        });
+      })(req, res, next);
     });
 
   router.route('/logout')
