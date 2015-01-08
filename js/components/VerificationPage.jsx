@@ -11,7 +11,6 @@ var VerificationPage = React.createClass({
   mixins: [Navigation],
 
   componentDidMount: function() {
-    console.log('Mounted verification page');
     this.verifyUser(this.props.params.token);
   },
 
@@ -20,14 +19,12 @@ var VerificationPage = React.createClass({
   },
 
   verifyUser: function(token) {
-    console.log('verifying user');
     var data = {verificationToken: token};
     $.ajax({
       url: '/api/verify/',
       type: 'POST',
       data: data,
       success: function(user) {
-        console.log(user);
         // A successful verify means the user is already logged in
         // We just need to store the user in the token
         auth.storeCurrentUser(user, function() {
@@ -35,7 +32,6 @@ var VerificationPage = React.createClass({
         }.bind(this));
       }.bind(this),
       error: function(xhr, status, err) {
-        console.log(xhr.responseText);
         this.setState({ error: xhr.responseText });
       }.bind(this),
     });
