@@ -60,7 +60,7 @@ var routes = (
     <Route name="profile" path="/user/:userId" handler={ProfilePage}/>
     <Route name="search" path="/search/:query" handler={SearchPage}/>
     <Route name="passwordReset" path="/passwordReset/:token" handler={PasswordResetPage} />
-    <Route name="verification" path="/verify/:token" handler={VerificationPage} />
+    <Route name="verification" path="/verify/:token/" handler={VerificationPage} />
   </Route>
 );
 Router.run(routes, function (Handler, state) {

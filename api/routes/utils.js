@@ -736,7 +736,7 @@ var utils = {
   },
 
   generateVerificationEmailOptions: function(email, randomString) {
-    var url = urlConfig[process.env.NODE_ENV] + "#/verify/" + randomString;
+    var url = urlConfig[process.env.NODE_ENV] + '#/verify/' + randomString + '/';
     return {
       from: verificationEmailConfig.from,
       to: email,
