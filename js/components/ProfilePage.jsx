@@ -77,10 +77,7 @@ var ProfilePage = React.createClass({
       categoriesTable = <CategoriesTable currentUser={this.state.currentUser} user={this.state.user} />;
       feed = <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} isSelf={isSelf}/>;
       profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
-
-      if (isSelf) {
-        portfolio = <PortfolioTable user={this.state.user} currentUser={this.state.currentUser}/>;
-      }
+      portfolio = <PortfolioTable user={this.state.user} currentUser={this.state.currentUser}/>;
 
       if (!isSelf) {
         investmentButton = <InvestmentButton user={this.state.user} currentUser={this.state.currentUser} />;

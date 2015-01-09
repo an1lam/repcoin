@@ -20,14 +20,21 @@ var PortfolioItem = React.createClass({
       </div>;
     }
     var name = this.props.category.category;
+    var repsAvailable = '';
+    var investments = '';
+    if (this.props.privateFields) {
+      var repsAvailable = <td>{this.props.category.reps}</td>;
+      var investments = <td><InvestmentList investments={this.props.category.investments}/></td>;
+    }
     return (
       <tr className="portfolioItem">
         <td>
           <Link to="category" params={{category: name}}>{name}</Link>
           {deleteBtn}
         </td>
-        <td>{this.props.category.reps}</td>
-        <td><InvestmentList investments={this.props.category.investments}/></td>
+        <td>{this.props.category.percentile}</td>
+        {repsAvailable}
+        {investments}
       </tr>
     );
   }
