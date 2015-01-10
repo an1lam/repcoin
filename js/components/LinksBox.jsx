@@ -11,6 +11,16 @@ var LinksBox = React.createClass({
     return { showEdit: false, showInput : false };
   },
 
+  resetState: function() {
+    this.setState({ showEdit: false, showInput: false });
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    if (this.props.user._id !== newProps.user._id) {
+      this.resetState();
+    }
+  },
+
   handleMouseOver: function() {
     if (!this.state.showInput) {
       this.setState({ showEdit: true });
