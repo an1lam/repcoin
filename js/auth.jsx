@@ -57,6 +57,11 @@ var auth = {
     });
   },
 
+  loggedInWithPromise: function(cb) {
+    return $.ajax({
+      url:  '/api/loggedin',
+    });
+  },
   logOut: function(cb) {
     return $.ajax({
       url: 'api/logout',
