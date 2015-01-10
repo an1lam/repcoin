@@ -10,9 +10,16 @@ var Signup = require('./Signup.jsx');
 var Link = Router.Link;
 
 var LoginPage = React.createClass({
-  mixins: [LoggedInRoute],
+  mixins: [ Router.Navigation ],
 
   getInitialState: function() {
+    // Redirect to the home page if logged in
+    auth.loggedIn(function(loggedIn) {
+      if (loggedIn) {
+        this.transitionTo('/home');
+      }
+    }.bind(this));
+
     return {
       showLogin: false,
     };
