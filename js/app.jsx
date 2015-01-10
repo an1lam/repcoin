@@ -39,10 +39,8 @@ var RepsApp = React.createClass({
       // Start by hiding everything
       $('.searchDisplayTable').hide();
 
-      console.log($(':focus'));
       // Check if expert search is being used
       if ( $('.expertsearch').is(':focus') || $('.expertSearchResults').is(':focus') ) {
-        console.log('showing expert search');
         $('.expertSearchTable').show();
 
       // Check if investor search is being used

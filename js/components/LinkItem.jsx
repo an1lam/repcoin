@@ -15,6 +15,20 @@ var LinkItem = React.createClass({
     };
   },
 
+  resetState: function() {
+    this.setState({
+      showEdit: false,
+      showInput: false,
+      showDelete: false
+    });
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    if (this.props.user._id !== newProps.user._id) {
+      this.resetState();
+    }
+  },
+
   handleEditClick: function() {
     this.setState({ showEdit: false, showInput: true });
   },

@@ -9,34 +9,20 @@ var InstantBox = React.createClass({
   getInitialState: function() {
     return {
       query: '',
-      filteredData: []
+      filteredData: [],
+      totalData: []
     }
   },
 
-  search: function(query) {
-    var url = '/api/users/';
-    var data = { searchTerm: query };
-    if (query.trim().length === 0) {
-      this.setState({
-        query: query,
-        filteredData: []
-      });
-      return;
-    }
-
+  componentDidMount: function() {
     $.ajax({
       url: '/api/users/',
-      data: data,
       success: function(users) {
         $.ajax({
           url: '/api/categories/',
-          data: data,
           success: function(categories) {
-            var filteredData = (users.concat(categories)).sort(this.compareFunc);
-            this.setState({
-              query: query,
-              filteredData: filteredData
-            });
+            var totalData = (users.concat(categories)).sort(this.compareFunc);
+            this.setState({ totalData: totalData });
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(status, err.toString());
@@ -47,6 +33,30 @@ var InstantBox = React.createClass({
         console.error(status, err.toString());
       }.bind(this)
     });
+  },
+
+  search: function(query) {
+    this.setState({ query: query });
+    if (query.trim().length === 0) {
+      this.setState({ filteredData: [] });
+      return;
+    }
+
+    this.getFilteredData(query);
+  },
+
+  getFilteredData: function(query) {
+    var totalData = this.state.totalData;
+    var length = totalData.length;
+    var filteredData = [];
+    for (var i = 0; i < length; i++) {
+      var regexp = new RegExp('\\b' + query, 'i');
+      var name = totalData[i].username ? totalData[i].username : totalData[i].name;
+      if (regexp.test(name)) {
+        filteredData.push(totalData[i]);
+      }
+    }
+    this.setState({ filteredData: filteredData });
   },
 
   // TODO: compare with something more meaningful than the alphabet

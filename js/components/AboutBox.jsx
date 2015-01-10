@@ -11,6 +11,19 @@ var AboutBox = React.createClass({
     };
   },
 
+  resetState: function() {
+    this.setState({
+      showInput: false,
+      showEdit: false
+    });
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    if (this.props.user._id !== newProps.user._id) {
+      this.resetState();
+    }
+  },
+
   handleEditClick: function() {
     this.setState({ showEdit: false, showInput: true });
   },

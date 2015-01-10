@@ -18,6 +18,24 @@ var PortfolioTable = React.createClass({
              message: null };
   },
 
+  resetState: function() {
+    this.setState({
+      addMode: false,
+      editHover: false,
+      deleteMode: false,
+      showDeleteBox: false,
+      categoryToDelete: '',
+      message: null
+    });
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    if (newProps.user._id !== this.props.user._id) {
+      this.resetState();
+    }
+  },
+
+
   handleMouseOver: function() {
     if (!this.state.showDeleteBox && !this.state.addMode && !this.state.deleteMode) {
       this.setState({ editHover: true });
@@ -72,17 +90,17 @@ var PortfolioTable = React.createClass({
   },
 
   setMessage: function(message) {
-    this.setState({ message: message });
+    this.setState({ message: message, addMode: false });
   },
 
-  getPortfolioItems: function() {
+  getPortfolioItems: function(privateFields) {
     var portfolioItems = [];
     var length = this.props.user.portfolio.length;
     for (var i = 0; i < length; i++) {
       var category = this.props.user.portfolio[i];
       portfolioItems.push(
         <PortfolioItem key={category.category} category={category}
-          deleteMode={this.state.deleteMode} showDeleteBox={this.showDeleteBox}/>
+          deleteMode={this.state.deleteMode} showDeleteBox={this.showDeleteBox} privateFields={privateFields} />
       );
     }
     return portfolioItems;
@@ -117,7 +135,21 @@ var PortfolioTable = React.createClass({
       }
     }
 
-    var portfolioRows = this.getPortfolioItems();
+    // Determine whether to display private or public rows
+    var privateFields = false;
+    var repsHeader = '';
+    var investmentHeader = '';
+    if (isSelf) {
+      privateFields = true;
+      repsHeader = <th>Reps Available</th>;
+      investmentHeader =
+        <th>
+          <div>Investments</div>
+          <div className="subtitle">User / Amount / Valuation</div>
+        </th>;
+    }
+
+    var portfolioRows = this.getPortfolioItems(privateFields);
     var addCategoriesText = '';
 
     if (this.props.user.portfolio.length === 0) {
@@ -135,7 +167,7 @@ var PortfolioTable = React.createClass({
     }
 
     return (
-      <div className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
+      <div key={this.props.user._id} className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
         <PortfolioHeader name={this.props.user.username}/>
         {edit}
         {message}
@@ -144,11 +176,9 @@ var PortfolioTable = React.createClass({
         <table className="table table-bordered table-striped">
           <tr className="PortfolioHeader">
             <th>Category</th>
-            <th>Reps Available</th>
-            <th>
-              <div>Investments</div>
-              <div className="subtitle">User / Amount / Valuation</div>
-            </th>
+            <th>Percentile</th>
+            {repsHeader}
+            {investmentHeader}
           </tr>
           <tbody>
             {portfolioRows}

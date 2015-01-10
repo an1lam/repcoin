@@ -18,6 +18,23 @@ var CategoriesTable = React.createClass({
              message: null };
   },
 
+  resetState: function() {
+    this.setState({
+      addMode: false,
+      editHover: false,
+      deleteMode: false,
+      showDeleteBox: false,
+      categoryToDelete: '',
+      message: null
+    });
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    if (newProps.user._id !== this.props.user._id) {
+      this.resetState();
+    }
+  },
+
   handleMouseOver: function() {
     if (!this.state.showDeleteBox && !this.state.addMode && !this.state.deleteMode) {
       this.setState({ editHover: true });
@@ -72,7 +89,7 @@ var CategoriesTable = React.createClass({
   },
 
   setMessage: function(message) {
-    this.setState({ message: message });
+    this.setState({ message: message, addMode: false });
   },
 
   // Get the categories rows for the table
