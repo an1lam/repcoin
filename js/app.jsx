@@ -1,5 +1,6 @@
 'use strict';
 
+var $ = require('jquery');
 var AboutPage = require('./components/AboutPage.jsx');
 var auth = require('./auth.jsx');
 var ContactUsPage = require('./components/ContactUsPage.jsx');
@@ -28,9 +29,29 @@ var RepsApp = React.createClass({
   },
 
   componentWillMount: function() {
+    // Set the state as loggedIn or not
     auth.loggedIn(function(loggedIn) {
       this.setState({ loggedIn: loggedIn });
     }.bind(this));
+
+    // Make sure search results are only shown if actively searching
+    $(document).click(function() {
+      // Start by hiding everything
+      $('.searchDisplayTable').hide();
+
+      // Check if expert search is being used
+      if ( $('.expertsearch').is(':focus') || $('.expertSearchResults').is(':focus') ) {
+        $('.expertSearchTable').show();
+
+      // Check if investor search is being used
+      } else if ( $('.investorsearch').is(':focus') || $('.investorSearchResults').is(':focus') ) {
+        $('.investorSearchTable').show();
+
+      // Check if the top search bar is being used
+      } else if ( $('.mainSearch').is(':focus') || $('.mainSearchTable').is(':focus') ) {
+        $('.mainSearchTable').show();
+      }
+    });
   },
 
   render: function() {

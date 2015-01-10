@@ -38,7 +38,7 @@ var SearchBar = React.createClass({
     return (
       <div className="searchBar" onKeyDown={this.handleKeyDown}>
         <div className="input-group">
-          <input type="text" ref="searchInput" value={this.props.query} onChange={this.search} className="searchBarInput form-control" placeholder="Search" />
+          <input type="text" ref="searchInput" value={this.props.query} onChange={this.search} className="searchBarInput mainSearch form-control" placeholder="Search" />
           <div className="input-group-btn">
             <button onClick={this.handleClick} type="submit" className="searchbtn btn btn-default"><span className="glyphicon glyphicon-search"></span></button>
           </div>

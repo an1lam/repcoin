@@ -56,7 +56,7 @@ var SearchDisplayTable = React.createClass({
   render: function() {
     var i = 0;
     return (
-      <div className="searchDisplayTable">
+      <div className="searchDisplayTable mainSearchTable">
         <ul className="list-group">
           {this.props.data.map(function(datum) {
             var name = "searchItem-" + i;

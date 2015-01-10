@@ -86,7 +86,7 @@ var CategoryInput = React.createClass({
 
   search: function(query) {
     this.setState({ query: query });
-    if (query.length === 0) {
+    if (query.trim().length === 0) {
       this.setState({ filteredCategories: [] });
       return;
     }
