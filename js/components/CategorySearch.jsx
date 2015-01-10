@@ -40,7 +40,7 @@ var CategorySearch = React.createClass({
 
   render: function() {
     var submitClasses = this.props.type + 'submit btn btn-primary';
-    var searchBarInput = this.props.type + 'search form-control';
+    var searchBarInput = this.props.type + 'search form-control categorySearchBar';
     return (
       <div className="searchBar" onKeyDown={this.handleKeyDown}>
         <div className="input-group">

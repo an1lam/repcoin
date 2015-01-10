@@ -59,9 +59,10 @@ var CategorySearchDisplayTable = React.createClass({
 
   render: function() {
     var i = 0;
-    var searchBarItem = this.props.type + "searchItem-";
+    var searchBarItem = this.props.type + 'searchItem-';
+    var clazz = this.props.type + 'SearchTable searchDisplayTable'
     return (
-      <div className="searchDisplayTable">
+      <div className={clazz}>
         <ul className="list-group">
           {this.props.data.map(function(datum) {
             var name = searchBarItem + i;

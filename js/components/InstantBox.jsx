@@ -16,7 +16,7 @@ var InstantBox = React.createClass({
   search: function(query) {
     var url = '/api/users/';
     var data = { searchTerm: query };
-    if (query.length === 0) {
+    if (query.trim().length === 0) {
       this.setState({
         query: query,
         filteredData: []
@@ -45,7 +45,7 @@ var InstantBox = React.createClass({
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-      }.bind(this) 
+      }.bind(this)
     });
   },
 
@@ -55,7 +55,7 @@ var InstantBox = React.createClass({
     var bName = b.name ? b.name : b.firstname;
     if (aName < bName) {
       return -1;
-    } 
+    }
     if (bName < aName) {
       return 1;
     }

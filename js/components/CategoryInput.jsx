@@ -73,7 +73,7 @@ var CategoryInput = React.createClass({
   search: function(query) {
     var url = '/api/categories/';
     var data = { searchTerm: query };
-    if (query.length === 0) {
+    if (query.trim().length === 0) {
       this.setState({
         query: query,
         filteredData: []
