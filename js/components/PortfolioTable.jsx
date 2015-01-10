@@ -18,9 +18,20 @@ var PortfolioTable = React.createClass({
              message: null };
   },
 
+  resetState: function() {
+    this.setState({
+      addMode: false,
+      editHover: false,
+      deleteMode: false,
+      showDeleteBox: false,
+      categoryToDelete: '',
+      message: null
+    });
+  },
+
   componentWillReceiveProps: function(newProps) {
     if (newProps.user._id !== this.props.user._id) {
-      this.setState({ message: null });
+      this.resetState();
     }
   },
 
