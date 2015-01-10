@@ -9,8 +9,22 @@ var CategoryInput = React.createClass({
   getInitialState: function() {
     return {
       query: '',
-      filteredData: []
+      filteredCategories: [],
+      totalCategories: []
     }
+  },
+
+  componentDidMount: function() {
+    var url = '/api/categories/';
+    $.ajax({
+      url: url,
+      success: function(totalCategories) {
+        this.setState({ totalCategories: totalCategories });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }.bind(this)
+    });
   },
 
   handleClick: function(event) {
@@ -71,29 +85,27 @@ var CategoryInput = React.createClass({
   },
 
   search: function(query) {
-    var url = '/api/categories/';
-    var data = { searchTerm: query };
+    this.setState({ query: query });
     if (query.length === 0) {
-      this.setState({
-        query: query,
-        filteredData: []
-      });
+      this.setState({ filteredCategories: [] });
       return;
     }
 
-    $.ajax({
-      url: url,
-      data: data,
-      success: function(results) {
-        this.setState({
-          query: query,
-          filteredData: results
-        });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(status, err.toString());
-      }.bind(this)
-    });
+    this.getFilteredCategories(query);
+  },
+
+  getFilteredCategories: function(query) {
+    var totalCategories = this.state.totalCategories;
+    var length = totalCategories.length;
+    var filteredCategories = [];
+    for (var i = 0; i < length; i++) {
+      var regexp = new RegExp('\\b' + query, 'i');
+      var name = totalCategories[i].name;
+      if (regexp.test(name)) {
+        filteredCategories.push(totalCategories[i]);
+      }
+    }
+    this.setState({ filteredCategories: filteredCategories });
   },
 
   render: function() {
@@ -101,7 +113,7 @@ var CategoryInput = React.createClass({
     return (
       <div className="categoryInput">
         <CategorySearch onReset={this.props.onReset} query={this.state.query} search={this.search} handleClick={this.props.handleClick} getCategory={this.getCategory} setExpertCategory={this.setExpertCategory} setInvestorCategory={this.setInvestorCategory} type={type} />
-        <CategorySearchDisplayTable onReset={this.props.onReset} user={this.props.user} data={this.state.filteredData} handleClick={this.handleClick} type={type} />
+        <CategorySearchDisplayTable onReset={this.props.onReset} user={this.props.user} data={this.state.filteredCategories} handleClick={this.handleClick} type={type} />
       </div>
     );
   }
