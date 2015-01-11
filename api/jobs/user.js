@@ -7,4 +7,5 @@ module.exports = function(agenda) {
 
   agenda.every('0 0 * * *', 'incrementInvestorReps');
   agenda.every('0 0 * * *', 'setPreviousPercentileToCurrent');
+  agenda.every('0 0 * * *', 'payDividends');
 };
