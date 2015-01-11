@@ -37,9 +37,15 @@ var UserSchema = new Schema({
     // reps available to invest for this category
     reps: {type: Number, default: 0, required: true },
 
-    // ROI for this category based on all revokes for this category
+    // ROI for this category based on all transactions for this category
     roi: {
       value   : { type: Number, default: 0, required: true },
+      length  : { type: Number, default: 0, required: true },
+    },
+
+    // Dividends for this category based on all transactions for this category
+    dividends: {
+      value: { type: Number, default: 0, required: true },
       length  : { type: Number, default: 0, required: true },
     },
 
