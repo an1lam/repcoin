@@ -10,6 +10,91 @@ describe('Job utils: ', function() {
     });
   });
 
+  describe('getCategoryTotal: ', function() {
+    var expert = { categories: [ { name: 'Coding', reps: 10 } ] };
+    it('returns null if no category is found', function() {
+      var total = utils.getCategoryTotal(expert, 'Tennis');
+      expect(total).toEqual(null);
+    });
+
+    it('returns the matching category amount', function() {
+      var total = utils.getCategoryTotal(expert, 'Coding');
+      expect(total).toEqual(10);
+    });
+
+  });
+
+  describe('payDividends: ', function() {
+    var expert, investor1, investor2;
+    beforeEach(function() {
+      expert = {
+        _id: '123',
+        portfolio: [],
+        categories: [
+          {
+            name: 'Coding',
+            reps: 20,
+            investors: [
+              { id: '456' },
+              { id: '789' },
+            ]
+          }
+        ],
+        save: jasmine.createSpy().andReturn()
+      };
+
+      investor1 = {
+        _id: '456',
+        portfolio: [
+          {
+            category: 'Coding',
+            reps: 1,
+            investments: [ { userId: '123', percentage: 1, amount: 5 } ]
+          }
+        ],
+        save: jasmine.createSpy().andReturn()
+      };
+
+      investor2 = {
+        _id: '789',
+        portfolio: [
+          {
+            category: 'Coding',
+            reps: 3,
+            investments: [ { userId: '123', percentage: 0.75, amount: 15 } ]
+          }
+        ],
+        save: jasmine.createSpy().andReturn()
+      };
+
+      users = [expert, investor1, investor2];
+    });
+
+    it('handles error finding users', function() {
+      spyOn(User, 'find').andCallFake(function(cb) {
+        return cb('Error', null);
+      });
+      utils.payDividends();
+      expect(winston.log).toHaveBeenCalledWith('error',
+        'Error paying dividends: %s', 'Error');
+      expect(users[1].portfolio[0].reps).toEqual(1);
+      expect(users[2].portfolio[0].reps).toEqual(3);
+    });
+
+    it('pays dividends', function() {
+      spyOn(User, 'find').andCallFake(function(cb) {
+        return cb(null, users);
+      });
+      spyOn(User, 'findById').andCallFake(function(id, cb) {
+        return cb(null, expert);
+      });
+
+      utils.payDividends();
+      expect(users[1].portfolio[0].reps).toEqual(3);
+      expect(users[2].portfolio[0].reps).toEqual(4.5);
+    });
+  });
+
   describe('incrementInvestorReps: ', function() {
     var users, categoryPromise;
     beforeEach(function() {

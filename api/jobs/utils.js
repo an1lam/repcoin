@@ -4,6 +4,7 @@ var Category = require('../models/Category.js');
 var User = require('../models/User.js');
 var winston = require('winston');
 
+var DIVIDEND_PERCENTAGE = 0.1;
 // Utility functions for jobs
 var utils = {
   incrementInvestorReps: function(job, done) {
@@ -48,6 +49,49 @@ var utils = {
           user.save();
         });
         winston.log('info', 'Updating %d users\' previous percentiles.', users.length);
+      }
+    });
+  },
+
+  getCategoryTotal: function(expert, categoryName) {
+    for (var i = 0; i < expert.categories.length; i++) {
+      var category = expert.categories[i];
+      if (category.name === categoryName) {
+        return category.reps;
+      }
+    }
+    return null;
+  },
+
+  payDividends: function(job, done) {
+    var self = this;
+    User.find(function(err, users) {
+      if (err) {
+        winston.log('error', 'Error paying dividends: %s', err.toString());
+      } else {
+        users.forEach(function(user) {
+          user.portfolio.forEach(function(category) {
+            var categoryName = category.category;
+            category.investments.forEach(function(investment) {
+              var percentage = investment.percentage;
+              User.findById(investment.userId, function(err, expert) {
+                if (err) {
+                  winston.log('error', 'Error finding user with id: %s', investment.userId);
+                } else {
+                  var total = self.getCategoryTotal(expert, categoryName);
+                  if (!total) {
+                    winston.log('error', 'Error finding expected expert category for user with id: %s');
+                  } else {
+                    var dividend = percentage * total * DIVIDEND_PERCENTAGE;
+                    category.reps += dividend;
+                  }
+                }
+              });
+            });
+          });
+          user.save();
+        });
+        winston.log('info', 'Paid dividends.');
       }
     });
   },
