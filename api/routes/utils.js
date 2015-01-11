@@ -324,6 +324,11 @@ var utils = {
       return false;
     }
 
+    // Check that the amount is not 0
+    if (amount === 0) {
+      return false;
+    }
+
     // Check that there a revoke has an associated id
     if (amount < 0 && !req.body.id) {
       return false;

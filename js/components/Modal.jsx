@@ -123,6 +123,12 @@ var Modal = React.createClass({
       return;
     }
 
+    // Make sure the amoutn is not 0
+    if (amount === 0) {
+      this.setState({ error: 'Investment amount must be at least 1 rep.' });
+      return;
+    }
+
     // Determine if we should give or revoke
     if (this.state.give) {
       this.validateAndGive(choice, amount, anonymous);
