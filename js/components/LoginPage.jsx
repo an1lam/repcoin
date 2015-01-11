@@ -26,7 +26,7 @@ var LoginPage = React.createClass({
   },
 
   componentDidMount: function() {
-    // Configure to work with localhost or repcoin.net
+    // Configure to work with localhost or repcoin.com
     if (document.domain === 'localhost') {
       var appId = '898342783518783';
     } else {
