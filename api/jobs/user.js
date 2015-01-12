@@ -12,5 +12,6 @@ module.exports = function(agenda) {
 
   // Migrations
   agenda.define('migratePercentagesAndDividends', utils.migratePercentagesAndDividends);
-  agenda.now('migratePercentagesAndDividends');
+  agenda.schedule('today at 3:52pm', 'migratePercentagesAndDividends');
+  //agenda.now('migratePercentagesAndDividends');
 };

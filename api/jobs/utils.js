@@ -53,43 +53,50 @@ var utils = {
     });
   },
 
-  getCategoryTotal: function(expert, categoryName) {
-    for (var i = 0; i < expert.categories.length; i++) {
-      var category = expert.categories[i];
-      if (category.name === categoryName) {
-        return category.reps;
+  payDividends: function(job, done) {
+    function getUserById(users, id) {
+      for (var i = 0; i < users.length; i++) {
+        if (users[i]._id.toString() === id.toString()) {
+          return users[i];
+        }
+      }
+    };
+
+    function getCategoryTotal(expert, categoryName) {
+      for (var i = 0; i < expert.categories.length; i++) {
+        var category = expert.categories[i];
+        if (category.name === categoryName) {
+          return category.reps;
+        }
       }
     }
-    return null;
-  },
 
-  payDividends: function(job, done) {
-    var self = this;
     User.find(function(err, users) {
       if (err) {
         winston.log('error', 'Error paying dividends: %s', err.toString());
       } else {
         users.forEach(function(user) {
-          user.portfolio.forEach(function(category) {
+          for (var i = 0; i < user.portfolio.length; i++) {
+            var category = user.portfolio[i];
             var categoryName = category.category;
-            category.investments.forEach(function(investment) {
+            for (var j = 0; j < category.investments.length; j++) {
+              var investment = category.investments[j];
               var percentage = investment.percentage;
-              User.findById(investment.userId, function(err, expert) {
-                if (err) {
-                  winston.log('error', 'Error finding user with id: %s', investment.userId);
+              var expert = getUserById(users, investment.userId);
+              if (!expert) {
+                winston.log('error', 'Error finding user with id: %s', investment.userId);
+              } else {
+                var total = getCategoryTotal(expert, categoryName);
+                if (!total) {
+                  winston.log('error', 'Error finding expected expert category for user with id: %s');
                 } else {
-                  var total = self.getCategoryTotal(expert, categoryName);
-                  if (!total) {
-                    winston.log('error', 'Error finding expected expert category for user with id: %s');
-                  } else {
-                    var dividend = Math.floor(investment.percentage * total * DIVIDEND_PERCENTAGE * 100)/100;
-                    investment.dividend = dividend;
-                    category.reps += dividend;
-                  }
+                  var dividend = Math.floor(investment.percentage * total * DIVIDEND_PERCENTAGE * 100)/100;
+                  investment.dividend = dividend;
+                  category.reps += dividend;
                 }
-              });
-            });
-          });
+              }
+            };
+          };
           user.save();
         });
         winston.log('info', 'Paid dividends.');
@@ -101,35 +108,53 @@ var utils = {
   // Give all investments a dividend
   // To be used ONCE ONLY to migrate to the dividend system
   migratePercentagesAndDividends: function(job, done) {
-    var self = this;
+    function getUserById(users, id) {
+      for (var i = 0; i < users.length; i++) {
+        if (users[i]._id.toString() === id.toString()) {
+          return users[i];
+        }
+      }
+    };
+
+    function getCategoryTotal(expert, categoryName) {
+      for (var i = 0; i < expert.categories.length; i++) {
+        var category = expert.categories[i];
+        if (category.name === categoryName) {
+          return category.reps;
+        }
+      }
+    }
+
     User.find(function(err, users) {
       if (err) {
         winston.log('error', 'Error migrating percentages and dividends: %s', err.toString());
       } else {
         users.forEach(function(user) {
-          user.portfolio.forEach(function(category) {
+          for (var i = 0; i < user.portfolio.length; i++) {
+            var category = user.portfolio[i];
             var categoryName = category.category;
-            category.investments.forEach(function(investment) {
+            for (var j = 0; j < category.investments.length; j++) {
+              var investment = category.investments[j];
               investment.percentage /= 100;
-              User.findById(investment.userId, function(err, expert) {
-                if (err) {
-                  winston.log('error', 'Error finding user with id: %s', investment.userId);
+              var expert = getUserById(users, investment.userId);
+              if (!expert) {
+                winston.log('error', 'Error finding user with id: %s', investment.userId.toString());
+                investment.dividend = 0;
+              } else {
+                var total = getCategoryTotal(expert, categoryName);
+                if (!total) {
+                  winston.log('error', 'Error finding expected expert category for user with id: %s');
                   investment.dividend = 0;
                 } else {
-                  var total = self.getCategoryTotal(expert, categoryName);
-                  if (!total) {
-                    winston.log('error', 'Error finding expected expert category for user with id: %s');
-                    investment.dividend = 0;
-                  } else {
-                    var dividend = Math.floor(investment.percentage * total * DIVIDEND_PERCENTAGE * 100)/100;
-                    investment.dividend = dividend;
-                  }
+                  var dividend = Math.floor(investment.percentage * total * DIVIDEND_PERCENTAGE * 100)/100;
+                  investment.dividend = dividend;
                 }
-              });
-            });
-          });
+              }
+            };
+          };
           user.save();
         });
+        winston.log('info', 'Successfully migrated percentages and dividends.');
       }
     });
   },

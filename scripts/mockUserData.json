@@ -31,7 +31,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690852b1"),
         "timeStamp": {"$date": 1413480833},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "amount": 15,
         "valuation": 15,
@@ -70,7 +70,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690853b1"),
         "timeStamp": {"$date": 1413480834},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -86,7 +86,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690854b1"),
         "timeStamp": {"$date": 1413480836},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -148,7 +148,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690861b1"),
         "timeStamp": {"$date": 1413480837},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -219,7 +219,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690881b1"),
         "timeStamp": {"$date": 1413480839},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -280,7 +280,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690891b1"),
         "timeStamp": {"$date": 1413480840},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -296,7 +296,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea596908a1b1"),
         "timeStamp": {"$date": 1413480841},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -335,7 +335,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea596908b1b1"),
         "timeStamp": {"$date": 1413480842},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -351,7 +351,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea596908c1b1"),
         "timeStamp": {"$date": 1413480843},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -390,7 +390,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea596908d1b1"),
         "timeStamp": {"$date": 1413480844},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -406,7 +406,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea596908e1b1"),
         "timeStamp": {"$date": 1413480844},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -445,7 +445,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea596908e1b1"),
         "timeStamp": {"$date": 1413480845},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -461,7 +461,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea596908f1b1"),
         "timeStamp": {"$date": 1413480846},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -500,7 +500,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690951b1"),
         "timeStamp": {"$date": 1413480847},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -516,7 +516,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690a51b1"),
         "timeStamp": {"$date": 1413480848},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -555,7 +555,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690b51b1"),
         "timeStamp": {"$date": 1413480849},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -571,7 +571,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690c51b1"),
         "timeStamp": {"$date": 141348083250},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -611,7 +611,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690d51b1"),
         "timeStamp": {"$date": 1413480851},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -627,7 +627,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59690e51b1"),
         "timeStamp": {"$date": 1413480852},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -666,7 +666,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59691851b1"),
         "timeStamp": {"$date": 1413480853},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -682,7 +682,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59692851b1"),
         "timeStamp": {"$date": 1413480854},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -721,7 +721,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59692851b1"),
         "timeStamp": {"$date": 1413480855},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -737,7 +737,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59693851b1"),
         "timeStamp": {"$date": 1413480856},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -776,7 +776,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59694851b1"),
         "timeStamp": {"$date": 1413480857},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -792,7 +792,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59695851b1"),
         "timeStamp": {"$date": 1413480858},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,
@@ -831,7 +831,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59696851b1"),
         "timeStamp": {"$date": 1413480859},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("543acfa788257fca61ff521b"),
         "user": "Kanye West",
         "percentage": 10,
         "amount": 20,
@@ -847,7 +847,7 @@
       "investments": [{
         "_id": ObjectId("1434171b7f9cea59697851b1"),
         "timeStamp": {"$date": 1413480860},
-        "userId": ObjectId("1434171b7f9cea5969085db1"),
+        "userId": ObjectId("5439a82b1e25afaf21b2adb4"),
         "user": "Stephen Malina",
         "percentage": 10,
         "amount": 15,

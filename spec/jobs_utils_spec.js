@@ -10,20 +10,6 @@ describe('Job utils: ', function() {
     });
   });
 
-  describe('getCategoryTotal: ', function() {
-    var expert = { categories: [ { name: 'Coding', reps: 10 } ] };
-    it('returns null if no category is found', function() {
-      var total = utils.getCategoryTotal(expert, 'Tennis');
-      expect(total).toEqual(null);
-    });
-
-    it('returns the matching category amount', function() {
-      var total = utils.getCategoryTotal(expert, 'Coding');
-      expect(total).toEqual(10);
-    });
-
-  });
-
   describe('migratePercentagesAndDividends: ', function() {
     var expert, investor1, investor2;
     beforeEach(function() {
@@ -112,13 +98,13 @@ describe('Job utils: ', function() {
     });
 
     it('gives users a dividend of zero when expert category total cannot be calculated', function() {
+      expert.categories = [];
       spyOn(User, 'find').andCallFake(function(cb) {
         return cb(null, users);
       });
       spyOn(User, 'findById').andCallFake(function(id, cb) {
         return cb(null, expert);
       });
-      spyOn(utils, 'getCategoryTotal').andReturn(null);
 
       utils.migratePercentagesAndDividends();
       expect(users[1].portfolio[0].investments[0].dividend).toEqual(0);
