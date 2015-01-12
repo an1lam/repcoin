@@ -24,6 +24,110 @@ describe('Job utils: ', function() {
 
   });
 
+  describe('migratePercentagesAndDividends: ', function() {
+    var expert, investor1, investor2;
+    beforeEach(function() {
+      expert = {
+        _id: '123',
+        portfolio: [],
+        categories: [
+          {
+            name: 'Coding',
+            reps: 20,
+            investors: [
+              { id: '456' },
+              { id: '789' },
+            ]
+          }
+        ],
+        save: jasmine.createSpy().andReturn()
+      };
+
+      investor1 = {
+        _id: '456',
+        portfolio: [
+          {
+            category: 'Coding',
+            reps: 1,
+            investments: [ { userId: '123', percentage: 100, amount: 5 } ]
+          }
+        ],
+        save: jasmine.createSpy().andReturn()
+      };
+
+      investor2 = {
+        _id: '789',
+        portfolio: [
+          {
+            category: 'Coding',
+            reps: 3,
+            investments: [ { userId: '123', percentage: 75, amount: 15 } ]
+          }
+        ],
+        save: jasmine.createSpy().andReturn()
+      };
+
+      users = [expert, investor1, investor2];
+    });
+
+    it('handles error finding users', function() {
+      spyOn(User, 'find').andCallFake(function(cb) {
+        return cb('Error', null);
+      });
+      utils.migratePercentagesAndDividends();
+      expect(winston.log).toHaveBeenCalledWith('error',
+        'Error migrating percentages and dividends: %s', 'Error');
+      expect(users[1].portfolio[0].reps).toEqual(1);
+      expect(users[2].portfolio[0].reps).toEqual(3);
+    });
+
+    it('divides percentages by 100 and adds accurate dividends', function() {
+      spyOn(User, 'find').andCallFake(function(cb) {
+        return cb(null, users);
+      });
+      spyOn(User, 'findById').andCallFake(function(id, cb) {
+        return cb(null, expert);
+      });
+
+      utils.migratePercentagesAndDividends();
+      expect(users[1].portfolio[0].investments[0].dividend).toEqual(2);
+      expect(users[1].portfolio[0].investments[0].percentage).toEqual(1.00);
+      expect(users[2].portfolio[0].investments[0].dividend).toEqual(1.5);
+      expect(users[2].portfolio[0].investments[0].percentage).toEqual(0.75);
+    });
+
+    it('gives users a dividend of zero when expert cannot be found', function() {
+      spyOn(User, 'find').andCallFake(function(cb) {
+        return cb(null, users);
+      });
+      spyOn(User, 'findById').andCallFake(function(id, cb) {
+        return cb('Error', null);
+      });
+
+      utils.migratePercentagesAndDividends();
+      expect(users[1].portfolio[0].investments[0].dividend).toEqual(0);
+      expect(users[1].portfolio[0].investments[0].percentage).toEqual(1.00);
+      expect(users[2].portfolio[0].investments[0].dividend).toEqual(0);
+      expect(users[2].portfolio[0].investments[0].percentage).toEqual(0.75);
+    });
+
+    it('gives users a dividend of zero when expert category total cannot be calculated', function() {
+      spyOn(User, 'find').andCallFake(function(cb) {
+        return cb(null, users);
+      });
+      spyOn(User, 'findById').andCallFake(function(id, cb) {
+        return cb(null, expert);
+      });
+      spyOn(utils, 'getCategoryTotal').andReturn(null);
+
+      utils.migratePercentagesAndDividends();
+      expect(users[1].portfolio[0].investments[0].dividend).toEqual(0);
+      expect(users[1].portfolio[0].investments[0].percentage).toEqual(1.00);
+      expect(users[2].portfolio[0].investments[0].dividend).toEqual(0);
+      expect(users[2].portfolio[0].investments[0].percentage).toEqual(0.75);
+    });
+  });
+
   describe('payDividends: ', function() {
     var expert, investor1, investor2;
     beforeEach(function() {
@@ -49,7 +153,7 @@ describe('Job utils: ', function() {
           {
             category: 'Coding',
             reps: 1,
-            investments: [ { userId: '123', percentage: 1, amount: 5 } ]
+            investments: [ { userId: '123', percentage: 1.00, amount: 5 } ]
           }
         ],
         save: jasmine.createSpy().andReturn()
@@ -81,7 +185,7 @@ describe('Job utils: ', function() {
       expect(users[2].portfolio[0].reps).toEqual(3);
     });
 
-    it('pays dividends', function() {
+    it('pays dividends and creates dividend field if not present', function() {
       spyOn(User, 'find').andCallFake(function(cb) {
         return cb(null, users);
       });
@@ -91,7 +195,9 @@ describe('Job utils: ', function() {
 
       utils.payDividends();
       expect(users[1].portfolio[0].reps).toEqual(3);
+      expect(users[1].portfolio[0].investments[0].dividend).toEqual(2);
       expect(users[2].portfolio[0].reps).toEqual(4.5);
+      expect(users[2].portfolio[0].investments[0].dividend).toEqual(1.5);
     });
   });
 

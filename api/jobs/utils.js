@@ -5,6 +5,7 @@ var User = require('../models/User.js');
 var winston = require('winston');
 
 var DIVIDEND_PERCENTAGE = 0.1;
+
 // Utility functions for jobs
 var utils = {
   incrementInvestorReps: function(job, done) {
@@ -24,7 +25,6 @@ var utils = {
               }, function(err) {
                 winston.log('info', 'Error finding category: %s', entry.category);
               });
-
               // Add reps to the user
               entry.reps += 5;
             }
@@ -82,7 +82,8 @@ var utils = {
                   if (!total) {
                     winston.log('error', 'Error finding expected expert category for user with id: %s');
                   } else {
-                    var dividend = percentage * total * DIVIDEND_PERCENTAGE;
+                    var dividend = Math.floor(investment.percentage * total * DIVIDEND_PERCENTAGE * 100)/100;
+                    investment.dividend = dividend;
                     category.reps += dividend;
                   }
                 }
@@ -92,6 +93,43 @@ var utils = {
           user.save();
         });
         winston.log('info', 'Paid dividends.');
+      }
+    });
+  },
+
+  // Divide all user percentages by 100
+  // Give all investments a dividend
+  // To be used ONCE ONLY to migrate to the dividend system
+  migratePercentagesAndDividends: function(job, done) {
+    var self = this;
+    User.find(function(err, users) {
+      if (err) {
+        winston.log('error', 'Error migrating percentages and dividends: %s', err.toString());
+      } else {
+        users.forEach(function(user) {
+          user.portfolio.forEach(function(category) {
+            var categoryName = category.category;
+            category.investments.forEach(function(investment) {
+              investment.percentage /= 100;
+              User.findById(investment.userId, function(err, expert) {
+                if (err) {
+                  winston.log('error', 'Error finding user with id: %s', investment.userId);
+                  investment.dividend = 0;
+                } else {
+                  var total = self.getCategoryTotal(expert, categoryName);
+                  if (!total) {
+                    winston.log('error', 'Error finding expected expert category for user with id: %s');
+                    investment.dividend = 0;
+                  } else {
+                    var dividend = Math.floor(investment.percentage * total * DIVIDEND_PERCENTAGE * 100)/100;
+                    investment.dividend = dividend;
+                  }
+                }
+              });
+            });
+          });
+          user.save();
+        });
       }
     });
   },
