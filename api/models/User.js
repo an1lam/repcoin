@@ -70,7 +70,9 @@ var UserSchema = new Schema({
       valuation: {type: Number, required: true },
 
       // The percentage of the user
-      percentage: {type: Number, required: true }
+      percentage: {type: Number, required: true },
+
+      dividend: { type: Number, default: 0 }
     }],
   }],
 
