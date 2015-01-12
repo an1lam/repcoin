@@ -115,8 +115,7 @@ var Modal = React.createClass({
     event.preventDefault();
     var choice = this.refs.choice.getDOMNode().value;
     var anonymous = this.refs.anonymous.getDOMNode().checked;
-
-    var amount = Number(this.refs.amount.getDOMNode.value);
+    var amount = Number(this.refs.amount.getDOMNode().value);
 
     // Make sure a valid number was entered
     if (isNaN(amount)) {
@@ -176,7 +175,7 @@ var Modal = React.createClass({
         <td>{count}</td>
         <td>{investmentList[i].category}</td>
         <td>{investmentList[i].investment.amount}</td>
-        <td>{investmentList[i].investment.valuation}</td>
+        <td>{investmentList[i].investment.dividend}</td>
       </tr>);
       count++;
     }
@@ -271,7 +270,7 @@ var Modal = React.createClass({
                 <th>No.</th>
                 <th>Category</th>
                 <th>Amount</th>
-                <th>Valuation</th>
+                <th>Dividend</th>
               </tr>
             </thead>
             <tbody>

@@ -145,7 +145,7 @@ var PortfolioTable = React.createClass({
       investmentHeader =
         <th>
           <div>Investments</div>
-          <div className="subtitle">User / Amount / Valuation</div>
+          <div className="subtitle">User / Amount / Dividend</div>
         </th>;
     }
 
