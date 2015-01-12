@@ -444,9 +444,22 @@ var utils = {
     return expert;
   },
 
+  // Remove an investor from the expert's list of investors if no longer investor
+  removeInvestorFromExpertOnRevoke: function(expert, investorId, portfolioEntry) {
+    var expertId = (String) (expert._id);
+    var investorId = (String) (investorId);
+    for (var i = 0; i < portfolioEntry.investments.length; i++) {
+      if (portfolioEntry.investments[i].userId === expertId) {
+        return expert;
+      }
+    }
+    expert = this.removeInvestor(expert, portfolioEntry.category, investorId);
+    return expert;
+  },
+
   // Update an investor making an investment for a given category,
   // Returns null if the investment is not possible
-  updateInvestorPortfolio: function(portfolio, category, toUser, amount, toUserCategoryTotal, id) {
+  updateInvestorPortfolio: function(portfolio, category, toUser, amount, toUserCategoryTotal, id, fromUserId) {
     // Find the portfolio entry that should be updated
     var index = -1;
     var length = portfolio.length;
@@ -465,8 +478,8 @@ var utils = {
 
     // Add the investment to the portfolio
     if (amount > 0) {
-      var investment = { userId     : toUser.id,
-                         user       : toUser.name,
+      var investment = { userId     : (String) (toUser._id),
+                         user       : toUser.username,
                          amount     : amount,
                          valuation  : amount,
                          percentage : Number(amount/toUserCategoryTotal * 100) };
@@ -506,6 +519,7 @@ var utils = {
       // If the amount is now zero, remove the investment
       if (investment.amount === 0) {
         portfolio[index].investments.splice(j, 1);
+        toUser = this.removeInvestorFromExpertOnRevoke(toUser, fromUserId, portfolio[index]);
         return portfolio;
       }
 

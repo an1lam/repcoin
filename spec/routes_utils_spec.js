@@ -89,6 +89,7 @@ describe('Utils: ', function() {
       });
 
       var expectedUsers = [{ categories: [{ name: 'Coding', reps: 0, investors: [{ id: '456' }] }] }];
+      console.log('IN FAILING TEST');
       utils.updateInvestorsExperts(['foo'], 'Coding', '123', cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
@@ -745,6 +746,26 @@ describe('Utils: ', function() {
     });
   });
 
+  describe('removeInvestorFromExpertOnRevoke', function() {
+    var expert = { _id: '123' };
+    var investorId = '456'
+    beforeEach(function() {
+      spyOn(utils, 'removeInvestor').andReturn();
+    });
+
+    it('returns does not change the expert if the investor still has investments', function() {
+      var portfolioEntry = { investments: [ { userId: '123' } ] };
+      utils.removeInvestorFromExpertOnRevoke(expert, investorId, portfolioEntry);
+      expect(utils.removeInvestor.callCount).toEqual(0);
+    });
+
+    it('call to remove investor', function() {
+      var portfolioEntry = { investments: [] };
+      utils.removeInvestorFromExpertOnRevoke(expert, investorId, portfolioEntry);
+      expect(utils.removeInvestor.callCount).toEqual(1);
+    });
+  });
+
   describe('updateInvestorPortfolio', function() {
     var portfolio, category, toUser, amount, toUserCategoryTotal;
 
@@ -767,7 +788,7 @@ describe('Utils: ', function() {
       existingPortfolio = [{ reps: 100, category: 'Coding', investments: [] }];
       amount = 10;
       toUserCategoryTotal = 20;
-      toUser = { id: '123', name: 'Matt' };
+      toUser = { _id: '123', username: 'Matt' };
 
       var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal);
       var newInvestment = { user: 'Matt', userId: '123', amount: 10, valuation: 10, percentage: 50 };
@@ -794,16 +815,18 @@ describe('Utils: ', function() {
     });
 
     it('should remove the investment if it is entirely revoked', function() {
-      var existingInvestment = { _id: '1', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 };
-      var existingInvestment2 = { _id: '2', user: "Bob", userId: "456", amount: 10, valuation: 100, percentage: 10 };
-      existingPortfolio = [{ reps: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [existingInvestment, existingInvestment2] }];
+      var investment = { _id: '1', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 };
+      var investment2 = { _id: '2', user: "Bob", userId: "456", amount: 10, valuation: 100, percentage: 10 };
+      var investment3 = { _id: '3', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 };
+      existingPortfolio = [{ reps: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [investment, investment2, investment3] }];
       amount = -10;
       toUserCategoryTotal = 990;
       toUser = { id: "123", name: "Matt" };
       var id = '1';
-      var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal, id);
+      spyOn(utils, 'removeInvestorFromExpertOnRevoke').andReturn();
 
-      expect(p[0].investments.length).toEqual(1);
+      var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal, id);
+      expect(p[0].investments.length).toEqual(2);
       expect(p[0].investments[0]._id).toEqual('2');
       expect(p[0].reps).toEqual(200);
     });
