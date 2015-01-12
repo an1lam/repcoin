@@ -89,7 +89,6 @@ describe('Utils: ', function() {
       });
 
       var expectedUsers = [{ categories: [{ name: 'Coding', reps: 0, investors: [{ id: '456' }] }] }];
-      console.log('IN FAILING TEST');
       utils.updateInvestorsExperts(['foo'], 'Coding', '123', cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
