@@ -71,9 +71,6 @@ describe('Job utils: ', function() {
       spyOn(User, 'find').andCallFake(function(cb) {
         return cb(null, users);
       });
-      spyOn(User, 'findById').andCallFake(function(id, cb) {
-        return cb(null, expert);
-      });
 
       utils.migratePercentagesAndDividends();
       expect(users[1].portfolio[0].investments[0].dividend).toEqual(2);
@@ -83,11 +80,9 @@ describe('Job utils: ', function() {
     });
 
     it('gives users a dividend of zero when expert cannot be found', function() {
+      users[0]._id = 'XXX';
       spyOn(User, 'find').andCallFake(function(cb) {
         return cb(null, users);
-      });
-      spyOn(User, 'findById').andCallFake(function(id, cb) {
-        return cb('Error', null);
       });
 
       utils.migratePercentagesAndDividends();
@@ -101,9 +96,6 @@ describe('Job utils: ', function() {
       expert.categories = [];
       spyOn(User, 'find').andCallFake(function(cb) {
         return cb(null, users);
-      });
-      spyOn(User, 'findById').andCallFake(function(id, cb) {
-        return cb(null, expert);
       });
 
       utils.migratePercentagesAndDividends();
@@ -174,9 +166,6 @@ describe('Job utils: ', function() {
     it('pays dividends and creates dividend field if not present', function() {
       spyOn(User, 'find').andCallFake(function(cb) {
         return cb(null, users);
-      });
-      spyOn(User, 'findById').andCallFake(function(id, cb) {
-        return cb(null, expert);
       });
 
       utils.payDividends();
