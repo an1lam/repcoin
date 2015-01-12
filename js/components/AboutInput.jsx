@@ -9,6 +9,12 @@ var AboutInput = React.createClass({
     return { error: null };
   },
 
+  componentDidMount: function() {
+    if (this.props.user.about) {
+      $(".about-form").val(this.props.user.about);
+    }
+  },
+
   handleSubmit: function(event) {
     event.preventDefault();
 
@@ -53,7 +59,7 @@ var AboutInput = React.createClass({
     return (
       <div className="aboutInput">
         <form onSubmit={this.handleSubmit} onReset={this.propagateReset}>
-          <textarea ref="about" rows="2" className="form-control" placeholder={about}></textarea>
+          <textarea ref="about" rows="2" className="form-control about-form" placeholder={about}></textarea>
           <button type="submit" className="btn btn-success">Save</button>
           <button type="reset" className="btn btn-default">Cancel</button>
         </form>
