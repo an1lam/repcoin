@@ -31,7 +31,7 @@ module.exports = function(router, isAuthenticated, acl) {
         } else if (!user) {
           winston.log('info', 'User with id %s is already an expert for category %s',
             userId, category.name);
-          return res.status(501).send('User is already an expert for this category');
+          return res.status(501).send('Already an expert');
         } else {
           // Add to the expert count
           category.experts += 1;
@@ -72,7 +72,7 @@ module.exports = function(router, isAuthenticated, acl) {
         } else if (!user) {
           winston.log('info', 'User with id %s is already an expert for category %s',
             userId, category.name);
-          return res.status(501).send('User is already an investor for this category');
+          return res.status(501).send('Already an investor');
         } else {
           category.investors += 1;
           category.reps += 5;
