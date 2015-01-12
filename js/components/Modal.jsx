@@ -113,13 +113,15 @@ var Modal = React.createClass({
 
   handleSubmit: function(event) {
     event.preventDefault();
-    var amount = Number(this.refs.amount.getDOMNode().value);
+    /* Round to one decimal place (as detailed in this StackOverflow post:
+     * http://stackoverflow.com/questions/14461017/rounding-a-number-to-one-decimal-in-javascript */
+    var amount = Math.round(Number(this.refs.amount.getDOMNode().value) * 10) / 10;
     var choice = this.refs.choice.getDOMNode().value;
     var anonymous = this.refs.anonymous.getDOMNode().checked;
 
     // Make sure a valid number was entered
-    if (isNaN(amount) || amount % 1 !== 0) {
-      this.setState({ error: 'Amount must be a valid integer'});
+    if (isNaN(amount)) {
+      this.setState({ error: 'Amount must be a valid number'});
       return;
     }
 
