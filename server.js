@@ -124,6 +124,4 @@ if (!module.parent) {
 var Agenda = require('agenda');
 var agenda = new Agenda({db: {address: mongoUrl}});
 require('./api/jobs/user.js')(agenda);
-agenda.start();
-
 module.exports = app;

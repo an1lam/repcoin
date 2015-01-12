@@ -1,4 +1,5 @@
 var utils = require('./utils.js');
+var winston = require('winston');
 
 module.exports = function(agenda) {
   // Jobs scheduled to run nightly
@@ -12,6 +13,9 @@ module.exports = function(agenda) {
 
   // Migrations
   agenda.define('migratePercentagesAndDividends', utils.migratePercentagesAndDividends);
-  agenda.schedule('today at 3:55pm', 'migratePercentagesAndDividends');
+  agenda.schedule('today at 4:50pm', 'migratePercentagesAndDividends');
   //agenda.now('migratePercentagesAndDividends');
+
+  agenda.start();
+  winston.log('info', 'Starting agenda jobs');
 };
