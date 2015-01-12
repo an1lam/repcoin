@@ -75,7 +75,7 @@ var UserSchema = new Schema({
       percentage: {type: Number, required: true },
 
       // The dividend being given to the user
-      dividend: { type: Number, required: true }
+      dividend: { type: Number, required: true, default: 0 }
     }],
   }],
 
