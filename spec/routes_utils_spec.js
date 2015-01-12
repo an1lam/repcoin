@@ -299,6 +299,18 @@ describe('Utils: ', function() {
       expect(result).toEqual(true);
     });
 
+    it('returns false is amount is 0', function() {
+      var req = { body : {
+        from      : { id: '1', name: 'foo' },
+        to        : { id: '2', name: 'bar' },
+        amount    : 0,
+        category  : 'foo'
+      }};
+
+      var result = utils.validateTransactionInputs(req);
+      expect(result).toEqual(false);
+    });
+
     it('returns false if amount is incorrect', function() {
       var req = { body : {
         from      : { id: '1', name: 'foo' },

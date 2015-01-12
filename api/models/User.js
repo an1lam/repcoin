@@ -64,7 +64,7 @@ var UserSchema = new Schema({
       user: {type: String, required: true },
 
       // The amount invested in this user
-      amount: {type: Number, required: true },
+      amount: {type: Number},
 
       // The current valuation of the amount
       valuation: {type: Number, required: true },
