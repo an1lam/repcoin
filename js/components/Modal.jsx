@@ -113,11 +113,10 @@ var Modal = React.createClass({
 
   handleSubmit: function(event) {
     event.preventDefault();
-    /* Round to one decimal place (as detailed in this StackOverflow post:
-     * http://stackoverflow.com/questions/14461017/rounding-a-number-to-one-decimal-in-javascript */
-    var amount = Math.round(Number(this.refs.amount.getDOMNode().value) * 10) / 10;
     var choice = this.refs.choice.getDOMNode().value;
     var anonymous = this.refs.anonymous.getDOMNode().checked;
+
+    var amount = Number(this.refs.amount.getDOMNode.value);
 
     // Make sure a valid number was entered
     if (isNaN(amount)) {
@@ -125,6 +124,8 @@ var Modal = React.createClass({
       return;
     }
 
+    // Round the number to the nearest tenth
+    amount = Math.round(amount* 10) / 10;
     // Make sure the amoutn is not 0
     if (amount === 0) {
       this.setState({ error: 'Investment amount must be at least 1 rep.' });

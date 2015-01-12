@@ -16,6 +16,8 @@ var passwordResetEmailConfig = require('../../config/mailer.js').passwordResetEm
 var urlConfig = require('../../config/url.js');
 var winston = require('winston');
 
+var DIVIDEND_RATE = 0.1;
+
 var utils = {
   // Determines if a user is an expert for a given category
   isExpert: function(user, category) {
@@ -318,9 +320,10 @@ var utils = {
       return false;
     }
 
-    // Check that the amount is a valid integer
     var amount = Number(req.body.amount);
-    if (isNaN(amount) || amount % 1 !== 0) {
+
+    // Check that the amount is a valid number
+    if (isNaN(amount)) {
       return false;
     }
 
@@ -336,14 +339,28 @@ var utils = {
     return true;
   },
 
+  // Given a portfolio entry, get the total dividends
+  getTotalDividends: function(portfolioEntry) {
+    var dividends = 0;
+    if (!portfolioEntry.investments) {
+      return 0;
+    };
+    var length = portfolioEntry.investments.length;
+    var investments = portfolioEntry.investments;
+    for (var i = 0; i < length; i++) {
+      dividends += investments[i].dividend;
+    }
+    return dividends;
+  },
+
   // Sort users by dividends for a given category, increasing order
   getDividendsComparator: function(category) {
     return function(a, b) {
       var indexA = this.getPortfolioIndex(a, category);
       var indexB = this.getPortfolioIndex(b, category);
 
-      var dividendsA = a.portfolio[indexA].dividends.value;
-      var dividendsB = b.portfolio[indexB].dividends.value;
+      var dividendsA = this.getTotalDividends(a.portfolio[indexA]);
+      var dividendsB = this.getTotalDividends(b.portfolio[indexB]);
       return dividendsA - dividendsB;
     }.bind(this);
   },
@@ -447,6 +464,9 @@ var utils = {
   // Update an investor making an investment for a given category,
   // Returns null if the investment is not possible
   updateInvestorPortfolio: function(portfolio, category, toUser, amount, toUserCategoryTotal, id) {
+    // Round the amount to the nearest tenth
+    amount = Math.round(amount * 10) / 10;
+
     // Find the portfolio entry that should be updated
     var index = -1;
     var length = portfolio.length;
@@ -465,10 +485,15 @@ var utils = {
 
     // Add the investment to the portfolio
     if (amount > 0) {
-      var investment = { userId     : toUser.id,
-                         user       : toUser.name,
-                         amount     : amount,
-                         percentage : Number(amount/toUserCategoryTotal * 100) };
+      var percentage = Number(amount/toUserCategoryTotal);
+      var dividend   = Math.round(percentage * toUserCategoryTotal * DIVIDEND_RATE * 100) / 100;
+      var investment = {
+        userId     : toUser.id,
+        user       : toUser.name,
+        amount     : amount,
+        percentage : percentage,
+        dividend   : dividend
+      };
 
       portfolio[index].investments.push(investment);
       portfolio[index].reps -= amount;
@@ -490,29 +515,21 @@ var utils = {
 
       amount *= -1;
 
-      // Dividends pay 10%
-      var dividendsPercentage = 0.1;
-      var newInvestorReps = portfolio[index].reps + amount;
+      // Adjust the investor's reps
+      var newReps = portfolio[index].reps + amount;
+      portfolio[index].reps = newReps;
+
       var investment = portfolio[index].investments[j];
 
-      var prevInvestmentAmount = investment.amount;
-      var prevInvestmentPercentage = investment.percentage;
-      var newInvestmentAmount = prevInvestmentAmount - amount;
+      var prevAmount = investment.amount;
+      var prevPercentage = investment.percentage;
+      var newAmount = prevAmount - amount;
 
-      // newPercentage / newAmount = oldPercentage / oldAmount (Proportional)
-      var newInvestmentPercentage = Math.floor((newInvestmentAmount * investment.percentage) / prevInvestmentAmount);
-
-      // New dividends equal old dividends reduced by the difference between
-      // what the investment contributed previously and what it contributes now
-      var dividendsChange = (
-        ((prevInvestmentPercentage * prevInvestmentAmount) -
-        (newInvestmentPercentage * newInvestmentAmount)) * dividendsPercentage
-      );
-
-      var newInvestorDividends = portfolio[index].dividends - dividendsChange;
+      // newPercentage / newAmount = prevPercentage / prevAmount (Proportional)
+      var newPercentage = newAmount * prevPercentage / prevAmount;
 
       // If the amount is now zero, remove the investment
-      if (newInvestmentAmount === 0) {
+      if (newAmount === 0) {
         portfolio[index].investments.splice(j, 1);
         return portfolio;
       }
@@ -520,19 +537,16 @@ var utils = {
       // Update the date
       investment.timeStamp = Date.now();
 
-      // Update the investment's amount and percentage
-      investment.amount = newInvestmentAmount;
-      investment.precentage = newInvestmentPercentage;
-
-      // Adjust the investor's reps and dividends
-      portfolio[index].reps = newInvestorReps;
-      portfolio[index].dividends = newInvestorDividends;
+      // Update the investment's amount, percentage, and dividend
+      investment.amount = newAmount;
+      investment.percentage = newPercentage;
+      investment.dividend = Math.round(newPercentage * toUserCategoryTotal * DIVIDEND_RATE * 100) / 100;
     }
     return portfolio;
   },
 
-  // Given a transaction, update all of the percentages for investors
-  updateInvestorPercentages: function(investors, expertCategoryTotal, category, username) {
+  // Given a transaction, update all dividends for investors
+  updateDividends: function(investors, expertCategoryTotal, category, username) {
     var investor, j, errs;
     var length = investors.length;
     for (var i = 0; i < length; i++) {
@@ -543,29 +557,21 @@ var utils = {
         continue;
       }
 
+      // Find the corresponding investment and reset the dividend
       var len = investor.portfolio[j].investments.length;
       for (var q = 0; q < len; q++) {
         var investment = investor.portfolio[j].investments[q];
         if (investment.user === username) {
-
-          // Reset the percentage
-          investment.percentage = 100 * investment.amount/expertCategoryTotal;
+          investment.dividend = Math.round(investment.percentage * expertCategoryTotal * DIVIDEND_RATE * 100) / 100;
         }
       }
     }
     return investors;
   },
 
-  // Given a revoke that just happened, update dividends
-  updateDividends: function(oldDividends, dividendsFromRevoke) {
-    var newLen = oldDividends.length + 1;
-    var newVal = (((oldDividends.value * oldDividends.length + dividendsFromRevoke)/(newLen)).toFixed(2))/1;
-    return { length: newLen, value: newVal };
-  },
-
   // Given a list of investors, update their percentiles
   updateInvestorPercentiles: function(investors, category, cb) {
-    // Calculates the percentage for a value
+    // Calculates the percentile for a value
     var formula = function (l, s, sampleSize) {
       return Math.floor(100 * ((s * 0.5) + l) / sampleSize);
     };
@@ -585,7 +591,7 @@ var utils = {
     indexDict[investors[0]._id] = index;
 
     // Each unique dividends value will have a unique percentage
-    var prevDividends = investors[0].portfolio[index].dividends.value;
+    var prevDividends = this.getTotalDividends(investors[0].portfolio[index]);
     percentileDict[prevDividends] = formula(l, s, length);
 
     for (var i = 1; i < length; i += 1) {
@@ -598,7 +604,7 @@ var utils = {
       // If we have seen this value before, increment s
       // Otherwise, we know there are s more numbers less than the current
       //  In that case, we increment l by s and set s back to 1
-      var currDividends = investors[i].portfolio[index].dividends.value;
+      var currDividends = this.getTotalDividends(investors[i].portfolio[index]);
       if (currDividends === prevDividends) {
         s += 1;
       } else {
@@ -614,7 +620,7 @@ var utils = {
     // Go through the results and reset all of the percentiles
     for (var i = 0; i < length; i++) {
       var j = indexDict[investors[i]._id];
-      var dividendsVal = investors[i].portfolio[j].dividends.value;
+      var dividendsVal = this.getTotalDividends(investors[i].portfolio[index]);
       var percentile = percentileDict[dividendsVal];
       investors[i].portfolio[j].percentile = percentile;
     }
@@ -684,7 +690,7 @@ var utils = {
 
       // If parameters are avaiable, update all the investor percentages
       if (username && expertCategoryTotal) {
-        investors = self.updateInvestorPercentages(investors, expertCategoryTotal, category, username);
+        investors = self.updateDividends(investors, expertCategoryTotal, category, username);
       }
 
       // Sort the investors by dividends in increasing order
