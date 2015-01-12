@@ -16,6 +16,8 @@ var passwordResetEmailConfig = require('../../config/mailer.js').passwordResetEm
 var urlConfig = require('../../config/url.js');
 var winston = require('winston');
 
+var DIVIDEND_RATE = 0.1;
+
 var utils = {
   // Determines if a user is an expert for a given category
   isExpert: function(user, category) {
@@ -64,7 +66,7 @@ var utils = {
   },
 
   // Given an investor, category, and expertId, remove investments in that expert
-  // Reimburse the investor for the valuation of those investments
+  // Reimburse the investor for the amount of those investments
   reimburseInvestor: function(investor, categoryName, expertId) {
     var l = investor.portfolio.length;
     for (var j = 0; j < l; j++) {
@@ -75,8 +77,8 @@ var utils = {
         for (var p = 0; p < z; p++) {
           var investment = investor.portfolio[j].investments[p];
           if (String(investment.userId) === String(expertId)) {
-            // Give the investor the valuation
-            investor.portfolio[j].reps += investment.valuation;
+            // Give the investor the amount
+            investor.portfolio[j].reps += investment.amount;
           } else {
             newInvestments.push(investment);
           }
@@ -243,7 +245,7 @@ var utils = {
 
   // Validate the inputs for /users/:categoryName/leaders/:count
   validateLeadersCountInputs: function(req) {
-    if (!req.query || req.query.expert == null) {
+    if (!req.query || req.query.expert === null) {
       return false;
     }
 
@@ -318,9 +320,10 @@ var utils = {
       return false;
     }
 
-    // Check that the amount is a valid integer
     var amount = Number(req.body.amount);
-    if (isNaN(amount) || amount % 1 !== 0) {
+
+    // Check that the amount is a valid number
+    if (isNaN(amount)) {
       return false;
     }
 
@@ -336,15 +339,29 @@ var utils = {
     return true;
   },
 
-  // Sort users by ROI for a given category, increasing order
-  getROIComparator: function(category) {
+  // Given a portfolio entry, get the total dividends
+  getTotalDividends: function(portfolioEntry) {
+    var dividends = 0;
+    if (!portfolioEntry.investments) {
+      return 0;
+    };
+    var length = portfolioEntry.investments.length;
+    var investments = portfolioEntry.investments;
+    for (var i = 0; i < length; i++) {
+      dividends += investments[i].dividend;
+    }
+    return dividends;
+  },
+
+  // Sort users by dividends for a given category, increasing order
+  getDividendsComparator: function(category) {
     return function(a, b) {
       var indexA = this.getPortfolioIndex(a, category);
       var indexB = this.getPortfolioIndex(b, category);
 
-      var roiA = a.portfolio[indexA].roi.value;
-      var roiB = b.portfolio[indexB].roi.value;
-      return roiA - roiB;
+      var dividendsA = this.getTotalDividends(a.portfolio[indexA]);
+      var dividendsB = this.getTotalDividends(b.portfolio[indexB]);
+      return dividendsA - dividendsB;
     }.bind(this);
   },
 
@@ -447,6 +464,9 @@ var utils = {
   // Update an investor making an investment for a given category,
   // Returns null if the investment is not possible
   updateInvestorPortfolio: function(portfolio, category, toUser, amount, toUserCategoryTotal, id) {
+    // Round the amount to the nearest tenth
+    amount = Math.round(amount * 10) / 10;
+
     // Find the portfolio entry that should be updated
     var index = -1;
     var length = portfolio.length;
@@ -465,11 +485,15 @@ var utils = {
 
     // Add the investment to the portfolio
     if (amount > 0) {
-      var investment = { userId     : toUser.id,
-                         user       : toUser.name,
-                         amount     : amount,
-                         valuation  : amount,
-                         percentage : Number(amount/toUserCategoryTotal * 100) };
+      var percentage = Number(amount/toUserCategoryTotal);
+      var dividend   = Math.round(percentage * toUserCategoryTotal * DIVIDEND_RATE * 100) / 100;
+      var investment = {
+        userId     : toUser.id,
+        user       : toUser.name,
+        amount     : amount,
+        percentage : percentage,
+        dividend   : dividend
+      };
 
       portfolio[index].investments.push(investment);
       portfolio[index].reps -= amount;
@@ -490,42 +514,39 @@ var utils = {
       }
 
       amount *= -1;
-      var investment = portfolio[index].investments[j];
-      var prevAmount = investment.amount;
-
-      // Revenue is the fraction sold times the valuation
-      var revenue = Math.floor(amount / prevAmount * investment.valuation);
-      var roi = (revenue - amount)/amount;
 
       // Adjust the investor's reps
-      portfolio[index].reps += revenue;
+      var newReps = portfolio[index].reps + amount;
+      portfolio[index].reps = newReps;
 
-      // Update the amount
-      investment.amount -= amount;
+      var investment = portfolio[index].investments[j];
+
+      var prevAmount = investment.amount;
+      var prevPercentage = investment.percentage;
+      var newAmount = prevAmount - amount;
+
+      // newPercentage / newAmount = prevPercentage / prevAmount (Proportional)
+      var newPercentage = newAmount * prevPercentage / prevAmount;
 
       // If the amount is now zero, remove the investment
-      if (investment.amount === 0) {
+      if (newAmount === 0) {
         portfolio[index].investments.splice(j, 1);
         return portfolio;
       }
 
-      // OldTotal/OldPercentage = newTotal/newPercentage (Proportional)
-      investment.percentage = Math.floor((investment.amount * investment.percentage) / prevAmount);
-
-      // New valuation is the proportion of the old valuation relative to the proportion of the investment remaining
-      investment.valuation = investment.valuation * investment.amount / prevAmount;
-
       // Update the date
       investment.timeStamp = Date.now();
 
-      portfolio[index].investments[j] = investment;
-      portfolio[index].roi = this.updateROI(portfolio[index].roi, amount * roi);
+      // Update the investment's amount, percentage, and dividend
+      investment.amount = newAmount;
+      investment.percentage = newPercentage;
+      investment.dividend = Math.round(newPercentage * toUserCategoryTotal * DIVIDEND_RATE * 100) / 100;
     }
     return portfolio;
   },
 
-  // Given a transaction, update all of the percentages for investors
-  updateInvestorPercentagesAndValuations: function(investors, expertCategoryTotal, category, username) {
+  // Given a transaction, update all dividends for investors
+  updateDividends: function(investors, expertCategoryTotal, category, username) {
     var investor, j, errs;
     var length = investors.length;
     for (var i = 0; i < length; i++) {
@@ -536,33 +557,21 @@ var utils = {
         continue;
       }
 
+      // Find the corresponding investment and reset the dividend
       var len = investor.portfolio[j].investments.length;
       for (var q = 0; q < len; q++) {
         var investment = investor.portfolio[j].investments[q];
         if (investment.user === username) {
-
-          // Reset the percentage
-          investment.percentage = 100 * investment.amount/expertCategoryTotal;
-
-          // Reset the valuation
-          investment.valuation = Math.floor(investment.percentage/100 * expertCategoryTotal);
-          investor.portfolio[j].investments[q] = investment;
+          investment.dividend = Math.round(investment.percentage * expertCategoryTotal * DIVIDEND_RATE * 100) / 100;
         }
       }
     }
     return investors;
   },
 
-  // Given a revoke that just happened, update roi
-  updateROI: function(oldROI, roiFromRevoke) {
-    var newLen = oldROI.length + 1;
-    var newVal = (((oldROI.value * oldROI.length + roiFromRevoke)/(newLen)).toFixed(2))/1;
-    return { length: newLen, value: newVal };
-  },
-
   // Given a list of investors, update their percentiles
-  getInvestorPercentiles: function(investors, category, cb) {
-    // Calculates the percentage for a value
+  updateInvestorPercentiles: function(investors, category, cb) {
+    // Calculates the percentile for a value
     var formula = function (l, s, sampleSize) {
       return Math.floor(100 * ((s * 0.5) + l) / sampleSize);
     };
@@ -581,9 +590,9 @@ var utils = {
     }
     indexDict[investors[0]._id] = index;
 
-    // Each unique reps value will have a unique percentage
-    var prevROI = investors[0].portfolio[index].roi.value;
-    percentileDict[prevROI] = formula(l, s, length);
+    // Each unique dividends value will have a unique percentage
+    var prevDividends = this.getTotalDividends(investors[0].portfolio[index]);
+    percentileDict[prevDividends] = formula(l, s, length);
 
     for (var i = 1; i < length; i += 1) {
       index = this.getPortfolioIndex(investors[i], category);
@@ -595,8 +604,8 @@ var utils = {
       // If we have seen this value before, increment s
       // Otherwise, we know there are s more numbers less than the current
       //  In that case, we increment l by s and set s back to 1
-      var currROI = investors[i].portfolio[index].roi.value;
-      if (currROI === prevROI) {
+      var currDividends = this.getTotalDividends(investors[i].portfolio[index]);
+      if (currDividends === prevDividends) {
         s += 1;
       } else {
         l += s;
@@ -604,15 +613,15 @@ var utils = {
       }
 
       //Reset the percentile for the given reps value
-      percentileDict[currROI] = formula(l, s, length);
-      prevROI = currROI;
+      percentileDict[currDividends] = formula(l, s, length);
+      prevDividends = currDividends;
     }
 
     // Go through the results and reset all of the percentiles
     for (var i = 0; i < length; i++) {
       var j = indexDict[investors[i]._id];
-      var roiVal = investors[i].portfolio[j].roi.value;
-      var percentile = percentileDict[roiVal];
+      var dividendsVal = this.getTotalDividends(investors[i].portfolio[index]);
+      var percentile = percentileDict[dividendsVal];
       investors[i].portfolio[j].percentile = percentile;
     }
     return cb(null);
@@ -673,23 +682,23 @@ var utils = {
     return cb(null);
   },
 
-  // Given a category name, update the percentiles, percentages, and valuations for all investors
+  // Given a category name, update the percentiles and percentages, for all investors
   updateInvestors: function(category, cb, username, expertCategoryTotal) {
     var self = this;
     var investorsPromise = User.findInvestorByCategory(category, function() {});
     investorsPromise.then(function(investors) {
 
-      // If parameters are avaiable, update all the investor percentages and valuations
+      // If parameters are avaiable, update all the investor percentages
       if (username && expertCategoryTotal) {
-        investors = self.updateInvestorPercentagesAndValuations(investors, expertCategoryTotal, category, username);
+        investors = self.updateDividends(investors, expertCategoryTotal, category, username);
       }
 
-      // Sort the investors by roi in increasing order
-      var roiComparator = self.getROIComparator(category);
-      investors.sort(roiComparator);
-      self.getInvestorPercentiles(investors, category, function(err) {
+      // Sort the investors by dividends in increasing order
+      var dividendsComparator = self.getDividendsComparator(category);
+      investors.sort(dividendsComparator);
+      self.updateInvestorPercentiles(investors, category, function(err) {
         if (err) {
-          winston.log('error', 'utils.updateInvestors: error getting investor percentiles: %s', err);
+          winston.log('error', 'utils.updateInvestors: error updating investor percentiles: %s', err);
           return cb(err);
         }
         self.saveAll(investors, function(errs) {
