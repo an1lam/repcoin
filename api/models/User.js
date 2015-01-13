@@ -37,10 +37,11 @@ var UserSchema = new Schema({
     // reps available to invest for this category
     reps: {type: Number, default: 0, required: true },
 
-    // ROI for this category based on all revokes for this category
+    // ROI for this category based on all transactions for this category
+    // DEPRECATED
     roi: {
-      value   : { type: Number, default: 0, required: true },
-      length  : { type: Number, default: 0, required: true },
+      value   : { type: Number },
+      length  : { type: Number },
     },
 
     // Percentile relative to all investors in this category
@@ -67,12 +68,14 @@ var UserSchema = new Schema({
       amount: {type: Number},
 
       // The current valuation of the amount
-      valuation: {type: Number, required: true },
+      // DEPRECATED
+      valuation: {type: Number },
 
       // The percentage of the user
       percentage: {type: Number, required: true },
 
-      dividend: { type: Number, default: 0 }
+      // The dividend being given to the user
+      dividend: { type: Number, required: true, default: 0 }
     }],
   }],
 
