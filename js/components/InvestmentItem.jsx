@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var React = require('react');
 
@@ -8,7 +8,7 @@ var InvestmentItem = React.createClass({
       <tr className="investmentItem">
         <td>{this.props.investment.user}</td>
         <td>{this.props.investment.amount}</td>
-        <td>{this.props.investment.dividend}</td>
+        <td>{this.props.investment.valuation}</td>
       </tr>
     );
   },
