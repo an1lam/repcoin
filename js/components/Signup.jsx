@@ -43,7 +43,12 @@ var Signup = React.createClass({
       type: 'POST',
       data: { access_token: accessToken },
       success: function(user) {
-        this.getFacebookProfilePicture(user);
+        // Only rewrite the picture if it is not there
+        if (!user.picture) {
+          this.getFacebookProfilePicture(user);
+        } else {
+          this.transitionTo('/home');
+        }
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText !== 'Error') {
@@ -155,7 +160,7 @@ var Signup = React.createClass({
       <div className="signup col-md-2 col-md-offset-5">
         {msg}
         <a className="facebook-signup btn btn-block btn-social btn-facebook" onClick={this.handleFacebookClick}>
-          <i className="fa fa-facebook"></i> Sign up with facebook
+          <i className="fa fa-facebook"></i> Log in with facebook
         </a>
         <form onSubmit={this.handleSubmit}>
           <input type="text" ref="firstname" className="form-control" placeholder="First name"></input>
