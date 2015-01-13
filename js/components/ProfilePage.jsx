@@ -94,11 +94,11 @@ var ProfilePage = React.createClass({
             {profileBox}
           </div>
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-md-6">
               {categoriesTable}
               {portfolio}
             </div>
-            <div className="col-md-7">
+            <div className="col-md-6">
               {investmentButton}
               {feed}
             </div>
