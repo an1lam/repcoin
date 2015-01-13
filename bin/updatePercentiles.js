@@ -11,9 +11,15 @@ if (process.env.NODE_ENV === 'production') {
   var mongoURL = db.production_url;
 } else {
   winston.log('info', 'Starting updatePercentiles in development environment');
-  var mongoURL = db.production_url;
+  var mongoURL = db.development_url;
 }
 mongoose.connect(mongoURL);
-
-utils.setPreviousPercentileToCurrent();
-process.exit();
+mongoose.connection.on('connected', function() {
+  utils.setPreviousPercentileToCurrent(function() {
+    if (errs) {
+      winston.log('info', 'Update percentiles finished with errors.');
+    }
+    mongoose.connection.close();
+    process.exit();
+  });
+});

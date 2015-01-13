@@ -11,9 +11,15 @@ if (process.env.NODE_ENV === 'production') {
   var mongoURL = db.production_url;
 } else {
   winston.log('info', 'Starting to pay dividends in development environment');
-  var mongoURL = db.production_url;
+  var mongoURL = db.development_url;
 }
 mongoose.connect(mongoURL);
-
-utils.payDividends();
-process.exit();
+mongoose.connection.on('connected', function() {
+  utils.payDividends(function(errs) {
+    if (errs) {
+      winston.log('info', 'Pay dividends finished with errors.');
+    }
+    mongoose.connection.close();
+    process.exit();
+  });
+});

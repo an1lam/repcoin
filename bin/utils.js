@@ -1,6 +1,7 @@
 'use strict';
 
 var Category = require('../api/models/Category.js');
+var routeUtils = require('../api/routes/utils.js');
 var User = require('../api/models/User.js');
 var winston = require('winston');
 
@@ -8,20 +9,25 @@ var DIVIDEND_PERCENTAGE = 0.1;
 
 // Utility functions for jobs
 var utils = {
-  incrementInvestorReps: function(job, done) {
+  incrementInvestorReps: function(cb) {
     var i = 0;
     User.find(function(err, users) {
       if (err) {
         winston.log('error', 'Error incrementing investor reps: %s', err.toString());
+        cb();
       } else {
         users.forEach(function(user) {
           user.portfolio.forEach(function(entry) {
             if (entry.reps === 0) {
-
               // Add reps to the category model
               var category = Category.findByName(entry.category).then(function(category) {
                 category.reps += 5;
-                category.save();
+                category.save(function(err) {
+                  if (err) {
+                    winston.log('error', 'Error saving category: %s', entry.category);
+                  }
+                  return;
+                });
               }, function(err) {
                 winston.log('info', 'Error finding category: %s', entry.category);
               });
@@ -29,31 +35,46 @@ var utils = {
               entry.reps += 5;
             }
           });
-          user.save();
         });
-        winston.log('info', 'Incrementing investor reps');
+        routeUtils.saveAll(users, function(errs) {
+          if (errs.length > 0) {
+            winston.log('error', 'Error migrating percentiles and dividends: %s', errs);
+            cb(errs);
+          } else {
+            winston.log('info', 'Successfully migrated percentages and dividends.');
+            cb(null);
+          }
+        });
       }
     });
   },
 
-  setPreviousPercentileToCurrent: function(job, done) {
+  setPreviousPercentileToCurrent: function(cb) {
     var i = 0;
     User.find(function(err, users) {
       if (err) {
+        cb();
         winston.log('error', 'Error setting previous percentiles to current: %s', err.toString());
       } else {
         users.forEach(function(user) {
           user.categories.forEach(function(category) {
             category.previousPercentile = category.percentile;
           });
-          user.save();
         });
-        winston.log('info', 'Updating %d users\' previous percentiles.', users.length);
+        routeUtils.saveAll(users, function(errs) {
+          if (errs.length > 0) {
+            winston.log('error', 'Error migrating percentiles and dividends: %s', errs);
+            cb(errs);
+          } else {
+            winston.log('info', 'Successfully migrated percentages and dividends.');
+            cb(null);
+          }
+        });
       }
     });
   },
 
-  payDividends: function(job, done) {
+  payDividends: function(cb) {
     function getUserById(users, id) {
       for (var i = 0; i < users.length; i++) {
         if (users[i]._id.toString() === id.toString()) {
@@ -74,6 +95,7 @@ var utils = {
     User.find(function(err, users) {
       if (err) {
         winston.log('error', 'Error paying dividends: %s', err.toString());
+        cb();
       } else {
         users.forEach(function(user) {
           for (var i = 0; i < user.portfolio.length; i++) {
@@ -97,9 +119,16 @@ var utils = {
               }
             };
           };
-          user.save();
         });
-        winston.log('info', 'Paid dividends.');
+        routeUtils.saveAll(users, function(errs) {
+          if (errs.length > 0) {
+            winston.log('error', 'Error migrating percentiles and dividends: %s', errs);
+            cb(errs);
+          } else {
+            winston.log('info', 'Successfully migrated percentages and dividends.');
+            cb(null);
+          }
+        });
       }
     });
   },
@@ -107,7 +136,7 @@ var utils = {
   // Divide all user percentages by 100
   // Give all investments a dividend
   // To be used ONCE ONLY to migrate to the dividend system
-  migratePercentagesAndDividends: function(job, done) {
+  migratePercentagesAndDividends: function(cb) {
     function getUserById(users, id) {
       for (var i = 0; i < users.length; i++) {
         if (users[i]._id.toString() === id.toString()) {
@@ -128,6 +157,7 @@ var utils = {
     User.find(function(err, users) {
       if (err) {
         winston.log('error', 'Error migrating percentages and dividends: %s', err.toString());
+        cb();
       } else {
         users.forEach(function(user) {
           for (var i = 0; i < user.portfolio.length; i++) {
@@ -152,9 +182,16 @@ var utils = {
               }
             };
           };
-          user.save();
         });
-        winston.log('info', 'Successfully migrated percentages and dividends.');
+        routeUtils.saveAll(users, function(errs) {
+          if (errs.length > 0) {
+            winston.log('error', 'Error migrating percentiles and dividends: %s', errs);
+            cb(errs);
+          } else {
+            winston.log('info', 'Successfully migrated percentages and dividends.');
+            cb(null);
+          }
+        });
       }
     });
   },

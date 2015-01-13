@@ -1,13 +1,20 @@
 var winston = require('winston');
 var Category = require('../api/models/Category.js');
+var routeUtils = require('../api/routes/utils.js');
 var User = require('../api/models/User.js');
 var utils = require('../bin/utils.js');
 
 describe('Job utils: ', function() {
+  var cb;
   beforeEach(function() {
+    cb = jasmine.createSpy().andReturn();
     spyOn(winston, 'log').andCallFake(function(arg1, arg2, arg3, arg4) {
       return;
     });
+  });
+
+  afterEach(function() {
+    expect(cb.callCount).toEqual(1);
   });
 
   describe('migratePercentagesAndDividends: ', function() {
@@ -57,10 +64,10 @@ describe('Job utils: ', function() {
     });
 
     it('handles error finding users', function() {
-      spyOn(User, 'find').andCallFake(function(cb) {
-        return cb('Error', null);
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback('Error', null);
       });
-      utils.migratePercentagesAndDividends();
+      utils.migratePercentagesAndDividends(cb);
       expect(winston.log).toHaveBeenCalledWith('error',
         'Error migrating percentages and dividends: %s', 'Error');
       expect(users[1].portfolio[0].reps).toEqual(1);
@@ -68,11 +75,14 @@ describe('Job utils: ', function() {
     });
 
     it('divides percentages by 100 and adds accurate dividends', function() {
-      spyOn(User, 'find').andCallFake(function(cb) {
-        return cb(null, users);
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
+      });
+      spyOn(routeUtils, 'saveAll').andCallFake(function(users, callback) {
+        return callback([]);
       });
 
-      utils.migratePercentagesAndDividends();
+      utils.migratePercentagesAndDividends(cb);
       expect(users[1].portfolio[0].investments[0].dividend).toEqual(2);
       expect(users[1].portfolio[0].investments[0].percentage).toEqual(1.00);
       expect(users[2].portfolio[0].investments[0].dividend).toEqual(1.5);
@@ -81,11 +91,14 @@ describe('Job utils: ', function() {
 
     it('gives users a dividend of zero when expert cannot be found', function() {
       users[0]._id = 'XXX';
-      spyOn(User, 'find').andCallFake(function(cb) {
-        return cb(null, users);
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
+      });
+      spyOn(routeUtils, 'saveAll').andCallFake(function(users, callback) {
+        return callback([]);
       });
 
-      utils.migratePercentagesAndDividends();
+      utils.migratePercentagesAndDividends(cb);
       expect(users[1].portfolio[0].investments[0].dividend).toEqual(0);
       expect(users[1].portfolio[0].investments[0].percentage).toEqual(1.00);
       expect(users[2].portfolio[0].investments[0].dividend).toEqual(0);
@@ -94,11 +107,14 @@ describe('Job utils: ', function() {
 
     it('gives users a dividend of zero when expert category total cannot be calculated', function() {
       expert.categories = [];
-      spyOn(User, 'find').andCallFake(function(cb) {
-        return cb(null, users);
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
+      });
+      spyOn(routeUtils, 'saveAll').andCallFake(function(users, callback) {
+        return callback([]);
       });
 
-      utils.migratePercentagesAndDividends();
+      utils.migratePercentagesAndDividends(cb);
       expect(users[1].portfolio[0].investments[0].dividend).toEqual(0);
       expect(users[1].portfolio[0].investments[0].percentage).toEqual(1.00);
       expect(users[2].portfolio[0].investments[0].dividend).toEqual(0);
@@ -153,10 +169,10 @@ describe('Job utils: ', function() {
     });
 
     it('handles error finding users', function() {
-      spyOn(User, 'find').andCallFake(function(cb) {
-        return cb('Error', null);
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback('Error', null);
       });
-      utils.payDividends();
+      utils.payDividends(cb);
       expect(winston.log).toHaveBeenCalledWith('error',
         'Error paying dividends: %s', 'Error');
       expect(users[1].portfolio[0].reps).toEqual(1);
@@ -164,11 +180,14 @@ describe('Job utils: ', function() {
     });
 
     it('pays dividends and creates dividend field if not present', function() {
-      spyOn(User, 'find').andCallFake(function(cb) {
-        return cb(null, users);
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
+      });
+      spyOn(routeUtils, 'saveAll').andCallFake(function(users, callback) {
+        return callback([]);
       });
 
-      utils.payDividends();
+      utils.payDividends(cb);
       expect(users[1].portfolio[0].reps).toEqual(3);
       expect(users[1].portfolio[0].investments[0].dividend).toEqual(2);
       expect(users[2].portfolio[0].reps).toEqual(4.5);
@@ -190,18 +209,18 @@ describe('Job utils: ', function() {
           reps: 7,
           save: jasmine.createSpy().andReturn()
         },
-        then: function(cb) {
-          return cb(this.category);
+        then: function(callback) {
+          return callback(this.category);
         }
       };
       spyOn(Category, 'findByName').andReturn(categoryPromise);
     });
 
     it('handles error finding users', function() {
-      spyOn(User, 'find').andCallFake(function(cb) {
-        return cb('Error', null);
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback('Error', null);
       });
-      utils.incrementInvestorReps();
+      utils.incrementInvestorReps(cb);
       expect(winston.log).toHaveBeenCalledWith('error',
         'Error incrementing investor reps: %s', 'Error');
       expect(users[0].portfolio[0].reps).toEqual(0);
@@ -210,10 +229,14 @@ describe('Job utils: ', function() {
     });
 
     it('increments investor reps if they have none left and increments category reps', function() {
-      spyOn(User, 'find').andCallFake(function(cb) {
-        return cb(null, users);
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
       });
-      utils.incrementInvestorReps();
+      spyOn(routeUtils, 'saveAll').andCallFake(function(users, callback) {
+        return callback([]);
+      });
+
+      utils.incrementInvestorReps(cb);
       expect(users[0].portfolio[0].reps).toEqual(5);
       expect(users[1].portfolio[0].reps).toEqual(3);
       expect(categoryPromise.category.reps).toEqual(12);
@@ -238,10 +261,10 @@ describe('Job utils: ', function() {
     });
 
     it('handles error finding users', function() {
-      spyOn(User, 'find').andCallFake(function(cb) {
-        return cb('Error', null);
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback('Error', null);
       });
-      utils.setPreviousPercentileToCurrent();
+      utils.setPreviousPercentileToCurrent(cb);
       expect(winston.log).toHaveBeenCalledWith('error',
         'Error setting previous percentiles to current: %s', 'Error');
       expect(users[0].categories[0].percentile).toEqual(24);
@@ -249,10 +272,14 @@ describe('Job utils: ', function() {
     });
 
     it('sets previous percentiles to percentiles', function() {
-      spyOn(User, 'find').andCallFake(function(cb) {
-        return cb(null, users);
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
       });
-      utils.setPreviousPercentileToCurrent();
+      spyOn(routeUtils, 'saveAll').andCallFake(function(users, callback) {
+        return callback([]);
+      });
+
+      utils.setPreviousPercentileToCurrent(cb);
       expect(users[0].categories[0].previousPercentile).toEqual(
         users[0].categories[0].percentile);
       expect(users[1].categories[0].previousPercentile).toEqual(
