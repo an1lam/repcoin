@@ -113,7 +113,7 @@ module.exports = function(router, isAuthenticated, acl) {
                       fromUser.save();
                       return res.status(400).send(err);
                     } else {
-                      // Update the investor percentiles and percentages
+                      // Update the investor percentiles, valuations, and percentages
                       utils.updateInvestors(categoryName, function(err) {
                         if (err) {
                           winston.log('error', 'Error updating investors: %s', err);
