@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'production') {
 
 mongoose.connect(mongoURL);
 mongoose.connection.on('connected', function() {
-  utils.incrementInvestorReps(function(errs) {
+  utils.convertCategoryNamesToLowerCase(function(errs) {
     if (errs) {
       winston.log('info', 'Increment investor reps finished with errors.');
     }
