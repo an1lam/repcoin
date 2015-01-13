@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 require('newrelic');
 var agenda = require('agenda');
