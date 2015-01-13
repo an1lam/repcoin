@@ -103,7 +103,6 @@ module.exports = function(router, isAuthenticated, acl) {
                   return res.status(400).send(err);
                 } else {
                   // Update the expert percentiles
-                  winston.log('info', 'Updating expert percentiles for category: %s', categoryName);
                   utils.updateExpertPercentiles(categoryName, function(err) {
                     if (err) {
                       winston.log('error', 'Error saving transaction: %s', err);
@@ -114,7 +113,7 @@ module.exports = function(router, isAuthenticated, acl) {
                       fromUser.save();
                       return res.status(400).send(err);
                     } else {
-                      // Update the investor percentiles and percentages
+                      // Update the investor percentiles, valuations, and percentages
                       utils.updateInvestors(categoryName, function(err) {
                         if (err) {
                           winston.log('error', 'Error updating investors: %s', err);
@@ -128,7 +127,7 @@ module.exports = function(router, isAuthenticated, acl) {
                           winston.log('info', 'Successfully created transaction: %s', transaction._id.toString());
                           return res.send(transaction);
                         }
-                      }, toUser.username, toUserCategoryTotal);
+                      }, toUser.name, toUserCategoryTotal);
                     }
                   });
                 }
