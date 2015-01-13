@@ -2,6 +2,7 @@
 
 var Category = require('../api/models/Category.js');
 var routeUtils = require('../api/routes/utils.js');
+var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 var winston = require('winston');
 
@@ -131,6 +132,88 @@ var utils = {
         });
       }
     });
+  },
+
+  // Make all category names lowercase
+  // To be used ONCE ONLY to migrate category name
+  lowerCaseCategoryNames: function(cb) {
+    function lowerUserModelCategories(cb, cb1) {
+      User.find(function(err, users) {
+        if (err) {
+          winston.log('error', 'Error changing case of category names in user documents: %s', err.toString());
+          cb1(cb);
+        } else {
+          users.forEach(function(user) {
+            // Change every field of portfolio.category
+            for (var i = 0; i < user.portfolio.length; i++) {
+              user.portfolio[i].category = user.portfolio[i].category.toLowerCase();
+            };
+
+            // Change every field of catgories.name
+            for (var i = 0; i < user.categories.length; i++) {
+              user.categories[i].name = user.categories[i].name.toLowerCase();
+            };
+          });
+          routeUtils.saveAll(users, function(errs) {
+            if (errs.length > 0) {
+              winston.log('error', 'Error converting category names to lowercase: %s', errs);
+              cb1(cb);
+            } else {
+              winston.log('info', 'Successfully converted user category names to lowercase.');
+              cb1(cb);
+            }
+          });
+        }
+      });
+    };
+
+    function lowerCategoryModelNames(cb, cb1) {
+      Category.find(function(err, categories) {
+        if (err) {
+          winston.log('error', 'Error changing case of category names in category documents: %s', err.toString());
+          cb1(cb);
+        } else {
+          categories.forEach(function(category) {
+            // Change category.name
+            category.name = category.name.toLowerCase();
+          });
+          routeUtils.saveAll(categories, function(errs) {
+            if (errs.length > 0) {
+              winston.log('error', 'Error converting category names to lowercase: %s', errs);
+              cb1(cb);
+            } else {
+              winston.log('info', 'Successfully converted category model names to lowercase.');
+              cb1(cb);
+            }
+          });
+        }
+      });
+    };
+
+    function lowerTransactionModelCategoryNames(cb) {
+      Transaction.find(function(err, transactions) {
+        if (err) {
+          winston.log('error', 'Error changing case of category names in transaction documents: %s', err.toString());
+          cb();
+        } else {
+          transactions.forEach(function(transaction) {
+            // Change transaction.category
+            transaction.category = transaction.category.toLowerCase();
+          });
+          routeUtils.saveAll(transactions, function(errs) {
+            if (errs.length > 0) {
+              winston.log('error', 'Error converting category names to lowercase: %s', errs);
+              cb();
+            } else {
+              winston.log('info', 'Successfully converted transaction model documents to lowercase.');
+              cb();
+            }
+          });
+        }
+      });
+    };
+
+    lowerUserModelCategories(cb, lowerCategoryModelNames(lowerTransactionModelCategoryNames(cb), cb), cb);
   },
 
   // Divide all user percentages by 100
