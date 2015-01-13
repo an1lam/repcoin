@@ -2,6 +2,7 @@
 
 require('newrelic');
 var bodyParser = require('body-parser');
+var cookieSession = require('cookie-session');
 var express = require('express');
 var mongoose = require('mongoose');
 var nodemailer = require('nodemailer');
@@ -46,10 +47,8 @@ winston.log('info', 'Serving static files from %s', __dirname + '/public');
 app.set('views', STATIC_PATH);
 app.engine('.html', require('jade').__express);
 
-app.use(session({
-  secret: 'ubermensch',
-  resave: true,
-  saveUninitialized: true
+app.use(cookieSession({
+  keys: ['ubermensch1', 'ubermensch2'],
 }));
 
 app.use(passport.initialize());
