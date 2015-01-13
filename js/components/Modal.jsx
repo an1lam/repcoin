@@ -113,18 +113,16 @@ var Modal = React.createClass({
 
   handleSubmit: function(event) {
     event.preventDefault();
+    var amount = Number(this.refs.amount.getDOMNode().value);
     var choice = this.refs.choice.getDOMNode().value;
     var anonymous = this.refs.anonymous.getDOMNode().checked;
-    var amount = Number(this.refs.amount.getDOMNode().value);
 
     // Make sure a valid number was entered
-    if (isNaN(amount)) {
-      this.setState({ error: 'Amount must be a valid number'});
+    if (isNaN(amount) || amount % 1 !== 0) {
+      this.setState({ error: 'Amount must be a valid integer'});
       return;
     }
 
-    // Round the number to the nearest tenth
-    amount = Math.round(amount* 10) / 10;
     // Make sure the amoutn is not 0
     if (amount === 0) {
       this.setState({ error: 'Investment amount must be at least 1 rep.' });
@@ -175,7 +173,7 @@ var Modal = React.createClass({
         <td>{count}</td>
         <td>{investmentList[i].category}</td>
         <td>{investmentList[i].investment.amount}</td>
-        <td>{investmentList[i].investment.dividend}</td>
+        <td>{investmentList[i].investment.valuation}</td>
       </tr>);
       count++;
     }
@@ -270,7 +268,7 @@ var Modal = React.createClass({
                 <th>No.</th>
                 <th>Category</th>
                 <th>Amount</th>
-                <th>Dividend</th>
+                <th>Valuation</th>
               </tr>
             </thead>
             <tbody>

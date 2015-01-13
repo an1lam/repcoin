@@ -14,20 +14,6 @@ describe('Utils: ', function() {
     });
   });
 
-  describe('getTotalDividends: ', function() {
-    it('adds up the dividend from each investment', function() {
-      var portfolioEntry = { investments: [ { dividend: 1 }, { dividend: 3 } ] };
-      var totalDividends = utils.getTotalDividends(portfolioEntry);
-      expect(totalDividends).toEqual(4);
-    });
-
-    it('returns 0 if the entry has no investments', function() {
-      var portfolioEntry = {};
-      var totalDividends = utils.getTotalDividends(portfolioEntry);
-      expect(totalDividends).toEqual(0);
-    });
-  });
-
   describe('isExpert: ', function() {
     var user = { categories: [{ name: 'Coding' }] };
     it('returns true if the user is an expert', function() {
@@ -145,8 +131,8 @@ describe('Utils: ', function() {
     });
 
     var investments = [
-      { userId: '123', amount: 5 },
-      { userId: '456', amount: 6 }
+      { userId: '123', valuation: 10 },
+      { userId: '456', valuation: 8 }
     ];
     var users = [{ portfolio: [{ category: 'Coding', reps: 0, investments: investments }] }];
     it('properly reimburses investors', function() {
@@ -158,7 +144,7 @@ describe('Utils: ', function() {
       });
       var investors = [ { name: 'Foo', id: 'bar' }];
 
-      var expectedUsers = [{ portfolio: [{ category: 'Coding', reps: 5, investments: [investments[1]] }] }];
+      var expectedUsers = [{ portfolio: [{ category: 'Coding', reps: 10, investments: [investments[1]] }] }];
       utils.reimburseInvestors(investors, 'Coding', '123', cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
@@ -213,12 +199,12 @@ describe('Utils: ', function() {
   describe('reimburseInvestor: ', function() {
     it('properly reimburses investments pertaining to this user and category', function() {
       var investments = [
-        { userId: '123', amount: 5 },
-        { userId: '456', amount: 6 }
+        { userId: '123', valuation: 10 },
+        { userId: '456', valuation: 8 }
       ];
       var investor = { portfolio: [{ category: 'Coding', reps: 0, investments: investments }] };
       var result = utils.reimburseInvestor(investor, 'Coding', '123');
-      var expected = { portfolio: [{ category: 'Coding', reps: 5, investments: [investments[1]] }] };
+      var expected = { portfolio: [{ category: 'Coding', reps: 10, investments: [investments[1]] }] };
       expect(result).toEqual(expected);
     });
   });
@@ -301,41 +287,54 @@ describe('Utils: ', function() {
   });
 
   describe('validateTransactionInputs: ', function() {
-    var req;
-    beforeEach(function() {
-      req = { body : {
+    it('returns true if inputs are correct', function() {
+      var req = { body : {
         from      : { id: '1', name: 'foo' },
         to        : { id: '2', name: 'bar' },
         amount    : 10,
         category  : 'foo'
       }};
-    });
 
-    it('returns true if inputs are correct', function() {
       var result = utils.validateTransactionInputs(req);
       expect(result).toEqual(true);
     });
 
     it('returns false is amount is 0', function() {
-      req.body.amount = 0;
+      var req = { body : {
+        from      : { id: '1', name: 'foo' },
+        to        : { id: '2', name: 'bar' },
+        amount    : 0,
+        category  : 'foo'
+      }};
+
       var result = utils.validateTransactionInputs(req);
       expect(result).toEqual(false);
     });
 
-    it('returns true if amount is a decimal', function() {
-      req.body.amount = 10.1;
-      var result = utils.validateTransactionInputs(req);
-      expect(result).toEqual(true);
-    });
+    it('returns false if amount is incorrect', function() {
+      var req = { body : {
+        from      : { id: '1', name: 'foo' },
+        to        : { id: '2', name: 'bar' },
+        amount    : 10.1,
+        category  : 'foo'
+      }};
 
-    it('returns false is amount is not a number', function() {
+      var result = utils.validateTransactionInputs(req);
+      expect(result).toEqual(false);
+
       req.body.amount = 'foo';
       var result = utils.validateTransactionInputs(req);
       expect(result).toEqual(false);
     });
 
     it('returns false if no id is supplied for a revoke', function() {
-      req.body.amount = -1;
+      var req = { body : {
+        from      : { id: '1', name: 'foo' },
+        to        : { id: '2', name: 'bar' },
+        amount    : -1,
+        category  : 'foo'
+      }};
+
       var result = utils.validateTransactionInputs(req);
       expect(result).toEqual(false);
     });
@@ -409,10 +408,10 @@ describe('Utils: ', function() {
     var category = 'Coding';
     var investorsPromise = {
       investors: [
-        { _id: '1', portfolio: [ { category: category, percentile: 50, investments: [{ dividend: 1 }] }] },
-        { _id: '2', portfolio: [ { category: category, percentile: 50, investments: [{ dividend: 1 }] }] },
-        { _id: '3', portfolio: [ { category: category, percentile: 50, investments: [{ dividend: 1 }] }] },
-        { _id: '4', portfolio: [ { category: category, percentile: 50, investments: [{ dividend: 1 }] }] },
+        { _id: '1', portfolio: [ { category: category, roi: {length: 1, value: 9}, percentile: 50 }] },
+        { _id: '2', portfolio: [ { category: category, roi: {length: 1, value: 5}, percentile: 50 }] },
+        { _id: '3', portfolio: [ { category: category, roi: {length: 1, value: 3}, percentile: 50 }] },
+        { _id: '4', portfolio: [ { category: category, roi: {length: 1, value: 4}, percentile: 50 }] },
       ],
 
       then: function(cb) {
@@ -420,8 +419,8 @@ describe('Utils: ', function() {
       }
     };
 
-    it('should call updateDividends when parameters are provided', function() {
-      spyOn(utils, 'updateDividends')
+    it('should call updateInvestorPercentagesAndValuations when parameters are provided', function() {
+      spyOn(utils, 'updateInvestorPercentagesAndValuations')
         .andCallFake(function(investors, toUserCategoryTotal, category, username) {
           return investors;
         });
@@ -429,17 +428,17 @@ describe('Utils: ', function() {
       spyOn(utils, 'saveAll').andCallFake(function(investors, cb) {
         return cb([]);
       });
-      spyOn(utils, 'updateInvestorPercentiles').andCallFake(function(investors, category, cb) {
+      spyOn(utils, 'getInvestorPercentiles').andCallFake(function(investors, category, cb) {
         return cb(null);
       });
       utils.updateInvestors(category, cb, 100, 'Coding', 'Matt');
-      expect(utils.updateDividends.callCount).toEqual(1);
+      expect(utils.updateInvestorPercentagesAndValuations.callCount).toEqual(1);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
     });
 
     it('should correctly update percentiles for some investors', function() {
-      spyOn(utils, 'updateDividends')
+      spyOn(utils, 'updateInvestorPercentagesAndValuations')
         .andCallFake(function(investors, toUserCategoryTotal, category, username) {
           return investors;
         });
@@ -447,7 +446,7 @@ describe('Utils: ', function() {
       spyOn(utils, 'saveAll').andCallFake(function(investors, cb) {
         return cb([]);
       });
-      spyOn(utils, 'updateInvestorPercentiles').andCallFake(function(investors, category, cb) {
+      spyOn(utils, 'getInvestorPercentiles').andCallFake(function(investors, category, cb) {
         return cb(null);
       });
       utils.updateInvestors(category, cb);
@@ -455,8 +454,8 @@ describe('Utils: ', function() {
       expect(cb).toHaveBeenCalledWith(null);
     });
 
-    it('should correctly handle error from updateInvestorPercentiles', function() {
-      spyOn(utils, 'updateDividends')
+    it('should correctly handle error from getInvestorPercentiles', function() {
+      spyOn(utils, 'updateInvestorPercentagesAndValuations')
         .andCallFake(function(investors, toUserCategoryTotal, category, username) {
           return investors;
         });
@@ -464,7 +463,7 @@ describe('Utils: ', function() {
       spyOn(utils, 'saveAll').andCallFake(function(investors, cb) {
         return cb([]);
       });
-      spyOn(utils, 'updateInvestorPercentiles').andCallFake(function(investors, category, cb) {
+      spyOn(utils, 'getInvestorPercentiles').andCallFake(function(investors, category, cb) {
         return cb('getInvestorPercentile error');
       });
       utils.updateInvestors(category, cb);
@@ -473,7 +472,7 @@ describe('Utils: ', function() {
     });
 
     it('should correctly handle error from saveAll()', function() {
-      spyOn(utils, 'updateDividends')
+      spyOn(utils, 'updateInvestorPercentagesAndValuations')
         .andCallFake(function(investors, toUserCategoryTotal, category, username) {
           return investors;
         });
@@ -482,7 +481,7 @@ describe('Utils: ', function() {
       spyOn(utils, 'saveAll').andCallFake(function(investors, cb) {
         return cb(errs);
       });
-      spyOn(utils, 'updateInvestorPercentiles').andCallFake(function(investors, category, cb) {
+      spyOn(utils, 'getInvestorPercentiles').andCallFake(function(investors, category, cb) {
         return cb(null);
       });
       utils.updateInvestors(category, cb);
@@ -491,24 +490,24 @@ describe('Utils: ', function() {
     });
   });
 
-  describe('dividendsComparator: ', function() {
-    it('should correctly sort users by dividends in increasing order', function() {
+  describe('roiComparator: ', function() {
+    it('should correctly sort users by ROI in increasing order', function() {
       var users = [
-        { _id: '1', portfolio: [ { category: 'Coding', investments: [{ dividend: 3 }] }] },
-        { _id: '2', portfolio: [ { category: 'Coding', investments: [{ dividend: 5 }] }] },
-        { _id: '3', portfolio: [ { category: 'Coding', investments: [{ dividend: 3 }] }] },
-        { _id: '4', portfolio: [ { category: 'Coding', investments: [{ dividend: 1 }] }] },
+        { _id: '1', portfolio: [{ category: 'Coding', roi: { value: 3 }}] },
+        { _id: '2', portfolio: [{ category: 'Coding', roi: { value: 5 }}] },
+        { _id: '3', portfolio: [{ category: 'Coding', roi: { value: 3 }}] },
+        { _id: '4', portfolio: [{ category: 'Coding', roi: { value: 1 }}] },
       ];
 
       var expected = [
-        { _id: '4', portfolio: [ { category: 'Coding', investments: [{ dividend: 1 }] }] },
-        { _id: '1', portfolio: [ { category: 'Coding', investments: [{ dividend: 3 }] }] },
-        { _id: '3', portfolio: [ { category: 'Coding', investments: [{ dividend: 3 }] }] },
-        { _id: '2', portfolio: [ { category: 'Coding', investments: [{ dividend: 5 }] }] },
+        { _id: '4', portfolio: [{ category: 'Coding', roi: { value: 1 }}] },
+        { _id: '1', portfolio: [{ category: 'Coding', roi: { value: 3 }}] },
+        { _id: '3', portfolio: [{ category: 'Coding', roi: { value: 3 }}] },
+        { _id: '2', portfolio: [{ category: 'Coding', roi: { value: 5 }}] },
       ];
 
-      var dividendsComparator = utils.getDividendsComparator('Coding');
-      var results = users.sort(dividendsComparator);
+      var roiComparator = utils.getROIComparator('Coding');
+      var results = users.sort(roiComparator);
       expect(results.length).toEqual(4);
       expect(results).toEqual(expected);
     });
@@ -581,36 +580,54 @@ describe('Utils: ', function() {
     });
   });
 
-  describe('updateInvestorPercentiles: ', function() {
+  describe('updateROI: ', function() {
+    it('should correctly update roi when it starts as 0', function() {
+      var oldROI = { length: 0, value: 0 };
+      var roiFromRevoke = 5;
+      var roi = utils.updateROI(oldROI, roiFromRevoke);
+      expect(roi).toEqual({ length: 1, value: 5 });
+    });
+
+    it('should correctly update roi when it has an arbitrary value', function() {
+      var oldROI = { length: 4, value: 2.5 };
+      var roiFromRevoke = 1.2;
+      var roi = utils.updateROI(oldROI, roiFromRevoke);
+      expect(roi).toEqual({ length: 5, value: 2.24 });
+    });
+
+  });
+
+  describe('getInvestorPercentiles: ', function() {
     var investors, category, cb;
     beforeEach(function() {
       cb = jasmine.createSpy();
     });
 
-    it('should give all investors a percentile of 50 if dividends are the same', function() {
+    it('should give all investors a percentile of 50 if ROIs are the same', function() {
       category = 'Coding';
       investors = [
-        { _id: '1', portfolio: [ { category: category, investments: [{ dividend: 1 }] }] },
-        { _id: '2', portfolio: [ { category: category, investments: [{ dividend: 1 }] }] },
+        { _id: '1', portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+        { _id: '2', portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
       ];
 
-      utils.updateInvestorPercentiles(investors, category, cb);
+      utils.getInvestorPercentiles(investors, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
       expect(investors[0].portfolio[0].percentile).toEqual(50);
       expect(investors[1].portfolio[0].percentile).toEqual(50);
     });
 
-    it('should give all investors correct percentiles if dividends are different', function() {
+    it('should give all investors correct percentiles if ROIs are different', function() {
+
       category = 'Coding';
       investors = [
-        { _id: '1', portfolio: [ { category: category, investments: [{ dividend: 1 }] }] },
-        { _id: '2', portfolio: [ { category: category, investments: [{ dividend: 2 }] }] },
-        { _id: '3', portfolio: [ { category: category, investments: [{ dividend: 3 }] }] },
-        { _id: '4', portfolio: [ { category: category, investments: [{ dividend: 4 }] }] },
+        { _id: '1', portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+        { _id: '2', portfolio: [ { category: category, roi: { value: 13, length: 2 } }] },
+        { _id: '3', portfolio: [ { category: category, roi: { value: 19, length: 2 } }] },
+        { _id: '4', portfolio: [ { category: category, roi: { value: 20, length: 2 } }] },
       ];
 
-      utils.updateInvestorPercentiles(investors, category, cb);
+      utils.getInvestorPercentiles(investors, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
       expect(investors[0].portfolio[0].percentile).toEqual(12);
@@ -621,13 +638,15 @@ describe('Utils: ', function() {
 
     it('should give a single investor a percentile of 50', function() {
       category = 'Coding';
-       var investments = [ { amount: 10 } ];
-
-      investors = [
-        { _id: '1', portfolio: [ { category: category, investments: [] }] },
+       var investments = [
+        { valuation: 40, amount: 10 },
       ];
 
-      utils.updateInvestorPercentiles(investors, category, cb);
+      investors = [
+        { _id: '1', portfolio: [ { category: category, roi: { value: 10, length: 2 } }] },
+      ];
+
+      utils.getInvestorPercentiles(investors, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
       expect(investors[0].portfolio[0].percentile).toEqual(50);
@@ -636,9 +655,9 @@ describe('Utils: ', function() {
     it('should return an error if the first investor does not have the category', function() {
       category = 'Coding';
       investors = [
-        { _id: '1', portfolio: [ { category: 'A', investments: [] }], username: 'Matt Ritter' },
+        { _id: '1', portfolio: [ { category: 'A', roi: { value: 10, length: 2 } }], username: 'Matt Ritter' },
       ];
-      utils.updateInvestorPercentiles(investors, category, cb);
+      utils.getInvestorPercentiles(investors, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith('Could not find portfolio index for user Matt Ritter');
     });
@@ -646,11 +665,11 @@ describe('Utils: ', function() {
     it('should return an error if any investor does not have the category', function() {
       category = 'Coding';
       investors = [
-        { _id: '1', username: 'Matt Ritter', portfolio: [ { category: category, investments: [] }], },
-        { _id: '2', username: 'Bob', portfolio: [ { category: 'A', investments: [] }] },
+        { _id: '1', username: 'Matt Ritter', portfolio: [ { category: category, roi: { value: 10, length: 2 } }], },
+        { _id: '2', username: 'Bob', portfolio: [ { category: 'A', roi: { value: 10, length: 2 } }] },
       ];
 
-      utils.updateInvestorPercentiles(investors, category, cb);
+      utils.getInvestorPercentiles(investors, category, cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith('Could not find portfolio index for user Bob');
     });
@@ -771,42 +790,44 @@ describe('Utils: ', function() {
       toUser = { _id: '123', username: 'Matt' };
 
       var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal);
-      var newInvestment = { user: 'Matt', userId: '123', amount: 10, percentage: 0.50, dividend: 1 };
+      var newInvestment = { user: 'Matt', userId: '123', amount: 10, valuation: 10, percentage: 50 };
       expect(p[0].investments).toEqual([newInvestment]);
       expect(p[0].reps).toEqual(90);
     });
 
-    it('should update the existing investment and dividend if revoke', function() {
-      var existingInvestment = { _id: '1', user: 'Matt', userId: '123', amount: 10, percentage: 0.1, dividend: 10 };
-      existingPortfolio = [{ reps: 100, category: 'Coding', investments: [existingInvestment] }];
+    it('should update the existing investment and roi if revoke', function() {
+      var existingInvestment = { _id: '1', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 };
+      existingPortfolio = [{ reps: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [existingInvestment] }];
       amount = -2;
       toUserCategoryTotal = 998;
-      toUser = { id: '123', name: 'Matt' };
+      toUser = { id: "123", name: "Matt" };
+      var expectedROI =  { length: 1, value: 18 };
       var id = '1';
       var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal, id);
 
       expect(p[0].investments.length).toEqual(1);
       expect(p[0].investments[0].amount).toEqual(8);
-      expect(p[0].investments[0].percentage).toEqual(0.08);
-      expect(p[0].investments[0].dividend).toEqual(7.98);
-      expect(p[0].reps).toEqual(102);
+      expect(p[0].investments[0].percentage).toEqual(8);
+      expect(p[0].investments[0].valuation).toEqual(80);
+      expect(p[0].roi).toEqual(expectedROI);
+      expect(p[0].reps).toEqual(120);
     });
 
     it('should remove the investment if it is entirely revoked', function() {
-      var investment = { _id: '1', user: "Matt", userId: "123", amount: 10, dividend: 1, percentage: 10 };
-      var investment2 = { _id: '2', user: "Bob", userId: "456", amount: 10, dividend: 1, percentage: 10 };
-      var investment3 = { _id: '3', user: "Matt", userId: "123", amount: 10, dividend: 1, percentage: 10 };
+      var investment = { _id: '1', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 };
+      var investment2 = { _id: '2', user: "Bob", userId: "456", amount: 10, valuation: 100, percentage: 10 };
+      var investment3 = { _id: '3', user: "Matt", userId: "123", amount: 10, valuation: 100, percentage: 10 };
       existingPortfolio = [{ reps: 100, category: "Coding", roi: { value: 0, length: 0 }, investments: [investment, investment2, investment3] }];
       amount = -10;
       toUserCategoryTotal = 990;
-      toUser = { id: '123', name: 'Matt' };
+      toUser = { id: "123", name: "Matt" };
       var id = '1';
       spyOn(utils, 'removeInvestorFromExpertOnRevoke').andReturn();
 
       var p = utils.updateInvestorPortfolio(existingPortfolio, category, toUser, amount, toUserCategoryTotal, id);
       expect(p[0].investments.length).toEqual(2);
       expect(p[0].investments[0]._id).toEqual('2');
-      expect(p[0].reps).toEqual(110);
+      expect(p[0].reps).toEqual(200);
     });
   });
 
@@ -881,16 +902,16 @@ describe('Utils: ', function() {
     });
   });
 
-  describe('updateDividends', function() {
-    it('should correctly update dividends', function() {
+  describe('updateInvestorPercentagesAndValuations', function() {
+    it('should correctly update percentages and valuations', function() {
       var category = 'Coding';
       var expertCategoryTotal = 100;
       var username = 'Matt';
 
-      var investment1 = { user: 'Matt', userId: '123', amount: 8, percentage: 0.20, dividend: 1 };
-      var investment2 = { user: 'Matt', userId: '123', amount: 5, percentage: 0.15, dividend: 1 };
-      var investment3 = { user: 'Matt', userId: '123', amount: 20, percentage: 0.10, dividend: 1 };
-      var investment4 = { user: 'Bob', userId: '456', amount: 10, percentage: 0.14, dividend: 1 };
+      var investment1 = { user: 'Matt', userId: '123', amount: 8, valuation: 14, percentage: 20 };
+      var investment2 = { user: 'Matt', userId: '123', amount: 5, valuation: 12, percentage: 15 };
+      var investment3 = { user: 'Matt', userId: '123', amount: 20, valuation: 11, percentage: 10 };
+      var investment4 = { user: 'Bob', userId: '456', amount: 10, valuation: 10, percentage: 14 };
 
       var investors = [
         { _id: '1', portfolio: [ { category: category, investments: [investment1] }] },
@@ -899,10 +920,10 @@ describe('Utils: ', function() {
         { _id: '4', portfolio: [ { category: category, investments: [investment4] }] },
       ];
 
-      var result1 = { user: 'Matt', userId: '123', amount: 8, percentage: 0.20, dividend: 2 };
-      var result2 = { user: 'Matt', userId: '123', amount: 5, percentage: 0.15, dividend: 1.5 };
-      var result3 = { user: 'Matt', userId: '123', amount: 20, percentage: 0.10, dividend: 1 };
-      var result4 = { user: 'Bob', userId: '456', amount: 10, percentage: 0.14, dividend: 1 };
+      var result1 = { user: 'Matt', userId: '123', amount: 8, valuation: 8, percentage: 8 };
+      var result2 = { user: 'Matt', userId: '123', amount: 5, valuation: 5, percentage: 5 };
+      var result3 = { user: 'Matt', userId: '123', amount: 20, valuation: 20, percentage: 20 };
+      var result4 = { user: 'Bob', userId: '456', amount: 10, valuation: 10, percentage: 14 };
 
       var expectedInvestors = [
         { _id: '1', portfolio: [ { category: category, investments: [result1] }] },
@@ -911,10 +932,8 @@ describe('Utils: ', function() {
         { _id: '4', portfolio: [ { category: category, investments: [result4] }] },
       ];
 
-      var results = utils.updateDividends(investors, expertCategoryTotal, category, username);
-      for (var i = 0; i < results.length; i++) {
-        expect(results[i]).toEqual(expectedInvestors[i]);
-      }
+      var results = utils.updateInvestorPercentagesAndValuations(investors, expertCategoryTotal, category, username);
+      expect(results).toEqual(expectedInvestors);
     });
   });
 
