@@ -1,7 +1,6 @@
-"use strict";
+'use strict';
 
 require('newrelic');
-var agenda = require('agenda');
 var bodyParser = require('body-parser');
 var express = require('express');
 var mongoose = require('mongoose');
@@ -120,8 +119,4 @@ if (!module.parent) {
   app.listen(port); // startup our app at http://localhost:8080
 }
 
-// Config scheduled jobs
-var Agenda = require('agenda');
-var agenda = new Agenda({db: {address: mongoUrl}});
-require('./api/jobs/user.js')(agenda);
 module.exports = app;

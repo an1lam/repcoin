@@ -1,7 +1,7 @@
 var winston = require('winston');
 var Category = require('../api/models/Category.js');
 var User = require('../api/models/User.js');
-var utils = require('../api/jobs/utils.js');
+var utils = require('../bin/utils.js');
 
 describe('Job utils: ', function() {
   beforeEach(function() {

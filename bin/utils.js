@@ -1,7 +1,7 @@
 'use strict';
 
-var Category = require('../models/Category.js');
-var User = require('../models/User.js');
+var Category = require('../api/models/Category.js');
+var User = require('../api/models/User.js');
 var winston = require('winston');
 
 var DIVIDEND_PERCENTAGE = 0.1;
