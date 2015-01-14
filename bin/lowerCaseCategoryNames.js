@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'production') {
 
 mongoose.connect(mongoURL);
 mongoose.connection.on('connected', function() {
-  utils.lowerCaseCategoryNames(function(errs) {
+  utils.makeCategoryNamesLowerCase(function(errs) {
     if (errs) {
       winston.log('info', 'Lower category names finished with errors.');
     }

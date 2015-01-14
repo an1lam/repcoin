@@ -136,8 +136,8 @@ var utils = {
 
   // Make all category names lowercase
   // To be used ONCE ONLY to migrate category name
-  lowerCaseCategoryNames: function(cb) {
-    function lowerUserModelCategories(cb, cb1) {
+  makeCategoryNamesLowerCase: function(cb) {
+    function lowerUserModelCategories(cb, cbParams) {
       User.find(function(err, users) {
         if (err) {
           winston.log('error', 'Error changing case of category names in user documents: %s', err.toString());
@@ -157,17 +157,16 @@ var utils = {
           routeUtils.saveAll(users, function(errs) {
             if (errs.length > 0) {
               winston.log('error', 'Error converting category names to lowercase: %s', errs);
-              cb1(cb);
             } else {
               winston.log('info', 'Successfully converted user category names to lowercase.');
-              cb1(cb);
             }
+            cb(cbParams[0], cbParams.slice(1, cbParams.length));
           });
         }
       });
     };
 
-    function lowerCategoryModelNames(cb, cb1) {
+    function lowerCategoryModelNames(cb, cbParams) {
       Category.find(function(err, categories) {
         if (err) {
           winston.log('error', 'Error changing case of category names in category documents: %s', err.toString());
@@ -180,15 +179,14 @@ var utils = {
           routeUtils.saveAll(categories, function(errs) {
             if (errs.length > 0) {
               winston.log('error', 'Error converting category names to lowercase: %s', errs);
-              cb1(cb);
             } else {
               winston.log('info', 'Successfully converted category model names to lowercase.');
-              cb1(cb);
             }
+            cb(cbParams[0], cbParams.slice(1, cbParams.length));
           });
         }
       });
-    };
+    }
 
     function lowerTransactionModelCategoryNames(cb) {
       Transaction.find(function(err, transactions) {
@@ -211,9 +209,9 @@ var utils = {
           });
         }
       });
-    };
+    }
 
-    lowerUserModelCategories(cb, lowerCategoryModelNames(lowerTransactionModelCategoryNames(cb), cb), cb);
+    lowerUserModelCategories(lowerCategoryModelNames, [lowerTransactionModelCategoryNames, cb]);
   },
 
   // Divide all user percentages by 100

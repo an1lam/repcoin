@@ -29,9 +29,7 @@ var CategoryInput = React.createClass({
 
   handleClick: function(event) {
     event.preventDefault();
-    var name = $(event.currentTarget).attr('href').toLowerCase();
-    debugger;
-    console.log(name);
+    var name = $(event.currentTarget).attr('href');
     if (this.props.expert) {
       this.setExpertCategory(name);
     } else {

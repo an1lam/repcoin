@@ -40,8 +40,9 @@ module.exports = function(router, isAuthenticated, acl) {
         winston.log('info', 'Invalid inputs to create category');
         return res.status(412).send('Invalid inputs');
       }
-      var name = req.body.name.toLowerCase();
-      var category = new Category({ name : name });
+
+      // Values will either be assigned defaults or undefined if nothing present
+      var category = new Category({ name : req.body.name });
 
       category.save( function(err) {
         if (err) {

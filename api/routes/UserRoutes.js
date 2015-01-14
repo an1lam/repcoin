@@ -183,7 +183,7 @@ module.exports = function(router, isAuthenticated, acl) {
   // Create the category if it does not exist
   router.route('/users/:user_id/addexpert/:category_name')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
-      var categoryName = req.params.category_name.toLowerCase();
+      var categoryName = req.params.category_name;
       winston.log('info', 'PUT /users/%s/addexpert/%s', req.params.user_id, categoryName);
 
       Category.findByName(categoryName).then(function(category) {
@@ -211,7 +211,7 @@ module.exports = function(router, isAuthenticated, acl) {
   // Create the category if it does not exist
   router.route('/users/:user_id/addinvestor/:category_name')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
-      var categoryName = req.params.category_name.toLowerCase();
+      var categoryName = req.params.category_name;
       winston.log('info', '/users/%s/addinvestor/%s', req.params.user_id, req.params.category_name);
 
       Category.findByName(categoryName).then(function(category) {

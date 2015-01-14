@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var utils = require('./utils.js');
 var winston = require('winston');
 
+
 // Set up the database url
 var db = require('../config/db');
 if (process.env.NODE_ENV === 'production') {
@@ -14,11 +15,12 @@ if (process.env.NODE_ENV === 'production') {
   var mongoURL = db.development_url;
 }
 
+
 mongoose.connect(mongoURL);
 mongoose.connection.on('connected', function() {
-  utils.incrementInvestorReps(function(errs) {
+  utils.makeCategoryNamesLowerCase(function(errs) {
     if (errs) {
-      winston.log('info', 'Increment investor reps finished with errors.');
+      winston.log('error', 'Update category names to lower case finished with errors.');
     }
     mongoose.connection.close();
     process.exit();
