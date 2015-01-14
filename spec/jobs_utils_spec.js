@@ -131,7 +131,7 @@ describe('Job utils: ', function() {
         categories: [
           {
             name: 'Coding',
-            reps: 20,
+            reps: 20.17,
             investors: [
               { id: '456' },
               { id: '789' },
@@ -179,7 +179,7 @@ describe('Job utils: ', function() {
       expect(users[2].portfolio[0].reps).toEqual(3);
     });
 
-    it('pays dividends and creates dividend field if not present', function() {
+    it('pays dividends and creates dividend field if not present, rounding to nearest hundredth', function() {
       spyOn(User, 'find').andCallFake(function(callback) {
         return callback(null, users);
       });
@@ -188,10 +188,10 @@ describe('Job utils: ', function() {
       });
 
       utils.payDividends(cb);
-      expect(users[1].portfolio[0].reps).toEqual(3);
-      expect(users[1].portfolio[0].investments[0].dividend).toEqual(2);
-      expect(users[2].portfolio[0].reps).toEqual(4.5);
-      expect(users[2].portfolio[0].investments[0].dividend).toEqual(1.5);
+      expect(users[1].portfolio[0].reps).toEqual(3.01);
+      expect(users[1].portfolio[0].investments[0].dividend).toEqual(2.01);
+      expect(users[2].portfolio[0].reps).toEqual(4.51);
+      expect(users[2].portfolio[0].investments[0].dividend).toEqual(1.51);
     });
   });
 
@@ -200,7 +200,7 @@ describe('Job utils: ', function() {
     beforeEach(function() {
       users = [
         { _id: '123', portfolio: [ { category: 'Coding', reps: 0 } ], save: jasmine.createSpy().andReturn() },
-        { _id: '456', portfolio: [ { category: 'Coding', reps: 3 } ], save: jasmine.createSpy().andReturn() },
+        { _id: '456', portfolio: [ { category: 'Coding', reps: 3.299 } ], save: jasmine.createSpy().andReturn() },
       ];
 
       categoryPromise = {
@@ -224,11 +224,11 @@ describe('Job utils: ', function() {
       expect(winston.log).toHaveBeenCalledWith('error',
         'Error incrementing investor reps: %s', 'Error');
       expect(users[0].portfolio[0].reps).toEqual(0);
-      expect(users[1].portfolio[0].reps).toEqual(3);
+      expect(users[1].portfolio[0].reps).toEqual(3.299);
       expect(categoryPromise.category.reps).toEqual(7);
     });
 
-    it('increments investor reps if they have none left and increments category reps', function() {
+    it('increments investor reps and category reps, rounding to nearest hundredth', function() {
       spyOn(User, 'find').andCallFake(function(callback) {
         return callback(null, users);
       });
@@ -238,7 +238,7 @@ describe('Job utils: ', function() {
 
       utils.incrementInvestorReps(cb);
       expect(users[0].portfolio[0].reps).toEqual(5);
-      expect(users[1].portfolio[0].reps).toEqual(3);
+      expect(users[1].portfolio[0].reps).toEqual(3.29);
       expect(categoryPromise.category.reps).toEqual(12);
     });
   });

@@ -8,6 +8,22 @@
   padding-bottom: 10px;
 }
 
+/* Home Page //////////////////// */
+.profileQuickView {
+  margin-left:20px;
+}
+
+.quick-view-image {
+  width:100px;
+  height:100px;
+  margin-left:80px;
+}
+
+.quickview-heading-text {
+  display:inline-block;
+}
+
+
 /* Feed Items ////////////////////////////////////// */
 .no-transactions-warning {
   margin-top:10px;
