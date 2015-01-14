@@ -18,10 +18,12 @@ var utils = {
       } else {
         users.forEach(function(user) {
           user.portfolio.forEach(function(entry) {
+            entry.reps = Math.floor(entry.reps * 100)/100;
             if (entry.reps === 0) {
               // Add reps to the category model
               var category = Category.findByName(entry.category).then(function(category) {
                 category.reps += 5;
+                category.reps = Math.floor(category.reps * 100)/100;
                 category.save(function(err) {
                   if (err) {
                     winston.log('error', 'Error saving category: %s', entry.category);
@@ -33,6 +35,7 @@ var utils = {
               });
               // Add reps to the user
               entry.reps += 5;
+              entry.reps = Math.floor(entry.reps * 100)/100;
             }
           });
         });
@@ -115,6 +118,7 @@ var utils = {
                   var dividend = Math.floor(investment.percentage * total * DIVIDEND_PERCENTAGE * 100)/100;
                   investment.dividend = dividend;
                   category.reps += dividend;
+                  category.reps = Math.floor(category.reps * 100)/100;
                 }
               }
             };

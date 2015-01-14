@@ -145,6 +145,19 @@ UserSchema.pre('validate', function(next) {
 UserSchema.pre('save', function(next) {
   var user = this;
 
+  // Round user reps to the nearest hundredth
+  if (user.categories) {
+    for (var i = 0; i < user.categories.length; i++) {
+      user.categories[i].reps = Math.floor(user.categories[i].reps * 100)/100;
+    }
+  }
+
+  if (user.portfolio) {
+    for (var i = 0; i < user.portfolio.length; i++) {
+      user.portfolio[i].reps = Math.floor(user.portfolio[i].reps * 100)/100;
+    }
+  }
+
   if (!user.password && user.facebookId) {
     return next();
   }
