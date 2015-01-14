@@ -322,10 +322,10 @@ describe('Utils: ', function() {
       expect(result).toEqual(false);
     });
 
-    it('returns true if amount is a decimal', function() {
-      req.body.amount = 10.1;
+    it('returns false if amount is past hundredths place', function() {
+      req.body.amount = 10.152;
       var result = utils.validateTransactionInputs(req);
-      expect(result).toEqual(true);
+      expect(result).toEqual(false);
     });
 
     it('returns false is amount is not a number', function() {

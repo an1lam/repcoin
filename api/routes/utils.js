@@ -332,6 +332,11 @@ var utils = {
       return false;
     }
 
+    // Check that the amount is not past the hundredths place
+    if (parseFloat((amount * 100).toPrecision(10)) % 1 !== 0) {
+      return false;
+    }
+
     // Check that there a revoke has an associated id
     if (amount < 0 && !req.body.id) {
       return false;
@@ -477,8 +482,8 @@ var utils = {
   // Update an investor making an investment for a given category,
   // Returns null if the investment is not possible
   updateInvestorPortfolio: function(portfolio, category, toUser, amount, toUserCategoryTotal, id, fromUserId) {
-    // Round the amount to the nearest tenth
-    amount = Math.round(amount * 10) / 10;
+    // Round the amount to the nearest hundredth
+    amount = Math.round(amount * 100) / 100;
 
     // Find the portfolio entry that should be updated
     var index = -1;
