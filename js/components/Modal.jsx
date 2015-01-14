@@ -46,7 +46,6 @@ var Modal = React.createClass({
     }
 
     // Make sure the investor has enough reps
-    var amount = parseInt(amount);
     if (portfolio[portIndex].reps < amount) {
       this.setState({error: 'You do not have enough reps!'});
       return;
@@ -61,7 +60,6 @@ var Modal = React.createClass({
   validateAndRevoke: function(number, amount, anonymous) {
     var investmentList = this.getInvestmentList();
     var number = parseInt(number);
-    var amount = parseInt(amount);
     var investment = investmentList[number-1].investment;
     var category = investmentList[number-1].category;
 
@@ -123,11 +121,11 @@ var Modal = React.createClass({
       return;
     }
 
-    // Round the number to the nearest tenth
-    amount = Math.round(amount* 10) / 10;
-    // Make sure the amoutn is not 0
+    // Round the number to the nearest hundredth
+    amount = Math.round(amount* 100) / 100;
+    // Make sure the amount is not 0
     if (amount === 0) {
-      this.setState({ error: 'Investment amount must be at least 1 rep.' });
+      this.setState({ error: 'Investment amount must be more than 0 reps.' });
       return;
     }
 
