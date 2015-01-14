@@ -6,7 +6,6 @@ var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
-var InvestmentButton = require('./InvestmentButton.jsx');
 var PortfolioTable = require('./PortfolioTable.jsx');
 var ProfileBox = require('./ProfileBox.jsx');
 var PubSub = require('pubsub-js');
@@ -69,7 +68,6 @@ var ProfilePage = React.createClass({
     var feed = '';
     var portfolio = '' ;
     var profileBox = '';
-    var investmentButton = '';
 
     if (this.state.user && this.state.currentUser) {
       var isSelf = this.state.currentUser._id === this.state.user._id;
@@ -78,10 +76,6 @@ var ProfilePage = React.createClass({
       feed = <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} isSelf={isSelf}/>;
       profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
       portfolio = <PortfolioTable user={this.state.user} currentUser={this.state.currentUser}/>;
-
-      if (!isSelf) {
-        investmentButton = <InvestmentButton user={this.state.user} currentUser={this.state.currentUser} />;
-      }
     }
 
     return (
@@ -99,7 +93,6 @@ var ProfilePage = React.createClass({
               {portfolio}
             </div>
             <div className="col-md-7">
-              {investmentButton}
               {feed}
             </div>
           </div>
