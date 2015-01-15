@@ -19,7 +19,7 @@ var InvestmentButton = React.createClass({
 
     return (
       <div className="InvestmentButton">
-        <button onClick={this.handleShowModal} className="btn btn-default">Invest</button>
+        <button onClick={this.handleShowModal} className="btn btn-primary btn-lg">Invest in {this.props.user.username}</button>
         {modal}
       </div>
     );

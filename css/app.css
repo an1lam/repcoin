@@ -556,6 +556,12 @@ input.cropit-image-zoom-input {
   margin-left:20px;
 }
 
+.searchBarImg {
+  width:40px;
+  height:40px;
+  margin-right:10px;
+}
+
 .search-text {
   font-size:26px;
   font-style: italic;
@@ -576,6 +582,14 @@ input.cropit-image-zoom-input {
 .searchPageUser .superScore {
   font-size:26px;
   display:inline-block;
+}
+
+.category-search-item {
+  background-color: #ADD8E6;
+}
+
+.user-search-item {
+  background-color: #FFF;
 }
 
 textarea {

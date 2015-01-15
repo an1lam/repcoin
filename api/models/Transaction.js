@@ -16,6 +16,10 @@ var privateFilter = {
   "timeStamp": 1
 };
 
+function toLower(w) {
+  return w.toLowerCase();
+}
+
 var TransactionSchema = new Schema({
   to : {
     name : { type: String, required: true },
@@ -27,7 +31,7 @@ var TransactionSchema = new Schema({
     id : { type: Schema.Types.ObjectId, required: true },
   },
   amount : { type: Number, required: true },
-  category : { type: String, required: true },
+  category : { type: String, required: true, set: toLower },
   timeStamp : { type: Date, default: Date.now, required: true },
 });
 
@@ -62,7 +66,7 @@ TransactionSchema.statics.findByIdPublic = function(id) {
 TransactionSchema.statics.findByUserIdToPublic = function(userId) {
   userId = mongoose.Types.ObjectId(userId);
   var to = { "to.id" : userId };
-  return this.findPublic(to)
+  return this.findPublic(to);
 };
 
 // Get all public transactions involving a given user

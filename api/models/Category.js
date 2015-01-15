@@ -3,8 +3,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+function toLower(w) {
+  return w.toLowerCase();
+}
+
 var CategorySchema = new Schema({
-  name          : { type: String, required: true, unique: true },
+  name          : { type: String, required: true, unique: true, set: toLower },
   reps          : { type: Number, default: 0, required: true },
   experts       : { type: Number, required: true, default: 0 },
   investors     : { type: Number, required: true, default: 0 },

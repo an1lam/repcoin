@@ -69,7 +69,7 @@ var CategorySearchDisplayTable = React.createClass({
             i += 1;
             return <li key={datum._id} className="list-group-item">
               <a href={datum.name} onClick={this.props.handleClick} onKeyDown={this.handleKeyDown} className={name}>
-                <SearchItem name={datum.name} index={i-1}/>
+                <SearchItem data={datum} index={i-1}/>
               </a>
               </li>;
           }.bind(this))}

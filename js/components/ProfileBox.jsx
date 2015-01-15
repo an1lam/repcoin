@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var AboutBox = require('./AboutBox.jsx');
 var auth = require('../auth.jsx');
+var InvestmentButton = require('./InvestmentButton.jsx');
 var LinksBox = require('./LinksBox.jsx');
 var PictureBox = require('./PictureBox.jsx');
 var React = require('react');
@@ -10,6 +11,10 @@ var React = require('react');
 var ProfileBox = React.createClass({
 
   render: function() {
+    var investmentButton = '';
+    if (this.props.currentUser._id !== this.props.user._id) {
+      investmentButton = <InvestmentButton user={this.props.user} currentUser={this.props.currentUser} />;
+    }
     return (
       <div className="profileBox">
         <div className="col-md-2">
@@ -21,6 +26,7 @@ var ProfileBox = React.createClass({
           </div>
           <div className="row">
             <AboutBox user={this.props.user} currentUser={this.props.currentUser}/>
+            {investmentButton}
           </div>
         </div>
         <div className="col-md-7">
