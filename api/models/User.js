@@ -23,6 +23,10 @@ var passwordValidator = [
   })
 ];
 
+function toLower(w) {
+  return w.toLowerCase();
+}
+
 var UserSchema = new Schema({
   facebookId: { type: String, index: { unique: true, sparse: true } },
   firstname: {type: String, required: true, trim: true },
@@ -86,7 +90,7 @@ var UserSchema = new Schema({
   categories: [{
 
     // The name of the category
-    name: {type: String, required: true },
+    name: {type: String, required: true, set: toLower },
 
     // The id of the category
     id: {type: Schema.Types.ObjectId, required: true },

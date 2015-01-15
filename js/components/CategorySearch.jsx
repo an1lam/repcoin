@@ -30,7 +30,7 @@ var CategorySearch = React.createClass({
 
   handleSubmit: function(event) {
     event.preventDefault();
-    var categoryName = this.props.query;
+    var categoryName = this.props.query.toLowerCase();
     if (this.props.type === 'expert') {
       this.props.setExpertCategory(categoryName);
     } else {

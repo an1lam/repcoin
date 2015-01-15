@@ -1,8 +1,10 @@
 var winston = require('winston');
-var Category = require('../api/models/Category.js');
 var routeUtils = require('../api/routes/utils.js');
-var User = require('../api/models/User.js');
 var utils = require('../bin/utils.js');
+
+var Category = require('../api/models/Category.js');
+var Transaction = require('../api/models/Transaction.js');
+var User = require('../api/models/User.js');
 
 describe('Job utils: ', function() {
   var cb;
@@ -284,6 +286,47 @@ describe('Job utils: ', function() {
         users[0].categories[0].percentile);
       expect(users[1].categories[0].previousPercentile).toEqual(
         users[1].categories[0].percentile);
+    });
+  });
+
+  describe('makeCategoryNamesLowerCase: ', function() {
+    var users;
+    beforeEach(function() {
+      users = [
+        {
+          _id: '123',
+          portfolio: [
+            { category: 'Foo' }
+          ],
+          categories: [
+            { name: 'Foo' }
+          ],
+          save: jasmine.createSpy().andReturn()
+        }
+      ];
+
+      transactions = [{category: 'Foo'}];
+      categories = [{name: 'Foo'}];
+    });
+
+    it('converts category names to lower case', function() {
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
+      });
+      spyOn(Transaction, 'find').andCallFake(function(callback) {
+        return callback(null, transactions);
+      });
+      spyOn(Category, 'find').andCallFake(function(callback) {
+        return callback(null, categories);
+      });
+      spyOn(routeUtils, 'saveAll').andCallFake(function(users, callback) {
+        return callback([]);
+      });
+      utils.makeCategoryNamesLowerCase(cb);
+      expect(users[0].portfolio[0].category).toEqual('foo');
+      expect(users[0].categories[0].name).toEqual('foo');
+      expect(transactions[0].category).toEqual('foo');
+      expect(categories[0].name).toEqual('foo');
     });
   });
 });
