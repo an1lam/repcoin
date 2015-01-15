@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var BecomeInvestorPrompt = require('./BecomeInvestorPrompt.jsx');
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
@@ -9,8 +10,10 @@ var Modal = React.createClass({
   mixins: [ModalMixin],
 
   getInitialState: function() {
-    return { give: true,
-             error: '' };
+    return {
+      give: true,
+      error: '',
+    };
   },
 
   // Validate a give
@@ -325,7 +328,9 @@ var Modal = React.createClass({
               <span><h3> {this.props.user.username} </h3></span>
             </div>
             {modalContent}
-            <div className="modal-footer"></div>
+            <div className="modal-footer investment-modal-footer">
+              <BecomeInvestorPrompt user={this.props.user} currentUser={this.props.currentUser}/>
+            </div>
           </div>
         </div>
       </div>

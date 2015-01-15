@@ -70,7 +70,7 @@ module.exports = function(router, isAuthenticated, acl) {
           winston.log('error', 'Error updating user: %s', err);
           return res.status(501).send(err);
         } else if (!user) {
-          winston.log('info', 'User with id %s is already an expert for category %s',
+          winston.log('info', 'User with id %s is already an investor for category %s',
             userId, category.name);
           return res.status(501).send('Already an investor');
         } else {
