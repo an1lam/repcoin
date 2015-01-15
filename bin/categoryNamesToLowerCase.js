@@ -8,10 +8,10 @@ var winston = require('winston');
 // Set up the database url
 var db = require('../config/db');
 if (process.env.NODE_ENV === 'production') {
-  winston.log('info', 'Starting increment investor reps in production environment');
+  winston.log('info', 'Starting make category names lower case in production environment');
   var mongoURL = db.production_url;
 } else {
-  winston.log('info', 'Starting increment investor reps in development environment');
+  winston.log('info', 'Starting make category names lower case in development environment');
   var mongoURL = db.development_url;
 }
 
