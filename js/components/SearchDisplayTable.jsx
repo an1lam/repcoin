@@ -63,7 +63,7 @@ var SearchDisplayTable = React.createClass({
             i += 1;
             if (datum.name) {
               return <li key={datum._id} className="list-group-item">
-                <Link onKeyDown={this.handleKeyDown} className={name} to="category" params={{category: datum.name}}><SearchItem data={datum} index={i-1}/></Link>
+                <Link onKeyDown={this.handleKeyDown} className={name} to="category" params={{category: datum.name}}><SearchItem type='category' data={datum} index={i-1}/></Link>
               </li>;
             } else {
               return <li key={datum._id} className="list-group-item">

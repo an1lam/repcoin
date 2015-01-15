@@ -9,6 +9,13 @@ var SearchItem = React.createClass({
     return { imgClass: null };
   },
 
+  getDefaultProps: function() {
+    return {
+      type: 'user',
+      data: {},
+    };
+  },
+
   componentDidMount: function() {
     this.setState({ imgClass: 'searchBarImg ' + this.props.data._id });
   },
@@ -20,21 +27,23 @@ var SearchItem = React.createClass({
   render: function() {
     var data = this.props.data;
     var img = '';
-    var imgUrl = ''
-    if (data.username) {
-      if (data.picture && data.picture.url) {
-        imgUrl = data.picture.url;
+    var imgUrl = DEFAULT_LINK;
+    var itemClass = this.props.type + '-search-item searchItem';
+    if (data) {
+      if (data.username) {
+        if (data.picture && data.picture.url) {
+          imgUrl = data.picture.url;
+        }
       } else {
-        imgUrl = DEFAULT_LINK;
+        imgUrl = CATEGORY_LINK;
       }
-    } else {
-      imgUrl = CATEGORY_LINK;
     }
 
     img = <img className={this.state.imgClass} src={imgUrl} onError={this.handleImgError}></img>;
+    console.log(data);
     var name = data.username ? data.username : data.name;
     return (
-      <div className="searchItem">
+      <div className={itemClass}>
         {img}
         {name}
       </div>
