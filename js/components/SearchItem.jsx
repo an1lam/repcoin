@@ -40,7 +40,7 @@ var SearchItem = React.createClass({
     }
 
     img = <img className={this.state.imgClass} src={imgUrl} onError={this.handleImgError}></img>;
-    console.log(data);
+
     var name = data.username ? data.username : data.name;
     return (
       <div className={itemClass}>
