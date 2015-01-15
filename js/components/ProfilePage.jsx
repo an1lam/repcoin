@@ -70,10 +70,10 @@ var ProfilePage = React.createClass({
     var profileBox = '';
 
     if (this.state.user && this.state.currentUser) {
-      var isSelf = this.state.currentUser._id === this.state.user._id;
+      var isSelf = this.state.currentUser._id === this.props.params.userId;
 
       categoriesTable = <CategoriesTable currentUser={this.state.currentUser} user={this.state.user} />;
-      feed = <Feed parent="ProfilePage" userId={this.state.user._id} filter={"all"} isSelf={isSelf}/>;
+      feed = <Feed parent="ProfilePage" userId={this.props.params.userId} filter={"all"} isSelf={isSelf}/>;
       profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
       portfolio = <PortfolioTable user={this.state.user} currentUser={this.state.currentUser}/>;
     }
