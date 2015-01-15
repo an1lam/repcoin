@@ -552,9 +552,14 @@ input.cropit-image-zoom-input {
 }
 
 /* Search Page ////////////////// */
-.no-results {
+.searchPageFilter {
+  margin-left:20px;
+}
+
+.search-text {
   font-size:26px;
   font-style: italic;
+  text-align:center;
 }
 
 .searchPageItem {

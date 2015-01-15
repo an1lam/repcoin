@@ -3,6 +3,8 @@
 var $ = require('jquery');
 var SearchDisplayTable = require('./SearchDisplayTable.jsx');
 var React = require('react');
+var Router = require('react-router');
+var Navigation = Router.Navigation;
 var SearchBar = require('./SearchBar.jsx');
 
 var InstantBox = React.createClass({
@@ -72,9 +74,15 @@ var InstantBox = React.createClass({
     return 0;
   },
 
+  handleBrowseClick: function(e) {
+    debugger;
+    this.transitionTo('search', { query: '' });
+  },
+
   render: function() {
     return (
       <div className="instantBox">
+        <a href="#" onClick={this.handleBrowseClick}>Browse</a>
         <SearchBar query={this.state.query} search={this.search} />
         <SearchDisplayTable data={this.state.filteredData} />
       </div>
