@@ -447,6 +447,20 @@ html, body {
 }
 
 /* Modal ///////////////////////// */
+.investment-modal-footer {
+  text-align:center;
+}
+
+.becomeInvestorPrompt {
+  margin-right:20px;
+  margin-left:20px;
+}
+
+.investor-prompt-btn {
+  margin-left:15px;
+  margin-right:15px;
+}
+
 .no-categories {
   margin: 10px 10px 10px 10px;
 }
