@@ -278,6 +278,7 @@ var Modal = React.createClass({
         );
       }
 
+      var amountPlaceholder = this.state.give ? 'Amount to give' : 'Amount to revoke';
       modalContent =
         <form onSubmit={this.handleSubmit} className="navbar-form">
           <div className="modal-body">
@@ -296,7 +297,7 @@ var Modal = React.createClass({
                 {choiceDropdown}
                 <div>
                   <strong className="modal_text">Amount:</strong>
-                  <input type="text" placeholder="10" className="form-control reps_text-input" ref="amount"/>
+                  <input type="text" placeholder={amountPlaceholder} className="form-control reps_text-input" ref="amount"/>
                 </div>
               </div>
               <div className="investmentTable panel panel-default">
