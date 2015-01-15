@@ -79,7 +79,7 @@ var ProfileQuickView = React.createClass({
       profileLink = <Link to="profile" params={{userId: this.state.currentUser._id}}>{this.state.currentUser.username}</Link>;
       about = this.state.currentUser.about ? this.state.currentUser.about : '';
 
-      if (this.state.currentUser.picture && this.state.currntUser.picture.url) {
+      if (this.state.currentUser.picture && this.state.currentUser.picture.url) {
         imgUrl = this.state.currentUser.picture.url;
       }
 
