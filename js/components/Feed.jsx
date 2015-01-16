@@ -6,9 +6,15 @@ var FeedItem = require('./FeedItem.jsx');
 var InvestmentButton = require('./InvestmentButton.jsx');
 var React = require('react');
 
+var PAGINATION_SIZE = 15;
+
 var Feed = React.createClass({
   getInitialState: function() {
-    return { transactions: [], filter: "all" };
+    return {
+      transactions: [],
+      filter: 'all',
+      pagination: 0,
+     };
   },
 
   componentDidMount: function() {
@@ -59,6 +65,33 @@ var Feed = React.createClass({
     this.setTransactions(newFilter);
   },
 
+  getFeedItems: function() {
+    var feedItems = [];
+    var start = this.state.pagination;
+    var end = start + PAGINATION_SIZE;
+    var transactions = this.state.transactions;
+    for (var i = start; i < end && i < transactions.length; i++) {
+      feedItems.push(
+        <li key={transactions[i]._id} className="list-group-item"><FeedItem transaction={transactions[i]} /></li>
+      );
+    }
+    return feedItems;
+  },
+
+  showNewer: function(e) {
+    e.preventDefault();
+    if (this.state.pagination - PAGINATION_SIZE > -1) {
+      this.setState({ pagination: this.state.pagination - PAGINATION_SIZE });
+    }
+  },
+
+  showOlder: function(e) {
+    e.preventDefault();
+    if (this.state.pagination + PAGINATION_SIZE < this.state.transactions.length) {
+      this.setState({ pagination: this.state.pagination + PAGINATION_SIZE });
+    }
+  },
+
   render: function() {
     var feedHeader = this.props.userId ? <FeedHeader onClick={this.handleClick} isSelf={this.props.isSelf} /> : '';
     var feedText = '';
@@ -66,16 +99,36 @@ var Feed = React.createClass({
       var text = 'No transactions were found.';
       feedText = <div className="alert alert-warning no-transactions-warning">{text}</div>;
     }
+    var feedItems = this.getFeedItems();
+    var previousBtn = '';
+    if (this.state.pagination + PAGINATION_SIZE < this.state.transactions.length) {
+      previousBtn =
+        <li className="previous">
+          <a href="#" onClick={this.showOlder}><span aria-hidden="true">&larr;</span> Older</a>
+        </li>;
+    }
+    var nextBtn = '';
+    if (this.state.pagination - PAGINATION_SIZE > -1) {
+      nextBtn =
+        <li className="next">
+            <a href="#" onClick={this.showNewer}>Newer <span aria-hidden="true">&rarr;</span></a>
+        </li>;
+
+    }
     return (
       <div key={this.props.userId} className="feed panel panel-default">
         <h3 className="feedTitle panel-title">Feed</h3>
         {feedHeader}
         <ul className="list-group">
-          {this.state.transactions.map(function(transaction) {
-            return <li key={transaction._id} className="list-group-item"><FeedItem transaction={transaction} /></li>;
-          })}
+          {feedItems}
         </ul>
         {feedText}
+        <nav>
+          <ul className="pager">
+            {previousBtn}
+            {nextBtn}
+          </ul>
+        </nav>
       </div>
     );
   }

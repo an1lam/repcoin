@@ -26,6 +26,9 @@ var FeedItem = React.createClass({
     var amount = a < 0 ? a * -1 : a;
     var repsPronoun = a < 0 ? "reps from" : "reps to";
 
+    var date = new Date(this.props.transaction.timeStamp);
+    var month = date.getMonth() + 1;
+    var dateFormat = month + '\/' + date.getDate() + '\/' + date.getFullYear();
     var classes = "action " + this.props.transaction._id;
     return (
       <div className="feedItem">
@@ -37,6 +40,7 @@ var FeedItem = React.createClass({
         <p className="for">for</p>
       	<Link className="category" to="category" params={{category: this.props.transaction.category}}>{this.props.transaction.category}</Link>
       	<p className="period">.</p>
+        <span className="timestamp-badge badge">{dateFormat}</span>
       </div>
     );
   }

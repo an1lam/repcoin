@@ -25,6 +25,11 @@
 
 
 /* Feed Items ////////////////////////////////////// */
+.timestamp-badge {
+  margin-left:30px;
+  float:right;
+}
+
 .no-transactions-warning {
   margin-top:10px;
   margin-left:10px;
@@ -70,6 +75,7 @@
 
 
 .feedItem {
+  width:100%;
   display:inline-block;
 }
 
