@@ -488,8 +488,13 @@ html, body {
   width:
 }
 
-.modal_error {
-  float:right;
+.modal-msg {
+  display:inline-block;
+  margin-left:30px;
+}
+
+.modal-username {
+  display:inline-block;
 }
 
 .modal_text {
