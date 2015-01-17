@@ -51,7 +51,7 @@ var ProfileQuickView = React.createClass({
       var category = this.state.currentUser.portfolio[i];
       categories.push(
         <div className="list-group-item">
-          <span className="quick-view-bade badge">{category.reps} reps</span>
+          <span className="badge">{category.reps} reps</span>
           <Link to="category" params={{category: category.category}}>{category.category}</Link>
         </div>
       );
