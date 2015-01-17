@@ -314,6 +314,11 @@
 }
 
 /* Category Page /////////////////////////////////// */
+.category-item h5 {
+  margin-top:5px;
+  margin-bottom:5px;
+}
+
 .categoryPage .row {
   margin-right:0px;
 }
@@ -617,8 +622,13 @@ textarea {
 }
 
 /* Categories Page //////////// */
+
 .categories-page-title {
-  text-align: center;
+  margin-left:30px;
+}
+
+.cat-page-filter {
+  float:right;
 }
 
 .no-cat-btn {

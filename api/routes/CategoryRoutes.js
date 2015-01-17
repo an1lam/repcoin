@@ -22,7 +22,7 @@ module.exports = function(router, isAuthenticated, acl) {
         });
       } else {
         winston.log('info', 'Finding all categories');
-        Category.find().exec().then(function(categories) {
+        Category.find().sort({ name: 1 }).exec().then(function(categories) {
           return res.status(200).send(categories);
         }, function(err) {
           winston.log('error', 'Error finding all categories: %s', err);

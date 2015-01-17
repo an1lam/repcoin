@@ -14,8 +14,15 @@ var Category = React.createClass({
 
   render: function() {
     return (
-      <div className="col-md-4">
-        <h3><Link to="category" params={{category: this.props.category}}>{this.props.category}</Link></h3>
+      <div className="col-md-4 category-item">
+        <div>
+          <h3><Link to="category" params={{category: this.props.category.name}}>{this.props.category.name}</Link></h3>
+        </div>
+        <div>
+          <h5>{this.props.category.experts} Experts</h5>
+          <h5>{this.props.category.investors} Investors</h5>
+          <h5>Market Size: {this.props.category.reps}</h5>
+        </div>
       </div>
     );
   }
