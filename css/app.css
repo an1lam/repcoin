@@ -523,6 +523,12 @@ html, body {
 .investmentTable {
   float:right;
 }
+
+.modal-warning {
+  float: right;
+  margin-left: 130px;
+}
+
 /* PictureUploadModal ////////////// */
 
 /* Hide file input */
