@@ -229,6 +229,7 @@ var Modal = React.createClass({
   },
 
   render: function() {
+    var revokeError = '';
     var modalStyleOverride = {
       'zIndex': 1050,
     };
@@ -249,16 +250,6 @@ var Modal = React.createClass({
       var categories = this.getInvestmentCategories(); // The valid categories
       var investmentNumbers = this.getInvestmentNumbers(investmentList); // The investment numbers
 
-      // The dropdown box will be investment numbers or categories
-      var choiceText = this.state.give ? 'Categories:' : 'Investment Number:';
-      var choices = this.state.give ? categories : investmentNumbers;
-      var choiceDropdown =
-        <div className="choices-dropdown">
-          <strong className="modal_text">{choiceText}</strong>
-            <select ref="choice" className="form-control">
-              {choices}
-            </select>
-        </div>;
 
       // Create the investment table if any investments exist
       var investmentTable = '';
@@ -279,7 +270,24 @@ var Modal = React.createClass({
             </tbody>
           </table>
         );
+      } else {
+        if (!this.state.give) {
+          var string = 'You don\'t have any investments to revoke';
+          revokeError = <div className='modal-warning alert alert-info'>{string}</div>;
+        }
       }
+
+      // The dropdown box will be investment numbers or categories
+      var choiceText = this.state.give ? 'Categories:' : 'Investment Number:';
+      var choices = this.state.give ? categories : investmentNumbers;
+      var choiceDropdown =
+        <div className="choices-dropdown">
+          <strong className="modal_text">{choiceText}</strong>
+            <select ref="choice" className="form-control">
+              {choices}
+            </select>
+            {revokeError}
+        </div>;
 
       var amountPlaceholder = this.state.give ? 'Amount to give' : 'Amount to revoke';
       modalContent =
