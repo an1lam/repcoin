@@ -12,7 +12,8 @@ var Modal = React.createClass({
   getInitialState: function() {
     return {
       give: true,
-      error: '',
+      error: false,
+      message: '',
     };
   },
 
@@ -30,7 +31,7 @@ var Modal = React.createClass({
     }
     // If the category was not found, throw an error
     if (!category) {
-      this.setState({error: 'Category was not found for ' + this.props.user.username });
+      this.setState({ error: true, mg: 'Category was not found for ' + this.props.user.username });
       return;
     }
 
@@ -44,13 +45,13 @@ var Modal = React.createClass({
       }
     }
     if (portIndex === -1) {
-      this.setState({error: 'You are not an investor for ' + category.name });
+      this.setState({ error: true, message: 'You are not an investor for ' + category.name });
       return;
     }
 
     // Make sure the investor has enough reps
     if (portfolio[portIndex].reps < amount) {
-      this.setState({error: 'You do not have enough reps!'});
+      this.setState({ error: true, message: 'You do not have enough reps!' });
       return;
     }
 
@@ -99,14 +100,21 @@ var Modal = React.createClass({
           url: '/api/users/' + fromUser._id,
           type: 'GET',
           success: function(user) {
+            var action = 'Successfully gave ' + transaction.amount + ' reps to ' + transaction.to.name;
+            if (!this.state.give) {
+              action = 'Successfully revoked ' + transaction.amount * -1 + ' reps from ' + transaction.to.name;
+            }
+            this.setState({ error: false, message: action });
             PubSub.publish('profileupdate');
           }.bind(this),
           error: function(xhr, status, err) {
+            this.setState({ error: true, message: 'Error creating transaction' });
             console.error(status, err.toString());
-          },
+          }.bind(this),
         });
       }.bind(this),
       error: function(xhr, status, err) {
+        this.setState({ error: true, message: 'Error creating transaction' });
         console.error(status, err.toString());
       }.bind(this)
     });
@@ -120,7 +128,7 @@ var Modal = React.createClass({
 
     // Make sure a valid number was entered
     if (isNaN(amount)) {
-      this.setState({ error: 'Amount must be a valid number'});
+      this.setState({ error: true, message: 'Amount must be a valid number'});
       return;
     }
 
@@ -128,7 +136,7 @@ var Modal = React.createClass({
     amount = Math.round(amount* 100) / 100;
     // Make sure the amount is not 0
     if (amount === 0) {
-      this.setState({ error: 'Investment amount must be more than 0 reps.' });
+      this.setState({ error: true, message: 'Investment amount must be more than 0 reps.' });
       return;
     }
 
@@ -141,11 +149,11 @@ var Modal = React.createClass({
   },
 
   clickGive: function(e) {
-    this.setState({give: true });
+    this.setState({ give: true });
   },
 
   clickRevoke: function(e) {
-    this.setState({give: false });
+    this.setState({ give: false });
   },
 
   // Get all of the investments the currentUser has in this user
@@ -240,10 +248,13 @@ var Modal = React.createClass({
       modalContent = <div className="no-categories">{text}</div>
     } else {
       var action = this.state.give ? 'Give' : 'Revoke'; // The text for the action button
-      var error = this.state.error ?
-        <div className="alert alert-danger" role="alert">
-          <p>{this.state.error}</p>
-        </div>  : ''; // The text for an error
+      var clazz = this.state.error ? 'alert alert-danger modal-msg' : 'alert alert-info modal-msg';
+      var message = '';
+      if (this.state.message.trim().length !== 0) {
+        var message = <div className={clazz} role="alert">
+            <p>{this.state.message}</p>
+          </div>;
+      }
 
       var investmentList = this.getInvestmentList(); // The list of investments
       var categories = this.getInvestmentCategories(); // The valid categories
@@ -311,9 +322,6 @@ var Modal = React.createClass({
               <div className="modal_submit">
                 <button type="submit" className="btn btn-lg btn-primary">{action}</button>
               </div>
-              <div className="modal_error">
-                {error}
-              </div>
             </div>
           </div>
         </form>;
@@ -325,7 +333,8 @@ var Modal = React.createClass({
           <div className="modal-content">
             <div className="modal-header">
               {this.renderCloseButton()}
-              <span><h3> {this.props.user.username} </h3></span>
+              <span><h3 className="modal-username"> {this.props.user.username} </h3></span>
+              {message}
             </div>
             {modalContent}
             <div className="modal-footer investment-modal-footer">
