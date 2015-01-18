@@ -9,7 +9,7 @@ var InvestmentList = React.createClass({
       <table className="investmentList table table-bordered">
         <tbody>
           {this.props.investments.map(function(investment) {
-            return <InvestmentItem key={investment.user} investment={investment} />;
+            return <InvestmentItem key={investment.timeStamp} investment={investment} />;
          })}
         </tbody>
       </table>
