@@ -5,31 +5,45 @@ var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 
-var LeaderTable = React.createClass({
+var TrendingTable = React.createClass({
   getInitialState: function() {
-    return { leaders: [] };
+    return {
+      leaders: [],
+      timeframe: 'month',
+    };
   },
 
   componentDidMount: function() {
-    this.setLeaders(this.props.category);
+    this.getLeaders(this.props.category);
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setLeaders(newProps.category);
+    this.getLeaders(newProps.category);
   },
 
-  setLeaders: function(category) {
-    var url = '/api/users/' + category + '/leaders/10';
-    var expert = this.props.expert ? 1 : 0;
-    var data = { expert: expert };
+  getDate: function() {
+    var date = new Date();
+    switch(this.state.timeframe) {
+      case 'month':
+        //date.setMonth(date.getMonth()-1);
+        date.setYear(date.getYear()-300);
+        break;
+      default:
+        date.setMonth(date.getMonth()-1);
+        break;
+    };
+    return date;
+  },
+
+  getLeaders: function(category) {
+    var url = '/api/users/' + category + '/trending/experts/' + this.getDate().toString();
     $.ajax({
       url: url,
-      data: data,
       success: function(leaders) {
         this.setState({ leaders: leaders });
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.params.category, status, err.toString());
+        console.error(xhr.responseText, status, err.toString());
       }.bind(this)
     });
   },
@@ -40,19 +54,10 @@ var LeaderTable = React.createClass({
     var length = this.state.leaders.length;
     for (var i = 0; i < length; i++) {
       leader = this.state.leaders[i];
-      if (this.props.expert) {
-        for (var j = 0; j < leader.categories.length; j++) {
-          if (leader.categories[j].name.toLowerCase() === this.props.category.toLowerCase()) {
-            percentile = leader.categories[j].percentile;
-            break;
-          }
-        }
-      } else {
-        for (var j = 0; j < leader.portfolio.length; j++) {
-          if (leader.portfolio[j].category.toLowerCase() === this.props.category.toLowerCase()) {
-            percentile = leader.portfolio[j].percentile;
-            break;
-          }
+      for (var j = 0; j < leader.categories.length; j++) {
+        if (leader.categories[j].name.toLowerCase() === this.props.category.toLowerCase()) {
+          percentile = leader.categories[j].percentile;
+          break;
         }
       }
       leaderRows.push(
@@ -67,7 +72,7 @@ var LeaderTable = React.createClass({
 
   render: function() {
     var leaders = this.getLeaderRows();
-    var title = this.props.expert ? 'Leading Experts' : 'Leading Investors';
+    var title = 'Trending experts this month';
     return (
       <div className="panel panel-default">
         <table className="table table-bordered">
@@ -87,4 +92,4 @@ var LeaderTable = React.createClass({
   }
 });
 
-module.exports = LeaderTable;
+module.exports = TrendingTable;

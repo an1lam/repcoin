@@ -1,6 +1,7 @@
 'use strict';
 var winston = require('winston');
 var Category = require('../models/Category.js');
+var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 var utils = require('../routes/utils.js');
 var VerificationToken = require('../models/VerificationToken.js');
@@ -104,6 +105,33 @@ var UserHandler = {
           }
         });
       }
+    },
+
+    trending: {
+      experts: {
+        get: function(req, res) {
+          var date = req.params.date;
+          var category = req.params.category;
+          winston.log('info', 'GET /users/trending/experts/%s', date);
+          Transaction.findTrendingExperts(date, category).then(function(userIds) {
+            var idArray = [];
+            for (var i = 0; i < userIds.length; i++) {
+              idArray.push(userIds[i]._id);
+            }
+            User.findPublic({ '_id': { $in: idArray }}, function(err, users) {
+              if (err) {
+                winston.log('error', 'Error finding trending experts %s', err.toString());
+                return res.status(501).send(err);
+              } else {
+                return res.status(200).send(users);
+              }
+            });
+          }, function(err) {
+            winston.log('error', 'Error finding trending experts: %s', err.toString());
+            return res.status(503).send(err);
+          });
+        },
+      },
     },
 
     // Routes with /users/user_id

@@ -7,6 +7,7 @@ var CategoryPageHeader = require('./CategoryPageHeader.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
 var LeaderTable = require('./LeaderTable.jsx');
+var TrendingTable = require('./TrendingTable.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
 var Toolbar = require('./Toolbar.jsx');
@@ -70,6 +71,7 @@ var CategoryPage = React.createClass({
           <div className="col-md-3">
             <div className="expert-table">
               <LeaderTable category={this.props.params.category} expert={true}/>
+              <TrendingTable category={this.props.params.category} expert={true}/>
             </div>
           </div>
           <div className="col-md-6">

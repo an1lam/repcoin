@@ -2,6 +2,7 @@ process.env.NODE_ENV = 'test';
 var UserHandler = require('../api/handlers/user.js');
 
 var Category = require('../api/models/Category.js');
+var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 var VerificationToken = require('../api/models/VerificationToken.js');
 
@@ -41,6 +42,7 @@ describe('UserHandler: ', function() {
     expect(res.status.callCount).toEqual(1);
     expect(res.send.callCount).toEqual(1);
   });
+
 
   describe('verify: ', function() {
     describe('post: ', function() {
@@ -129,6 +131,50 @@ describe('UserHandler: ', function() {
   });
 
   describe('users: ', function() {
+    describe('trending: ', function() {
+      describe('experts: ', function() {
+        describe('get: ', function() {
+          var transactionPromise;
+          beforeEach(function() {
+            transactionPromise = {
+              userIds: [
+                { _id: '123' },
+                { _id: '456' },
+              ],
+
+              then: function(cb) {
+                return cb(this.userIds);
+              }
+            };
+          });
+
+          it('handles error finding users ids', function() {
+            spyOn(Transaction, 'findTrendingExperts').andReturn(transactionPromise);
+            spyOn(User, 'findPublic').andCallFake(function(query, cb) {
+              return cb('Error', null);
+            });
+            UserHandler.users.trending.experts.get(req, res);
+            expect(res.status).toHaveBeenCalledWith(501);
+            expect(res.send).toHaveBeenCalledWith('Error');
+          });
+
+          it('finds trending users', function() {
+            var users = [
+              { _id: '123' },
+              { _id: '456' },
+            ]
+            spyOn(Transaction, 'findTrendingExperts').andReturn(transactionPromise);
+            spyOn(User, 'findPublic').andCallFake(function(query, cb) {
+              return cb(null, users);
+            });
+            UserHandler.users.trending.experts.get(req, res);
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.send).toHaveBeenCalledWith(users);
+          });
+        });
+      });
+    });
+
     describe('get: ', function() {
       it('finds users properly with no search term', function() {
         spyOn(User, 'findPublic').andCallFake(function(query, cb) {
