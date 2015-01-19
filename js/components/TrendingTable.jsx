@@ -9,7 +9,6 @@ var TrendingTable = React.createClass({
   getInitialState: function() {
     return {
       leaders: [],
-      timeframe: 'month',
     };
   },
 
@@ -18,16 +17,33 @@ var TrendingTable = React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.getLeaders(newProps.category);
+    this.getLeaders(newProps.category, 'This month');
   },
 
-  getDate: function() {
+  setTimeframe: function(e) {
+    e.preventDefault();
+    this.getLeaders(this.props.category, e.target.value);
+  },
+
+  getDate: function(timeframe) {
     var date = new Date();
-    switch(this.state.timeframe) {
-      case 'month':
-        //date.setMonth(date.getMonth()-1);
-        date.setYear(date.getYear()-300);
+    switch(timeframe) {
+      case 'This year':
+        date.setYear(date.getYear()-1);
         break;
+
+      case 'This month':
+        date.setMonth(date.getMonth()-1);
+        break;
+
+      case 'This week':
+        date.setDate(date.getDate()-7);
+        break;
+
+      case 'Today':
+        date.setDate(date.getDate()-1);
+        break;
+
       default:
         date.setMonth(date.getMonth()-1);
         break;
@@ -35,8 +51,8 @@ var TrendingTable = React.createClass({
     return date;
   },
 
-  getLeaders: function(category) {
-    var url = '/api/users/' + category + '/trending/experts/' + this.getDate().toString();
+  getLeaders: function(category, timeframe) {
+    var url = '/api/users/' + category + '/trending/experts/' + this.getDate(timeframe).toString();
     $.ajax({
       url: url,
       success: function(leaders) {
@@ -72,12 +88,22 @@ var TrendingTable = React.createClass({
 
   render: function() {
     var leaders = this.getLeaderRows();
-    var title = 'Trending experts this month';
+    var title = 'Trending Experts';
     return (
-      <div className="panel panel-default">
+      <div className="panel panel-default trending-table">
         <table className="table table-bordered">
           <thead>
-          <tr><th colSpan="3">{title}</th></tr>
+          <tr>
+            <th colSpan="3">
+              <div className="trending-table-title">{title}</div>
+              <select onChange={this.setTimeframe}>
+                <option>This month</option>
+                <option>This week</option>
+                <option>Today</option>
+                <option>This year</option>
+              </select>
+            </th>
+          </tr>
           <tr>
             <th>Name</th>
             <th>Percentile</th>

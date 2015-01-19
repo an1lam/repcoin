@@ -70,8 +70,8 @@ var CategoryPage = React.createClass({
         <div className="row">
           <div className="col-md-3">
             <div className="expert-table">
+              <TrendingTable category={this.props.params.category} />
               <LeaderTable category={this.props.params.category} expert={true}/>
-              <TrendingTable category={this.props.params.category} expert={true}/>
             </div>
           </div>
           <div className="col-md-6">
