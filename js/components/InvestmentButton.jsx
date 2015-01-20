@@ -1,9 +1,9 @@
-/** @jsx React.DOM */
-"use strict";
+'use strict';
 
-var React = require('react');
-var Modal = require('./Modal.jsx');
 var $ = require('jquery');
+var Modal = require('./Modal.jsx');
+var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var InvestmentButton = React.createClass({
   getInitialState: function() {
@@ -19,7 +19,7 @@ var InvestmentButton = React.createClass({
 
     return (
       <div className="InvestmentButton">
-        <button onClick={this.handleShowModal} className="btn btn-primary btn-lg">Invest in {this.props.user.username}</button>
+        <button onClick={this.handleShowModal} className="btn btn-primary btn-lg">{strings.INVEST_IN_USER(this.props.user.username)}</button>
         {modal}
       </div>
     );

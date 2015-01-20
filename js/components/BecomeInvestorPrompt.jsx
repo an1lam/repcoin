@@ -52,7 +52,7 @@ var BecomeInvestorPrompt = React.createClass({
     var categoryOptions = this.getCategoryOptions();
     var promptText = '';
     if (categoryOptions.length > 0) {
-      promptText = strings.BECOME_AN_INVESTOR(firstname);
+      promptText = strings.BECOME_AN_INVESTOR(this.props.user.firstname);
     }
     return (
       <div className="becomeInvestorPrompt">

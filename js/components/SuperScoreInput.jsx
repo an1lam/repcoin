@@ -4,6 +4,7 @@ var $ = require('jquery');
 var PubSub = require('pubsub-js');
 var React = require('react');
 
+// COMPONENT IS NOT CURRENTLY IN USE
 var SuperScoreInput = React.createClass({
   updateDefaultCategory: function(category) {
     var url = '/api/users/' + this.props.user._id;

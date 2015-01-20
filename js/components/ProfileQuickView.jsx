@@ -34,12 +34,12 @@ var ProfileQuickView = React.createClass({
     }
 
     if (categories.length === 0) {
-      categories.push(<div className="list-group-item">You have no expert categories</div>);
+      categories.push(<div className="list-group-item">{strings.NO_EXPERT_CATEGORIES}</div>);
     }
 
     return (
       <div className="list-group">
-        <strong>Expert Categories</strong>
+        <strong>{strings.EXPERT_CATEGORIES_IMPERSONAL}</strong>
         {categories}
       </div>
     );
@@ -58,12 +58,12 @@ var ProfileQuickView = React.createClass({
     }
 
     if (categories.length === 0) {
-      categories.push(<div className="list-group-item">You have no invester categories</div>);
+      categories.push(<div className="list-group-item">{strings.NO_INVESTOR_CATEGORIES}</div>);
     }
 
     return (
       <div className="list-group">
-        <strong>Investor Categories</strong>
+        <strong>{strings.INVESTOR_CATEGORIES}</strong>
         {categories}
       </div>
     );

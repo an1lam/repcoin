@@ -125,8 +125,8 @@ var PictureUploadModal = React.createClass({
               </div>
             </div>
             <div className="modal-footer">
-              <button onClick={this.handleClick} type="button" className="btn btn-default">Select an image</button>
-              <button onClick={this.handleSave} type="button" className="btn btn-primary">Save!</button>
+              <button onClick={this.handleClick} type="button" className="btn btn-default">{strings.SELECT_IMAGE}</button>
+              <button onClick={this.handleSave} type="button" className="btn btn-primary">{strings.SAVE}</button>
             </div>
           </div>
         </div>

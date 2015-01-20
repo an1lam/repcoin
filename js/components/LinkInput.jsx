@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var PubSub = require('pubsub-js');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var LinkInput = React.createClass({
   getInitialState: function() {
@@ -26,13 +27,13 @@ var LinkInput = React.createClass({
     var title = this.refs.description.getDOMNode().value;
     var url = this.refs.url.getDOMNode().value;
     if (title.length > 50) {
-      this.setState({ error: 'Title cannot be longer than 50 characters' });
+      this.setState({ error: strings.TITLE_LONGER_THAN_50 });
     } else if (title.trim().length === 0) {
-      this.setState({ error: 'Title cannot be blank' });
+      this.setState({ error: strings.TITLE_BLANK });
     } else if (url.length > 2083) {
-      this.setState({ error: 'Url must be less than 2084 characters' });
+      this.setState({ error: strings.URL_LESS_THAN_2084 });
     } else if (url.trim().length === 0) {
-      this.setState({ error: 'Url cannot be blank' });
+      this.setState({ error: strings.URL_BLANK });
     } else {
       this.setState({ error: null });
       this.updateLinks({ title: title, url: url });
@@ -74,8 +75,8 @@ var LinkInput = React.createClass({
 
   render: function() {
     var error = this.state.error ? <div className="alert alert-danger" role="alert">{this.state.error}</div> : '';
-    var title = this.props.title || "Description";
-    var url = this.props.url || "URL";
+    var title = this.props.title || strings.TITLE;
+    var url = this.props.url || strings.URL;
     return (
       <div className="linkInput">
         <form onSubmit={this.handleSubmit} onReset={this.props.reset}>

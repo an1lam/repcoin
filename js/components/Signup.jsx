@@ -4,14 +4,16 @@ var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
 var React = require('react');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
+var strings = require('../lib/strings_utils.js');
 
 var Signup = React.createClass({
   mixins: [Navigation],
 
   getInitialState: function() {
-    return { error: false,
-             msg: null
-           };
+    return {
+      error: false,
+      msg: null
+    };
   },
 
   handleFacebookClick: function(e) {
@@ -31,9 +33,9 @@ var Signup = React.createClass({
     if (response.status === 'connected') {
       this.loginUser(response.authResponse.accessToken);
       } else if (response.status === 'not_authorized') {
-      this.setState({ error: true, msg: 'Unauthorized credentials for facebook login' });
+      this.setState({ error: true, msg: strings.FACEBOOK_UNAUTHORIZED_CREDENTIALS });
     } else {
-      this.setState({ error: true, msg: 'Error logging into facebook' });
+      this.setState({ error: true, msg: strings.ERROR_LOGGING_INTO_FACEBOOK });
     }
   },
 
@@ -113,20 +115,20 @@ var Signup = React.createClass({
     $(".pwd-field2").val('');
 
     if (!firstname || !lastname || !email || !email2 || !password || !password2) {
-      this.setState({ error: true, msg: 'Fields cannot be blank' });
+      this.setState({ error: true, msg: strings.FIELDS_BLANK });
       return;
     }
 
     if (email !== email2) {
-      this.setState({ error: true, msg: 'Emails do not match' });
+      this.setState({ error: true, msg: strings.EMAILS_DO_NOT_MATCH });
       return;
     }
     if (password !== password2) {
-      this.setState({ error: true, msg: 'Passwords do not match' });
+      this.setState({ error: true, msg: strings.PASSWORDS_DO_NOT_MATCH });
       return;
     }
 
-    this.setState({ error: false, msg: 'Validating...' });
+    this.setState({ error: false, msg: strings.VALIDATING });
     var data = {
       firstname: firstname,
       lastname: lastname,
@@ -138,7 +140,7 @@ var Signup = React.createClass({
       type: 'POST',
       data: data,
       success: function() {
-        this.setState({ error: false, msg: 'Verification email sent!' });
+        this.setState({ error: false, msg: strings.VERIFICATION_EMAIL_SENT });
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText !== 'Error') {
@@ -160,7 +162,7 @@ var Signup = React.createClass({
       <div className="signup col-md-2 col-md-offset-5">
         {msg}
         <a className="facebook-signup btn btn-block btn-social btn-facebook" onClick={this.handleFacebookClick}>
-          <i className="fa fa-facebook"></i> Log in with facebook
+          <i className="fa fa-facebook"></i>{strings.LOG_IN_WITH_FACEBOOK}
         </a>
         <form onSubmit={this.handleSubmit}>
           <input type="text" ref="firstname" className="form-control" placeholder="First name"></input>

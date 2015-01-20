@@ -4,6 +4,7 @@ var $ = require('jquery');
 var React = require('react');
 var SuperScoreInput = require('./SuperScoreInput.jsx');
 
+// COMPONENT IS NOT CURRENTLY IN USE
 var SuperScore = React.createClass({
   getInitialState: function() {
     return {

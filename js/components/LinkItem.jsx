@@ -5,6 +5,7 @@ var LinkDelete = require('./LinkDelete.jsx');
 var LinkInput = require('./LinkInput.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var LinkItem = React.createClass({
   getInitialState: function() {
@@ -65,7 +66,7 @@ var LinkItem = React.createClass({
       }
     }
     if (links.length === 0) {
-      links.push("EMPTY");
+      links.push(strings.EMPTY);
     }
     this.updateUserLinks(links);
   },
