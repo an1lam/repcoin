@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var PubSub = require('pubsub-js');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var BecomeInvestorPrompt = React.createClass({
   setInvestorCategory: function(e) {
@@ -51,7 +52,7 @@ var BecomeInvestorPrompt = React.createClass({
     var categoryOptions = this.getCategoryOptions();
     var promptText = '';
     if (categoryOptions.length > 0) {
-      promptText = 'Become an investor in some of ' + this.props.user.firstname + '\'s categories';
+      promptText = strings.BECOME_AN_INVESTOR(firstname);
     }
     return (
       <div className="becomeInvestorPrompt">

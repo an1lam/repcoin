@@ -4,6 +4,7 @@ var CategorySearch = require('./CategorySearch.jsx');
 var CategorySearchDisplayTable = require('./CategorySearchDisplayTable.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var CategoryInput = React.createClass({
   getInitialState: function() {
@@ -42,8 +43,7 @@ var CategoryInput = React.createClass({
       url: '/api/users/' + this.props.user._id + '/addinvestor/' + name,
       type: 'PUT',
       success: function(user) {
-        var msg = 'You are now an investor in ' + name + '. You have received 5 reps to start, ' +
-          'and you will get 5 more overnight once you\'ve spent those!';
+        var msg = strings.NOW_AN_INVESTOR(name);
         this.props.setMessage(msg);
         PubSub.publish('profileupdate');
         this.props.onReset();
@@ -51,7 +51,7 @@ var CategoryInput = React.createClass({
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText === 'Already an investor') {
-          this.props.setMessage('Already an investor in ' + name);
+          this.props.setMessage(strings.ALREADY_AN_INVESTOR(name));
         }
         console.error(status, err.toString());
         this.props.onReset();
@@ -64,7 +64,7 @@ var CategoryInput = React.createClass({
       url: '/api/users/' + this.props.user._id + '/addexpert/' + name,
       type: 'PUT',
       success: function(user) {
-        var msg = 'You are now an expert in ' + name;
+        var msg = strings.NOW_AN_EXPERT(name);
         this.props.setMessage(msg);
         PubSub.publish('profileupdate');
         this.props.onReset();
@@ -72,7 +72,7 @@ var CategoryInput = React.createClass({
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText === 'Already an expert') {
-          this.props.setMessage('Already an expert in ' + name);
+          this.props.setMessage(strings.ALREADY_AN_EXPERT(name));
         }
         console.error(status, err.toString());
         this.props.onReset();

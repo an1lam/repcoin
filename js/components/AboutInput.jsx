@@ -1,8 +1,9 @@
-"use strict";
+'use strict';
 
 var $ = require('jquery');
 var PubSub = require('pubsub-js');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var AboutInput = React.createClass({
   getInitialState: function() {
@@ -21,9 +22,9 @@ var AboutInput = React.createClass({
     // Validate input
     var text = this.refs.about.getDOMNode().value;
     if (text.length > 200) {
-      this.setState({ error: "Text cannot be longer than 200 characters" });
+      this.setState({ error: strings.TEXT_LONGER_THAN_200 });
     } else if (text.trim().length === 0) {
-      this.setState({ error: "Text cannot be blank" });
+      this.setState({ error: strings.TEXT_BLANK });
     } else {
       this.setState({ error: null });
       this.updateAbout(this.refs.about.getDOMNode().value);
@@ -55,7 +56,7 @@ var AboutInput = React.createClass({
 
   render: function() {
     var error = this.state.error ? <div className="alert alert-danger" role="alert">{this.state.error}</div> : '';
-    var about = this.props.user.about || "Add short description of yourself!";
+    var about = this.props.user.about || strings.ADD_BRIEF_DESCRIPTION;
     return (
       <div className="aboutInput">
         <form onSubmit={this.handleSubmit} onReset={this.propagateReset}>

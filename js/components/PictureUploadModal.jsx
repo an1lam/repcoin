@@ -4,16 +4,16 @@ var $ = require('jquery');
 
 var PubSub = require('pubsub-js');
 var cropit = require('cropit');
-var DEFAULT_LINK = 'http://res.cloudinary.com/repcoin/image/upload/v1419620814/default_profile_od0xw5.jpg';
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var PictureUploadModal = React.createClass({
   mixins: [ModalMixin],
 
   componentDidMount: function() {
     var picture = this.props.user.picture;
-    var imageSrc = picture ? picture.url : DEFAULT_LINK;
+    var imageSrc = picture ? picture.url : strings.DEFAULT_USER_PIC;
     $(".image-cropper").cropit({
       imageBackground: true,
       imageState: { src: imageSrc },

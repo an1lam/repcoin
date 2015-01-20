@@ -4,19 +4,19 @@ var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 var SuperScore = require('./SuperScore.jsx');
-
-var DEFAULT_LINK = 'http://res.cloudinary.com/repcoin/image/upload/v1419620814/default_profile_od0xw5.jpg';
+var strings = require('../lib/strings_utils.js');
 
 var SearchPageUser = React.createClass({
   handleImgError: function() {
-    $(".img-thumbnail").attr("src", DEFAULT_LINK);
+    $(".img-thumbnail").attr("src", strings.DEFAULT_USER_PIC);
   },
 
   render: function() {
     var about = this.props.user.about || '';
-    var imgUrl = this.props.user.picture && this.props.user.picture.url ?
-      this.props.user.picture.url :
-      DEFAULT_LINK;
+    var imgUrl = strings.DEFAULT_USER_PIC;
+    if (this.props.user.picture && this.props.user.picture.url) {
+      imgUrl = this.props.user.picture.url;
+    }
     return (
       <div className="searchPageItem searchPageUser">
         <div>

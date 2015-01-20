@@ -4,7 +4,7 @@ var auth = require('../auth.jsx');
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
-var DEFAULT_LINK = 'http://res.cloudinary.com/repcoin/image/upload/v1419620814/default_profile_od0xw5.jpg';
+var strings = require('../lib/strings_utils.js');
 
 var ProfileQuickView = React.createClass({
   getInitialState: function() {
@@ -12,7 +12,7 @@ var ProfileQuickView = React.createClass({
   },
 
   handleImgError: function() {
-    $('.quick-view-image').attr('src', DEFAULT_LINK);
+    $('.quick-view-image').attr('src', strings.DEFAULT_USER_PIC);
   },
 
   componentDidMount: function() {
@@ -72,7 +72,7 @@ var ProfileQuickView = React.createClass({
   render: function() {
     var profileLink = '';
     var about = '';
-    var imgUrl = DEFAULT_LINK;
+    var imgUrl = strings.DEFAULT_USER_PIC;
     var expertCategories = '';
     var investorCategories = '';
     if (this.state.currentUser) {

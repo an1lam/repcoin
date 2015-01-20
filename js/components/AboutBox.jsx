@@ -2,6 +2,7 @@
 
 var AboutInput = require('./AboutInput.jsx');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var AboutBox = React.createClass({
   getInitialState: function() {
@@ -50,7 +51,7 @@ var AboutBox = React.createClass({
       if (this.state.showInput) {
         aboutBox = <AboutInput currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeInputBox} text={this.props.about} />
       } else {
-        aboutBox = this.props.user.about ? <p>{this.props.user.about}</p> : <em>Add a brief description of yourself!</em>;
+        aboutBox = this.props.user.about ? <p>{this.props.user.about}</p> : <em>{strings.ADD_BRIEF_DESCRIPTION}</em>;
       }
 
       if (this.state.showEdit) {
