@@ -101,6 +101,7 @@ module.exports = function(router, isAuthenticated, acl) {
   };
 
   router.get('/users/list/byids', isAuthenticated, UserHandler.users.listByIds.get)
+  router.get('/users/:category/trending/experts/:date', isAuthenticated, UserHandler.users.trending.experts.get);
   router.get('/users', isAuthenticated, UserHandler.users.get);
   router.post('/verify', UserHandler.verify.post);
 

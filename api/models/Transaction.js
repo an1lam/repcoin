@@ -47,6 +47,22 @@ TransactionSchema.statics.findByUserIdFrom = function(userId) {
     return this.find( { "from.id" : userId }).sort({ "timeStamp": -1 }).exec();
 };
 
+// Get the trending experts for a given time period
+TransactionSchema.statics.findTrendingExperts = function(timeStamp, category) {
+  return this.aggregate([
+    { $match:
+      {
+        timeStamp: { $gte: new Date(timeStamp) },
+        category: category,
+      },
+    },
+    { $project: { "to.id": 1 } },
+    { $group: { _id: "$to.id", count: {$sum: 1} }  },
+    { $sort: { "count": -1 } },
+    { $limit: 10 }
+  ]).exec();
+};
+
 // Get filtered transactions based on conditions, obscuring private fields
 // Sorted from most recent to least recent
 TransactionSchema.statics.findPublic = function(conditions) {

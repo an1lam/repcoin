@@ -1,14 +1,13 @@
 'use strict';
 
 var $ = require('jquery');
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 
 var LeaderTable = React.createClass({
   getInitialState: function() {
-    return {leaders: []};
+    return { leaders: [] };
   },
 
   componentDidMount: function() {
