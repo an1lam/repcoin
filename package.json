@@ -7,13 +7,11 @@
     "node": "0.10.35"
   },
   "dependencies": {
-    "agenda": "~0.6.22",
     "bcrypt": "^0.8.0",
     "body-parser": "^1.9.0",
     "bootstrap": "~3.3.0",
     "browserify": "~6.3.2",
     "browserify-shim": "~3.8.0",
-    "busboy": "^0.2.9",
     "cloudinary": "",
     "coffeeify": "^1.0.0",
     "connect-livereload": "^0.4.0",
