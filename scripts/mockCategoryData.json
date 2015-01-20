@@ -1,5 +1,5 @@
 {
-  "name": "Biology",
+  "name": "biology",
   "_id": ObjectId("5434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
@@ -19,7 +19,7 @@
     }]
 },
 {
-  "name": "Blue Grass",
+  "name": "blue grass",
   "_id": ObjectId("5424171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
@@ -39,7 +39,7 @@
     }]
 },
 {
-  "name": "Hip Hop",
+  "name": "hip hop",
   "_id": ObjectId("9434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
@@ -59,7 +59,7 @@
     }]
 },
 {
-  "name": "Graphic Design",
+  "name": "graphic design",
   "_id": ObjectId("3434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
@@ -79,7 +79,7 @@
     }]
 },
 {
-  "name": "Sculpture",
+  "name": "sculpture",
   "_id": ObjectId("2434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
@@ -99,7 +99,7 @@
     }]
 },
 {
-  "name": "Ballet",
+  "name": "ballet",
   "_id": ObjectId("1434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
@@ -119,7 +119,7 @@
     }]
 },
 {
-  "name": "Coding",
+  "name": "coding",
   "_id": ObjectId("1434171b7f9cea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
@@ -139,7 +139,7 @@
     }]
 },
 {
-  "name": "Rap",
+  "name": "rap",
   "_id": ObjectId("1434171b7f9cea5969085db1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
@@ -159,7 +159,7 @@
     }]
 },
 {
-  "name": "Rock and Roll",
+  "name": "rock and roll",
   "_id": ObjectId("6434171b7f9bea5969085da1"),
   "timeStamp": {"$date": 1413480132},
   "color": "Blue",
