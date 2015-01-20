@@ -26,7 +26,7 @@ var ProfileQuickView = React.createClass({
     for (var i = 0; i < this.state.currentUser.categories.length; i++) {
       var category = this.state.currentUser.categories[i];
       categories.push(
-        <div className="list-group-item">
+        <div className="list-group-item" key={i}>
           <span className="badge">{category.reps} reps</span>
           <Link to="category" params={{category: category.name}}>{category.name}</Link>
         </div>
@@ -50,7 +50,7 @@ var ProfileQuickView = React.createClass({
     for (var i = 0; i < this.state.currentUser.portfolio.length; i++) {
       var category = this.state.currentUser.portfolio[i];
       categories.push(
-        <div className="list-group-item">
+        <div className="list-group-item" key={i}>
           <span className="badge">{category.reps} reps</span>
           <Link to="category" params={{category: category.category}}>{category.category}</Link>
         </div>

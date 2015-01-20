@@ -101,7 +101,7 @@ var CategoriesTable = React.createClass({
     for (var i = 0; i < length; i++) {
       var category = this.props.user.categories[i];
       categoriesItems.push(
-        <CategoriesItem key={category.id} category={category} includeReps={includeReps}
+        <CategoriesItem userId={this.props.user._id} category={category} includeReps={includeReps}
           deleteMode={this.state.deleteMode} showDeleteBox={this.showDeleteBox} />
       );
     }

@@ -7,9 +7,48 @@ var ScoreBar = require('./ScoreBar.jsx');
 var Link = Router.Link;
 
 var CategoriesItem = React.createClass({
+  getInitialState: function() {
+    return { investors: [] };
+  },
+
+  componentDidMount: function() {
+    this.getInvestors(this.props);
+  },
+
+  // Check to see if investors need to be refreshed
+  componentWillReceiveProps: function(props) {
+    if (props.userId !== this.props.userId) {
+      this.getInvestors(props);
+    }
+  },
 
   handleClick: function() {
     this.props.showDeleteBox(this.props.category);
+  },
+
+  getInvestors: function(props) {
+    var category = props.category
+    var idList = [];
+    var length = category.investors.length;
+    if (length === 0) {
+      return;
+    }
+
+    for (var i = 0; i < length; i++) {
+      idList.push(category.investors[i].id);
+    }
+    var url = '/api/users/list/byids';
+    var data = { idList: idList };
+    $.ajax({
+      url: url,
+      data: data,
+      success: function(investors) {
+        this.setState({ investors: investors });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(xhr.responseText, err.toString());
+      }.bind(this)
+    });
   },
 
   render: function() {
@@ -32,7 +71,7 @@ var CategoriesItem = React.createClass({
         <td><ScoreBar percentile={this.props.category.percentile}
           previousPercentile={this.props.category.previousPercentile} category={this.props.category.name}/></td>
         <td>
-          <InvestorList category={this.props.category}/>
+          <InvestorList category={this.props.category} investors={this.state.investors} />
         </td>
         {reps}
       </tr>
