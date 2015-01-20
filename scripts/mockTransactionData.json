@@ -9,8 +9,8 @@
     "id": ObjectId("543acfa788257fca61ff521b")
   },
   "amount": 10,
-  "category": "Rap",
-  "timeStamp": {"$date": 1413480939}
+  "category": "rap",
+  "timeStamp": {"$date": 1413766347309}
 },
 {
   "to": {
@@ -23,8 +23,8 @@
     "id": ObjectId("5439a82b1e25afaf21b2adb4")
   },
   "amount": 11,
-  "category": "Hip Hop",
-  "timeStamp": {"$date": 1413480939}
+  "category": "hip hop",
+  "timeStamp": {"$date": 1413766347309}
 },
 {
   "to": {
@@ -37,8 +37,8 @@
     "id": ObjectId("543acfa788257fca61ff521b")
   },
   "amount": -10,
-  "category": "Rap",
-  "timeStamp": {"$date": 1413480939}
+  "category": "rap",
+  "timeStamp": {"$date": 1413766347309}
 },
 {
   "to": {
@@ -51,8 +51,8 @@
     "id": ObjectId("5439a8221e25afaf21b2adb3")
   },
   "amount": 20,
-  "category": "Hip Hop",
-  "timeStamp": {"$date": 1413480939}
+  "category": "hip hop",
+  "timeStamp": {"$date": 1413766347309}
 },
 {
   "to": {
@@ -65,8 +65,8 @@
     "id": ObjectId("543a2533cb4b5e50277998d7")
   },
   "amount": 15,
-  "category": "Graphic Design",
-  "timeStamp": {"$date": 1413480939}
+  "category": "graphic design",
+  "timeStamp": {"$date": 1413766347309}
 },
 {
   "to": {
@@ -79,8 +79,8 @@
     "id": ObjectId("543a253bcb4b5e50277998d8")
   },
   "amount": 100,
-  "category": "Sculpture",
-  "timeStamp": {"$date": 1413480939}
+  "category": "sculpture",
+  "timeStamp": {"$date": 1413766347309}
 },
 {
   "to": {
@@ -93,8 +93,8 @@
     "id": ObjectId("5439a82b1e25afaf21b2adb4")
   },
   "amount": 15,
-  "category": "Coding",
-  "timeStamp": {"$date": 1413480939}
+  "category": "coding",
+  "timeStamp": {"$date": 1413766347309}
 },
 {
   "to": {
@@ -107,8 +107,8 @@
     "id": ObjectId("543a252acb4b5e50277998d6")
   },
   "amount": 5,
-  "category": "Graphic Design",
-  "timeStamp": {"$date": 1413480939}
+  "category": "graphic design",
+  "timeStamp": {"$date": 1413766347309}
 },
 {
   "to": {
@@ -121,6 +121,6 @@
     "id": ObjectId("5439a82b1e25afaf21b2adb4")
   },
   "amount": -20,
-  "category": "Coding",
-  "timeStamp": {"$date": 1413480939}
+  "category": "coding",
+  "timeStamp": {"$date": 1413766347309}
 }

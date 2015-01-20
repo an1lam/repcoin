@@ -9,7 +9,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": []
@@ -18,14 +18,14 @@
       "reps": 11,
       "roi": { "length": 0, "value": 3 },
       "percentile": 0,
-      "category": "Biology",
+      "category": "biology",
       "id": ObjectId("5434171b7f9bea5969085da1"),
       "investments": []
     },
     {
       "reps": 5,
       "roi": { "length": 1, "value": 1 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -40,7 +40,7 @@
     }
   ],
   "categories": [{
-      "name": "Rap",
+      "name": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 55,
       "previousPercentile": 58,
@@ -64,7 +64,7 @@
     {
       "reps": 10,
       "roi": { "length": 3, "value": 3 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -80,7 +80,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -96,14 +96,14 @@
   ],
   "categories": [
     {
-      "name": "Rap",
+      "name": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 51,
       "previousPercentile": 49,
       "reps": 20
     },
     {
-      "name": "Biology",
+      "name": "biology",
       "id": ObjectId("5434171b7f9bea5969085da1"),
       "percentile": 13,
       "previousPercentile": 13,
@@ -142,7 +142,7 @@
     {
       "reps": 100,
       "roi": { "length": 0, "value": 5 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -158,7 +158,7 @@
     {
       "reps": 8,
       "roi": { "length": 0, "value": 0 },
-      "category": "Biology",
+      "category": "biology",
       "id": ObjectId("5434171b7f9bea5969085da1"),
       "percentile": 0,
       "investments": []
@@ -166,7 +166,7 @@
     {
       "reps": 500,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -181,14 +181,14 @@
     }
   ],
   "categories": [{
-      "name": "Rock and Roll",
+      "name": "rock and roll",
       "id": ObjectId("6434171b7f9bea5969085da1"),
       "percentile": 72,
       "previousPercentile": 75,
       "reps": 51
   },
   {
-      "name": "Coding",
+      "name": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 33,
       "previousPercentile": 30,
@@ -213,7 +213,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -229,21 +229,21 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": []
     }
   ],
    "categories": [{
-      "name": "Rock and Roll",
+      "name": "rock and roll",
       "id": ObjectId("6434171b7f9bea5969085da1"),
       "percentile": 27,
       "previousPercentile": 24,
       "reps": 51
     },
     {
-      "name": "Coding",
+      "name": "coding",
       "id": ObjectId("6434171b7f9cea5969085da1"),
       "percentile": 42,
       "previousPercentile": 39,
@@ -251,7 +251,7 @@
       "investors": [
         {
           "id": "5439a8221e25afaf21b2adb3",
-          "name": "Matt Ritter",
+          "name": "matt ritter",
           "_id": "54933a1d3c11222446bce29c"
         }
       ]
@@ -274,7 +274,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -290,7 +290,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -305,7 +305,7 @@
     }
   ],
    "categories": [{
-      "name": "Graphic Design",
+      "name": "graphic design",
       "id": ObjectId("3434171b7f9bea5969085da1"),
       "percentile": 67,
       "previousPercentile": 64,
@@ -329,7 +329,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -345,7 +345,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -360,7 +360,7 @@
     }
   ],
    "categories": [{
-      "name": "Graphic Design",
+      "name": "graphic design",
       "id": ObjectId("3434171b7f9bea5969085da1"),
       "percentile": 82,
       "previousPercentile": 85,
@@ -384,7 +384,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -400,7 +400,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -415,7 +415,7 @@
     }
   ],
    "categories": [{
-      "name": "Sculpture",
+      "name": "sculpture",
       "id": ObjectId("2434171b7f9bea5969085da1"),
       "percentile": 16,
       "previousPercentile": 14,
@@ -439,7 +439,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -455,7 +455,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -470,7 +470,7 @@
     }
   ],
    "categories": [{
-      "name": "Sculpture",
+      "name": "sculpture",
       "id": ObjectId("2434171b7f9bea5969085da1"),
       "percentile": 59,
       "previousPercentile": 63,
@@ -494,7 +494,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -510,7 +510,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -525,7 +525,7 @@
     }
   ],
    "categories": [{
-      "name": "Ballet",
+      "name": "ballet",
       "id": ObjectId("1434171b7f9bea5969085da1"),
       "percentile": 33,
       "previousPercentile": 36,
@@ -549,7 +549,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -565,7 +565,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -580,7 +580,7 @@
     }
   ],
   "categories": [{
-    "name": "Ballet",
+    "name": "ballet",
     "id": ObjectId("1434171b7f9bea5969085da1"),
     "percentile": 50,
     "previousPercentile": 47,
@@ -605,7 +605,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -621,7 +621,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -636,7 +636,7 @@
     }
   ],
   "categories": [{
-    "name": "Blue Grass",
+    "name": "blue grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
     "percentile": 42,
     "previousPercentile": 44,
@@ -660,7 +660,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -676,7 +676,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -691,7 +691,7 @@
     }
   ],
   "categories": [{
-    "name": "Blue Grass",
+    "name": "blue grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
     "percentile": 6,
     "previousPercentile": 0,
@@ -715,7 +715,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -731,7 +731,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -746,7 +746,7 @@
     }
   ],
   "categories": [{
-    "name": "Blue Grass",
+    "name": "blue grass",
     "id": ObjectId("5424171b7f9bea5969085da1"),
     "percentile": 69,
     "previousPercentile": 70,
@@ -770,7 +770,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -786,7 +786,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -801,7 +801,7 @@
     }
   ],
   "categories": [{
-    "name": "Sculpture",
+    "name": "sculpture",
     "id": ObjectId("2434171b7f9bea5969085da1"),
     "percentile": 12,
     "previousPercentile": 11,
@@ -825,7 +825,7 @@
     {
       "reps": 10,
       "roi": { "length": 0, "value": 0 },
-      "category": "Rap",
+      "category": "rap",
       "id": ObjectId("1434171b7f9cea5969085db1"),
       "percentile": 0,
       "investments": [{
@@ -841,7 +841,7 @@
     {
       "reps": 5,
       "roi": { "length": 0, "value": 0 },
-      "category": "Coding",
+      "category": "coding",
       "id": ObjectId("1434171b7f9cea5969085da1"),
       "percentile": 0,
       "investments": [{
@@ -856,7 +856,7 @@
     }
   ],
   "categories": [{
-    "name": "Sculpture",
+    "name": "sculpture",
     "id": ObjectId("2434171b7f9bea5969085da1"),
     "percentile": 46,
     "previousPercentile": 42,
