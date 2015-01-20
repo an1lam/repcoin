@@ -35,6 +35,14 @@
   margin-right:10px;
 }
 
+.feed-item-img {
+  border-radius:4px;
+  margin-right:5px;
+  float:left;
+  width:40px;
+  height:40px;
+}
+
 .score {
   height: 28px;
   display:inline-block;
@@ -592,6 +600,7 @@ input.cropit-image-zoom-input {
 }
 
 .searchBarImg {
+  border-radius:4px;
   width:40px;
   height:40px;
   margin-right:10px;
