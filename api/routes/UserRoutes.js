@@ -169,7 +169,6 @@ module.exports = function(router, isAuthenticated, acl) {
               }
             });
 
-            var fullName = req.body.firstname + ' ' + req.body.lastname;
             utils.createEvent('join', [user.username, user._id]);
           });
         }
