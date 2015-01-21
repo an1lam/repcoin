@@ -1,3 +1,4 @@
+var Notification = require('../api/models/Notification.js');
 var User = require('../api/models/User.js');
 
 module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
@@ -56,6 +57,13 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
             if (err) {
               return done(err);
             }
+
+            // Create a welcome notification
+            var notification = new Notification({
+              user    : { id: user._id, name: user.username },
+              message : 'Welcome to Repcoin!',
+            });
+            notification.save();
             return done(null, user);
           });
         }

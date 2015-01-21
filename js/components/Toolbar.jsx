@@ -34,6 +34,9 @@ var Toolbar = React.createClass({
 
   toggleNotifications: function(e) {
     e.preventDefault();
+    if (this.state.showNotifications) {
+      this.markNotificationsRead();
+    }
     this.setState({ showNotifications: !this.state.showNotifications });
   },
 
@@ -43,6 +46,27 @@ var Toolbar = React.createClass({
       url: url,
       success: function(notifications) {
         this.setState({ notifications: notifications });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(xhr.responseText);
+      }.bind(this)
+    });
+  },
+
+  markNotificationsRead: function() {
+    var id = this.state.currentUser._id;
+    var url = '/api/notifications/user/' + id + '/markread';
+    var notificationIds = [];
+    for (var i = 0; i < this.state.notifications.length; i++) {
+      notificationIds.push(this.state.notifications[i]._id);
+    }
+    var data = { notificationIds: notificationIds };
+    $.ajax({
+      url: url,
+      type: 'PUT',
+      data: data,
+      success: function() {
+        this.setState({ notifications: [] });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(xhr.responseText);
@@ -82,14 +106,16 @@ var Toolbar = React.createClass({
         <div className="col-md-3 col-md-offset-1 toolbar-search ">
           {instantBox}
         </div>
+        <div className="toolbar-nav-right">
         <ul className="nav navbar-nav toolbar-nav-right">
           <li>{profileLink}</li>
           <li>
             {notifications}
-            {notificationDisplay}
           </li>
           <li>{logout}</li>
         </ul>
+          {notificationDisplay}
+        </div>
       </div>
     );
   }

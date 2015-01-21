@@ -216,7 +216,8 @@
   display:inline-block;
   position:absolute;
   z-index: 999;
-  width:200px;
+  width:300px;
+  margin-top:62px;
 }
 
 .searchDisplayTable {
