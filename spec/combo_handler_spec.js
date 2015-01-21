@@ -74,8 +74,8 @@ describe('ComboHandler: ', function() {
         });
         ComboHandler.feedItems.get(req, res);
         expect(res.send).toHaveBeenCalledWith([
-          { timeStamp: new Date('1992') }, { timeStamp: new Date('1993') },
-          { timeStamp: new Date('1994') }]);
+          { timeStamp: new Date('1994') }, { timeStamp: new Date('1993') },
+          { timeStamp: new Date('1992') }]);
       });
 
       it('should log an error when the transaction find fails', function() {

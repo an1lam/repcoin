@@ -8,14 +8,19 @@ var Link = Router.Link;
 var EventFeedItem = React.createClass({
 
   render: function() {
-    var from;
+    var event;
+    var date = new Date(this.props.event.timeStamp);
+    var month = date.getMonth() + 1;
+    var dateFormat = month + '\/' + date.getDate() + '\/' + date.getFullYear();
+
     if (this.props.event.type === 'join') {
-      from = <Link className='fromName' to='profile' params={{userId: this.props.event.userId}}>
-              {this.props.event.name}</Link>;
+      event = <span><Link className='userName' to='profile' params={{userId: this.props.event.userId}}>
+              {this.props.event.name}</Link> just joined Repcoin!</span>;
     }
     return (
-      <div className='feedItem eventFeedItem'>
-        {from} just joined Repcoin!
+      <div className='feedItem event-feed-item'>
+        {event}
+        <span className="timestamp-badge badge">{dateFormat}</span>
       </div>
     )
    },

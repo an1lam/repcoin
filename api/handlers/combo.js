@@ -12,7 +12,7 @@ var ComboHandler = {
         JoinEvent.find().exec().then(function(evts) {
           var combined = transactions.concat(evts);
           combined.sort(function(a,b) {
-            return a.timeStamp - b.timeStamp;
+            return b.timeStamp - a.timeStamp;
           });
           return res.status(200).send(combined);
         }, function(err) {

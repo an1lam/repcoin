@@ -86,6 +86,10 @@
   display:inline-block;
 }
 
+.event-feed-item {
+  min-height: 30px;
+}
+
 .list-group-item {
   padding: 5px 10px;
 }
