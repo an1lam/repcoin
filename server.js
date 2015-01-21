@@ -88,6 +88,10 @@ var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
 var categoryRouter = express.Router();
 var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth, acl);
 
+// Non-model associated
+var comboRouter = express.Router();
+var comboRoutes = require('./api/routes/ComboRoutes.js')(comboRouter, auth, acl);
+
 // Transactions
 var transactionRouter = express.Router();
 var transactionRoutes = require('./api/routes/TransactionRoutes.js')(transactionRouter, auth, acl);
@@ -105,7 +109,7 @@ var notificationRouter = express.Router();
 var notificationRoutes = require('./api/routes/NotificationRoutes.js')(notificationRouter, auth, acl);
 
 
-app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter, uploadsRouter, notificationRouter ]);
+app.use('/api', [authRouter, categoryRouter, comboRouter, notificationRouter, userRouter, transactionRouter, uploadsRouter ]);
 
 // Start the server unless we are running a test
 if (!module.parent) {

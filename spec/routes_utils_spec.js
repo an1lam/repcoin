@@ -1004,4 +1004,18 @@ describe('Utils: ', function() {
       });
     });
   });
+
+  describe('createEvent', function() {
+    beforeEach(function() {
+      spyOn(utils, 'createJoinEvent').andCallFake(function(name, id) {
+        return [name, id];
+      });
+    });
+
+    it('should call create join event', function() {
+      utils.createEvent('join', ['foo', 'bar']);
+      expect(utils.createJoinEvent).toHaveBeenCalledWith('foo', 'bar');
+    });
+  });
+
 });

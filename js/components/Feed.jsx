@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var FeedHeader = require('./FeedHeader.jsx');
 var FeedItem = require('./FeedItem.jsx');
+var EventFeedItem = require('./EventFeedItem.jsx');
 var InvestmentButton = require('./InvestmentButton.jsx');
 var React = require('react');
 var strings = require('../lib/strings_utils.js');
@@ -32,7 +33,7 @@ var Feed = React.createClass({
         url = '/api/transactions/categories/' + this.props.category;
         break;
       case "HomePage":
-        url = '/api/transactions';
+        url = '/api/feedItems';
         break;
       default:
         url = '';
@@ -72,9 +73,18 @@ var Feed = React.createClass({
     var end = start + PAGINATION_SIZE;
     var transactions = this.state.transactions;
     for (var i = start; i < end && i < transactions.length; i++) {
-      feedItems.push(
-        <li key={transactions[i]._id} className="list-group-item"><FeedItem transaction={transactions[i]} /></li>
-      );
+      // If it's a transaction
+      if (transactions[i].amount) {
+        feedItems.push(
+          <li key={transactions[i]._id} className="list-group-item"><FeedItem transaction={transactions[i]} /></li>
+        );
+
+      // If it's an event
+      } else {
+        feedItems.push(
+          <li key={transactions[i]._id} className="list-group-item"><EventFeedItem event={transactions[i]} /></li>
+        );
+      }
     }
     return feedItems;
   },

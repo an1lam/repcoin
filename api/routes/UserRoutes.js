@@ -57,7 +57,7 @@ module.exports = function(router, isAuthenticated, acl) {
           });
         }
     });
-  };
+  }
 
   // Add an investor category to a given user
   function addInvestorCategory(req, res, category) {
@@ -98,9 +98,9 @@ module.exports = function(router, isAuthenticated, acl) {
           });
         }
     });
-  };
+  }
 
-  router.get('/users/list/byids', isAuthenticated, UserHandler.users.listByIds.get)
+  router.get('/users/list/byids', isAuthenticated, UserHandler.users.listByIds.get);
   router.get('/users/:category/trending/experts/:date', isAuthenticated, UserHandler.users.trending.experts.get);
   router.get('/users', isAuthenticated, UserHandler.users.get);
   router.post('/verify', UserHandler.verify.post);
@@ -168,6 +168,8 @@ module.exports = function(router, isAuthenticated, acl) {
                 return res.status(200).end();
               }
             });
+
+            utils.createEvent('join', [user.username, user._id]);
           });
         }
       });
