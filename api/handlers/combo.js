@@ -16,11 +16,11 @@ var ComboHandler = {
           });
           return res.status(200).send(combined);
         }, function(err) {
-          winston.log('error', 'Error finding transactions: %s', err);
+          winston.log('error', 'Error finding transactions: %s', err.toString());
           return res.status(503).send(err);
         });
       }, function(err) {
-        winston.log('error', 'Error finding join event: %s', err);
+        winston.log('error', 'Error finding join event: %s', err.toString());
         return res.status(503).send(err);
       });
     },
