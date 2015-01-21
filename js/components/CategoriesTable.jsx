@@ -7,6 +7,7 @@ var CategoryInput = require('./CategoryInput');
 var CategoryDelete = require('./CategoryDelete.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var CategoriesTable = React.createClass({
   getInitialState: function() {
@@ -152,14 +153,14 @@ var CategoriesTable = React.createClass({
     var addCategoriesText = '';
     if (length === 0) {
       if (isSelf) {
-        var text = 'You are not an expert for any categories yet!';
+        var text = strings.YOU_ARE_NOT_EXPERT_IN_ANY_CATEGORIES;
           addCategoriesText =
             <div className="add-category-text">
               {text}
               <button className="no-cat-btn btn btn-primary" onClick={this.handleAddClick}>Add Categories</button>
             </div>;
       } else {
-        var text = this.props.user.username + ' is not an expert for any categories yet.';
+        var text = strings.USER_IS_NOT_EXPERT_IN_ANY_CATEGORIES(this.props.user.username);
         addCategoriesText = <div className="add-category-text">{text}</div>;
       }
     }

@@ -8,6 +8,7 @@ var React = require('react');
 var Router = require('react-router');
 var Signup = require('./Signup.jsx');
 var Link = Router.Link;
+var strings = require('../lib/strings_utils.js');
 
 var LoginPage = React.createClass({
   mixins: [ Router.Navigation ],
@@ -27,10 +28,11 @@ var LoginPage = React.createClass({
 
   componentDidMount: function() {
     // Configure to work with localhost or repcoin.com
+    var appId;
     if (document.domain === 'localhost') {
       var appId = '898342783518783';
     } else {
-      var appId = '894010190618709';
+      appId = FACEBOOK_APP_ID_PRODUCTION;
     }
     window.fbAsyncInit = function() {
       FB.init({
@@ -68,9 +70,9 @@ var LoginPage = React.createClass({
             <button onClick={this.handleLoginClick} type="button" ref="login" className="loginButton btn btn-default">Log In</button>
             {login}
           </div>
-          <span className="logo">Repcoin</span>
+          <span className="logo">{strings.REPCOIN}</span>
           <span className="slogan">
-            <h1>Find your expert.</h1>
+            <h1>{strings.FIND_YOUR_EXPERT}</h1>
           </span>
           <Signup />
         </div>

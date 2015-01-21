@@ -4,6 +4,7 @@ var React = require('react');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var PasswordReset = require('./PasswordReset.jsx');
+var strings = require('../lib/strings_utils.js');
 
 var Login = React.createClass({
   mixins: [Navigation],
@@ -51,9 +52,9 @@ var Login = React.createClass({
     if (response.status === 'connected') {
       this.loginUser(response.authResponse.accessToken);
       } else if (response.status === 'not_authorized') {
-      this.setState({ error: true, msg: 'Unauthorized credentials for facebook login' });
+      this.setState({ error: true, msg: strings.FACEBOOK_UNAUTHORIZED_CREDENTIALS });
     } else {
-      this.setState({ error: true, msg: 'Error logging into facebook' });
+      this.setState({ error: true, msg: strings.ERROR_LOGGING_INTO_FACEBOOK });
     }
   },
 
@@ -98,7 +99,7 @@ var Login = React.createClass({
           </div>
           {errors}
         </form>
-        <a onClick={this.handleForgotPasswordClick} href="#">Forgot your password?</a>
+        <a onClick={this.handleForgotPasswordClick} href="#">{strings.FORGOT_PASSWORD}</a>
       </div>;
 
     return (

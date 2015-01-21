@@ -9,7 +9,6 @@ var PictureBox = require('./PictureBox.jsx');
 var React = require('react');
 
 var ProfileBox = React.createClass({
-
   render: function() {
     var investmentButton = '';
     if (this.props.currentUser._id !== this.props.user._id) {

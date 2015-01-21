@@ -1,9 +1,9 @@
 'use strict';
 
 var $ = require('jquery');
-var DEFAULT_LINK = 'http://res.cloudinary.com/repcoin/image/upload/v1419620814/default_profile_od0xw5.jpg';
 var PictureUploadModal = require('./PictureUploadModal');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var PictureBox = React.createClass({
   getInitialState: function() {
@@ -32,7 +32,7 @@ var PictureBox = React.createClass({
   },
 
   handleImgError: function() {
-    $(".img-thumbnail").attr("src", DEFAULT_LINK);
+    $(".img-thumbnail").attr("src", strings.DEFAULT_USER_PIC);
   },
 
   render: function() {
@@ -51,9 +51,10 @@ var PictureBox = React.createClass({
       }
     }
 
-    var imgUrl = this.props.user.picture && this.props.user.picture.url ?
-      this.props.user.picture.url :
-      DEFAULT_LINK;
+    var imgUrl = strings.DEFAULT_USER_PIC;
+    if (this.props.user.picture && this.props.user.picture.url) {
+      imgUrl = this.props.user.picture.url;
+    }
     return (
       <div className="pictureBox" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <img className="img-thumbnail" src={imgUrl} onError={this.handleImgError} ></img>

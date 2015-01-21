@@ -5,6 +5,7 @@ var FeedHeader = require('./FeedHeader.jsx');
 var FeedItem = require('./FeedItem.jsx');
 var InvestmentButton = require('./InvestmentButton.jsx');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var PAGINATION_SIZE = 15;
 
@@ -96,7 +97,7 @@ var Feed = React.createClass({
     var feedHeader = this.props.userId ? <FeedHeader onClick={this.handleClick} isSelf={this.props.isSelf} /> : '';
     var feedText = '';
     if (this.state.transactions.length === 0) {
-      var text = 'No transactions were found.';
+      var text = strings.NO_TRANSACTIONS_FOUND;
       feedText = <div className="alert alert-warning no-transactions-warning">{text}</div>;
     }
     var feedItems = this.getFeedItems();

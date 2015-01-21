@@ -5,6 +5,7 @@ var BecomeInvestorPrompt = require('./BecomeInvestorPrompt.jsx');
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var Modal = React.createClass({
   mixins: [ModalMixin],
@@ -31,7 +32,7 @@ var Modal = React.createClass({
     }
     // If the category was not found, throw an error
     if (!category) {
-      this.setState({ error: true, mg: 'Category was not found for ' + this.props.user.username });
+      this.setState({ error: true, msg: strings.CATEGORY_NOT_FOUND(this.props.user.username) });
       return;
     }
 
@@ -45,13 +46,13 @@ var Modal = React.createClass({
       }
     }
     if (portIndex === -1) {
-      this.setState({ error: true, message: 'You are not an investor for ' + category.name });
+      this.setState({ error: true, message: strings.NOT_AN_INVESTOR(category.name) });
       return;
     }
 
     // Make sure the investor has enough reps
     if (portfolio[portIndex].reps < amount) {
-      this.setState({ error: true, message: 'You do not have enough reps!' });
+      this.setState({ error: true, message: strings.NOT_ENOUGH_REPS });
       return;
     }
 
@@ -69,7 +70,7 @@ var Modal = React.createClass({
 
     // Make sure this investment has at least the amount
     if (investment.amount < amount) {
-      this.setState({ error: 'That investment only has ' + investment.amount + ' reps in it'});
+      this.setState({ error: strings.INVESTMENT_AMOUNT_TOO_SMALL(investment.amount) });
       return;
     }
 
@@ -100,21 +101,21 @@ var Modal = React.createClass({
           url: '/api/users/' + fromUser._id,
           type: 'GET',
           success: function(user) {
-            var action = 'Successfully gave ' + transaction.amount + ' reps to ' + transaction.to.name;
+            var action = strings.SUCCESSFULLY_GAVE(transaction.amount, transaction.to.name);
             if (!this.state.give) {
-              action = 'Successfully revoked ' + transaction.amount * -1 + ' reps from ' + transaction.to.name;
+              action = strings.SUCCESSFULLY_REVOKED(transaction.amount * -1, transaction.to.name);
             }
             this.setState({ error: false, message: action });
             PubSub.publish('profileupdate');
           }.bind(this),
           error: function(xhr, status, err) {
-            this.setState({ error: true, message: 'Error creating transaction' });
+            this.setState({ error: true, message: strings.ERROR_CREATING_TRANSACTION });
             console.error(status, err.toString());
           }.bind(this),
         });
       }.bind(this),
       error: function(xhr, status, err) {
-        this.setState({ error: true, message: 'Error creating transaction' });
+        this.setState({ error: true, message: strings.ERROR_CREATING_TRANSACTION });
         console.error(status, err.toString());
       }.bind(this)
     });
@@ -128,7 +129,7 @@ var Modal = React.createClass({
 
     // Make sure a valid number was entered
     if (isNaN(amount)) {
-      this.setState({ error: true, message: 'Amount must be a valid number'});
+      this.setState({ error: true, message: strings.INVALID_AMOUNT });
       return;
     }
 
@@ -136,7 +137,7 @@ var Modal = React.createClass({
     amount = Math.round(amount* 100) / 100;
     // Make sure the amount is not 0
     if (amount === 0) {
-      this.setState({ error: true, message: 'Investment amount must be more than 0 reps.' });
+      this.setState({ error: true, message: strings.INVALID_AMOUNT_VALUE  });
       return;
     }
 
@@ -244,8 +245,7 @@ var Modal = React.createClass({
 
     var modalContent = '';
     if (this.noPossibleCategories()) {
-      var text = 'You are not an investor for any of ' + this.props.user.firstname + '\'s expert categories.' +
-        ' To invest in ' + this.props.user.firstname + ', you must become an investor for one of their categories.';
+      var text = strings.NO_MATCHING_CATEGORIES(this.props.user.firstname);
       modalContent = <div className="no-categories">{text}</div>
     } else {
       var action = this.state.give ? 'Give' : 'Revoke'; // The text for the action button
@@ -283,7 +283,7 @@ var Modal = React.createClass({
         );
       } else {
         if (!this.state.give) {
-          var string = 'You don\'t have any investments to revoke';
+          var string = strings.NO_INVESTMENTS_TO_REVOKE;
           revokeError = <div className='modal-warning alert alert-info'>{string}</div>;
         }
       }
@@ -300,7 +300,7 @@ var Modal = React.createClass({
             {revokeError}
         </div>;
 
-      var amountPlaceholder = this.state.give ? 'Amount to give' : 'Amount to revoke';
+      var amountPlaceholder = this.state.give ? strings.AMOUNT_TO_GIVE : strings.AMOUNT_TO_REVOKE;
       modalContent =
         <form onSubmit={this.handleSubmit} className="navbar-form">
           <div className="modal-body">

@@ -3,6 +3,7 @@ var auth = require('../auth.jsx');
 var React = require('react');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
+var strings = require('../lib/strings_utils.js');
 
 var PasswordReset = React.createClass({
   getInitialState: function() {
@@ -23,7 +24,7 @@ var PasswordReset = React.createClass({
 
       success: function() {
         this.setState({
-          message: 'An email has been sent to ' + email + ' with a link to reset your password.'
+          message: strings.EMAIL_SENT(email)
         });
       }.bind(this),
       error: function(xhr, status, err) {
