@@ -1,8 +1,7 @@
 'use strict';
 
 var React = require('react');
-var DEFAULT_LINK = 'http://res.cloudinary.com/repcoin/image/upload/v1419620814/default_profile_od0xw5.jpg';
-var CATEGORY_LINK = 'http://res.cloudinary.com/repcoin/image/upload/v1421283105/tag_yib4xo.svg';
+var strings = require('../lib/strings_utils.js');
 
 var SearchItem = React.createClass({
   getInitialState: function() {
@@ -21,13 +20,13 @@ var SearchItem = React.createClass({
   },
 
   handleImgError: function() {
-    $(this.state.imgClass).attr('src', DEFAULT_LINK);
+    $(this.state.imgClass).attr('src', strings.DEFAULT_USER_PIC);
   },
 
   render: function() {
     var data = this.props.data;
     var img = '';
-    var imgUrl = DEFAULT_LINK;
+    var imgUrl = strings.DEFAULT_USER_PIC;
     var itemClass = this.props.type + '-search-item searchItem';
     if (data) {
       if (data.username) {
@@ -35,7 +34,7 @@ var SearchItem = React.createClass({
           imgUrl = data.picture.url;
         }
       } else {
-        imgUrl = CATEGORY_LINK;
+        imgUrl = strings.DEFAULT_CATEGORY_PIC;
       }
     }
 

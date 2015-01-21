@@ -8,6 +8,7 @@ var NotificationDisplay = require('./NotificationDisplay.jsx');
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
+var strings = require('../lib/strings_utils.js');
 
 var Toolbar = React.createClass({
   getInitialState: function() {
@@ -99,8 +100,8 @@ var Toolbar = React.createClass({
     return (
       <div className="toolbar navbar navbar-default" role="navigation">
         <div className="navbar-header">
-          <div className="homelink  navbar-brand">
-            <Link to="home">Repcoin</Link>
+          <div className="homelink navbar-brand">
+            <Link to="home">{strings.REPCOIN}</Link>
           </div>
         </div>
         <div className="col-md-3 col-md-offset-1 toolbar-search ">

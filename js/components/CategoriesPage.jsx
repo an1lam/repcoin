@@ -6,6 +6,7 @@ var CategoriesList = require('./CategoriesList.jsx');
 var CategoriesPageFilter = require('./CategoriesPageFilter.jsx');
 var Footer = require('./Footer.jsx');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 var Toolbar = require('./Toolbar.jsx');
 
 var CategoriesPage = React.createClass({
@@ -34,13 +35,13 @@ var CategoriesPage = React.createClass({
   sortResults: function(selected) {
     var comparator;
     switch(selected) {
-      case 'Alphabetical':
+      case strings.ALPHABETICAL:
         comparator = this.getAlphabeticalComparator();
         break;
-      case 'Market Size (High to Low)':
+      case strings.MARKET_SIZE_HIGH_TO_LOW:
         comparator = this.getMarketComparator(true);
         break;
-      case 'Market Size (Low to High)':
+      case strings.MARKET_SIZE_LOW_TO_HIGH:
         comparator = this.getMarketComparator(false);
         break;
       default:
@@ -78,7 +79,7 @@ var CategoriesPage = React.createClass({
           <Toolbar />
         </div>
         <div className="row">
-          <h1 className="col-md-8 categories-page-title">Check out all of the existing categories on Repcoin.</h1>
+          <h1 className="col-md-8 categories-page-title">{strings.CHECK_OUT_EXISTING_CATEGORIES}</h1>
           <div className="col-md-3 cat-page-filter">
             <CategoriesPageFilter sortResults={this.sortResults}/>
           </div>

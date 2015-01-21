@@ -117,9 +117,9 @@ var SearchPage = React.createClass({
     var filteredResults = this.state.filteredResults;
     if (filteredResults) {
       if (filteredResults.length === 0) {
-        msg = 'Sorry, no results were found for \'' + this.props.params.query + '\'';
+        msg = strings.NO_RESULTS(this.props.params.query);
       } else {
-        msg = 'Displaying ' + filteredResults.length + ' results for \'' + this.props.params.query + '\'';
+        msg = strings.DISPLAYING_RESULTS(filteredResults.length, this.props.params.query);
         results = this.generateResultList();
         filter = <SearchPageFilter filterResults={this.filterResults} />
       }

@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var PubSub = require('pubsub-js');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var CategoryPageHeader = React.createClass({
 
@@ -65,12 +66,12 @@ var CategoryPageHeader = React.createClass({
   render: function() {
     var expertBtn = <button onClick={this.setExpertCategory} className="btn btn-default">Become a {this.props.category.name} expert!</button>;
     if (this.isExpert(this.props.currentUser)) {
-      expertBtn = <div className="alert alert-success" role="alert">You are a {this.props.category.name} expert.</div>
+      expertBtn = <div className="alert alert-success" role="alert">{strings.YOU_ARE_AN_EXPERT(this.props.category.name)}</div>
     }
 
     var investorBtn = <button onClick={this.setInvestorCategory} className="btn btn-default">Become a {this.props.category.name} investor!</button>;
     if (this.isInvestor(this.props.currentUser)) {
-      investorBtn = <div className="alert alert-success" role="alert">You are a {this.props.category.name} investor.</div>
+      expertBtn = <div className="alert alert-success" role="alert">{strings.YOU_ARE_AN_INVESTOR(this.props.category.name)}</div>
     }
 
     return (

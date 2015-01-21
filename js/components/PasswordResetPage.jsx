@@ -3,6 +3,7 @@ var Footer = require('./Footer.jsx');
 var Toolbar = require('./Toolbar.jsx');
 var Navigation = require('react-router').Navigation;
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var PasswordResetPage = React.createClass({
   mixins: [Navigation],
@@ -20,7 +21,7 @@ var PasswordResetPage = React.createClass({
     $(".pwd1").val('');
     $(".pwd2").val('');
     if (password1 !== password2) {
-      this.setState({error: 'The two passwords you entered don\'t match.'});
+      this.setState({error: strings.PASSWORDS_DO_NOT_MATCH });
       return;
     }
 

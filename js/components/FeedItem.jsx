@@ -3,8 +3,8 @@
 var $ = require('jquery');
 var React = require('react');
 var Router = require('react-router');
-var strings = require('../lib/strings_utils.js');
 var Link = Router.Link;
+var strings = require('../lib/strings_utils.js');
 
 var FeedItem = React.createClass({
   getInitialState: function() {
@@ -58,14 +58,15 @@ var FeedItem = React.createClass({
       }
       fromImg = <img className={img1Class} src={img1Url}></img>;
     } else {
-      from = <p className="fromName">Someone</p>;
+      from = <p className="fromName">{strings.SOMEONE}</p>;
       fromImg = '';
     }
 
     var a = this.props.transaction.amount;
-    var action = a < 0 ? 'revoked' : 'gave';
-    var amount = a < 0 ? a * -1 : a;
-    var repsPronoun = a < 0 ? 'reps from' : 'reps to';
+    var revoke = a < 0;
+    var action = revoke ? strings.REVOKED : strings.GAVE;
+    var amount = revoke ? a * -1 : a;
+    var repsPronoun = revoke ? strings.REPS_FROM : strings.REPS_TO;
 
     var date = new Date(this.props.transaction.timeStamp);
     var month = date.getMonth() + 1;

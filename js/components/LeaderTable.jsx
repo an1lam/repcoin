@@ -4,6 +4,7 @@ var $ = require('jquery');
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
+var strings = require('../lib/strings_utils.js');
 
 var LeaderTable = React.createClass({
   getInitialState: function() {
@@ -67,7 +68,7 @@ var LeaderTable = React.createClass({
 
   render: function() {
     var leaders = this.getLeaderRows();
-    var title = this.props.expert ? 'Leading Experts' : 'Leading Investors';
+    var title = this.props.expert ? strings.LEADING_EXPERTS : strings.LEADING_INVESTORS;
     return (
       <div className="panel panel-default">
         <table className="table table-bordered">

@@ -7,6 +7,7 @@ var PortfolioHeader = require('./PortfolioHeader.jsx');
 var PortfolioItem = require('./PortfolioItem.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var PortfolioTable = React.createClass({
   getInitialState: function() {
@@ -141,11 +142,11 @@ var PortfolioTable = React.createClass({
     var investmentHeader = '';
     if (isSelf) {
       privateFields = true;
-      repsHeader = <th>Reps Available</th>;
+      repsHeader = <th>{strings.REPS_AVAILABLE}</th>;
       investmentHeader =
         <th>
-          <div>Investments</div>
-          <div className="subtitle">User / Amount / Dividend</div>
+          <div>{strings.INVESTMENTS}</div>
+          <div className="subtitle">{strings.USER_AMOUNT_DIVIDEND}</div>
         </th>;
     }
 
@@ -154,14 +155,14 @@ var PortfolioTable = React.createClass({
 
     if (this.props.user.portfolio.length === 0) {
       if (isSelf) {
-        var text = 'You are not an investor for any categories yet!';
+        var text = strings.NOT_AN_INVESTOR_FOR_ANYTHING;
           addCategoriesText =
             <div className="add-category-text">
               {text}
               <button className="no-cat-btn btn btn-primary" onClick={this.handleAddClick}>Add Categories</button>
             </div>;
       } else {
-        var text = this.props.user.username + ' is not an investor for any categories yet.';
+        var text = strings.NOT_AN_INVESTOR_FOR_ANYTHING_IMPERSONAL(this.props.user.username);
         addCategoriesText = <div className="add-category-text">{text}</div>;
       }
     }

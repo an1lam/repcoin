@@ -4,6 +4,7 @@ var $ = require('jquery');
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
+var strings = require('../lib/strings_utils.js');
 
 var TrendingTable = React.createClass({
   getInitialState: function() {
@@ -17,7 +18,7 @@ var TrendingTable = React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.getLeaders(newProps.category, 'This month');
+    this.getLeaders(newProps.category, strings.THIS_MONTH);
   },
 
   setTimeframe: function(e) {
@@ -28,23 +29,23 @@ var TrendingTable = React.createClass({
   getDate: function(timeframe) {
     var date = new Date();
     switch(timeframe) {
-      case 'This year':
+      case strings.THIS_YEAR:
         date.setYear(date.getYear()-1);
         break;
 
-      case 'This month':
+      case strings.THIS_MONTH:
         date.setMonth(date.getMonth()-1);
         break;
 
-      case 'This week':
+      case strings.THIS_WEEK:
         date.setDate(date.getDate()-7);
         break;
 
-      case 'Today':
+      case strings.TODAY:
         date.setDate(date.getDate()-1);
         break;
 
-      case 'All time':
+      case strings.ALL_TIME:
         date.setYear(date.getYear()-10);
         break;
 
@@ -92,7 +93,7 @@ var TrendingTable = React.createClass({
 
   render: function() {
     var leaders = this.getLeaderRows();
-    var title = 'Trending Experts';
+    var title = strings.TRENDING_EXPERTS;
     return (
       <div className="panel panel-default trending-table">
         <table className="table table-bordered">
@@ -101,17 +102,17 @@ var TrendingTable = React.createClass({
             <th colSpan="3">
               <div className="trending-table-title">{title}</div>
               <select onChange={this.setTimeframe}>
-                <option>This month</option>
-                <option>This week</option>
-                <option>Today</option>
-                <option>This year</option>
-                <option>All time</option>
+                <option>{strings.THIS_MONTH}</option>
+                <option>{strings.THIS_WEEK}</option>
+                <option>{strings.TODAY}</option>
+                <option>{strings.THIS_YEAR}</option>
+                <option>{strings.ALL_TIME}</option>
               </select>
             </th>
           </tr>
           <tr>
-            <th>Name</th>
-            <th>Percentile</th>
+            <th>{strings.NAME}</th>
+            <th>{strings.PERCENTILE}</th>
           </tr>
           </thead>
           <tbody>

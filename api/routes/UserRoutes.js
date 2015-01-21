@@ -133,7 +133,7 @@ module.exports = function(router, isAuthenticated, acl) {
               msg = 'Fields cannot be blank';
             }
             winston.log('error', 'Error creating user: %s', msg);
-            return res.status(501).send('Fields cannot be blank');
+            return res.status(501).send(msg);
 
           // If the error is not from Mongoose, try parsing MongoDB errors
           } else if (err.err.indexOf('email') !== -1) {

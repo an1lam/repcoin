@@ -5,6 +5,7 @@ var auth = require('../auth.jsx');
 var LinkInput = require('./LinkInput.jsx');
 var LinkItem = require('./LinkItem.jsx');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var LinksBox = React.createClass({
   getInitialState: function() {
@@ -74,9 +75,9 @@ var LinksBox = React.createClass({
     var linksList = '';
     if (!this.props.user.links || this.props.user.links.length === 0) {
       if (isSelf) {
-        var text = 'You currently have no content displayed. Add some links so that users can check out your skills!';
+        var text = strings.YOU_HAVE_NO_CONTENT_DISPLAYED;
       } else {
-        var text = this.props.user.username + ' currently has no content displayed.';
+        var text = strings.NO_CONTENT_DISPLAYED(this.props.user.username);
       }
       linksList = <p>{text}</p>;
     } else {
@@ -85,7 +86,7 @@ var LinksBox = React.createClass({
 
     return(
       <div className="linksBox" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
-        <h4>Content</h4>
+        <h4>{strings.CONTENT}</h4>
         {edit}
         {linkInput}
         {linksList}

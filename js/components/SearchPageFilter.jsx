@@ -1,5 +1,6 @@
 'use strict';
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 
 var SearchPageFilter = React.createClass({
   applyFilter: function() {
@@ -13,17 +14,17 @@ var SearchPageFilter = React.createClass({
     return (
       <div className="searchPageFilter panel panel-info">
         <div className="panel-heading">
-          <h5>Filter by</h5>
+          <h5>{strings.FILTER_BY}</h5>
         </div>
         <div className="panel-body">
           <div className="checkbox" onChange={this.applyFilter}>
             <label>
-              <input type="checkbox" className="user-checkbox"> User </input>
+              <input type="checkbox" className="user-checkbox">{strings.USER}</input>
             </label>
           </div>
           <div className="checkbox" onChange={this.applyFilter}>
             <label>
-              <input type="checkbox" className="category-checkbox"> Category </input>
+              <input type="checkbox" className="category-checkbox">{strings.CATEGORY}</input>
             </label>
           </div>
         </div>
