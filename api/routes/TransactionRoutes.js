@@ -217,9 +217,7 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/transactions/users/:user_id/all')
     // Get all of the transactions to or from a given user
     .get(isAuthenticated, acl.isAdmin, function(req, res) {
-      winston.log('info', 'GET /transactions/users/%s/all', req.params.user_id);
       Transaction.findByUserIdAll(req.params.user_id).then(function(transactions) {
-        winston.log('info', 'Found all transactions related to user: %s', req.params.user_id);
         return res.status(200).send(transactions);
       }, function(err) {
         winston.log('error', 'Error finding transactions: %s', err);

@@ -49,16 +49,10 @@
     "reduce": "~1.0.1",
     "watchify": "^2.1.0",
     "winston": "^0.8.3",
-    "cookie-session": "~1.1.0",
-    "sinon": "~1.12.2"
+    "cookie-session": "~1.1.0"
   },
   "devDependencies": {
-    "should": "^4.0.4",
-    "supertest": "^0.14.0",
-    "chai": "~1.9.2",
-    "sinon": "~1.11.1",
-    "jasmine-node": "~1.14.5",
-    "request": "~2.48.0"
+    "jasmine-node": "~1.14.5"
   },
   "jshintConfig": {
     "node": "true",

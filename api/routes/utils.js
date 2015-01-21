@@ -796,8 +796,8 @@ var utils = {
     }
   },
 
-  createJoinEvent: function(name) {
-    var evt = new JoinEvent({ name: name });
+  createJoinEvent: function(name, id) {
+    var evt = new JoinEvent({ name: name, userId: id });
     evt.save(function(err, svdEvt) {
       if (err) {
         winston.log('error', 'Error creating join event: %s', err);
