@@ -31,7 +31,7 @@ var Feed = React.createClass({
         url = '/api/transactions/categories/' + this.props.category;
         break;
       case "HomePage":
-        url = '/api/transactions';
+        url = '/api/feedItems';
         break;
       default:
         url = '';

@@ -6,6 +6,7 @@ var nodeUtil = require('util');
 
 // Models
 var Category = require('../models/Category.js');
+var JoinEvent = require('../models/JoinEvent.js');
 var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 var VerificationToken = require('../models/VerificationToken.js');
@@ -783,6 +784,28 @@ var utils = {
       subject: passwordResetEmailConfig.subject,
       text: nodeUtil.format(passwordResetEmailConfig.text, url),
     };
+  },
+
+  createEvent: function(type, params) {
+    switch (type) {
+      case 'join':
+        this.createJoinEvent.apply(this, params);
+        break;
+
+      default: return;
+    }
+  },
+
+  createJoinEvent: function(name) {
+    var evt = new JoinEvent({ name: name });
+    evt.save(function(err, svdEvt) {
+      if (err) {
+        winston.log('error', 'Error creating join event: %s', err);
+        return err;
+      }
+
+      return svdEvt;
+    });
   },
 };
 

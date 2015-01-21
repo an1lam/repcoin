@@ -100,6 +100,10 @@ var uploadRoutes = require('./api/routes/UploadRoutes.js')(uploadsRouter, auth, 
 var userRouter = express.Router();
 var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth, acl);
 
+// Non-model associated
+var comboRouter = express.Router();
+var comboRoutes = require('./api/routes/ComboRoutes.js')(comboRouter, auth, acl);
+
 app.use('/api', [authRouter, categoryRouter, userRouter, transactionRouter, uploadsRouter ]);
 
 // Start the server unless we are running a test

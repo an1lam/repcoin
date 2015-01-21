@@ -146,9 +146,7 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/transactions')
     // Get all the transactions, obscuring private fields
     .get(isAuthenticated, function(req, res) {
-      winston.log('info', 'GET /transactions');
       Transaction.findPublic({}).then(function(transactions) {
-        winston.log('info', 'Found all transactions');
         return res.status(200).send(transactions);
       }, function(err) {
         winston.log('error', 'Error finding transactions: %s', err);

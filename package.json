@@ -49,7 +49,8 @@
     "reduce": "~1.0.1",
     "watchify": "^2.1.0",
     "winston": "^0.8.3",
-    "cookie-session": "~1.1.0"
+    "cookie-session": "~1.1.0",
+    "sinon": "~1.12.2"
   },
   "devDependencies": {
     "should": "^4.0.4",
