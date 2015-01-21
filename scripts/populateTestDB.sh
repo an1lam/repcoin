@@ -25,7 +25,7 @@ destroy=$2
 if [ "$destroy" = "--destroy" ];
   then
   echo "Destroying database...";
-  mongo reps_development --eval "db.users.remove({}); db.transactions.remove({}); db.categories.remove({});"
+  mongo reps_development --eval "db.users.remove({}); db.transactions.remove({}); db.categories.remove({}); db.verificationtokens.remove({});"
 fi
 
 mongoimport -d reps_development -c users --jsonArray --file $REPS_ROOT/scripts/${data}UserData.json

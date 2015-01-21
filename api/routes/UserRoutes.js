@@ -344,5 +344,4 @@ module.exports = function(router, isAuthenticated, acl) {
         }
       });
     });
-
 };

@@ -1,5 +1,6 @@
 'use strict';
 var Category = require('../models/Category.js');
+var Notification = require('../models/Notification.js');
 var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 var utils = require('./utils.js');
@@ -126,6 +127,21 @@ module.exports = function(router, isAuthenticated, acl) {
                           return res.status(400).send(err);
                         } else {
                           winston.log('info', 'Successfully created transaction: %s', transaction._id.toString());
+
+                          // Notify the to user of the transaction
+                          var action;
+                          if (amount < 0) {
+                            action = ' revoked ' + amount * -1 + ' reps from you for ' + transaction.category;
+                          } else {
+                            action = ' gave ' + amount + ' reps to you for ' + transaction.category;
+                          }
+                          var from = transaction.anonymous ? 'Someone' : transaction.from.name;
+                          var notification = new Notification({
+                            user    : { id: transaction.to.id, name: transaction.to.name },
+                            message : from + action,
+                          });
+                          notification.save();
+
                           return res.send(transaction);
                         }
                       }, toUser.username, toUserCategoryTotal);

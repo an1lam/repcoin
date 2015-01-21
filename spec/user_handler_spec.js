@@ -43,7 +43,6 @@ describe('UserHandler: ', function() {
     expect(res.send.callCount).toEqual(1);
   });
 
-
   describe('verify: ', function() {
     describe('post: ', function() {
       it('handles no verification token', function() {

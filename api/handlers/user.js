@@ -1,6 +1,8 @@
 'use strict';
+
 var winston = require('winston');
 var Category = require('../models/Category.js');
+var Notification = require('../models/Notification.js');
 var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 var utils = require('../routes/utils.js');
@@ -40,6 +42,14 @@ var UserHandler = {
             }
 
             verificationToken.save();
+
+            // Create a welcome notification
+            var notification = new Notification({
+              user    : { id: user._id, name: user.username },
+              message : 'Welcome to Repcoin!',
+            });
+            notification.save();
+
             req.login(user, function(err) {
               if (err) {
                 winston.log('error', 'Error logging in user: %s', err.toString());

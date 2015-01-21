@@ -104,7 +104,12 @@ var uploadRoutes = require('./api/routes/UploadRoutes.js')(uploadsRouter, auth, 
 var userRouter = express.Router();
 var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth, acl);
 
-app.use('/api', [authRouter, categoryRouter, comboRouter, userRouter, transactionRouter, uploadsRouter ]);
+// Notifications
+var notificationRouter = express.Router();
+var notificationRoutes = require('./api/routes/NotificationRoutes.js')(notificationRouter, auth, acl);
+
+
+app.use('/api', [authRouter, categoryRouter, comboRouter, notificationRouter, userRouter, transactionRouter, uploadsRouter ]);
 
 // Start the server unless we are running a test
 if (!module.parent) {
