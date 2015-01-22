@@ -135,8 +135,9 @@ var Modal = React.createClass({
 
     // Round the number to the nearest hundredth
     amount = Math.round(amount* 100) / 100;
+
     // Make sure the amount is not 0
-    if (amount === 0) {
+    if (amount <= 0) {
       this.setState({ error: true, message: strings.INVALID_AMOUNT_VALUE  });
       return;
     }
