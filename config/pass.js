@@ -1,5 +1,6 @@
 var Notification = require('../api/models/Notification.js');
 var User = require('../api/models/User.js');
+var utils = require('../api/routes/utils.js');
 
 module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
   passport.use(new LocalStrategy({
@@ -64,6 +65,10 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
               message : 'Welcome to Repcoin!',
             });
             notification.save();
+
+            // Create a join event
+            utils.createEvent('join', [user.username, user._id]);
+
             return done(null, user);
           });
         }
