@@ -30,9 +30,9 @@ var LoginPage = React.createClass({
     // Configure to work with localhost or repcoin.com
     var appId;
     if (document.domain === 'localhost') {
-      var appId = '898342783518783';
+      appId = strings.FACEBOOK_APP_ID_LOCALHOST;
     } else {
-      appId = FACEBOOK_APP_ID_PRODUCTION;
+      appId = strings.FACEBOOK_APP_ID_PRODUCTION;
     }
     window.fbAsyncInit = function() {
       FB.init({
