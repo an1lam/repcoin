@@ -505,6 +505,15 @@ html, body {
 }
 
 /* Modal ///////////////////////// */
+.reps-available {
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+.reps-available p {
+  display:inline-block;
+}
+
 .investment-modal-footer {
   text-align:center;
 }

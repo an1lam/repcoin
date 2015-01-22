@@ -77,13 +77,14 @@ module.exports = function(router, isAuthenticated, acl) {
         winston.log('info', 'Unable to find portfolio index for user %s and %s', fromUser.name, categoryName);
         return res.status(400).send('Unable to find portfolioIndex');
       }
-      var portfolio = utils.updateInvestorPortfolio(fromUser.portfolio,
-        categoryName, toUser, amount, toUserCategoryTotal, investmentId, fromUser._id);
-      if (!portfolio) {
-        winston.log('error', 'Error updating portfolio for user: %s', fromUser.name);
+      console.log(fromUser);
+      console.log();
+      var updatedUser = utils.updateInvestorPortfolio(fromUser, categoryName, toUser, amount, toUserCategoryTotal, investmentId);
+      console.log(fromUser);
+      if (!updatedUser) {
+        winston.log('error', 'Error updating portfolio for %s', fromUser.username);
         return res.status(400).send('Error updating portfolio');
       }
-      fromUser.portfolio = portfolio;
       transaction.save(function(err) {
         if (err) {
           winston.log('error', 'Error saving transaction: %s', err);
@@ -111,7 +112,7 @@ module.exports = function(router, isAuthenticated, acl) {
                       Transaction.findOneAndRemove({'id': transaction.id});
                       toUser.categories[categoryIndex].reps -= amount;
                       toUser.save();
-                      fromUser.portfolio[portfolioIndex].reps += amount;
+                      fromUser.reps += amount;
                       fromUser.save();
                       return res.status(400).send(err);
                     } else {
@@ -122,7 +123,7 @@ module.exports = function(router, isAuthenticated, acl) {
                           Transaction.findOneAndRemove({'id': transaction.id});
                           toUser.categories[categoryIndex].reps -= amount;
                           toUser.save();
-                          fromUser.portfolio[portfolioIndex].reps += amount;
+                          fromUser.reps += amount;
                           fromUser.save();
                           return res.status(400).send(err);
                         } else {

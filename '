@@ -215,6 +215,7 @@ describe('Job utils: ', function() {
         'Error incrementing investor reps: %s', 'Error');
       expect(users[0].reps).toEqual(0);
       expect(users[1].reps).toEqual(3.299);
+      expect(categoryPromise.category.reps).toEqual(7);
     });
 
     it('increments investor reps and category reps, rounding to nearest hundredth', function() {
@@ -228,6 +229,7 @@ describe('Job utils: ', function() {
       utils.incrementInvestorReps(cb);
       expect(users[0].reps).toEqual(5);
       expect(users[1].reps).toEqual(3.29);
+      expect(categoryPromise.category.reps).toEqual(12);
     });
   });
 

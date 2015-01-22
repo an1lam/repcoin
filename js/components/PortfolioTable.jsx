@@ -138,11 +138,11 @@ var PortfolioTable = React.createClass({
 
     // Determine whether to display private or public rows
     var privateFields = false;
-    var repsHeader = '';
     var investmentHeader = '';
+    var repsAvailable;
     if (isSelf) {
+      repsAvailable = this.props.user.reps;
       privateFields = true;
-      repsHeader = <th>{strings.REPS_AVAILABLE}</th>;
       investmentHeader =
         <th>
           <div>{strings.INVESTMENTS}</div>
@@ -169,7 +169,7 @@ var PortfolioTable = React.createClass({
 
     return (
       <div key={this.props.user._id} className="categoriesTable panel panel-default" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} >
-        <PortfolioHeader name={this.props.user.username}/>
+        <PortfolioHeader name={this.props.user.username} reps={repsAvailable} />
         {edit}
         {message}
         {addCategory}
@@ -178,7 +178,6 @@ var PortfolioTable = React.createClass({
           <tr className="PortfolioHeader">
             <th>Category</th>
             <th>Percentile</th>
-            {repsHeader}
             {investmentHeader}
           </tr>
           <tbody>

@@ -205,11 +205,18 @@ var utils = {
   deleteInvestorCategory: function(user, categoryName) {
     var length = user.portfolio.length;
     var newPortfolio = [];
+    var reps = 0;
     for (var i = 0; i < length; i++) {
       if (categoryName !== user.portfolio[i].category) {
         newPortfolio.push(user.portfolio[i]);
+      } else {
+        var investments = user.portfolio[i].investments;
+        for (var j = 0; j < investments.length; j++) {
+          reps += investments[j].amount;
+        }
       }
     }
+    user.reps += reps;
     user.portfolio = newPortfolio;
     return user;
   },
@@ -482,7 +489,8 @@ var utils = {
 
   // Update an investor making an investment for a given category,
   // Returns null if the investment is not possible
-  updateInvestorPortfolio: function(portfolio, category, toUser, amount, toUserCategoryTotal, id, fromUserId) {
+  updateInvestorPortfolio: function(fromUser, toUser, category, amount, toUserCategoryTotal, investmentId) {
+    var portfolio = fromUser.portfolio;
     // Round the amount to the nearest hundredth
     amount = Math.round(amount * 100) / 100;
 
@@ -514,13 +522,13 @@ var utils = {
         dividend   : dividend
       };
       portfolio[index].investments.push(investment);
-      portfolio[index].reps -= amount;
+      fromUser.reps -= amount;
     // Otherwise, the investment is a revoke
     } else {
       var j = -1;
       var length = portfolio[index].investments.length;
       for (var i = 0; i < length; i++) {
-        if (String(portfolio[index].investments[i]._id) ===  String(id)) {
+        if (String(portfolio[index].investments[i]._id) ===  String(investmentId)) {
           j = i;
           break;
         }
@@ -534,8 +542,7 @@ var utils = {
       amount *= -1;
 
       // Adjust the investor's reps
-      var newReps = portfolio[index].reps + amount;
-      portfolio[index].reps = newReps;
+      fromUser.reps += amount;
 
       var investment = portfolio[index].investments[j];
 
@@ -549,8 +556,8 @@ var utils = {
       // If the amount is now zero, remove the investment
       if (newAmount === 0) {
         portfolio[index].investments.splice(j, 1);
-        toUser = this.removeInvestorFromExpertOnRevoke(toUser, fromUserId, portfolio[index]);
-        return portfolio;
+        toUser = this.removeInvestorFromExpertOnRevoke(toUser, fromUser._id, portfolio[index]);
+        return fromUser;
       }
 
       // Update the date
@@ -561,7 +568,7 @@ var utils = {
       investment.percentage = newPercentage;
       investment.dividend = Math.round(newPercentage * toUserCategoryTotal * DIVIDEND_RATE * 100) / 100;
     }
-    return portfolio;
+    return fromUser;
   },
 
   // Given a transaction, update all dividends for investors

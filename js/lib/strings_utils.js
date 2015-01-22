@@ -20,8 +20,7 @@ var strings = {
   },
   ARE_YOU_SURE_DELETE_INVESTOR_CATEGORY: function(name) {
     return 'Are you sure you want to delete the category \'' + name
-      + '\'? Your experts will retain the investments you have made, and you will '
-      + 'lose your investor status for this category as well as all of the reps you have earned.';
+      + '\'? All of your investments will be immediately revoked';
   },
   BECOME_AN_INVESTOR: function(firstname) {
     return 'Become an investor in some of ' + firstname + '\'s categories';
@@ -111,6 +110,9 @@ var strings = {
   NOT_ENOUGH_REPS: 'You do not have enough reps!',
   PASSWORDS_DO_NOT_MATCH: 'Passwords do not match',
   PERCENTILE: 'Percentile',
+  PORTFOLIO_HEADER_REPS: function(amount) {
+    return amount + ' reps available';
+  },
   PORTFOLIO_TABLE_TITLE: function(name) {
     return name + '\'s Investor Categories';
   },

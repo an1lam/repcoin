@@ -51,7 +51,7 @@ var Modal = React.createClass({
     }
 
     // Make sure the investor has enough reps
-    if (portfolio[portIndex].reps < amount) {
+    if (portfolio.reps < amount) {
       this.setState({ error: true, message: strings.NOT_ENOUGH_REPS });
       return;
     }
@@ -212,9 +212,9 @@ var Modal = React.createClass({
     var categoriesList = [];
     for (var i = 0; i < catLen; i++) {
       for (var j = 0; j < portLen; j++) {
-        if (portfolio[j].category === categories[i].name && portfolio[j].reps > 0) {
-          var key = categories[i].id + portfolio[j].reps;
-          categoriesList.push(<option key={key} value={categories[i].name}>{categories[i].name} ({portfolio[j].reps} available)</option>);
+        if (portfolio[j].category === categories[i].name) {
+          var key = categories[i].id;
+          categoriesList.push(<option key={key} value={categories[i].name}>{categories[i].name}</option>);
         }
       }
     }
@@ -317,6 +317,9 @@ var Modal = React.createClass({
             <div className="row">
               <div className="menu-options">
                 {choiceDropdown}
+                <div className="reps-available">
+                  <strong className="modal_text">Reps Available: </strong><p>{this.props.currentUser.reps}</p>
+                </div>
                 <div>
                   <strong className="modal_text">Amount:</strong>
                   <input type="text" placeholder={amountPlaceholder} className="form-control reps_text-input" ref="amount"/>

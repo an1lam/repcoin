@@ -18,34 +18,17 @@ var utils = {
         cb();
       } else {
         users.forEach(function(user) {
-          user.portfolio.forEach(function(entry) {
-            entry.reps = Math.floor(entry.reps * 100)/100;
-            if (entry.reps === 0) {
-              // Add reps to the category model
-              var category = Category.findByName(entry.category).then(function(category) {
-                category.reps += 5;
-                category.reps = Math.floor(category.reps * 100)/100;
-                category.save(function(err) {
-                  if (err) {
-                    winston.log('error', 'Error saving category: %s', entry.category);
-                  }
-                  return;
-                });
-              }, function(err) {
-                winston.log('info', 'Error finding category: %s', entry.category);
-              });
-              // Add reps to the user
-              entry.reps += 5;
-              entry.reps = Math.floor(entry.reps * 100)/100;
-            }
-          });
+          if (Math.floor(user.reps * 100)/100 === 0) {
+            user.reps = 5;
+          }
+          user.reps = Math.floor(user.reps * 100)/100;
         });
         routeUtils.saveAll(users, function(errs) {
           if (errs.length > 0) {
-            winston.log('error', 'Error migrating percentiles and dividends: %s', errs);
+            winston.log('error', 'Error incrementing investor reps: %s', errs);
             cb(errs);
           } else {
-            winston.log('info', 'Successfully migrated percentages and dividends.');
+            winston.log('info', 'Successfully incremented investor reps.');
             cb(null);
           }
         });
@@ -118,8 +101,8 @@ var utils = {
                 } else {
                   var dividend = Math.floor(investment.percentage * total * DIVIDEND_PERCENTAGE * 100)/100;
                   investment.dividend = dividend;
-                  category.reps += dividend;
-                  category.reps = Math.floor(category.reps * 100)/100;
+                  user.reps += dividend;
+                  user.reps = Math.floor(user.reps * 100)/100;
                 }
               }
             };
