@@ -239,8 +239,8 @@ var UserHandler = {
                 winston.log('info', 'No user found with id: %s', userId);
                 return res.status(501).send('No user found with id: ' + userId);
               // If the user is not investor for the category, just return the user
-              } else if (!utils.isInvestor(user, categoryName)) {
-                return res.status(200).send(user);
+              } else if (!utils.isInvestor(investor, categoryName)) {
+                return res.status(200).send(investor);
               } else {
                 // Undo this investors activities in the category
                 // Remove investments, decrement category market share
