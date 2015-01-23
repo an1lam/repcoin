@@ -505,7 +505,6 @@ var utils = {
 
     // The from user is not an investor for this category (ERROR!)
     if (index === -1) {
-      console.log('index is -1');
       return null;
     }
 
@@ -570,8 +569,6 @@ var utils = {
       investment.percentage = newPercentage;
       investment.dividend = Math.round(newPercentage * toUserCategoryTotal * DIVIDEND_RATE * 100) / 100;
     }
-    console.log('returning fromUser');
-    console.log(fromUser);
     return fromUser;
   },
 

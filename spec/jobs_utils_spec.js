@@ -19,6 +19,81 @@ describe('Job utils: ', function() {
     expect(cb.callCount).toEqual(1);
   });
 
+  describe('migrateCategoryReps: ', function() {
+    var users, category;
+    beforeEach(function() {
+      category = { name: 'Coding', reps: 0 };
+      users = [
+        { categories: [{name: 'Coding', reps: 5 }, { name: 'Ballet', reps: 10 }] },
+        { categories: [{name: 'Coding', reps: 6 }] },
+        { categories: [{name: 'Foobar', reps: 6 }] },
+      ];
+    });
+
+    it('handles error finding users', function() {
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback('Error', null);
+      });
+      utils.migrateCategoryReps(cb);
+      expect(winston.log).toHaveBeenCalledWith('error', 'Error migrating category reps: %s', 'Error');
+      expect(category.reps).toEqual(0);
+    });
+
+    it('handles error finding categories', function() {
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
+      });
+      spyOn(Category, 'find').andCallFake(function(callback) {
+        return callback('Error', null);
+      });
+      utils.migrateCategoryReps(cb);
+      expect(winston.log).toHaveBeenCalledWith('error', 'Error migrating category reps: %s', 'Error');
+      expect(category.reps).toEqual(0);
+    });
+
+    it('makes category reps the sum of expert reps in that category', function() {
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
+      });
+      spyOn(Category, 'find').andCallFake(function(callback) {
+        return callback(null, [category]);
+      });
+      spyOn(routeUtils, 'saveAll').andCallFake(function(categories, callback) {
+        return callback([]);
+      });
+      utils.migrateCategoryReps(cb);
+      expect(category.reps).toEqual(11);
+    });
+  });
+
+  describe('migrateInvestorReps: ', function() {
+    var investor;
+    beforeEach(function() {
+      investor = { reps: 0, portfolio: [{ reps: 10 }, { reps: 15 }] };
+    });
+
+    it('handles error finding users', function() {
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback('Error', null);
+      });
+      utils.migrateInvestorReps(cb);
+      expect(winston.log).toHaveBeenCalledWith('error', 'Error migrating investor reps: %s', 'Error');
+      expect(investor.reps).toEqual(0);
+    });
+
+    it('makes investor reps the sum of portfolio reps', function() {
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, [investor]);
+      });
+      spyOn(routeUtils, 'saveAll').andCallFake(function(users, callback) {
+        return callback([]);
+      });
+
+      utils.migrateInvestorReps(cb);
+      expect(investor.reps).toEqual(25);
+    });
+  });
+
   describe('migratePercentagesAndDividends: ', function() {
     var expert, investor1, investor2;
     beforeEach(function() {
