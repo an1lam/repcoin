@@ -29,8 +29,6 @@ module.exports = function(router, isAuthenticated, acl) {
           winston.log('error', 'Error finding user: %s', err);
           return res.status(501).send(err);
         } else if (!user) {
-          winston.log('info', 'User with id %s is already an expert for category %s',
-            userId, category.name);
           return res.status(501).send('Already an expert');
         } else {
           // Add to the expert count
@@ -46,10 +44,8 @@ module.exports = function(router, isAuthenticated, acl) {
                   winston.log('error', 'Error finding user: %s', err);
                   return res.status(501).send(err);
                 } else if (!user) {
-                  winston.log('info', 'No user found with id: %s', userId);
                   return res.status(501).send(err);
                 } else {
-                  winston.log('info', 'Found user: %s', user.email);
                   return res.status(200).send(user);
                 }
               });
@@ -70,8 +66,6 @@ module.exports = function(router, isAuthenticated, acl) {
           winston.log('error', 'Error updating user: %s', err);
           return res.status(501).send(err);
         } else if (!user) {
-          winston.log('info', 'User with id %s is already an investor for category %s',
-            userId, category.name);
           return res.status(501).send('Already an investor');
         } else {
           category.investors += 1;
@@ -87,10 +81,8 @@ module.exports = function(router, isAuthenticated, acl) {
                   winston.log('error', 'Error finding user: %s', err);
                   return res.status(501).send(err);
                 } else if (!user) {
-                  winston.log('info', 'No user found with id: %s', userId);
                   return res.status(501).send(err);
                 } else {
-                  winston.log('info', 'Found user: %s', user.email);
                   return res.status(200).send(user);
                 }
               });
@@ -108,7 +100,6 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/users')
     // Create a new user
     .post(function(req, res) {
-      winston.log('info', 'POST /users');
 
       if (!utils.validateCreateUserInputs(req)) {
         return res.status(412).send('Invalid inputs');
@@ -187,13 +178,11 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/users/:user_id/addexpert/:category_name')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
       var categoryName = req.params.category_name;
-      winston.log('info', 'PUT /users/%s/addexpert/%s', req.params.user_id, categoryName);
 
       Category.findByName(categoryName).then(function(category) {
         if (category) {
           return addExpertCategory(req, res, category);
         } else {
-          winston.log('info', 'Creating category: %s', categoryName);
           var newCategory = new Category({ name : categoryName });
           newCategory.save(function(err, category) {
             if (err) {
@@ -215,13 +204,11 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/users/:user_id/addinvestor/:category_name')
     .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
       var categoryName = req.params.category_name;
-      winston.log('info', '/users/%s/addinvestor/%s', req.params.user_id, req.params.category_name);
 
       Category.findByName(categoryName).then(function(category) {
         if (category) {
           return addInvestorCategory(req, res, category);
         } else {
-          winston.log('info', 'Creating category: %s', categoryName);
           var newCategory = new Category({ name : categoryName });
           newCategory.save(function(err, category) {
             if (err) {
@@ -250,7 +237,6 @@ module.exports = function(router, isAuthenticated, acl) {
   router.route('/users/sendPasswordResetEmail')
     .post(function(req, res) {
       var email = req.body.email;
-      winston.log('info', 'User with email %s resetting their password', email);
       if (!email) {
         winston.log('error', 'No email provided in password reset request.');
         return res.status(412).send('No email address provided');
@@ -261,10 +247,8 @@ module.exports = function(router, isAuthenticated, acl) {
           winston.log('error', 'Failed to send password reset email to user %s: %s.', email, err);
           return res.status(503).send('Error finding user for ' + email + '. Please try again.');
         } else if (!user) {
-          winston.log('info', 'Will not send password reset email to unrecognized address: %s', email);
           return res.status(412).send('Unrecognized email address');
         } else if (user.facebookId) {
-          winston.log('info', 'User with email: %s is a facebook account', email);
           return res.status(412).send('Users who sign up with facebook do not have a Repcoin email address');
         }
 
@@ -289,7 +273,6 @@ module.exports = function(router, isAuthenticated, acl) {
               winston.log('error', 'Failed to send email to user %s: %s', email, err);
               return res.status(554).send(err);
             } else {
-              winston.log('info', 'Successfully emailed user %s with password reset link.', email);
               return res.status(200).end();
             }
           });
@@ -325,7 +308,7 @@ module.exports = function(router, isAuthenticated, acl) {
               user.password = newPassword;
               user.save(function(err) {
                 if (err) {
-                  winston.log('Unable to save user: %s', err);
+                  winston.log('error', 'Unable to save user: %s', err);
                   return res.status(501).send(err);
                 }
 
@@ -334,7 +317,6 @@ module.exports = function(router, isAuthenticated, acl) {
                     winston.log('error', 'Error logging in user: %s', err);
                     return res.status(400).send(err);
                   } else {
-                    winston.log('info', 'Successully update password for user: %s', user.email);
                     return res.status(200).send(user);
                   }
                 });
