@@ -7,7 +7,6 @@ var Transaction = require('../models/Transaction.js');
 var ComboHandler = {
   feedItems: {
     get: function(req, res) {
-      winston.log('info', 'feedItems.get called by ComboRouter');
       Transaction.findPublic({}).then(function(transactions) {
         JoinEvent.find().exec().then(function(evts) {
           var combined = transactions.concat(evts);

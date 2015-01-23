@@ -12,7 +12,6 @@ var UserHandler = {
   // Route that verifies email
   verify: {
     post: function(req, res) {
-      winston.log('info', 'POST /verify');
       var token = req.body.verificationToken;
 
       if (!token) {
@@ -55,7 +54,6 @@ var UserHandler = {
                 winston.log('error', 'Error logging in user: %s', err.toString());
                 return res.status(501).send(err);
               } else {
-                winston.log('info', 'Successully verified user: %s', user._id.toString());
                 return res.status(200).send(user);
               }
             });
@@ -68,16 +66,13 @@ var UserHandler = {
   // Routes with the url /users
   users: {
     get: function(req, res) {
-      winston.log('info', 'GET /users');
       // Check if we want to get the users with a search term
       if (req.query.searchTerm) {
-        winston.log('info', 'Finding users with searchTerm %s', req.query.searchTerm);
         User.findBySearchTermPublic(req.query.searchTerm, function(err, users) {
           if (err) {
             winston.log('error', 'Error finding users: %s', err);
             return res.status(501).send(err);
           } else {
-            winston.log('info', 'Found users');
             return res.status(200).send(users);
           }
         });
@@ -90,7 +85,6 @@ var UserHandler = {
             winston.log('error', 'Error finding users: %s', err);
             return res.status(501).send(err);
           } else {
-            winston.log('info', 'Found users');
             return res.status(200).send(users);
           }
         });
@@ -100,9 +94,7 @@ var UserHandler = {
     // Route /users/list/byids/
     listByIds: {
       get: function(req, res) {
-        winston.log('info', 'GET /users/list/byids');
         if (!req.query.idList) {
-          winston.log('info', 'No id list provided');
           return res.status(412).send('No id list provided');
         }
         User.findPublic({ '_id': { $in: req.query.idList }}, function(err, users) {
@@ -110,7 +102,6 @@ var UserHandler = {
             winston.log('error', 'Error finding users: %s', err);
             return res.status(501).send(err);
           } else {
-            winston.log('info', 'Found users');
             return res.status(200).send(users);
           }
         });
@@ -122,7 +113,6 @@ var UserHandler = {
         get: function(req, res) {
           var date = req.params.date;
           var category = req.params.category;
-          winston.log('info', 'GET /users/trending/experts/%s', date);
           Transaction.findTrendingExperts(date, category).then(function(userIds) {
             var idArray = [];
             for (var i = 0; i < userIds.length; i++) {
@@ -147,7 +137,6 @@ var UserHandler = {
     // Routes with /users/user_id
     userId: {
       get: function(req, res) {
-        winston.log('info', 'GET /users/%s', req.params.user_id);
         var cb = function(err, user) {
           if (err) {
             winston.log('error', 'Error getting user: %s', err);
@@ -156,7 +145,6 @@ var UserHandler = {
             winston.log('info', 'No user found with id: %s', req.params.user_id);
             return res.status(501).send('No user was found');
           } else {
-            winston.log('info', 'Found user with id: %s', req.params.user_id);
             return res.status(200).send(user);
           }
         };
@@ -173,9 +161,7 @@ var UserHandler = {
 
       put: function(req, res) {
         var userId = req.params.user_id;
-        winston.log('info', 'PUT /users/%s', userId);
         if (!utils.validateUserInputs(req)) {
-          winston.log('info', 'Invalid inputs');
           return res.status(412).send('Invalid inputs');
         }
 
@@ -208,7 +194,6 @@ var UserHandler = {
                 winston.log('error', 'Error saving user: %s', err);
                 return res.status(501).send(err);
               } else {
-                winston.log('info', 'Saved user with id: %s', userId);
                 return res.status(200).send(user);
               }
             });
@@ -218,7 +203,6 @@ var UserHandler = {
 
       delete: function(req, res) {
         var userId = req.params.user_id;
-        winston.log('info', 'DELETE /users/%s', userId);
         User.remove({ _id: userId }, function(err, user) {
           if (err) {
             winston.log('error', 'Error finding user: %s', err);
@@ -227,7 +211,6 @@ var UserHandler = {
             winston.log('info', 'No user found with id: %s', userId);
             return res.status(501).send('No user was found with id: ' + userId);
           } else {
-            winston.log('info', 'Found user with id: %s', userId);
             return res.status(200).send(user);
           }
         });
@@ -237,7 +220,6 @@ var UserHandler = {
         delete: function(req, res) {
           var userId = req.params.user_id;
           var categoryName = req.params.category_name;
-          winston.log('info', 'PUT /users/%s/%s/investor/delete', userId, categoryName);
 
           // Decrement the number of investors in the category
           var category = Category.findByName(categoryName).then(function(category) {
@@ -257,8 +239,8 @@ var UserHandler = {
                 winston.log('info', 'No user found with id: %s', userId);
                 return res.status(501).send('No user found with id: ' + userId);
               // If the user is not investor for the category, just return the user
-              } else if (!utils.isInvestor(investor, categoryName)) {
-                return res.status(200).send(investor);
+              } else if (!utils.isInvestor(user, categoryName)) {
+                return res.status(200).send(user);
               } else {
                 // Undo this investors activities in the category
                 // Remove investments, decrement category market share
@@ -273,7 +255,7 @@ var UserHandler = {
               }
             });
           }, function(err) {
-            winston.log('info', 'Error finding category: %s', categoryName);
+            winston.log('error', 'Error finding category: %s', categoryName);
             return res.status(501).send(err);
           });
         },
@@ -283,7 +265,6 @@ var UserHandler = {
         delete: function(req, res) {
           var categoryName = req.params.category_name;
           var userId = req.params.user_id;
-          winston.log('info', 'PUT /users/%s/%s/expert/delete', userId, categoryName);
 
           // Decrement the number of investors in the category
           var category = Category.findByName(categoryName).then(function(category) {
@@ -298,7 +279,6 @@ var UserHandler = {
                 return res.status(501).send('No user found with id: ' + userId);
               // If the user is not an expert for this category, just return the user
               } else if (!utils.isExpert(user, categoryName)) {
-                winston.log('info', 'User %s is not an expert for %s', userId, categoryName);
                 return res.status(200).send(user);
               } else {
                 // Reimburse the user's investors in the category
@@ -314,7 +294,6 @@ var UserHandler = {
                         winston.log('error', 'Error saving user: %s', err);
                         return res.status(501).send(err);
                       } else {
-                        winston.log('info', 'Saved user: %s', userId);
                         return res.status(200).send(user);
                       }
                     });
@@ -333,9 +312,7 @@ var UserHandler = {
     // /users/:categoryName/leaders/:count
     leaders: {
       get: function(req, res) {
-        winston.log('info', 'GET /users/%s/leaders/%s', req.params.categoryName, req.params.count);
         if (!utils.validateLeadersCountInputs(req)) {
-          winston.log('info', 'Invalid inputs');
           return res.status(412).send('Invalid inputs');
         }
 
@@ -350,7 +327,6 @@ var UserHandler = {
           } else {
             // sort the users in decreasing order of directScore
             var percentileComparator = utils.getPercentileComparator(categoryName, expert);
-            winston.log('info', 'Found %s leaders for category %s', count, categoryName);
             return res.status(200).send(leaders.sort(percentileComparator));
           }
         });
