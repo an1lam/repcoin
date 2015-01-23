@@ -241,39 +241,33 @@ var UserHandler = {
 
           // Decrement the number of investors in the category
           var category = Category.findByName(categoryName).then(function(category) {
+            if (!category) {
+              winston.log('error', 'Error finding category: %s', categoryName);
+              res.status(501).send('No category found with name ' + categoryName);
+            }
+
             category.investors -= 1;
 
             // Update the user and the experts that the user invested in
-            User.findById(userId, function(err, user) {
+            User.findById(userId, function(err, investor) {
               if (err) {
-                winston.log('error', 'Error finding user: %s', err);
+                winston.log('error', 'Error finding investor: %s', err);
                 return res.status(501).send(err);
-              } else if (!user) {
+              } else if (!investor) {
                 winston.log('info', 'No user found with id: %s', userId);
                 return res.status(501).send('No user found with id: ' + userId);
               // If the user is not investor for the category, just return the user
-              } else if (!utils.isInvestor(user, categoryName)) {
-                winston.log('info', 'User %s is already an investor for %s', userId, categoryName);
-                return res.status(200).send(user);
+              } else if (!utils.isInvestor(investor, categoryName)) {
+                return res.status(200).send(investor);
               } else {
-                // Update all of the experts invested in by this user for the category
-                var expertIds = utils.getInvestorsExperts(user, categoryName);
-                utils.updateInvestorsExperts(expertIds, categoryName, user._id, function(err) {
+                // Undo this investors activities in the category
+                // Remove investments, decrement category market share
+                utils.undoInvestorActivityForCategory(category, investor, function(err, user) {
                   if (err) {
-                    winston.log('error', 'Error updating investors\' experts: %s', err);
+                    winston.log('error', 'Error undoing investor activity: %s', err.toString());
                     return res.status(501).send(err);
                   } else {
-                    user = utils.deleteInvestorCategory(user, categoryName);
-                    user.save(function(err, user) {
-                      if (err) {
-                        winston.log('error', 'Error saving user: %s', err);
-                        return res.status(501).send(err);
-                      } else {
-                        category.save();
-                        winston.log('info', 'Saved user: %s', userId);
-                        return res.status(200).send(user);
-                      }
-                    });
+                    return res.status(200).send(user);
                   }
                 });
               }

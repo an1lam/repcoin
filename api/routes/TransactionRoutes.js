@@ -77,10 +77,7 @@ module.exports = function(router, isAuthenticated, acl) {
         winston.log('info', 'Unable to find portfolio index for user %s and %s', fromUser.name, categoryName);
         return res.status(400).send('Unable to find portfolioIndex');
       }
-      console.log(fromUser);
-      console.log();
-      var updatedUser = utils.updateInvestorPortfolio(fromUser, categoryName, toUser, amount, toUserCategoryTotal, investmentId);
-      console.log(fromUser);
+      var updatedUser = utils.updateInvestorPortfolio(fromUser, toUser, categoryName, amount, toUserCategoryTotal, investmentId);
       if (!updatedUser) {
         winston.log('error', 'Error updating portfolio for %s', fromUser.username);
         return res.status(400).send('Error updating portfolio');

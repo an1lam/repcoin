@@ -97,8 +97,7 @@ var strings = {
     return 'You are now an expert in ' + name;
   },
   NOW_AN_INVESTOR: function(name) {
-    return 'You are now an investor in ' + name + '. You have received 5 reps to start, '
-      + 'and you will get 5 more overnight once you\'ve spent those!';
+    return 'You are now an investor in ' + name;
   },
   NOT_AN_INVESTOR: function(name) {
     return 'You are not an investor for ' + name;

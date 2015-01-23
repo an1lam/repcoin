@@ -43,24 +43,29 @@ var utils = {
   },
 
   // Given an expert, category, and userId, remove investments from that userId
-  // The expert keeps the reps it had from that investment
-  removeInvestor: function(expert, categoryName, userId) {
+  // If amount is not present, then expert keeps the reps it had from that investor
+  removeInvestor: function(expert, categoryName, userId, amount) {
     var l = expert.categories.length;
-    for (var j = 0; j < l; j++) {
+    for (var i = 0; i < l; i++) {
 
       // If the category matches, search the investors
-      if (expert.categories[j].name === categoryName) {
+      if (expert.categories[i].name === categoryName) {
         var newInvestors = [];
-        var z = expert.categories[j].investors.length;
-        for (var p = 0; p < z; p++) {
+        var z = expert.categories[i].investors.length;
+        for (var j = 0; j < z; j++) {
 
           // Copy over the investor unless it is the one we want to remove
-          var investor = expert.categories[j].investors[p];
+          var investor = expert.categories[i].investors[j];
           if (String(investor.id) !== String(userId)) {
             newInvestors.push(investor);
           }
         }
-        expert.categories[j].investors = newInvestors;
+        expert.categories[i].investors = newInvestors;
+
+        // If an amount is given, then remove that amount
+        if (amount) {
+          expert.categories[i].reps -= amount;
+        }
       }
     }
     return expert;
@@ -90,39 +95,74 @@ var utils = {
     return investor;
   },
 
-  // Given experts ids invested by an investor
-  // For each expert, remove investments from that investor
-  updateInvestorsExperts: function(expertIds, categoryName, investorId, cb) {
-    // If the list of experts is empty, simply return
-    if (expertIds.length === 0) {
-      return cb(null);
-    }
-    var self = this;
-
-    // Update each user
-    User.find({ '_id': { $in: expertIds }}, function(err, experts) {
-      if (err) {
-        winston.log('error', 'utils.updateInvestorExperts: error finding experts: %s', err);
-        return cb(err);
+  // For each investment, decrement that experts reps and remove the investor if necessary
+  // Give the investment amounts back to the investor
+  // Decrement the investment amounts from the category market size
+  undoInvestorActivityForCategory: function(category, investor, cb) {
+    // Find the investments that need to be removed
+    // Keep remaining portfolio entries in the new portfolio
+    var investments;
+    var portfolio = investor.portfolio;
+    var newPortfolio = [];
+    for (var i = 0; i < investor.portfolio.length; i++) {
+      if (portfolio[i].category === category.name) {
+        investments = portfolio[i].investments;
       } else {
-        var newExperts = [];
-        // Search through each expert's portfolio
-        var length = experts.length;
-        for (var i = 0; i < length; i++) {
-          var expert = experts[i];
-          newExperts.push(self.removeInvestor(expert, categoryName, investorId));
-        }
-
-        // Finally, save all the modified investors
-        self.saveAll(newExperts, function(errs) {
-          if (errs.length > 0) {
-            winston.log('error', 'utils.updateInvestorExperts: error saving all experts: %s', errs);
-            return cb(errs);
-          } else {
-            return cb(null);
-          }
-        });
+        newPortfolio.push(portfolio[i]);
       }
+    }
+    if (!investments) {
+      return cb('Error finding investments', null);
+    }
+
+    // Create a map of users to their respective amounts owed back to the investor
+    // Store the total amount of reps to be given back to the investor
+    var expertAmounts = {};
+    var totalReps = 0;
+    var expertId, amount;
+    for (var j = 0; j < investments.length; j++) {
+      amount = investments[j].amount;
+      expertId = investments[j].userId;
+      if (expertAmounts[expertId]) {
+        expertAmounts[expertId] += amount;
+      } else {
+        expertAmounts[expertId] = amount;
+      }
+      totalReps += amount;
+    }
+
+    // Give the investor back the total amount and update his portfolio
+    investor.reps += totalReps;
+    investor.portfolio = newPortfolio;
+
+    // Decrement the total amount being removed from the category
+    category.reps -= totalReps;
+
+    var self = this;
+    var investorId = investor._id.toString();
+    // For each expert in the map, remove those reps and the investor
+    User.find({ '_id': { $in: Object.keys(expertAmounts) }}, function(err, experts) {
+      if (err) {
+        return cb('Error finding investors experts', null);
+      }
+      var newExperts = [];
+      // Search through each expert's portfolio
+      var length = experts.length;
+      for (var i = 0; i < length; i++) {
+        var expert = experts[i];
+        newExperts.push(self.removeInvestor(expert, category.name, investorId, expertAmounts[expert._id.toString()]));
+      }
+
+      // Finally, save all the modified experts, the investor, and the category
+      var newDocs = newExperts.concat(investor).concat(category);
+      self.saveAll(newDocs, function(errs) {
+        if (errs.length > 0) {
+          winston.log('error', 'utils.updateInvestorExperts: error saving documents: %s', errs);
+          return cb(errs, null);
+        } else {
+          return cb(null, investor);
+        }
+      });
     });
   },
 
@@ -168,28 +208,6 @@ var utils = {
     });
   },
 
-  // Get an investor's experts' ids for a given category
-  getInvestorsExperts: function(user, categoryName) {
-    var expertIds = {};
-    var length = user.portfolio.length;
-    for (var i = 0; i < length; i++) {
-      if (categoryName === user.portfolio[i].category) {
-        var len = user.portfolio[i].investments.length;
-        for (var j = 0; j < len; j++) {
-          var id = user.portfolio[i].investments[j].userId;
-          if (!(id in expertIds)) {
-            expertIds[id] = true;
-          }
-        }
-      }
-    }
-    var ids = [];
-    for (var key in expertIds) {
-      ids.push(key);
-    }
-    return ids;
-  },
-
   // Get investors for a given user and category
   getInvestors: function(user, categoryName) {
     var length = user.categories.length;
@@ -199,26 +217,6 @@ var utils = {
       }
     }
     return null;
-  },
-
-  // Delete an investor category
-  deleteInvestorCategory: function(user, categoryName) {
-    var length = user.portfolio.length;
-    var newPortfolio = [];
-    var reps = 0;
-    for (var i = 0; i < length; i++) {
-      if (categoryName !== user.portfolio[i].category) {
-        newPortfolio.push(user.portfolio[i]);
-      } else {
-        var investments = user.portfolio[i].investments;
-        for (var j = 0; j < investments.length; j++) {
-          reps += investments[j].amount;
-        }
-      }
-    }
-    user.reps += reps;
-    user.portfolio = newPortfolio;
-    return user;
   },
 
   // Delete an expert category
@@ -507,6 +505,7 @@ var utils = {
 
     // The from user is not an investor for this category (ERROR!)
     if (index === -1) {
+      console.log('index is -1');
       return null;
     }
 
@@ -523,6 +522,8 @@ var utils = {
       };
       portfolio[index].investments.push(investment);
       fromUser.reps -= amount;
+      fromUser.reps = Math.floor(fromUser.reps * 100)/100;
+
     // Otherwise, the investment is a revoke
     } else {
       var j = -1;
@@ -543,6 +544,7 @@ var utils = {
 
       // Adjust the investor's reps
       fromUser.reps += amount;
+      fromUser.reps = Math.floor(fromUser.reps * 100)/100;
 
       var investment = portfolio[index].investments[j];
 
@@ -568,6 +570,8 @@ var utils = {
       investment.percentage = newPercentage;
       investment.dividend = Math.round(newPercentage * toUserCategoryTotal * DIVIDEND_RATE * 100) / 100;
     }
+    console.log('returning fromUser');
+    console.log(fromUser);
     return fromUser;
   },
 
