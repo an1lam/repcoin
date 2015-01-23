@@ -1,6 +1,5 @@
 // api/routes/AuthRoutes.js
 // Routes to login, logout, and signup
-var winston = require('winston');
 
 module.exports = function(router, passport) {
   /*

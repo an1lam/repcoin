@@ -8,7 +8,6 @@ var NotificationHandler = {
     userId: {
       markread: {
         put: function(req, res) {
-          winston.log('info', 'PUT /notifications/user/%s/markread', req.params.user_id);
           var notificationIds = req.body.notificationIds;
           if (!notificationIds) {
             return res.status(412).send('Invalid inputs');
@@ -35,7 +34,6 @@ var NotificationHandler = {
       unread: {
         get: function(req, res) {
           var userId = req.params.user_id;
-          winston.log('info', 'GET /notifications/user/%s/unread', userId);
           Notification.findUnread(userId).then(function(notifications) {
             return res.status(200).send(notifications);
           }, function(err) {
