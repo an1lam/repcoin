@@ -70,7 +70,7 @@ module.exports = function(router, isAuthenticated, acl) {
         } else {
           category.investors += 1;
           category.save();
-          utils.updateInvestors(category.name, function(err) {
+          utils.updateInvestorPercentilesAndDividends(category.name, function(err) {
             if (err) {
               winston.log('error', 'Error updating investor percentiles: %s', err);
               return res.status(501).send(err);

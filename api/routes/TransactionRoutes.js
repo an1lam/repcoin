@@ -2,145 +2,14 @@
 var Category = require('../models/Category.js');
 var Notification = require('../models/Notification.js');
 var Transaction = require('../models/Transaction.js');
+var TransactionHandler = require('../handlers/transaction.js');
 var User = require('../models/User.js');
 var utils = require('./utils.js');
 var winston = require('winston');
 
 // Routes that end in /transactions
 module.exports = function(router, isAuthenticated, acl) {
-  function createTransaction(req, res) {
-    // Validate the inputs given to createTransaction
-    if (!utils.validateTransactionInputs(req)) {
-      winston.log('info', 'Invalid transaction inputs');
-      return res.status(412).send('Invalid transaction inputs');
-    }
-
-    var from = req.body.from;
-    var to = req.body.to;
-    var amount = Number(req.body.amount);
-    var categoryName = req.body.category;
-    var investmentId = req.body.id;
-    var categoryIndex = -1;
-    var portfolioIndex = -1;
-
-    var transaction = new Transaction({
-      to          : to,
-      from        : from,
-      amount      : amount,
-      category    : categoryName
-    });
-
-    var fromUserPromise = User.findById(from.id).exec();
-    var toUserPromise = User.findById(to.id).exec();
-
-    var toUserCategoryTotal;
-    var toUser;
-    var fromUser;
-
-    // Modify the toUser given the investment being made
-    toUserPromise.then(function(touser) {
-      for (var i = 0; i < touser.categories.length; i++) {
-        if (touser.categories[i].name === categoryName) {
-            touser.categories[i].reps = touser.categories[i].reps + amount;
-            toUserCategoryTotal = touser.categories[i].reps;
-            categoryIndex = i;
-          }
-        }
-
-        if (categoryIndex === -1) {
-          winston.log('info', 'Unable to find corresponding category for user %s and %s', toUser.name, categoryName);
-          return res.status(400).send('Unable to find corresponding category');
-        }
-        toUser = utils.addInvestorToExpertCategory(touser, from.id, from.name, categoryIndex);
-        return fromUserPromise;
-    }, function(err) {
-      winston.log('error', 'Error retrieving toUser promise: %s', err);
-      return res.status(400).send(err);
-    // Deal with the from user
-    }).then(function(fromUser) {
-      // Modify the from user given the investment being made
-      portfolioIndex = utils.getPortfolioIndex(fromUser, categoryName);
-      if (portfolioIndex === -1) {
-        winston.log('info', 'Unable to find portfolio index for user %s and %s', fromUser.name, categoryName);
-        return res.status(400).send('Unable to find portfolioIndex');
-      }
-      var updatedUser = utils.updateInvestorPortfolio(fromUser, toUser, categoryName, amount, toUserCategoryTotal, investmentId);
-      if (!updatedUser) {
-        winston.log('error', 'Error updating portfolio for %s', fromUser.username);
-        return res.status(400).send('Error updating portfolio');
-      }
-      transaction.save(function(err) {
-        if (err) {
-          winston.log('error', 'Error saving transaction: %s', err);
-          return res.status(400).send(err);
-        } else {
-          toUser.save(function(err) {
-            if (err) {
-              winston.log('error', 'Error saving toUser: %s', err);
-              Transaction.findOneAndRemove({'id': transaction.id});
-              return res.status(400).send(err);
-            } else {
-              fromUser.save(function(err) {
-                if (err) {
-                  winston.log('error', 'Error saving fromUser: %s', err);
-                  Transaction.findOneAndRemove({'id': transaction.id});
-                  toUser.categories[categoryIndex].reps -= amount;
-                  toUser.save();
-                  return res.status(400).send(err);
-                } else {
-                  // Update the expert percentiles
-                  utils.updateExpertPercentiles(categoryName, function(err) {
-                    if (err) {
-                      winston.log('error', 'Error saving transaction: %s', err);
-                      Transaction.findOneAndRemove({'id': transaction.id});
-                      toUser.categories[categoryIndex].reps -= amount;
-                      toUser.save();
-                      fromUser.reps += amount;
-                      fromUser.save();
-                      return res.status(400).send(err);
-                    } else {
-                      // Update the investor percentiles and percentages
-                      utils.updateInvestors(categoryName, function(err) {
-                        if (err) {
-                          winston.log('error', 'Error updating investors: %s', err);
-                          Transaction.findOneAndRemove({'id': transaction.id});
-                          toUser.categories[categoryIndex].reps -= amount;
-                          toUser.save();
-                          fromUser.reps += amount;
-                          fromUser.save();
-                          return res.status(400).send(err);
-                        } else {
-
-                          // Notify the to user of the transaction
-                          var action;
-                          if (amount < 0) {
-                            action = ' revoked ' + amount * -1 + ' reps from you for ' + transaction.category;
-                          } else {
-                            action = ' gave ' + amount + ' reps to you for ' + transaction.category;
-                          }
-                          var from = transaction.anonymous ? 'Someone' : transaction.from.name;
-                          var notification = new Notification({
-                            user    : { id: transaction.to.id, name: transaction.to.name },
-                            message : from + action,
-                          });
-                          notification.save();
-
-                          return res.send(transaction);
-                        }
-                      }, toUser.username, toUserCategoryTotal);
-                    }
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
-    }, function(err) {
-      winston.log('error', 'Error getting fromUser: %s', err);
-      return res.status(400).send(err);
-    }).end();
-  }
+  router.post('/transactions', isAuthenticated, acl.isAdminOrFrom, TransactionHandler.transactions.post);
 
   router.route('/transactions')
     // Get all the transactions, obscuring private fields
@@ -152,11 +21,6 @@ module.exports = function(router, isAuthenticated, acl) {
         return res.status(503).send(err);
       });
     })
-
-    // Create a new transaction
-    .post(isAuthenticated, acl.isAdminOrFrom, function(req, res) {
-      createTransaction(req, res);
-    });
 
 ///////// Routes that have /transcations/:transaction_id ////////
   router.route('/transactions/:transaction_id')
