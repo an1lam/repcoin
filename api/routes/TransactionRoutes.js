@@ -23,18 +23,6 @@ module.exports = function(router, isAuthenticated, acl) {
     var categoryIndex = -1;
     var portfolioIndex = -1;
 
-    // Check that there is a user logged in
-    if (!req.user) {
-      winston.log('info', 'Could not create transaction, no user logged in');
-      return res.status(400).send('No user logged in');
-    }
-
-    // Check that the user is the same as from
-    if (req.user._id != req.body.from.id) {
-      winston.log('info', 'Incorrect user: %s does not match %s', from.name, req.user.username);
-      return res.status(400).send('Incorrect user: ' + from.name + 'does not match ' + req.user.username);
-    }
-
     var transaction = new Transaction({
       to          : to,
       from        : from,
