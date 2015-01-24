@@ -47,6 +47,13 @@
   height:40px;
 }
 
+.join-event-item-img {
+  border-radius:4px;
+  margin-right:5px;
+  float:left;
+  width:80px;
+  height:80px;
+}
 .score {
   height: 28px;
   display:inline-block;
