@@ -175,7 +175,7 @@ describe('UserHandler: ', function() {
     });
 
     describe('get: ', function() {
-      it('finds users properly with no search term', function() {
+      it('finds users with no search term', function() {
         spyOn(User, 'findPublic').andCallFake(function(query, cb) {
           return cb(null, [{ username: 'Matt Ritter'}]);
         });
@@ -184,7 +184,7 @@ describe('UserHandler: ', function() {
         expect(res.send).toHaveBeenCalledWith([{ username: 'Matt Ritter'}]);
       });
 
-      it('properly handles error finding users with no search term', function() {
+      it('handles error finding users with no search term', function() {
         spyOn(User, 'findPublic').andCallFake(function(query, cb) {
           return cb('Error', null);
         });
@@ -193,7 +193,7 @@ describe('UserHandler: ', function() {
         expect(res.send).toHaveBeenCalledWith('Error');
       });
 
-      it('properly gets users with a search term', function() {
+      it('gets users with a search term', function() {
         spyOn(User, 'findBySearchTermPublic').andCallFake(function(query, cb) {
           return cb(null, [{ username: 'Matt Ritter'}]);
         });
@@ -203,7 +203,7 @@ describe('UserHandler: ', function() {
         expect(res.send).toHaveBeenCalledWith([{ username: 'Matt Ritter'}]);
       });
 
-      it('properly handles error getting users with a search term', function() {
+      it('handles error getting users with a search term', function() {
         spyOn(User, 'findBySearchTermPublic').andCallFake(function(query, cb) {
           return cb('Error', null);
         });
@@ -226,13 +226,13 @@ describe('UserHandler: ', function() {
           expect(res.send).toHaveBeenCalledWith({ username: 'Matt'});
         });
 
-        it('properly handles error from no id list', function() {
+        it('handles error from no id list', function() {
           UserHandler.users.listByIds.get(req, res);
           expect(res.status).toHaveBeenCalledWith(412);
           expect(res.send).toHaveBeenCalledWith('No id list provided');
         });
 
-        it('properly handles Mongo error', function() {
+        it('handles Mongo error', function() {
           spyOn(User, 'findPublic').andCallFake(function(query, cb) {
             return cb('Error', null);
           });
@@ -260,13 +260,13 @@ describe('UserHandler: ', function() {
           expect(res.send).toHaveBeenCalledWith([{ username: 'Matt' }]);
         });
 
-        it('properly handles invalid inputs', function() {
+        it('handles invalid inputs', function() {
           UserHandler.users.leaders.get(req, res);
           expect(res.status).toHaveBeenCalledWith(412);
           expect(res.send).toHaveBeenCalledWith('Invalid inputs');
         });
 
-        it('properly handles error finding leaders', function() {
+        it('handles error finding leaders', function() {
           spyOn(User, 'findNLeadersPublic').andCallFake(function(query, category, count, cb) {
             return cb('Error', null);
           });
@@ -307,7 +307,7 @@ describe('UserHandler: ', function() {
           expect(res.send).toHaveBeenCalledWith({ username: 'Matt' });
         });
 
-        it('properly handles a null user', function() {
+        it('handles a null user', function() {
           spyOn(User, 'findById').andCallFake(function(query, cb) {
             return cb(null, null);
           });
@@ -319,7 +319,7 @@ describe('UserHandler: ', function() {
           expect(res.send).toHaveBeenCalledWith('No user was found');
         });
 
-        it('properly handles an error finding the user', function() {
+        it('handles an error finding the user', function() {
           spyOn(User, 'findById').andCallFake(function(query, cb) {
             return cb('Error', null);
           });
@@ -333,7 +333,7 @@ describe('UserHandler: ', function() {
       });
 
       describe('put: ', function() {
-        it('properly handles invalid inputs', function() {
+        it('handles invalid inputs', function() {
           req.params = { user_id: '123' };
           req.body = { picture: {} };
           UserHandler.users.userId.put(req, res);
@@ -341,7 +341,7 @@ describe('UserHandler: ', function() {
           expect(res.send).toHaveBeenCalledWith('Invalid inputs');
         });
 
-        it('properly handles an error finding the user', function() {
+        it('handles an error finding the user', function() {
           spyOn(User, 'findById').andCallFake(function(query, cb) {
             return cb('Error', null);
           });
@@ -351,7 +351,7 @@ describe('UserHandler: ', function() {
           expect(res.send).toHaveBeenCalledWith('Error');
         });
 
-        it('properly handles an null user', function() {
+        it('handles an null user', function() {
           spyOn(User, 'findById').andCallFake(function(query, cb) {
             return cb(null, null);
           });
@@ -361,7 +361,7 @@ describe('UserHandler: ', function() {
           expect(res.send).toHaveBeenCalledWith('No user found with id: 123');
         });
 
-        it('properly handles invalid link inputs', function() {
+        it('handles invalid link inputs', function() {
           spyOn(User, 'findById').andCallFake(function(query, cb) {
             return cb(null, { username: 'Matt' });
           });
@@ -372,7 +372,7 @@ describe('UserHandler: ', function() {
           expect(res.send).toHaveBeenCalledWith('Invalid link inputs');
         });
 
-        it('properly handles error saving user', function() {
+        it('handles error saving user', function() {
           var user = {
             username: 'Matt',
             save: jasmine.createSpy().andCallFake(function(cb) {
@@ -414,7 +414,7 @@ describe('UserHandler: ', function() {
       });
 
       describe('delete: ', function() {
-        it('properly deletes a given user', function() {
+        it('deletes a given user', function() {
           spyOn(User, 'remove').andCallFake(function(query, cb) {
             return cb(null, { username: 'Matt' });
           });
@@ -424,7 +424,7 @@ describe('UserHandler: ', function() {
           expect(res.send).toHaveBeenCalledWith({ username: 'Matt' });
         });
 
-        it('properly handles deleting a user that is not found', function() {
+        it('handles deleting a user that is not found', function() {
           spyOn(User, 'remove').andCallFake(function(query, cb) {
             return cb(null, null);
           });
@@ -434,7 +434,7 @@ describe('UserHandler: ', function() {
           expect(res.send).toHaveBeenCalledWith('No user was found with id: 123');
         });
 
-        it('properly handles an error finding the user', function() {
+        it('handles an error finding the user', function() {
           spyOn(User, 'remove').andCallFake(function(query, cb) {
             return cb('Error', null);
           });
@@ -463,7 +463,7 @@ describe('UserHandler: ', function() {
             spyOn(Category, 'findByName').andReturn(categoryPromise);
           });
 
-          it('properly handles an error finding the user', function() {
+          it('handles an error finding the user', function() {
             spyOn(User, 'findById').andCallFake(function(query, cb) {
               return cb('Error', null);
             });
@@ -473,7 +473,7 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith('Error');
           });
 
-          it('properly handles a null user', function() {
+          it('handles a null user', function() {
             spyOn(User, 'findById').andCallFake(function(query, cb) {
               return cb(null, null);
             });
@@ -483,7 +483,7 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith('No user found with id: 123');
           });
 
-          it('properly handles when the user is not an investor for this category', function() {
+          it('handles when the user is not an investor for this category', function() {
             spyOn(User, 'findById').andCallFake(function(query, cb) {
               return cb(null, { username: 'Matt' });
             });
@@ -494,15 +494,14 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith({username: 'Matt' });
           });
 
-          it('properly handles an error updating investors\' experts', function() {
+          it('handles an error undoing investor activity', function() {
             spyOn(User, 'findById').andCallFake(function(query, cb) {
               return cb(null, { username: 'Matt' });
             });
             spyOn(utils, 'isInvestor').andReturn(true);
-            spyOn(utils, 'getInvestorsExperts').andReturn({});
-            spyOn(utils, 'updateInvestorsExperts').andCallFake(
-              function(experts, categoryName, userId, cb) {
-                cb('Error');
+            spyOn(utils, 'undoInvestorActivityForCategory').andCallFake(
+              function(category, user, cb) {
+                cb('Error', null);
               });
             req.params = { user_id: '123' };
             UserHandler.users.userId.investorCategory.delete(req, res);
@@ -510,7 +509,7 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith('Error');
           });
 
-          it('properly handles an error saving the user', function() {
+          it('handles an error undoing the investor activity', function() {
             var user = {
               username: 'Matt',
               save: jasmine.createSpy().andCallFake(function(cb) {
@@ -521,19 +520,17 @@ describe('UserHandler: ', function() {
               return cb(null, { username: 'Matt' });
             });
             spyOn(utils, 'isInvestor').andReturn(true);
-            spyOn(utils, 'getInvestorsExperts').andReturn({});
-            spyOn(utils, 'updateInvestorsExperts').andCallFake(
-              function(experts, categoryName, userId, cb) {
-                cb(null);
+            spyOn(utils, 'undoInvestorActivityForCategory').andCallFake(
+              function(category, investor, cb) {
+                cb('Error', null);
               });
-            spyOn(utils, 'deleteInvestorCategory').andReturn(user);
             req.params = { user_id: '123', category_name: 'Foo' };
             UserHandler.users.userId.investorCategory.delete(req, res);
             expect(res.status).toHaveBeenCalledWith(501);
             expect(res.send).toHaveBeenCalledWith('Error');
           });
 
-          it('deletes the category and saves user', function() {
+          it('deletes the category and undoes investor activity', function() {
             var user = {
               username: 'Matt',
               save: jasmine.createSpy().andCallFake(function(cb) {
@@ -544,12 +541,10 @@ describe('UserHandler: ', function() {
               return cb(null, user);
             });
             spyOn(utils, 'isInvestor').andReturn(true);
-            spyOn(utils, 'getInvestorsExperts').andReturn({});
-            spyOn(utils, 'updateInvestorsExperts').andCallFake(
-              function(investors, categoryName, userId, cb) {
-                cb(null);
+            spyOn(utils, 'undoInvestorActivityForCategory').andCallFake(
+              function(category, investor, cb) {
+                cb(null, { username: 'Matt' });
               });
-            spyOn(utils, 'deleteInvestorCategory').andReturn(user);
             req.params = { user_id: '123', categoryName: 'Foo' };
             UserHandler.users.userId.investorCategory.delete(req, res);
             expect(categoryPromise.category.investors).toEqual(1);
@@ -576,7 +571,7 @@ describe('UserHandler: ', function() {
             spyOn(Category, 'findByName').andReturn(categoryPromise);
           });
 
-          it('properly handles an error finding the user', function() {
+          it('handles an error finding the user', function() {
             spyOn(User, 'findById').andCallFake(function(query, cb) {
               return cb('Error', null);
             });
@@ -586,7 +581,7 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith('Error');
           });
 
-          it('properly handles a null user', function() {
+          it('handles a null user', function() {
             spyOn(User, 'findById').andCallFake(function(query, cb) {
               return cb(null, null);
             });
@@ -596,7 +591,7 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith('No user found with id: 123');
           });
 
-          it('properly handles when the user is not an expert for this category', function() {
+          it('handles when the user is not an expert for this category', function() {
             spyOn(User, 'findById').andCallFake(function(query, cb) {
               return cb(null, { username: 'Matt' });
             });
@@ -607,7 +602,7 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith({username: 'Matt' });
           });
 
-          it('properly handles an error reimbursing investors', function() {
+          it('handles an error reimbursing investors', function() {
             spyOn(User, 'findById').andCallFake(function(query, cb) {
               return cb(null, { username: 'Matt' });
             });
@@ -623,7 +618,7 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith('Error');
           });
 
-          it('properly handles an error saving the user', function() {
+          it('handles an error saving the user', function() {
             var user = {
               username: 'Matt',
               save: jasmine.createSpy().andCallFake(function(cb) {

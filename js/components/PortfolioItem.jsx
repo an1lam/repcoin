@@ -20,10 +20,8 @@ var PortfolioItem = React.createClass({
       </div>;
     }
     var name = this.props.category.category;
-    var repsAvailable = '';
     var investments = '';
     if (this.props.privateFields) {
-      var repsAvailable = <td>{this.props.category.reps}</td>;
       var investments = <td><InvestmentList investments={this.props.category.investments}/></td>;
     }
     return (
@@ -33,7 +31,6 @@ var PortfolioItem = React.createClass({
           {deleteBtn}
         </td>
         <td>{this.props.category.percentile}</td>
-        {repsAvailable}
         {investments}
       </tr>
     );

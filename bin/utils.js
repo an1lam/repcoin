@@ -18,34 +18,17 @@ var utils = {
         cb();
       } else {
         users.forEach(function(user) {
-          user.portfolio.forEach(function(entry) {
-            entry.reps = Math.floor(entry.reps * 100)/100;
-            if (entry.reps === 0) {
-              // Add reps to the category model
-              var category = Category.findByName(entry.category).then(function(category) {
-                category.reps += 5;
-                category.reps = Math.floor(category.reps * 100)/100;
-                category.save(function(err) {
-                  if (err) {
-                    winston.log('error', 'Error saving category: %s', entry.category);
-                  }
-                  return;
-                });
-              }, function(err) {
-                winston.log('info', 'Error finding category: %s', entry.category);
-              });
-              // Add reps to the user
-              entry.reps += 5;
-              entry.reps = Math.floor(entry.reps * 100)/100;
-            }
-          });
+          if (Math.floor(user.reps * 100)/100 === 0) {
+            user.reps = 5;
+          }
+          user.reps = Math.floor(user.reps * 100)/100;
         });
         routeUtils.saveAll(users, function(errs) {
           if (errs.length > 0) {
-            winston.log('error', 'Error migrating percentiles and dividends: %s', errs);
+            winston.log('error', 'Error incrementing investor reps: %s', errs);
             cb(errs);
           } else {
-            winston.log('info', 'Successfully migrated percentages and dividends.');
+            winston.log('info', 'Successfully incremented investor reps.');
             cb(null);
           }
         });
@@ -118,8 +101,8 @@ var utils = {
                 } else {
                   var dividend = Math.floor(investment.percentage * total * DIVIDEND_PERCENTAGE * 100)/100;
                   investment.dividend = dividend;
-                  category.reps += dividend;
-                  category.reps = Math.floor(category.reps * 100)/100;
+                  user.reps += dividend;
+                  user.reps = Math.floor(user.reps * 100)/100;
                 }
               }
             };
@@ -216,6 +199,81 @@ var utils = {
     }
 
     lowerUserModelCategories(lowerCategoryModelNames, [lowerTransactionModelCategoryNames, cb]);
+  },
+
+  // Make category reps the sum of all expert reps for that category
+  // TO BE USED ONCE ONLY TO MIGRATE TO THE NEW REPS MODEL
+  migrateCategoryReps: function(cb) {
+    User.find(function(err, users) {
+      if (err) {
+        winston.log('error', 'Error migrating category reps: %s', err.toString());
+        cb();
+      } else {
+        Category.find(function(err, categories) {
+          if (err) {
+            winston.log('error', 'Error migrating category reps: %s', err.toString());
+            cb();
+          } else {
+            var category, totalReps, user;
+            for (var i = 0; i < categories.length; i++) {
+              category = categories[i];
+              totalReps = 0;
+              for (var j = 0; j < users.length; j++) {
+                user = users[j];
+                for (var p = 0; p < user.categories.length; p++) {
+                  if (user.categories[p].name === category.name) {
+                    totalReps += user.categories[p].reps;
+                  }
+                }
+              }
+              category.reps = Math.floor(totalReps * 100)/100;
+            }
+            routeUtils.saveAll(categories, function(errs) {
+              if (errs.length > 0) {
+                winston.log('error', 'Error migrating category reps: %s', errs);
+                cb(errs);
+              } else {
+                winston.log('info', 'Successfully migrated category reps.');
+                cb(null);
+              }
+            });
+          }
+        });
+      }
+    });
+  },
+
+  // Make investor reps at the same level as the portfolio
+  // Make an investor\'s reps the sum of their reps for each portfolio entry
+  // TO BE USED ONCE ONLY TO MIGRATE TO THE NEW REPS MODEL
+  migrateInvestorReps: function(cb) {
+    User.find(function(err, users) {
+      if (err) {
+        winston.log('error', 'Error migrating investor reps: %s', err.toString());
+        cb();
+      } else {
+        var user, totalReps;
+        for (var i = 0; i < users.length; i++) {
+          user = users[i];
+          totalReps = 0;
+          for (var j = 0; j < user.portfolio.length; j++) {
+            if (user.portfolio[j].reps) {
+              totalReps += user.portfolio[j].reps;
+            }
+          }
+          user.reps = Math.floor(totalReps * 100)/100;
+        };
+        routeUtils.saveAll(users, function(errs) {
+          if (errs.length > 0) {
+            winston.log('error', 'Error migrating investor reps: %s', errs);
+            cb(errs);
+          } else {
+            winston.log('info', 'Successfully migrated investor reps.');
+            cb(null);
+          }
+        });
+      }
+    });
   },
 
   // Divide all user percentages by 100

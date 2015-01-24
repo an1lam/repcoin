@@ -10,7 +10,7 @@ var privateFields = {
   "facebookId": 0,
   "email": 0,
   "password": 0,
-  "portfolio.reps": 0,
+  "reps": 0,
   "portfolio.investments": 0,
   "timeStamp": 0
 };
@@ -36,10 +36,15 @@ var UserSchema = new Schema({
   email: {type: String, index: { unique: true, sparse: true }, trim: true },
   about: {type: String, trim: true },
 
-  // A list of investments for various categories
+  // The reps this user has to invest
+  reps: { type: Number, required: true, default: 0 },
+
+  // The investor categories for this user
   portfolio: [{
+
+    // DEPRECATED
     // reps available to invest for this category
-    reps: {type: Number, default: 0, required: true },
+    reps: {type: Number },
 
     // ROI for this category based on all transactions for this category
     // DEPRECATED
