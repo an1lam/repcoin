@@ -202,7 +202,7 @@ var utils = {
   },
 
   // Make category reps the sum of all expert reps for that category
-  // TO BE USED ONCE ONLy TO MIGRATE TO THE NEW REPS MODEL
+  // TO BE USED ONCE ONLY TO MIGRATE TO THE NEW REPS MODEL
   migrateCategoryReps: function(cb) {
     User.find(function(err, users) {
       if (err) {
@@ -245,7 +245,7 @@ var utils = {
 
   // Make investor reps at the same level as the portfolio
   // Make an investor\'s reps the sum of their reps for each portfolio entry
-  // TO BE USED ONCE ONLy TO MIGRATE TO THE NEW REPS MODEL
+  // TO BE USED ONCE ONLY TO MIGRATE TO THE NEW REPS MODEL
   migrateInvestorReps: function(cb) {
     User.find(function(err, users) {
       if (err) {

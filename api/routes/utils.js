@@ -123,7 +123,8 @@ var utils = {
     for (var j = 0; j < investments.length; j++) {
       amount = investments[j].amount;
       expertId = investments[j].userId;
-      if (expertAmounts[expertId]) {
+
+      if (expertAmounts.hasOwnProperty(expertId)) {
         expertAmounts[expertId] += amount;
       } else {
         expertAmounts[expertId] = amount;
