@@ -75,7 +75,7 @@ var TransactionHandler = {
             } else {
               action = ' gave ' + amount + ' reps to you for ' + transaction.category;
             }
-            var fromText = transaction.anonymous ? 'Someone' : transaction.from.name;
+            var fromText = transaction.from.anonymous ? 'Someone' : transaction.from.name;
             var notification = new Notification({
               user    : { id: transaction.to.id, name: transaction.to.name },
               message : fromText + action,

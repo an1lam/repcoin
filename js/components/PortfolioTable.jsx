@@ -139,7 +139,7 @@ var PortfolioTable = React.createClass({
     // Determine whether to display private or public rows
     var privateFields = false;
     var investmentHeader = '';
-    var repsAvailable;
+    var repsAvailable = -1;
     if (isSelf) {
       repsAvailable = this.props.user.reps;
       privateFields = true;

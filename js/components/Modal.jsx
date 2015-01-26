@@ -70,7 +70,7 @@ var Modal = React.createClass({
 
     // Make sure this investment has at least the amount
     if (investment.amount < amount) {
-      this.setState({ error: strings.INVESTMENT_AMOUNT_TOO_SMALL(investment.amount) });
+      this.setState({ error: true, message: strings.INVESTMENT_AMOUNT_TOO_SMALL(investment.amount) });
       return;
     }
 
