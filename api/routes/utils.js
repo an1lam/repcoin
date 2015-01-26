@@ -344,7 +344,7 @@ var utils = {
       return false;
     }
 
-    // Check that there a revoke has an associated id
+    // Check that a revoke has an associated investment id
     if (amount < 0 && !req.body.id) {
       return false;
     }
@@ -461,10 +461,13 @@ var utils = {
   },
 
   // Add an investor to an expert's category if not already present
-  addInvestorToExpertCategory: function(expert, investorId, investorName, i) {
+  addInvestorToExpertCategory: function(expert, investor, i) {
+    var investorId = investor._id.toString();
+    var investorName = investor.username;
+
     var length = expert.categories[i].investors.length;
     for (var j = 0; j < length; j++) {
-      if (String(expert.categories[i].investors[j].id) === String(investorId)) {
+      if (String(expert.categories[i].investors[j].id) === investorId) {
         return expert;
       }
     }
@@ -486,12 +489,51 @@ var utils = {
     return expert;
   },
 
-  // Update an investor making an investment for a given category,
-  // Returns null if the investment is not possible
-  updateInvestorPortfolio: function(fromUser, toUser, category, amount, toUserCategoryTotal, investmentId) {
-    var portfolio = fromUser.portfolio;
+  // Changes fields for all of the documents necessary for a transaction to occur
+  // Returns null if successful, error message otherwise
+  processTransaction: function(toUser, fromUser, category, transaction, investmentId) {
     // Round the amount to the nearest hundredth
-    amount = Math.round(amount * 100) / 100;
+    transaction.amount = Math.round(transaction.amount * 100) / 100;
+
+    // Update all fields for the toUser
+    var toUserReps = this.updateTransactionToUser(toUser, fromUser, category.name, transaction.amount);
+    if (!toUserReps) {
+      return 'User is not an expert for category';
+    }
+
+    // Update all fields for the fromUser
+    var err = this.updateTransactionFromUser(fromUser, toUser, category.name, transaction.amount, toUserReps, investmentId);
+    if (err) {
+      return err;
+    }
+
+    // Update the category reps
+    category.reps += transaction.amount;
+    category.reps = Math.floor(category.reps * 100)/100;
+
+    return null;
+  },
+
+  // Update the to user in a transaction
+  // Returns toUser's new reps value if successful, null otherwise
+  updateTransactionToUser: function(expert, investor, category, amount) {
+    var i = this.getCategoryIndex(expert, category);
+    if (i === -1) {
+      return null;
+    }
+
+    // Add the investor to the expert list of investor if not there
+    this.addInvestorToExpertCategory(expert, investor, i);
+
+    // Update the expert reps
+    expert.categories[i].reps += amount;
+    return expert.categories[i].reps;
+  },
+
+  // Update an investor making an investment for a given category
+  // Returns null if success, error message otherwise
+  updateTransactionFromUser: function(fromUser, toUser, category, amount, toUserReps, investmentId) {
+    var portfolio = fromUser.portfolio;
 
     // Find the portfolio entry that should be updated
     var index = -1;
@@ -506,13 +548,13 @@ var utils = {
 
     // The from user is not an investor for this category (ERROR!)
     if (index === -1) {
-      return null;
+      return 'User is not an investor for this category';
     }
 
     // Add the investment to the portfolio
     if (amount > 0) {
-      var percentage = Number(amount/toUserCategoryTotal);
-      var dividend   = Math.round(percentage * toUserCategoryTotal * DIVIDEND_RATE * 100) / 100;
+      var percentage = Number(amount/toUserReps);
+      var dividend   = Math.round(percentage * toUserReps * DIVIDEND_RATE * 100) / 100;
       var investment = {
         userId     : (String) (toUser._id),
         user       : toUser.username,
@@ -537,7 +579,7 @@ var utils = {
 
       // The investor is trying to revoke an investment that was not found (ERROR!)
       if (j === -1) {
-        return null;
+        return 'Investment for revoke was not found';
       }
 
       amount *= -1;
@@ -558,8 +600,8 @@ var utils = {
       // If the amount is now zero, remove the investment
       if (newAmount === 0) {
         portfolio[index].investments.splice(j, 1);
-        toUser = this.removeInvestorFromExpertOnRevoke(toUser, fromUser._id, portfolio[index]);
-        return fromUser;
+        this.removeInvestorFromExpertOnRevoke(toUser, fromUser._id, portfolio[index]);
+        return null;
       }
 
       // Update the date
@@ -568,19 +610,19 @@ var utils = {
       // Update the investment's amount, percentage, and dividend
       investment.amount = newAmount;
       investment.percentage = newPercentage;
-      investment.dividend = Math.round(newPercentage * toUserCategoryTotal * DIVIDEND_RATE * 100) / 100;
+      investment.dividend = Math.round(newPercentage * toUserReps * DIVIDEND_RATE * 100) / 100;
     }
-    return fromUser;
+    return null;
   },
 
-  // Given a transaction, update all dividends for investors
-  updateDividends: function(investors, expertCategoryTotal, category, username) {
+  // Given a transaction, update all dividends for investors investing in that expert
+  updateDividends: function(investors, categoryName, expertName, expertReps) {
     var investor, j, errs;
     var length = investors.length;
     for (var i = 0; i < length; i++) {
       j = -1;
       investor = investors[i];
-      j = this.getPortfolioIndex(investor, category);
+      j = this.getPortfolioIndex(investor, categoryName);
       if (j === -1) {
         continue;
       }
@@ -589,8 +631,8 @@ var utils = {
       var len = investor.portfolio[j].investments.length;
       for (var q = 0; q < len; q++) {
         var investment = investor.portfolio[j].investments[q];
-        if (investment.user === username) {
-          investment.dividend = Math.round(investment.percentage * expertCategoryTotal * DIVIDEND_RATE * 100) / 100;
+        if (investment.user === expertName) {
+          investment.dividend = Math.round(investment.percentage * expertReps * DIVIDEND_RATE * 100) / 100;
         }
       }
     }
@@ -710,26 +752,50 @@ var utils = {
     return cb(null);
   },
 
-  // Given a category name, update the percentiles and percentages, for all investors
-  updateInvestors: function(category, cb, username, expertCategoryTotal) {
+  // Given a category name, update the percentiles for all the experts and investors in that category
+  // In addition, update the investor dividends
+  updatePercentilesAndDividends: function(categoryName, expert, cb) {
     var self = this;
-    var investorsPromise = User.findInvestorByCategory(category, function() {});
+    var i = self.getCategoryIndex(expert, categoryName);
+    if (i < 0) {
+      return cb('User is not an expert in this category');
+    }
+    var expertReps = expert.categories[i].reps;
+    self.updateInvestorPercentilesAndDividends(categoryName, function(err) {
+      if (err) {
+        return cb(err);
+      }
+      self.updateExpertPercentiles(categoryName, function(err) {
+        if (err) {
+          return cb(err);
+        }
+        return cb(null);
+      });
+    }, expert.username, expertReps);
+  },
+
+  // Given a category name, update the percentiles and dividends, for all investors
+  updateInvestorPercentilesAndDividends: function(categoryName, cb, expertName, expertReps) {
+    var self = this;
+    var investorsPromise = User.findInvestorByCategory(categoryName, function() {});
     investorsPromise.then(function(investors) {
       // If parameters are available, update all the investor percentages
-      if (username && expertCategoryTotal) {
-        investors = self.updateDividends(investors, expertCategoryTotal, category, username);
+      if (expertName && expertReps) {
+        investors = self.updateDividends(investors, categoryName, expertName, expertReps);
       }
+
       // Sort the investors by dividends in increasing order
-      var dividendsComparator = self.getDividendsComparator(category);
+      var dividendsComparator = self.getDividendsComparator(categoryName);
       investors.sort(dividendsComparator);
-      self.updateInvestorPercentiles(investors, category, function(err) {
+      // Update the investor percentiles for this category
+      self.updateInvestorPercentiles(investors, categoryName, function(err) {
         if (err) {
-          winston.log('error', 'utils.updateInvestors: error updating investor percentiles: %s', err);
+          winston.log('error', 'utils.updateInvestorPercentilesAndDividends: error updating investor percentiles: %s', err);
           return cb(err);
         }
         self.saveAll(investors, function(errs) {
           if (errs.length > 0) {
-            winston.log('error', 'utils.updateInvestors: error saving investors: %s', err);
+            winston.log('error', 'utils.updateInvestorPercentilesAndDividends: error saving investors: %s', err);
             return cb(errs);
           } else {
             return cb(null);
@@ -737,19 +803,19 @@ var utils = {
         });
       });
     }, function(err) {
-      winston.log('error', 'utils.updateInvestors: error getting investorsPromise: %s', err);
+      winston.log('error', 'utils.updateInvestorPercentilesAndDividends: error getting investorsPromise: %s', err);
       return cb(err);
     });
   },
 
   // Given a category name, update the percentiles for all the experts in that category
-  updateExpertPercentiles: function(category, cb) {
+  updateExpertPercentiles: function(categoryName, cb) {
     var self = this;
-    var expertsPromise = User.findExpertByCategory(category, function() {});
+    var expertsPromise = User.findExpertByCategory(categoryName, function() {});
     expertsPromise.then(function(experts) {
-      var repsComparator = self.getRepsComparator(category);
+      var repsComparator = self.getRepsComparator(categoryName);
       experts.sort(repsComparator);
-      self.getExpertPercentiles(experts, category, function(err) {
+      self.getExpertPercentiles(experts, categoryName, function(err) {
         if (err) {
           winston.log('error', 'utils.updateExperts: error getting expert percentiles: %s', err);
           return cb(err);
