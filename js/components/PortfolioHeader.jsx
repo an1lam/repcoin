@@ -6,7 +6,7 @@ var strings = require('../lib/strings_utils.js');
 var PortfolioHeader = React.createClass({
   render: function() {
     var repsAvailable = '';
-    if (this.props.reps) {
+    if (this.props.reps > -1) {
       repsAvailable = <p>{strings.PORTFOLIO_HEADER_REPS(this.props.reps)}</p>;
     }
     return (

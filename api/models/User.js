@@ -37,7 +37,7 @@ var UserSchema = new Schema({
   about: {type: String, trim: true },
 
   // The reps this user has to invest
-  reps: { type: Number, required: true, default: 0 },
+  reps: { type: Number, required: true, default: 5 },
 
   // The investor categories for this user
   portfolio: [{

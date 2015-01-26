@@ -63,7 +63,7 @@ var ProfileQuickView = React.createClass({
 
     return (
       <div className="list-group">
-        <strong>{strings.INVESTOR_CATEGORIES}</strong>
+        <strong>{strings.INVESTOR_CATEGORIES} ( {this.state.currentUser.reps} reps )</strong>
         {categories}
       </div>
     );
