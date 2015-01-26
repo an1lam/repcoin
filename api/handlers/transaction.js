@@ -49,7 +49,7 @@ var TransactionHandler = {
         return res.status(400).send(err);
       }).then(function(categoryP) {
         category = categoryP;
-        // Update fields for all of the documents a they should be for the transaction
+        // Update fields for all of the documents as they should be for the transaction
         var err = utils.processTransaction(toUser, fromUser, category, transaction, investmentId);
         if (err) {
           winston.log('error', err);

@@ -757,7 +757,7 @@ var utils = {
   updatePercentilesAndDividends: function(categoryName, expert, cb) {
     var self = this;
     var i = self.getCategoryIndex(expert, categoryName);
-    if (i === -1) {
+    if (i < -1) {
       return cb('User is not an expert in this category');
     }
     var expertReps = expert.categories[i].reps;
