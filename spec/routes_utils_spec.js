@@ -436,6 +436,19 @@ describe('Utils: ', function() {
       expect(cb).toHaveBeenCalledWith('User is not an expert in this category');
     });
 
+    it('allows the expert to be null', function() {
+      categoryName = 'Coding';
+      expert = null;
+      utils.updateInvestorPercentilesAndDividends = jasmine.createSpy().andCallFake(function(categoryName, callback, expertName, expertReps) {
+        return callback(null);
+      });
+      utils.updateExpertPercentiles = jasmine.createSpy().andCallFake(function(categoryName, callback) {
+        return callback(null);
+      });
+      utils.updatePercentilesAndDividends(categoryName, expert, cb);
+      expect(cb).toHaveBeenCalledWith(null);
+    });
+
     it('handles error updating investor percentiles and dividends', function() {
       categoryName = 'Coding';
       expert = { categories: [ { name: 'Coding' } ] };
