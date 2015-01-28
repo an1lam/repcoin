@@ -25,11 +25,12 @@ var Signup = React.createClass({
     if (response.status === 'connected') {
       this.loginUser(response.authResponse.accessToken);
     } else {
-      FB.login(this.loginCallback, true);
+      FB.login(this.loginCallback, { scope: 'email', return_scopes: true });
     }
   },
 
   loginCallback: function(response) {
+    debugger;
     if (response.status === 'connected') {
       this.loginUser(response.authResponse.accessToken);
       } else if (response.status === 'not_authorized') {
@@ -47,9 +48,22 @@ var Signup = React.createClass({
       success: function(user) {
         // Only rewrite the picture if it is not there
         if (!user.picture) {
-          this.getFacebookProfilePicture(user);
+          this.getFacebookProfilePicture(user, function(user) {
+            if (!user.email) {
+              debugger;
+              this.getFacebookEmail(user, function(user) {
+                this.transitionTo('/home');
+              }.bind(this));
+            }
+          }.bind(this));
         } else {
-          this.transitionTo('/home');
+          if (!user.email) {
+            this.getFacebookEmail(user, function(user) {
+              this.transitionTo('/home');
+            }.bind(this));
+          } else {
+            this.transitionTo('/home');
+          }
         }
       }.bind(this),
       error: function(xhr, status, err) {
@@ -61,11 +75,31 @@ var Signup = React.createClass({
     });
   },
 
-  getFacebookProfilePicture: function(user) {
-    var cb = function(user) {
-      this.transitionTo('/home');
-    }.bind(this);
+  getFacebookEmail: function(user, cb) {
+    FB.api('/me/email',
+      function (response) {
+        if (response && !response.error) {
+          debugger;
+          var url = '/api/users/' + user._id + '/email/' + response.data.email;
+          $.ajax({
+            url: url,
+            type: 'PUT',
+            success: function(user) {
+              cb(user);
+            }.bind(this),
+            error: function(xhr, status, err) {
+              console.error(xhr.responseText);
+            }
+          });
+        } else {
+          debugger;
+          cb(user);
+        }
+      }.bind(this)
+    );
+  },
 
+  getFacebookProfilePicture: function(user, cb) {
     FB.api('/me/picture',
       {
         'redirect': false,
