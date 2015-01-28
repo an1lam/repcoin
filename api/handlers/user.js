@@ -248,9 +248,14 @@ var UserHandler = {
                   if (err) {
                     winston.log('error', 'Error undoing investor activity: %s', err.toString());
                     return res.status(501).send(err);
-                  } else {
-                    return res.status(200).send(user);
                   }
+                  utils.updatePercentilesAndDividends(category.name, null, function(err) {
+                    if (err) {
+                      winston.log('error', 'Error updating percentiles: %s', err.toString());
+                      return res.status(400).send(err);
+                    }
+                    return res.status(200).send(user);
+                  });
                 });
               }
             });
@@ -293,9 +298,14 @@ var UserHandler = {
                       if (err) {
                         winston.log('error', 'Error saving user: %s', err);
                         return res.status(501).send(err);
-                      } else {
-                        return res.status(200).send(user);
                       }
+                      utils.updatePercentilesAndDividends(categoryName, null, function(err) {
+                        if (err) {
+                          winston.log('error', 'Error updating percentiles: %s', err.toString());
+                          return res.status(400).send(err);
+                        }
+                        return res.status(200).send(user);
+                      });
                     });
                   }
                 });

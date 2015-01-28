@@ -530,6 +530,32 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith('Error');
           });
 
+          it('handles error updating percentiles and dividends', function() {
+            var user = {
+              username: 'Matt',
+              save: jasmine.createSpy().andCallFake(function(cb) {
+                cb(null, { username: 'Matt' });
+              })
+            };
+            spyOn(User, 'findById').andCallFake(function(query, cb) {
+              return cb(null, user);
+            });
+            spyOn(utils, 'isInvestor').andReturn(true);
+            spyOn(utils, 'undoInvestorActivityForCategory').andCallFake(
+              function(category, investor, cb) {
+                cb(null, { username: 'Matt' });
+              });
+            spyOn(utils, 'updatePercentilesAndDividends').andCallFake(
+              function(category, expert, cb) {
+                cb('Error');
+              });
+            req.params = { user_id: '123', categoryName: 'Foo' };
+            UserHandler.users.userId.investorCategory.delete(req, res);
+            expect(categoryPromise.category.investors).toEqual(1);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.send).toHaveBeenCalledWith('Error');
+          });
+
           it('deletes the category and undoes investor activity', function() {
             var user = {
               username: 'Matt',
@@ -544,6 +570,10 @@ describe('UserHandler: ', function() {
             spyOn(utils, 'undoInvestorActivityForCategory').andCallFake(
               function(category, investor, cb) {
                 cb(null, { username: 'Matt' });
+              });
+            spyOn(utils, 'updatePercentilesAndDividends').andCallFake(
+              function(category, expert, cb) {
+                cb(null);
               });
             req.params = { user_id: '123', categoryName: 'Foo' };
             UserHandler.users.userId.investorCategory.delete(req, res);
@@ -641,6 +671,34 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith('Error');
           });
 
+          it('handles error updating percentiles and dividends', function() {
+            var user = {
+              username: 'Matt',
+              save: jasmine.createSpy().andCallFake(function(cb) {
+                cb(null, { username: 'Matt' });
+              })
+            };
+            spyOn(User, 'findById').andCallFake(function(query, cb) {
+              return cb(null, user);
+            });
+            spyOn(utils, 'isExpert').andReturn(true);
+            spyOn(utils, 'getInvestors').andReturn({});
+            spyOn(utils, 'reimburseInvestors').andCallFake(
+              function(investors, categoryName, userId, cb) {
+                cb(null);
+              });
+            spyOn(utils, 'deleteExpertCategory').andReturn(user);
+            spyOn(utils, 'updatePercentilesAndDividends').andCallFake(
+              function(category, expert, cb) {
+                cb('Error');
+              });
+            req.params = { user_id: '123', categoryName: 'Foo' };
+            UserHandler.users.userId.expertCategory.delete(req, res);
+            expect(categoryPromise.category.experts).toEqual(1);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.send).toHaveBeenCalledWith('Error');
+          });
+
           it('deletes the category and saves user', function() {
             var user = {
               username: 'Matt',
@@ -658,6 +716,10 @@ describe('UserHandler: ', function() {
                 cb(null);
               });
             spyOn(utils, 'deleteExpertCategory').andReturn(user);
+            spyOn(utils, 'updatePercentilesAndDividends').andCallFake(
+              function(category, expert, cb) {
+                cb(null);
+              });
             req.params = { user_id: '123', categoryName: 'Foo' };
             UserHandler.users.userId.expertCategory.delete(req, res);
             expect(categoryPromise.category.experts).toEqual(1);

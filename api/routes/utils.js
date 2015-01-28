@@ -756,11 +756,17 @@ var utils = {
   // In addition, update the investor dividends
   updatePercentilesAndDividends: function(categoryName, expert, cb) {
     var self = this;
-    var i = self.getCategoryIndex(expert, categoryName);
-    if (i < 0) {
-      return cb('User is not an expert in this category');
+
+    var username, expertReps;
+    if (expert) {
+      var i = self.getCategoryIndex(expert, categoryName);
+      if (i < 0) {
+        return cb('User is not an expert in this category');
+      }
+      username = expert.username;
+      expertReps = expert.categories[i].reps;
     }
-    var expertReps = expert.categories[i].reps;
+
     self.updateInvestorPercentilesAndDividends(categoryName, function(err) {
       if (err) {
         return cb(err);
@@ -771,7 +777,7 @@ var utils = {
         }
         return cb(null);
       });
-    }, expert.username, expertReps);
+    }, username, expertReps);
   },
 
   // Given a category name, update the percentiles and dividends, for all investors
