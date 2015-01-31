@@ -6,6 +6,7 @@ var React = require('react');
 var SearchPageCategory = require('./SearchPageCategory.jsx');
 var SearchPageFilter = require('./SearchPageFilter.jsx');
 var SearchPageUser = require('./SearchPageUser.jsx');
+var strings = require('../lib/strings_utils.js');
 var Toolbar = require('./Toolbar.jsx');
 
 var SearchPage = React.createClass({
