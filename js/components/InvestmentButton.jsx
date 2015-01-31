@@ -10,6 +10,10 @@ var InvestmentButton = React.createClass({
     return { showModal: false };
   },
 
+  componentDidMount: function() {
+    $('.investment-button-info').popover({ trigger: 'hover focus' });
+  },
+
   handleShowModal: function() {
     this.refs.modal.show();
   },
@@ -20,6 +24,7 @@ var InvestmentButton = React.createClass({
     return (
       <div className="InvestmentButton">
         <button onClick={this.handleShowModal} className="btn btn-primary btn-lg">{strings.INVEST_IN_USER(this.props.user.username)}</button>
+        <span className="investment-button-info glyphicon glyphicon-info-sign" data-toggle="popover" data-placement="bottom" data-content={strings.INVESTMENT_BUTTON_INFO_CONTENT}></span>
         {modal}
       </div>
     );

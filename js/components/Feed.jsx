@@ -104,7 +104,6 @@ var Feed = React.createClass({
   },
 
   render: function() {
-    var feedHeader = this.props.userId ? <FeedHeader onClick={this.handleClick} isSelf={this.props.isSelf} /> : '';
     var feedText = '';
     if (this.state.transactions.length === 0) {
       var text = strings.NO_TRANSACTIONS_FOUND;
@@ -128,8 +127,7 @@ var Feed = React.createClass({
     }
     return (
       <div key={this.props.userId} className="feed panel panel-default">
-        <h3 className="feedTitle panel-title">Feed</h3>
-        {feedHeader}
+        <FeedHeader onClick={this.handleClick} isSelf={this.props.isSelf} parent={this.props.parent}/>
         <ul className="list-group">
           {feedItems}
         </ul>
