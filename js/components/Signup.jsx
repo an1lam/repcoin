@@ -53,7 +53,7 @@ var Signup = React.createClass({
     });
   },
 
-  getFacebookProfilePicture: function(user, cb) {
+  getFacebookProfilePicture: function(user) {
     var cb = function(user) {
       this.transitionTo('/home');
     }.bind(this);

@@ -159,31 +159,6 @@ var UserHandler = {
         }
       },
 
-      email: {
-        put: function(req, res) {
-          var userId = req.params.userId;
-          User.findById(userId, function(err, user) {
-            if (err) {
-              winston.log('error', 'Error finding user: %s', err);
-              return res.status(501).send(err);
-            } else if (!user) {
-              winston.log('info', 'No user found with id: %s', userId);
-              return res.status(501).send('No user found with id: ' + userId);
-            } else {
-              user.email = req.params.email || user.email;
-              user.save(function(err, user) {
-                if (err) {
-                  winston.log('error', 'Error saving user: %s', err);
-                  return res.status(501).send(err);
-                } else {
-                  return res.status(200).send(user);
-                }
-              });
-            }
-          });
-        },
-      },
-
       put: function(req, res) {
         var userId = req.params.user_id;
         if (!utils.validateUserInputs(req)) {
