@@ -17,7 +17,7 @@ var transporter = require('../../config/mailer.js').transporterFactory();
 
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
-module.exports = function(router, isAuthenticated, acl) {
+module.exports = function(router, isAuthenticated, acl, censor) {
   // Add an expert category to a given user
   function addExpertCategory(req, res, category) {
     var userId = req.params.user_id;
@@ -98,7 +98,7 @@ module.exports = function(router, isAuthenticated, acl) {
 
   router.route('/users')
     // Create a new user
-    .post(function(req, res) {
+    .post(censor.isNaughty, function(req, res) {
 
       if (!utils.validateCreateUserInputs(req)) {
         return res.status(412).send('Invalid inputs');
@@ -175,7 +175,7 @@ module.exports = function(router, isAuthenticated, acl) {
   // Add an expert category if it is not already added
   // Create the category if it does not exist
   router.route('/users/:user_id/addexpert/:category_name')
-    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
+    .put(isAuthenticated, acl.isAdminOrSelf, censor.isNaughty, function(req, res) {
       var categoryName = req.params.category_name;
 
       Category.findByName(categoryName).then(function(category) {
@@ -201,7 +201,7 @@ module.exports = function(router, isAuthenticated, acl) {
   // Add an investor category if it not already added
   // Create the category if it does not exist
   router.route('/users/:user_id/addinvestor/:category_name')
-    .put(isAuthenticated, acl.isAdminOrSelf, function(req, res) {
+    .put(isAuthenticated, acl.isAdminOrSelf, censor.isNaughty, function(req, res) {
       var categoryName = req.params.category_name;
 
       Category.findByName(categoryName).then(function(category) {

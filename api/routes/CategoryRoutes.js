@@ -7,7 +7,7 @@ var winston = require('winston');
 
 // Routes that end in /categories
 // -------------------------------------------------------------
-module.exports = function(router, isAuthenticated, acl) {
+module.exports = function(router, isAuthenticated, acl, censor) {
   router.route('/categories')
     // Get all the categories
     .get(isAuthenticated, function(req, res) {
@@ -29,7 +29,7 @@ module.exports = function(router, isAuthenticated, acl) {
     })
 
     // Create a new category
-    .post(isAuthenticated, function(req, res) {
+    .post(isAuthenticated, censor.isNaughty, function(req, res) {
 
       // Validate the inputs
       if (!utils.validateCategoryInputs(req)) {

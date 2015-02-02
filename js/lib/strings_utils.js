@@ -68,6 +68,7 @@ var strings = {
   FORGOT_PASSWORD: 'Forgot your password?',
   GAVE: 'gave',
   HOME: 'Home',
+  INAPPROPRIATE_CATEGORY: 'Category name contains forbidden words',
   INVALID_AMOUNT: 'Amount must be a valid number.',
   INVALID_AMOUNT_VALUE: 'Investment amount must be more than 0 reps.',
   INVEST_IN_USER: function(username) {

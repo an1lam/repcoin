@@ -11,12 +11,15 @@ var strings = require('../lib/strings_utils.js');
 
 var CategoriesTable = React.createClass({
   getInitialState: function() {
-    return { addMode: false,
-             editHover: false,
-             deleteMode: false,
-             showDeleteBox: false,
-             categoryToDelete: '',
-             message: null };
+    return {
+      addMode: false,
+      editHover: false,
+      deleteMode: false,
+      showDeleteBox: false,
+      categoryToDelete: '',
+      message: null,
+      error: false,
+    };
   },
 
   resetState: function() {
@@ -26,7 +29,8 @@ var CategoriesTable = React.createClass({
       deleteMode: false,
       showDeleteBox: false,
       categoryToDelete: '',
-      message: null
+      message: null,
+      error: false,
     });
   },
 
@@ -89,8 +93,8 @@ var CategoriesTable = React.createClass({
     });
   },
 
-  setMessage: function(message) {
-    this.setState({ message: message, addMode: false });
+  setMessage: function(message, error) {
+    this.setState({ message: message, error: error, addMode: false });
   },
 
   // Get the categories rows for the table
@@ -111,7 +115,14 @@ var CategoriesTable = React.createClass({
 
   render: function() {
     var isSelf = this.props.currentUser._id === this.props.user._id;
-    var message = this.state.message ? <div className="alert alert-info added-cat-msg" role="alert">{this.state.message}</div> : '';
+    var message = '';
+    if (this.state.message) {
+      if (this.state.error) {
+        message = <div className="alert alert-danger added-cat-msg" role="alert">{this.state.message}</div>;
+      } else {
+        message = <div className="alert alert-info added-cat-msg" role="alert">{this.state.message}</div>;
+      }
+    }
     var edit = '';
     var addCategory = '';
     var deleteCategory= '';

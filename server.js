@@ -62,15 +62,8 @@ app.get('/', function(req, res) {
 // ACL middleware
 var acl = require('./config/acl.js');
 
-/////////// Routes /////////////////////////
-
-// Users
-var userRouter = express.Router();
-var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth, acl);
-
-// Categories
-var categoryRouter = express.Router();
-var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth, acl);
+// Censor middleware
+var censor = require('./config/censor.js');
 
 // Nodemailer Setup
 var transporter = nodemailer.createTransport({
@@ -78,15 +71,13 @@ var transporter = nodemailer.createTransport({
   auth: mailerConfig.fromUser,
 });
 
-/////////// Routes /////////////////////////
-
 // Authentication
 var authRouter = express.Router();
 var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
 
 // Categories
 var categoryRouter = express.Router();
-var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth, acl);
+var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, auth, acl, censor);
 
 // Non-model associated
 var comboRouter = express.Router();
@@ -102,7 +93,7 @@ var uploadRoutes = require('./api/routes/UploadRoutes.js')(uploadsRouter, auth, 
 
 // Users
 var userRouter = express.Router();
-var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth, acl);
+var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth, acl, censor);
 
 // Notifications
 var notificationRouter = express.Router();
