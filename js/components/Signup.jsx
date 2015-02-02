@@ -18,15 +18,7 @@ var Signup = React.createClass({
 
   handleFacebookClick: function(e) {
     e.preventDefault();
-    FB.getLoginStatus(this.statusCallback);
-  },
-
-  statusCallback: function(response) {
-    if (response.status === 'connected') {
-      this.loginUser(response.authResponse.accessToken);
-    } else {
-      FB.login(this.loginCallback, true);
-    }
+    FB.login(this.loginCallback, { scope: 'email', return_scopes: true });
   },
 
   loginCallback: function(response) {

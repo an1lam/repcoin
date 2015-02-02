@@ -37,21 +37,13 @@ var Login = React.createClass({
 
   handleFacebookClick: function(e) {
     e.preventDefault();
-    FB.getLoginStatus(this.statusCallback);
-  },
-
-  statusCallback: function(response) {
-    if (response.status === 'connected') {
-      this.loginUser(response.authResponse.accessToken);
-    } else {
-      FB.login(this.loginCallback, true);
-    }
+    FB.login(this.loginCallback, { scope: 'email', return_scopes: true });
   },
 
   loginCallback: function(response) {
     if (response.status === 'connected') {
       this.loginUser(response.authResponse.accessToken);
-      } else if (response.status === 'not_authorized') {
+    } else if (response.status === 'not_authorized') {
       this.setState({ error: true, msg: strings.FACEBOOK_UNAUTHORIZED_CREDENTIALS });
     } else {
       this.setState({ error: true, msg: strings.ERROR_LOGGING_INTO_FACEBOOK });
@@ -64,7 +56,12 @@ var Login = React.createClass({
       type: 'POST',
       data: { access_token: accessToken },
       success: function(user) {
-        this.transitionTo('/home');
+        // Only rewrite the picture if it is not there
+        if (!user.picture) {
+          this.getFacebookProfilePicture(user);
+        } else {
+          this.transitionTo('/home');
+        }
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText !== 'Error') {
@@ -74,6 +71,49 @@ var Login = React.createClass({
       }.bind(this)
     });
   },
+
+  getFacebookProfilePicture: function(user) {
+    var cb = function(user) {
+      this.transitionTo('/home');
+    }.bind(this);
+
+    FB.api('/me/picture',
+      {
+        'redirect': false,
+        'type': 'normal',
+        'width': 200,
+        'height': 200
+      },
+      function (response) {
+        if (response && !response.error) {
+          this.saveFacebookPhoto(user,
+            response.data.url, cb);
+        } else {
+          cb(user);
+        }
+      }.bind(this)
+    );
+  },
+
+  saveFacebookPhoto: function(user, link, cb) {
+    var url = '/api/users/'+ user._id;
+
+    // Mark facebook pictures as such with the special public_id
+    user.picture = { url: link, public_id: 'FACEBOOK' };
+    $.ajax({
+      url: url,
+      type: 'PUT',
+      data: user,
+      success: function(user) {
+        cb(user);
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+        cb(user)
+      }.bind(this)
+    });
+  },
+
 
   render: function() {
     var errors = this.state.error ? <div className="alert alert-danger" role="alert"><strong>{this.state.error}</strong></div> : '';
