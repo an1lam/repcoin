@@ -86,11 +86,15 @@
 }
 
 .feedTitle {
+  display:inline-block;
   padding-top:15px;
   padding-left:10px;
   padding-bottom:15px;
 }
 
+.feed-info {
+  margin-left:5px;
+}
 
 .feedItem {
   width:100%;
@@ -272,6 +276,22 @@
 }
 
 /* Profile Page Items ////////////////////////////// */
+.reps-available-info {
+  margin-left:5px;
+}
+
+.dividend-info {
+  margin-left:15px;
+}
+
+.links-title {
+  display:inline-block;
+}
+
+.content-info {
+  margin-left:5px;
+}
+
 .linksBox h4 {
   display:inline-block;
   margin-bottom:15px;
@@ -324,6 +344,10 @@
   font-size: 12px;
   padding-top: 12px;
   padding-right: 15px;
+}
+
+.investment-button-info {
+  margin-left:5px;
 }
 
 .profileBox {
@@ -685,7 +709,6 @@ input.cropit-image-zoom-input {
 }
 
 .category-search-item {
-  background-color: #ADD8E6;
 }
 
 .user-search-item {

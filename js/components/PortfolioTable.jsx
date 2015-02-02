@@ -30,12 +30,15 @@ var PortfolioTable = React.createClass({
     });
   },
 
+  componentDidMount: function() {
+    $('.dividend-info').popover({ trigger: 'hover focus' });
+  },
+
   componentWillReceiveProps: function(newProps) {
     if (newProps.user._id !== this.props.user._id) {
       this.resetState();
     }
   },
-
 
   handleMouseOver: function() {
     if (!this.state.showDeleteBox && !this.state.addMode && !this.state.deleteMode) {
@@ -146,7 +149,9 @@ var PortfolioTable = React.createClass({
       investmentHeader =
         <th>
           <div>{strings.INVESTMENTS}</div>
-          <div className="subtitle">{strings.USER_AMOUNT_DIVIDEND}</div>
+          <div className="subtitle">{strings.USER_AMOUNT_DIVIDEND}
+            <span className="dividend-info glyphicon glyphicon-info-sign" data-toggle="popover" data-placement="top" title={strings.DIVIDEND_INFO_TITLE} data-content={strings.DIVIDEND_INFO_CONTENT}></span>
+          </div>
         </th>;
     }
 

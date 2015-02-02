@@ -12,6 +12,10 @@ var LinksBox = React.createClass({
     return { showEdit: false, showInput : false };
   },
 
+  componentDidMount: function() {
+    $('.content-info').popover({ trigger: 'hover focus' });
+  },
+
   resetState: function() {
     this.setState({ showEdit: false, showInput: false });
   },
@@ -86,7 +90,10 @@ var LinksBox = React.createClass({
 
     return(
       <div className="linksBox" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
-        <h4>{strings.CONTENT}</h4>
+        <div className="links-title">
+          <h4>{strings.CONTENT}</h4>
+          <span className="content-info glyphicon glyphicon-info-sign" data-toggle="popover" data-placement="right" data-content={strings.CONTENT_INFO_CONTENT}></span>
+        </div>
         {edit}
         {linkInput}
         {linksList}

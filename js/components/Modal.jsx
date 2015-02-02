@@ -345,7 +345,7 @@ var Modal = React.createClass({
           <div className="modal-content">
             <div className="modal-header">
               {this.renderCloseButton()}
-              <span><h3 className="modal-username"> {this.props.user.username} </h3></span>
+              <span><h3 className="modal-username">Invest in {this.props.user.username} </h3></span>
               {message}
             </div>
             {modalContent}

@@ -4,10 +4,15 @@ var React = require('react');
 var strings = require('../lib/strings_utils.js');
 
 var PortfolioHeader = React.createClass({
+  componentDidMount: function() {
+    $('.reps-available-info').popover({ trigger: 'hover focus' });
+  },
+
   render: function() {
     var repsAvailable = '';
     if (this.props.reps > -1) {
-      repsAvailable = <p>{strings.PORTFOLIO_HEADER_REPS(this.props.reps)}</p>;
+      repsAvailable = <p>{strings.PORTFOLIO_HEADER_REPS(this.props.reps)}
+        <span className="reps-available-info glyphicon glyphicon-info-sign" data-toggle="popover" data-placement="right" data-content={strings.REPS_AVAILABLE_INFO_CONTENT}></span></p>;
     }
     return (
       <div className="portfolioHeader">

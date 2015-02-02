@@ -71,7 +71,7 @@ var CategoryPageHeader = React.createClass({
 
     var investorBtn = <button onClick={this.setInvestorCategory} className="btn btn-default">Become a {this.props.category.name} investor!</button>;
     if (this.isInvestor(this.props.currentUser)) {
-      expertBtn = <div className="alert alert-success" role="alert">{strings.YOU_ARE_AN_INVESTOR(this.props.category.name)}</div>
+      investorBtn = <div className="alert alert-success" role="alert">{strings.YOU_ARE_AN_INVESTOR(this.props.category.name)}</div>
     }
 
     return (

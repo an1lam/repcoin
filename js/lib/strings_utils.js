@@ -34,6 +34,7 @@ var strings = {
   CHECK_OUT_EXISTING_CATEGORIES: 'Check out all of the existing categories on Repcoin.',
   CONTACT_US: 'Contact Us',
   CONTENT: 'Content',
+  CONTENT_INFO_CONTENT: 'Put links to all of your relevant content here so that users can find your material!',
   DEFAULT_CATEGORY_PIC: 'http://res.cloudinary.com/repcoin/image/upload/v1421283105/tag_yib4xo.svg',
   DELETE_THIS_LINK: 'Delete this link?',
   DEFAULT_USER_PIC: 'http://res.cloudinary.com/repcoin/image/upload/v1419620814/default_profile_od0xw5.jpg',
@@ -41,6 +42,8 @@ var strings = {
   DISPLAYING_RESULTS: function(amount, query) {
     return 'Displaying ' + amount + ' results for \'' + query + '\'';
   },
+  DIVIDEND_INFO_CONTENT: 'Dividends are reps paid to you nightly for each investment you hold. Dividends are calculated based on the percentage of an expert\'s reps that you owned at investment time, so they increase as your expert\'s reps increase.',
+  DIVIDEND_INFO_TITLE: 'What are dividends?',
   EMAIL_SENT: function(email) {
     return 'An email has been sent to ' + email + ' with a link to reset your password.';
   },
@@ -55,6 +58,10 @@ var strings = {
   FACEBOOK_APP_ID_LOCALHOST: '898342783518783',
   FACEBOOK_APP_ID_PRODUCTION: '894010190618709',
   FACEBOOK_UNAUTHORIZED_CREDENTIALS: 'Unauthorized credentials for facebook login',
+  FEED_CATEGORY_INFO_CONTENT: 'The Category Feed holds all of the events and transactions happening on Repcoin for this category',
+  FEED_INFO_CONTENT: 'The Home Feed holds all of the events and transactions happening on Repcoin',
+  FEED_INFO_TITLE: 'The Feed',
+  FEED_PROFILE_INFO_CONTENT: 'The Profile Feed holds all of this user\'s Repcoin activity',
   FIELDS_BLANK: 'Fields cannot be blank',
   FILTER_BY: 'Filter by',
   FIND_YOUR_EXPERT: 'Find your expert.',
@@ -69,6 +76,7 @@ var strings = {
   INVESTMENT_AMOUNT_TOO_SMALL: function(amount) {
     return 'That investment only has ' + amount + ' reps in it';
   },
+  INVESTMENT_BUTTON_INFO_CONTENT: 'Click to pull up the investment menu and invest in this user',
   INVESTMENTS: 'Investments',
   INVESTOR_CATEGORIES: 'Investor categories',
   LEADING_EXPERTS: 'Leading experts',
@@ -117,6 +125,7 @@ var strings = {
   },
   REPCOIN: 'Repcoin',
   REPS_AVAILABLE: 'Reps Available',
+  REPS_AVAILABLE_INFO_CONTENT: 'These are all of the reps you currently have to invest. Spend them to start earning dividends!',
   REPS_FROM: 'reps from',
   REPS_TO: 'reps to',
   REVOKED: 'revoked',
