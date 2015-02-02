@@ -18,19 +18,10 @@ var Signup = React.createClass({
 
   handleFacebookClick: function(e) {
     e.preventDefault();
-    FB.getLoginStatus(this.statusCallback);
-  },
-
-  statusCallback: function(response) {
-    if (response.status === 'connected') {
-      this.loginUser(response.authResponse.accessToken);
-    } else {
-      FB.login(this.loginCallback, { scope: 'email', return_scopes: true });
-    }
+    FB.login(this.loginCallback, { scope: 'email', return_scopes: true });
   },
 
   loginCallback: function(response) {
-    debugger;
     if (response.status === 'connected') {
       this.loginUser(response.authResponse.accessToken);
       } else if (response.status === 'not_authorized') {
@@ -50,7 +41,6 @@ var Signup = React.createClass({
         if (!user.picture) {
           this.getFacebookProfilePicture(user, function(user) {
             if (!user.email) {
-              debugger;
               this.getFacebookEmail(user, function(user) {
                 this.transitionTo('/home');
               }.bind(this));
@@ -76,11 +66,10 @@ var Signup = React.createClass({
   },
 
   getFacebookEmail: function(user, cb) {
-    FB.api('/me/email',
+    FB.api('/me',
       function (response) {
         if (response && !response.error) {
-          debugger;
-          var url = '/api/users/' + user._id + '/email/' + response.data.email;
+          var url = '/api/users/' + user._id + '/email/' + response.email;
           $.ajax({
             url: url,
             type: 'PUT',
@@ -92,7 +81,6 @@ var Signup = React.createClass({
             }
           });
         } else {
-          debugger;
           cb(user);
         }
       }.bind(this)
