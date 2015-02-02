@@ -39,21 +39,9 @@ var Signup = React.createClass({
       success: function(user) {
         // Only rewrite the picture if it is not there
         if (!user.picture) {
-          this.getFacebookProfilePicture(user, function(user) {
-            if (!user.email) {
-              this.getFacebookEmail(user, function(user) {
-                this.transitionTo('/home');
-              }.bind(this));
-            }
-          }.bind(this));
+          this.getFacebookProfilePicture(user);
         } else {
-          if (!user.email) {
-            this.getFacebookEmail(user, function(user) {
-              this.transitionTo('/home');
-            }.bind(this));
-          } else {
-            this.transitionTo('/home');
-          }
+          this.transitionTo('/home');
         }
       }.bind(this),
       error: function(xhr, status, err) {
@@ -65,29 +53,11 @@ var Signup = React.createClass({
     });
   },
 
-  getFacebookEmail: function(user, cb) {
-    FB.api('/me',
-      function (response) {
-        if (response && !response.error) {
-          var url = '/api/users/' + user._id + '/email/' + response.email;
-          $.ajax({
-            url: url,
-            type: 'PUT',
-            success: function(user) {
-              cb(user);
-            }.bind(this),
-            error: function(xhr, status, err) {
-              console.error(xhr.responseText);
-            }
-          });
-        } else {
-          cb(user);
-        }
-      }.bind(this)
-    );
-  },
-
   getFacebookProfilePicture: function(user, cb) {
+    var cb = function(user) {
+      this.transitionTo('/home');
+    }.bind(this);
+
     FB.api('/me/picture',
       {
         'redirect': false,
