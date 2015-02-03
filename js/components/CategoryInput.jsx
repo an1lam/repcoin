@@ -44,14 +44,16 @@ var CategoryInput = React.createClass({
       type: 'PUT',
       success: function(user) {
         var msg = strings.NOW_AN_INVESTOR(name);
-        this.props.setMessage(msg);
+        this.props.setMessage(msg, false);
         PubSub.publish('profileupdate');
         this.props.onReset();
         return user;
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText === 'Already an investor') {
-          this.props.setMessage(strings.ALREADY_AN_INVESTOR(name));
+          this.props.setMessage(strings.ALREADY_AN_INVESTOR(name), true);
+        } else if (xhr.responseText === 'Inappropriate content detected.') {
+          this.props.setMessage(strings.INAPPROPRIATE_CATEGORY, true);
         }
         console.error(status, err.toString());
         this.props.onReset();
@@ -65,14 +67,16 @@ var CategoryInput = React.createClass({
       type: 'PUT',
       success: function(user) {
         var msg = strings.NOW_AN_EXPERT(name);
-        this.props.setMessage(msg);
+        this.props.setMessage(msg, false);
         PubSub.publish('profileupdate');
         this.props.onReset();
         return user;
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText === 'Already an expert') {
-          this.props.setMessage(strings.ALREADY_AN_EXPERT(name));
+          this.props.setMessage(strings.ALREADY_AN_EXPERT(name), true);
+        } else if (xhr.responseText === 'Inappropriate content detected.') {
+          this.props.setMessage(strings.INAPPROPRIATE_CATEGORY, true);
         }
         console.error(status, err.toString());
         this.props.onReset();
