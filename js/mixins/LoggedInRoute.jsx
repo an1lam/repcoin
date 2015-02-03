@@ -6,11 +6,11 @@ var Router = require('react-router');
 var LoggedInRoute = {
   statics: {
     willTransitionTo: function (transition) {
-      auth.loggedIn(function(loggedIn) {
+      transition.wait(auth.loggedInWithPromise().then(function(loggedIn) {
         if (!loggedIn) {
           transition.redirect('/login');
         }
-      });
+      }));
     }
   }
 };

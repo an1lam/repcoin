@@ -744,3 +744,8 @@ textarea {
 .added-cat-msg {
   text-align: center;
 }
+
+/* Error Page */
+.error-page {
+  text-align: center;
+}
