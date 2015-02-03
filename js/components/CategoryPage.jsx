@@ -4,6 +4,7 @@ var $ = require('jquery');
 var auth = require('../auth.jsx');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var CategoryPageHeader = require('./CategoryPageHeader.jsx');
+var ErrorPage = require('./ErrorPage.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
 var LeaderTable = require('./LeaderTable.jsx');
@@ -46,9 +47,14 @@ var CategoryPage = React.createClass({
     $.ajax({
       url: url,
       success: function(category) {
-        this.setState({ category: category });
+        if (category) {
+          this.setState({ category: category, error: null });
+        } else {
+          this.setState({ error: 404 });
+        }
       }.bind(this),
       error: function(xhr, status, err) {
+        this.setState({ error: status });
         console.error(this.props.params.category, status, err.toString());
       }.bind(this)
     });
@@ -59,32 +65,44 @@ var CategoryPage = React.createClass({
     if (this.state.category && this.state.currentUser) {
       categoryPageHeader = <CategoryPageHeader category={this.state.category} currentUser={this.state.currentUser} />;
     }
+
+    if (this.state.error) {
+      var mainBody = <ErrorPage type={this.state.error} />
+
+    } else {
+      var mainBody = (
+        <div>
+          <div className="row header">
+            {categoryPageHeader}
+          </div>
+          <div className="row">
+            <div className="col-md-3">
+              <div className="expert-table">
+                <TrendingTable category={this.props.params.category} />
+                <LeaderTable category={this.props.params.category} expert={true}/>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="feed-table">
+                <Feed category={this.props.params.category} parent="CategoryPage" />
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="investor-table">
+                <LeaderTable category={this.props.params.category} expert={false}/>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="categoryPage">
         <div className="row">
           <Toolbar />
         </div>
-        <div className="row header">
-          {categoryPageHeader}
-        </div>
-        <div className="row">
-          <div className="col-md-3">
-            <div className="expert-table">
-              <TrendingTable category={this.props.params.category} />
-              <LeaderTable category={this.props.params.category} expert={true}/>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="feed-table">
-              <Feed category={this.props.params.category} parent="CategoryPage" />
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="investor-table">
-              <LeaderTable category={this.props.params.category} expert={false}/>
-            </div>
-          </div>
-        </div>
+        {mainBody}
         <div className="row footerrow">
           <Footer />
         </div>
