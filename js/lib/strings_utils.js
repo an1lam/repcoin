@@ -1,4 +1,5 @@
 'use strict';
+var React = require('react');
 
 var strings = {
   ABOUT: 'About',
@@ -139,6 +140,14 @@ var strings = {
   SUCCESSFULLY_REVOKED: function(amount, name) {
     return 'Successfully revoked ' + amount + ' reps from ' + name;
   },
+  TEAM: 'Team',
+  TEAM_PART_1A: 'Repcoin is brought to you by the lean team of',
+  TEAM_PART_1B: 'We’ve spent the last five months hacking away to create what we believe is the most reliable way to find new content. Most of our nights look like this:',
+  TEAM_PART_2: 'We’re tired of digging through music forums, sports magazines, and obscure blogs to find the most exciting talent. We’ve watched way too many hours of YouTube videos, but automated recommendations still just don’t cut it. And now that we’ve burned through every episode of LouisCK, we need a new comedian.',
+  TEAM_PART_3: 'Usually we ask our friends for these kinds of leads, but we think we can do better. We want to get the same advice from all over the web. We want to give that advice, too, and we want everyone to know that we said it first.',
+  TEAM_PART_4: 'We realized a marketplace would be the best way to let people pick and discover great content, so we got busy building the world’s first trading platform for reputation. We’re comp sci majors who’ve built projects together before, but this is by far our most groundbreaking endeavor. We are very excited to have taken it all the way from the whiteboard to your hands.',
+  TEAM_PART_5: 'Repcoin makes it possible for your choices to have influence. And, it provides a brand new channel for you and your work to get recognition. We hope you will use it to find your favorite content, to discover those unknown greats, and to consolidate your online credibility.',
+  TEAM_PICTURE: 'http://res.cloudinary.com/repcoin/image/upload/v1423014486/repcoin_team_ilvdmx.jpg',
   TEXT_BLANK: 'Text cannot be blank',
   TEXT_LONGER_THAN_200: 'Text cannot be longer than 200 characters',
   THIS_MONTH: 'This month',
