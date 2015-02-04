@@ -5,6 +5,7 @@ var AboutBox = require('./AboutBox.jsx');
 var auth = require('../auth.jsx');
 var InvestmentButton = require('./InvestmentButton.jsx');
 var LinksBox = require('./LinksBox.jsx');
+var LocationBox = require('./LocationBox.jsx');
 var PictureBox = require('./PictureBox.jsx');
 var React = require('react');
 
@@ -25,6 +26,7 @@ var ProfileBox = React.createClass({
           </div>
           <div className="row">
             <AboutBox user={this.props.user} currentUser={this.props.currentUser}/>
+            <LocationBox user={this.props.user} currentUser={this.props.currentUser}/>
             {investmentButton}
           </div>
         </div>
