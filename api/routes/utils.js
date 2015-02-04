@@ -294,6 +294,14 @@ var utils = {
       }
     }
 
+    // Location must be less than 100 characters and cannot be whitespace
+    if (req.body.location) {
+      if (req.body.location.trim().length === 0 ||
+          req.body.location.length > 200) {
+        return false;
+      }
+    }
+
     // About must be less than 200 characters and cannot be whitespace
     if (req.body.about) {
       if (req.body.about.trim().length === 0 ||

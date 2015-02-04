@@ -376,10 +376,6 @@
   margin:5px;
 }
 
-.aboutBox {
-  margin-bottom:20px;
-}
-
 .profileUsername {
   margin-top:0px;
   font-size:28px;
@@ -520,6 +516,16 @@ html, body {
   display:inline-block;
   margin-left:2px;
   margin-right:2px;
+}
+
+/* LocationBox ///////////////////// */
+.locationBox {
+  margin-bottom:20px;
+}
+
+.locationBox .edit {
+  display:inline;
+  float:right;
 }
 
 /* AboutBox //////////////////////// */
