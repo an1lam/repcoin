@@ -12,6 +12,7 @@ var PasswordResetPage = require('./components/PasswordResetPage.jsx');
 var ProfilePage = require('./components/ProfilePage.jsx');
 var React = require('react');
 var SearchPage = require('./components/SearchPage.jsx');
+var TeamPage = require('./components/TeamPage.jsx');
 var VerificationPage = require('./components/VerificationPage.jsx');
 
 var Router = require('react-router');
@@ -75,6 +76,7 @@ var routes = (
     <Route name="profile" path="/user/:userId" handler={ProfilePage}/>
     <Route name="search" path="/search/:query" handler={SearchPage}/>
     <Route name="passwordReset" path="/passwordReset/:token" handler={PasswordResetPage} />
+    <Route name="team" handler={TeamPage} />
     <Route name="verification" path="/verify/:token/" handler={VerificationPage} />
   </Route>
 );
