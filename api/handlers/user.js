@@ -174,6 +174,7 @@ var UserHandler = {
             return res.status(501).send('No user found with id: ' + userId);
           } else {
             user.about            = req.body.about || user.about;
+            user.location         = req.body.location || user.location;
             user.username         = req.body.username || user.username;
             user.picture          = req.body.picture || user.picture;
 

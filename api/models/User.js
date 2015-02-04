@@ -35,6 +35,7 @@ var UserSchema = new Schema({
   password: {type: String, validate: passwordValidator },
   email: {type: String, index: { unique: true, sparse: true }, trim: true },
   about: {type: String, trim: true },
+  location: {type: String, trim: true },
 
   // The reps this user has to invest
   reps: { type: Number, required: true, default: 5 },
