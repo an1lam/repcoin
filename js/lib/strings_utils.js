@@ -5,7 +5,6 @@ var strings = {
   ABOUT: 'About',
   ADD_BRIEF_DESCRIPTION: 'Add a brief description of yourself',
   ADD_LOCATION: 'Add your location',
-  ALL_TIME: 'All time',
   ALPHABETICAL: 'Alphabetical',
   ALREADY_AN_EXPERT: function(name) {
     return 'Already an expert in ' + name;

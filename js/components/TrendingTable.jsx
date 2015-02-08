@@ -45,10 +45,6 @@ var TrendingTable = React.createClass({
         date.setDate(date.getDate()-1);
         break;
 
-      case strings.ALL_TIME:
-        date.setYear(date.getYear()-10);
-        break;
-
       default:
         date.setMonth(date.getMonth()-1);
         break;
@@ -106,7 +102,6 @@ var TrendingTable = React.createClass({
                 <option>{strings.THIS_WEEK}</option>
                 <option>{strings.TODAY}</option>
                 <option>{strings.THIS_YEAR}</option>
-                <option>{strings.ALL_TIME}</option>
               </select>
             </th>
           </tr>
