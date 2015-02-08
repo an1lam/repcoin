@@ -36,13 +36,13 @@ var FeedHeader = React.createClass({
     var buttons = '';
     if (this.props.parent === 'ProfilePage') {
       if (this.props.isSelf) {
-        <div className="btn-group">
+        buttons = <div className="btn-group">
           <button type="button" ref="All" value="all"  onClick={this.propagateClick.bind(this, "all")} className="btn btn-default">All</button>
           <button type="button" ref="To" value="to" onClick={this.propagateClick.bind(this, "to")} className="btn btn-default">To</button>
           <button type="button" ref="From" value="from" onClick={this.propagateClick.bind(this, "from")} className="btn btn-default">From</button>
         </div>;
       } else {
-        <div className="btn-group">
+        buttons = <div className="btn-group">
           <button type="button" ref="All" value="all"  onClick={this.propagateClick.bind(this, "all")} className="btn btn-default">All</button>
           <button type="button" ref="To" value="to" onClick={this.propagateClick.bind(this, "to")} className="btn btn-default">To</button>
           <button type="button" ref="From" value="from" onClick={this.propagateClick.bind(this, "from")} className="btn btn-default">From</button>
@@ -54,8 +54,10 @@ var FeedHeader = React.createClass({
     return (
       <div className="feedHeader">
         <div>
-          <h3 className="feedTitle panel-title">Feed</h3>
-            <span className="feed-info glyphicon glyphicon-info-sign" data-toggle="popover" data-placement="right" title={strings.FEED_INFO_TITLE} data-content={feedInfoContent}></span>
+          <div>
+            <h3 className="feedTitle panel-title">Feed</h3>
+              <span className="feed-info glyphicon glyphicon-info-sign" data-toggle="popover" data-placement="right" title={strings.FEED_INFO_TITLE} data-content={feedInfoContent}></span>
+          </div>
           {buttons}
         </div>
       </div>
