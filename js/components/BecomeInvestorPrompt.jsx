@@ -41,7 +41,9 @@ var BecomeInvestorPrompt = React.createClass({
       }
       if (!isInvestor) {
         options.push(
-          <button value={category} onClick={this.setInvestorCategory} className="btn btn-success investor-prompt-btn">{category}</button>
+          <div className="col-md-3 col-sm-3">
+            <button value={category} onClick={this.setInvestorCategory} className="btn btn-success investor-prompt-btn">{category}</button>
+          </div>
         );
       }
     }
