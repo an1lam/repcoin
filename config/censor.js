@@ -1,11 +1,24 @@
 'use strict';
 
 var naughtylist = require('./naughtylist.js');
+var spamEmailList = require('./spamEmailList.js');
 var length = naughtylist.length;
 var util = require('util');
 
 // Express middleware to check for words that should not be allowed
 var censor = {
+  hasSpamEmail: function(req, res, next) {
+    if (req.body.email) {
+      var len = spamEmailList.length;
+      for (var i = 0; i < len; i++) {
+        if (req.body.email.indexOf(spamEmailList[i]) > -1) {
+          return res.status(422).send('Spam email domain detected');
+        }
+      }
+    }
+    next();
+  },
+
   isNaughty: function(req, res, next) {
 
     // Check if a word is in the naughty list
