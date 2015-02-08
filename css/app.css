@@ -452,9 +452,10 @@
 }
 
 html, body {
-    height: 100%;
-    padding: 0;
-    margin: 0;
+  background-color: #F6F7F8;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 #content {
