@@ -57,6 +57,7 @@ var strings = {
     return username + '\'s Expert Categories';
   },
   EXPERT_CATEGORIES_IMPERSONAL: 'Expert categories',
+  EXPERTS_HIGH_TO_LOW: 'Experts (High to Low)',
   FACEBOOK_APP_ID_LOCALHOST: '898342783518783',
   FACEBOOK_APP_ID_PRODUCTION: '894010190618709',
   FACEBOOK_UNAUTHORIZED_CREDENTIALS: 'Unauthorized credentials for facebook login',
@@ -82,6 +83,7 @@ var strings = {
   INVESTMENT_BUTTON_INFO_CONTENT: 'Click to pull up the investment menu and invest in this user',
   INVESTMENTS: 'Investments',
   INVESTOR_CATEGORIES: 'Investor categories',
+  INVESTORS_HIGH_TO_LOW: 'Investors (High to Low)',
   LEADING_EXPERTS: 'Leading experts',
   LEADING_INVESTORS: 'Leading investors',
   LOG_IN_WITH_FACEBOOK: ' Log in with facebook',
