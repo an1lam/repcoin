@@ -44,11 +44,43 @@ var CategoriesPage = React.createClass({
       case strings.MARKET_SIZE_LOW_TO_HIGH:
         comparator = this.getMarketComparator(false);
         break;
+      case strings.EXPERTS_HIGH_TO_LOW:
+        comparator = this.getExpertComparator();
+        break;
+
+      case strings.INVESTORS_HIGH_TO_LOW:
+        comparator = this.getInvestorComparator();
+        break;
+
       default:
         comparator = this.getAlphabeticalComparator();
         break;
     }
     this.setState({ sortedCategories: this.state.sortedCategories.sort(comparator) });
+  },
+
+  getExpertComparator: function() {
+    return function(a, b) {
+      if (a.experts > b.experts) {
+        return -1;
+      }
+      if (a.experts < b.experts) {
+        return 1;
+      }
+      return 0;
+    }
+  },
+
+  getInvestorComparator: function() {
+    return function(a, b) {
+      if (a.investors > b.investors) {
+        return -1;
+      }
+      if (a.investors < b.investors) {
+        return 1;
+      }
+      return 0;
+    }
   },
 
   getAlphabeticalComparator: function() {

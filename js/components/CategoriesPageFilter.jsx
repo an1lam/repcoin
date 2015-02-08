@@ -14,8 +14,8 @@ var CategoriesPageFilter = React.createClass({
           <option>{strings.ALPHABETICAL}</option>
           <option>{strings.MARKET_SIZE_HIGH_TO_LOW}</option>
           <option>{strings.MARKET_SIZE_LOW_TO_HIGH}</option>
-          <option>Market Size (High to Low)</option>
-          <option>Market Size (Low to High)</option>
+          <option>{strings.EXPERTS_HIGH_TO_LOW}</option>
+          <option>{strings.INVESTORS_HIGH_TO_LOW}</option>
         </select>
       </div>
     );
