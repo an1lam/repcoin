@@ -50,7 +50,7 @@ var FeedItem = React.createClass({
       from = <Link className="fromName" to="profile" params={{userId: this.props.transaction.from.id}}>
                    {this.props.transaction.from.name}</Link>;
       // Get the img for the to user
-      var img1Class = 'feed-item-img 0 ' + this.props.transaction._id;
+      var img1Class = 'feed-item-img from-user-img 0 ' + this.props.transaction._id;
       var img1Url = strings.DEFAULT_USER_PIC;
       var fromUser = this.state.fromUser;
       if (fromUser && fromUser.picture && fromUser.picture.url) {
@@ -74,7 +74,7 @@ var FeedItem = React.createClass({
     var classes = 'action ' + this.props.transaction._id;
 
     // Get the img for to user
-    var img2Class = 'feed-item-img 1 ' + this.props.transaction._id;
+    var img2Class = 'feed-item-img to-user-img 1 ' + this.props.transaction._id;
     var img2Url = strings.DEFAULT_USER_PIC;
     var toUser = this.state.toUser;
     if (toUser && toUser.picture && toUser.picture.url) {
@@ -83,17 +83,17 @@ var FeedItem = React.createClass({
 
     return (
       <div className="feedItem">
-        {from}
         {fromImg}
+        {from}
         <strong className={classes}>{action}</strong>
       	<p className="amount">{amount}</p>
       	<p className="repsPronoun">{repsPronoun}</p>
         <Link className="toName" to="profile" params={{userId: this.props.transaction.to.id}}>{this.props.transaction.to.name}</Link>
-        <img className={img2Class} src={img2Url}></img>
         <p className="for">for</p>
       	<Link className="category" to="category" params={{category: this.props.transaction.category}}>{this.props.transaction.category}</Link>
       	<p className="period">.</p>
         <span className="timestamp-badge badge">{dateFormat}</span>
+        <img className={img2Class} src={img2Url}></img>
       </div>
     );
   }
