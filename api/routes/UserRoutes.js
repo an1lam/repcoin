@@ -135,7 +135,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
           winston.log('error', 'Error creating user: %s', msg);
           return res.status(501).send(msg);
         } else {
-          var verificationString = utils.generateVerificationToken();
+          var verificationString = utils.getRandomString();
 
           var verificationToken = new VerificationToken({
               user: user.email,
@@ -147,7 +147,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
               winston.log('error', 'Error saving verification token: %s', err);
               return res.status(501).send('Unable to save new verificationToken');
             }
-            var mailOptions = utils.generateVerificationEmailOptions(user.email, verificationString);
+            var mailOptions = utils.getVerificationEmailOptions(user.email, verificationString);
 
             transporter.sendMail(mailOptions, function(err, info) {
               if (err) {
@@ -172,23 +172,32 @@ module.exports = function(router, isAuthenticated, acl, censor) {
   // Get leaders for a given category and count. Set expert to '1' for expert category, else for investor
   router.get('/users/:categoryName/leaders/:count', isAuthenticated, UserHandler.users.leaders.get);
 
+  // Create a requested category and add the requesting user as either an expert for investor
+  router.route('/users/:user_id/:category_name/:action/:expert')
+    .post(acl.isAdmin, function(req, res) {
+      console.log('handling category request');
+    });
+
+  // Deny a requested category
   // Add an expert category if it is not already added
   // Create the category if it does not exist
   router.route('/users/:user_id/addexpert/:category_name')
     .put(isAuthenticated, acl.isAdminOrSelf, censor.isNaughty, function(req, res) {
       var categoryName = req.params.category_name;
+      var userId = req.params.user_id;
 
       Category.findByName(categoryName).then(function(category) {
         if (category) {
           return addExpertCategory(req, res, category);
         } else {
-          var newCategory = new Category({ name : categoryName });
-          newCategory.save(function(err, category) {
+          // If the category does not exist, email the admin
+          var mailOptions = utils.getCategoryRequestEmailOptions(categoryName, userId, 1);
+          transporter.sendMail(mailOptions, function(err, info) {
             if (err) {
-              winston.log('error', 'Error creating category: %s', err);
-              return res.status(503).send(err);
+              winston.log('error', 'Error sending email: %s', err);
+              return res.status(503).send('An internal error occurred. Please try again.');
             } else {
-              return addExpertCategory(req, res, category);
+              return res.status(200).end();
             }
           });
         }
@@ -251,7 +260,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
           return res.status(412).send('Users who sign up with facebook do not have a Repcoin email address');
         }
 
-        var randomString = utils.generateVerificationToken();
+        var randomString = utils.getRandomString();
         var resetToken = new PasswordResetToken({
           user: user.email,
           string: randomString,
@@ -264,7 +273,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
           }
 
           // Send an email with a link to reset the user's password
-          var mailOptions = utils.generatePasswordResetEmailOptions(
+          var mailOptions = utils.getPasswordResetEmailOptions(
             user.email, randomString);
 
           transporter.sendMail(mailOptions, function(err, info) {

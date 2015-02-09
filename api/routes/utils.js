@@ -12,8 +12,7 @@ var User = require('../models/User.js');
 var VerificationToken = require('../models/VerificationToken.js');
 
 // Config
-var verificationEmailConfig = require('../../config/mailer.js').verificationEmail;
-var passwordResetEmailConfig = require('../../config/mailer.js').passwordResetEmail;
+var emailConfig = require('../../config/mailer.js');
 var urlConfig = require('../../config/url.js');
 var winston = require('winston');
 
@@ -849,29 +848,39 @@ var utils = {
     });
   },
 
-  generateVerificationToken: function() {
-
-    // Generate the token using rand and the username
+  // Generate a random hex token
+  getRandomString: function() {
     return crypto.randomBytes(12).toString('hex');
   },
 
-  generateVerificationEmailOptions: function(email, randomString) {
+  getVerificationEmailOptions: function(email, randomString) {
     var url = urlConfig[process.env.NODE_ENV] + '#/verify/' + randomString + '/';
     return {
-      from: verificationEmailConfig.from,
+      from: emailConfig.verification.from,
       to: email,
-      subject: verificationEmailConfig.subject,
-      text: nodeUtil.format(verificationEmailConfig.text, url),
+      subject: emailConfig.verification.subject,
+      text: nodeUtil.format(emailConfig.verification.text, url),
     };
   },
 
-  generatePasswordResetEmailOptions: function(email, randomString) {
+  getCategoryRequestEmailOptions: function(categoryName, userId, expert) {
+    var approveUrl = urlConfig[process.env.NODE_ENV] + '#/categoryRequest/' + userId + '/' + categoryName + '/approve/' + expert;
+    var denyUrl = urlConfig[process.env.NODE_ENV] + '#/categoryRequest/' + userId + '/' + categoryName + '/deny/' + expert;
+    return {
+      from: emailConfig.categoryRequest.from,
+      to: emailConfig.categoryRequest.to,
+      subject: nodeUtil.format(emailConfig.categoryRequest.subject, categoryName),
+      text: nodeUtil.format(emailConfig.categoryRequest.text, categoryName, approveUrl, denyUrl),
+    };
+  },
+
+  getPasswordResetEmailOptions: function(email, randomString) {
     var url = urlConfig[process.env.NODE_ENV] + '#/passwordReset/' + randomString;
     return {
-      from: passwordResetEmailConfig.from,
+      from: emailConfig.passwordReset.from,
       to: email,
-      subject: passwordResetEmailConfig.subject,
-      text: nodeUtil.format(passwordResetEmailConfig.text, url),
+      subject: emailConfig.passwordReset.subject,
+      text: nodeUtil.format(emailConfig.passwordReset.text, url),
     };
   },
 

@@ -57,6 +57,10 @@ var strings = {
     return username + '\'s Expert Categories';
   },
   EXPERT_CATEGORIES_IMPERSONAL: 'Expert categories',
+  EXPERT_CATEGORY_PENDING: function(name) {
+    return 'The category \'' + name + '\' is pending approval. Upon approval, you will be ' +
+      'added as an expert, and the category will be created.';
+  },
   EXPERTS_HIGH_TO_LOW: 'Experts (High to Low)',
   FACEBOOK_APP_ID_LOCALHOST: '898342783518783',
   FACEBOOK_APP_ID_PRODUCTION: '894010190618709',
@@ -83,6 +87,10 @@ var strings = {
   INVESTMENT_BUTTON_INFO_CONTENT: 'Click to pull up the investment menu and invest in this user',
   INVESTMENTS: 'Investments',
   INVESTOR_CATEGORIES: 'Investor categories',
+  INVESTOR_CATEGORY_PENDING: function(name) {
+    return 'The category \'' + name + '\' is pending approval. Upon approval, you will be ' +
+      'added as an investor, and the category will be created.';
+  },
   INVESTORS_HIGH_TO_LOW: 'Investors (High to Low)',
   LEADING_EXPERTS: 'Leading experts',
   LEADING_INVESTORS: 'Leading investors',

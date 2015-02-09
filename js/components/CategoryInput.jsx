@@ -43,9 +43,15 @@ var CategoryInput = React.createClass({
       url: '/api/users/' + this.props.user._id + '/addinvestor/' + name,
       type: 'PUT',
       success: function(user) {
-        var msg = strings.NOW_AN_INVESTOR(name);
+        var msg;
+        // If the user was not returned, the category is waiting approval
+        if (!user) {
+          msg = strings.INVESTOR_CATEGORY_PENDING(name);
+        } else {
+          msg = strings.NOW_AN_INVESTOR(name);
+          PubSub.publish('profileupdate');
+        }
         this.props.setMessage(msg, false);
-        PubSub.publish('profileupdate');
         this.props.onReset();
         return user;
       }.bind(this),
@@ -66,9 +72,15 @@ var CategoryInput = React.createClass({
       url: '/api/users/' + this.props.user._id + '/addexpert/' + name,
       type: 'PUT',
       success: function(user) {
-        var msg = strings.NOW_AN_EXPERT(name);
+        var msg;
+        // If the user was not returned, the category is waiting approval
+        if (!user) {
+          msg = strings.EXPERT_CATEGORY_PENDING(name);
+        } else {
+          msg = strings.NOW_AN_EXPERT(name);
+          PubSub.publish('profileupdate');
+        }
         this.props.setMessage(msg, false);
-        PubSub.publish('profileupdate');
         this.props.onReset();
         return user;
       }.bind(this),
