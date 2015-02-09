@@ -863,6 +863,7 @@ var utils = {
     };
   },
 
+  // name of category, user requesting, boolean whether requested expert or investor
   getCategoryRequestEmailOptions: function(categoryName, userId, expert) {
     var approveUrl = urlConfig[process.env.NODE_ENV] + '#/categoryRequest/' + userId + '/' + categoryName + '/approve/' + expert;
     var denyUrl = urlConfig[process.env.NODE_ENV] + '#/categoryRequest/' + userId + '/' + categoryName + '/deny/' + expert;

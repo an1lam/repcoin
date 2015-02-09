@@ -21,8 +21,8 @@ var CategoryRequestPage = React.createClass({
       url: '/api/users/' + userId + '/' + name + '/' + action + '/' + expert,
       data: { password: password },
       type: 'POST',
-      success: function() {
-        this.setState({ message: 'Action successful!' });
+      success: function(user) {
+        this.setState({ message: 'Approval succeeded' });
       }.bind(this),
       error: function(xhr, status, err) {
         this.setState({ message: xhr.responseText });

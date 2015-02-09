@@ -22,7 +22,7 @@ module.exports = {
     from: process.env.REPCOIN_EMAIL,
     to: process.env.REPCOIN_EMAIL,
     subject: 'Repcoin Category Approval for %s',
-    text: 'Do you approve of the category %s? Click here if yes: %s\nClick here if no: %s',
+    text: 'Do you approve of the category %s?\n\nClick here if yes: %s\n\nClick here if no: %s',
   },
 
   transporterFactory: function() {

@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var NotificationSchema = new Schema({
   user      : {
     id      : { type: String, required: true },
-    name    : { type: String, required: true },
+    name    : { type: String },
   },
   viewed    : { type: Boolean, required: true, default: false },
   message   : { type: String, required: true },

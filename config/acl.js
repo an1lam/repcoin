@@ -5,8 +5,6 @@ var whitelist = require('./whitelist.js');
 var acl = {
   // Check if the user has admin privileges
   isAdmin: function(req, res, next) {
-    console.log(req.body.password);
-    console.log(process.env.REPCOIN_ADMIN_PASSWORD);
     if (req.body.password && req.body.password === process.env.REPCOIN_ADMIN_PASSWORD) {
       next();
     } else {
