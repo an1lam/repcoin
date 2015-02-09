@@ -5,6 +5,21 @@ var whitelist = require('./whitelist.js');
 var acl = {
   // Check if the user has admin privileges
   isAdmin: function(req, res, next) {
+
+    // TODO: remove this after Beta
+    // No need to enforce admin on a dev instance
+    if (process.env.NODE_ENV !== 'production') {
+      next();
+      return;
+    }
+
+    // TODO: remove this after Beta release
+    // This hack will allow us to login with our facebook accounts
+    if (req.body.access_token) {
+      next();
+      return;
+    }
+
     if (req.body.password && req.body.password === process.env.REPCOIN_ADMIN_PASSWORD) {
       next();
     } else {
