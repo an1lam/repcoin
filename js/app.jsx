@@ -5,6 +5,7 @@ var AboutPage = require('./components/AboutPage.jsx');
 var auth = require('./auth.jsx');
 var ContactUsPage = require('./components/ContactUsPage.jsx');
 var CategoriesPage = require('./components/CategoriesPage.jsx');
+var CategoryRequestPage = require('./components/CategoryRequestPage.jsx');
 var CategoryPage = require('./components/CategoryPage.jsx');
 var HomePage = require('./components/HomePage.jsx');
 var LoginPage = require('./components/LoginPage.jsx');
@@ -78,6 +79,7 @@ var routes = (
     <Route name="passwordReset" path="/passwordReset/:token" handler={PasswordResetPage} />
     <Route name="team" handler={TeamPage} />
     <Route name="verification" path="/verify/:token/" handler={VerificationPage} />
+    <Route name="categoryRequest" path="/categoryRequest/:userId/:categoryName/:action/:expert" handler={CategoryRequestPage} />
   </Route>
 );
 Router.run(routes, function (Handler, state) {

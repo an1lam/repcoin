@@ -1106,19 +1106,19 @@ describe('Utils: ', function() {
     });
   });
 
-  describe('generateVerificationToken', function() {
-    it('should generate a verification token with length 24', function() {
-      expect(utils.generateVerificationToken().length).toEqual(24);
+  describe('getRandomString', function() {
+    it('should get a verification token with length 24', function() {
+      expect(utils.getRandomString().length).toEqual(24);
     });
 
-    it ('should generate unique tokens', function() {
-      expect(utils.generateVerificationToken()).not.toEqual(utils.generateVerificationToken());
+    it ('should get unique tokens', function() {
+      expect(utils.getRandomString()).not.toEqual(utils.getRandomString());
     });
   });
 
-  describe('generateVerificationEmailOptions', function() {
+  describe('getVerificationEmailOptions', function() {
     it('should add the url to the text', function() {
-      expect(utils.generateVerificationEmailOptions('test@test.com', 'test')).toEqual({
+      expect(utils.getVerificationEmailOptions('test@test.com', 'test')).toEqual({
         from: jasmine.any(String),
         to: 'test@test.com',
         subject: jasmine.any(String),

@@ -3,14 +3,12 @@ var whitelist = require('./whitelist.js');
 
 // Express middleware to check for acl privileges based on a whitelist
 var acl = {
-
   // Check if the user has admin privileges
   isAdmin: function(req, res, next) {
-    var userId = req.session.passport.user;
-    if (whitelist[userId]) {
+    if (req.body.password && req.body.password === process.env.REPCOIN_ADMIN_PASSWORD) {
       next();
     } else {
-      return res.status(403).send(userId + ' needs admin privileges');
+      return res.status(403).send('Insufficient privileges');
     }
   },
 
