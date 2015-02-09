@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var AboutPage = require('./components/AboutPage.jsx');
+var AnticipationPage = require('./components/AnticipationPage.jsx');
 var auth = require('./auth.jsx');
 var ContactUsPage = require('./components/ContactUsPage.jsx');
 var CategoriesPage = require('./components/CategoriesPage.jsx');
@@ -67,19 +68,7 @@ var RepsApp = React.createClass({
 
 var routes = (
   <Route handler={RepsApp}>
-    <DefaultRoute handler={LoginPage} />
-    <Route name="about" handler={AboutPage} />
-    <Route name="categories" handler={CategoriesPage} />
-    <Route name="category" path="/categories/:category" handler={CategoryPage}/>
-    <Route name="contactUs" handler={ContactUsPage} />
-    <Route name="home" handler={HomePage} />
-    <Route name="login" handler={LoginPage} />
-    <Route name="profile" path="/user/:userId" handler={ProfilePage}/>
-    <Route name="search" path="/search/:query" handler={SearchPage}/>
-    <Route name="passwordReset" path="/passwordReset/:token" handler={PasswordResetPage} />
-    <Route name="team" handler={TeamPage} />
-    <Route name="verification" path="/verify/:token/" handler={VerificationPage} />
-    <Route name="categoryRequest" path="/categoryRequest/:userId/:categoryName/:action/:expert" handler={CategoryRequestPage} />
+    <DefaultRoute handler={AnticipationPage} />
   </Route>
 );
 Router.run(routes, function (Handler, state) {
