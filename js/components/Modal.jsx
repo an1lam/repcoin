@@ -18,6 +18,12 @@ var Modal = React.createClass({
     };
   },
 
+  componentWillReceiveProps: function(newProps) {
+    if (this.props.user._id !== newProps.user._id) {
+      this.setState({ give: true, error: false, message: '' });
+    }
+  },
+
   // Validate a give
   validateAndGive: function(category, amount, anonymous) {
     // Validate that the category is possible
