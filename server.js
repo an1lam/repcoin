@@ -73,7 +73,7 @@ var transporter = nodemailer.createTransport({
 
 // Authentication
 var authRouter = express.Router();
-var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
+var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport, acl);
 
 // Categories
 var categoryRouter = express.Router();
