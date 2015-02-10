@@ -66,7 +66,7 @@ var LoginPage = React.createClass({
     return (
       <div className="loginPage">
         <div className="loginBody row">
-          <div>
+          <div className="login-toggle">
             <button onClick={this.handleLoginClick} type="button" ref="login" className="loginButton btn btn-default">Log In</button>
             {login}
           </div>
@@ -74,7 +74,9 @@ var LoginPage = React.createClass({
           <span className="slogan">
             <h1>Coming to you February 12, 2015</h1>
           </span>
-          <Signup />
+          <div className="signup-form">
+            <Signup />
+          </div>
         </div>
         <div className="row footerrow">
           <Footer />

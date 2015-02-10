@@ -28,7 +28,7 @@ var Footer = React.createClass({
           <ul className="nav navbar-nav navbar-right">
             {home}
             {categories}
-            <li><Link to="about">{strings.ABOUT}</Link></li>
+            <li><Link to="faq">FAQ</Link></li>
             <li><Link to="team">{strings.TEAM}</Link></li>
             <li><Link to="contactUs">{strings.CONTACT_US}</Link></li>
           </ul>
