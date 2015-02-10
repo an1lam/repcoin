@@ -774,3 +774,11 @@ textarea {
 .error-page {
   text-align: center;
 }
+
+/* Anticipation Page */
+.anticipation-text {
+  text-align: center;
+  font-size: 26px;
+  position: absolute;
+  top: 45%; left: 0; bottom: 0; right: 0;
+}
