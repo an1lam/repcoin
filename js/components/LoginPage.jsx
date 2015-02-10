@@ -72,7 +72,7 @@ var LoginPage = React.createClass({
           </div>
           <span className="logo">{strings.REPCOIN}</span>
           <span className="slogan">
-            <h1>{strings.FIND_YOUR_EXPERT}</h1>
+            <h1>Coming to you February 12, 2015</h1>
           </span>
           <Signup />
         </div>

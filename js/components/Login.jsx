@@ -12,7 +12,8 @@ var Login = React.createClass({
   getInitialState: function() {
     return {
       error: false,
-      forgotPassword: false
+      forgotPassword: false,
+      msg: null,
     };
   },
 
@@ -25,7 +26,7 @@ var Login = React.createClass({
       if (loggedIn) {
         this.transitionTo('/home');
       } else {
-        return this.setState({error: err});
+        return this.setState({ error: true, msg: err });
       }
     }.bind(this));
   },
@@ -116,7 +117,7 @@ var Login = React.createClass({
 
 
   render: function() {
-    var errors = this.state.error ? <div className="alert alert-danger" role="alert"><strong>{this.state.error}</strong></div> : '';
+    var errors = this.state.error ? <div className="alert alert-danger" role="alert"><strong>{this.state.msg}</strong></div> : '';
 
     var loginDisplay = this.state.forgotPassword ?
       <div className="login-form">
