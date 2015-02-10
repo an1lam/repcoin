@@ -23,7 +23,7 @@ var acl = {
     if (req.body.password && req.body.password === process.env.REPCOIN_ADMIN_PASSWORD) {
       next();
     } else {
-      return res.status(403).send('Insufficient privileges');
+      return res.status(403).send('Sorry, Repcoin is closed until the Beta release');
     }
   },
 
