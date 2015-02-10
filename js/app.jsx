@@ -68,7 +68,7 @@ var RepsApp = React.createClass({
 var routes = (
   <Route handler={RepsApp}>
     <DefaultRoute handler={LoginPage} />
-    <Route name="about" handler={AboutPage} />
+    <Route name="faq" handler={AboutPage} />
     <Route name="categories" handler={CategoriesPage} />
     <Route name="category" path="/categories/:category" handler={CategoryPage}/>
     <Route name="contactUs" handler={ContactUsPage} />
