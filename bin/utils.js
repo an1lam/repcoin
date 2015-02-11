@@ -140,11 +140,9 @@ var utils = {
                   // Remove every user's investments
                   // Give every early investor 15 reps
                   for (var j = 0; j < user.portfolio.length; j++) {
-
                     // Only include categories that are not being destroyed
                     if (inappropriateNames.indexOf(user.portfolio[j].category) <= -1) {
                       user.portfolio[j].investments = [];
-                      user.portfolio.reps = 15;
                       user.portfolio[j].percentile = 50;
                       user.portfolio[j].previousPercentile = 50;
                       newPortfolio.push(user.portfolio[j]);
@@ -152,6 +150,7 @@ var utils = {
                   }
                   user.categories = newCategories;
                   user.portfolio = newPortfolio;
+                  user.reps = 15;
                 }
 
                 // Save all of the updated users
