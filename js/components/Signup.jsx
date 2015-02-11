@@ -3,6 +3,7 @@ var $ = require('jquery');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
 var React = require('react');
 var Router = require('react-router');
+var Link = Router.Link;
 var Navigation = Router.Navigation;
 var strings = require('../lib/strings_utils.js');
 
@@ -164,6 +165,7 @@ var Signup = React.createClass({
           <input type="password" ref="password" className="pwd-field1 form-control" placeholder="Password"></input>
           <input type="password" ref="password2" className="pwd-field2 form-control" placeholder="Re-enter password"></input>
           <button type="submit" className="signupSubmit btn btn-default">Sign Up</button>
+          <p className="accept-terms">By signing up, you accept our <Link to="termsOfService">{strings.TERMS_OF_SERVICE}</Link>.</p>
         </form>
       </div>
     );

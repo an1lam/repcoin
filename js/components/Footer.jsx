@@ -31,6 +31,7 @@ var Footer = React.createClass({
             <li><Link to="faq">FAQ</Link></li>
             <li><Link to="team">{strings.TEAM}</Link></li>
             <li><Link to="contactUs">{strings.CONTACT_US}</Link></li>
+            <li><Link to="termsOfService">{strings.TERMS_OF_SERVICE}</Link></li>
           </ul>
         </div>
       </div>
