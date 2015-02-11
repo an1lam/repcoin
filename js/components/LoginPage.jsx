@@ -65,12 +65,16 @@ var LoginPage = React.createClass({
 
     return (
       <div className="loginPage">
-        <div className="loginBody row">
-          <div className="login-toggle">
-            <button onClick={this.handleLoginClick} type="button" ref="login" className="loginButton btn btn-default">Log In</button>
-            {login}
+        <div className="loginBody">
+          <div className="login-form">
+            <button onClick={this.handleLoginClick} type="button" ref="login" className="loginButton btn btn-default">Log In</button><br />
+            <div className='login-wrapper'>
+              {login}
+            </div>
           </div>
-          <span className="logo">{strings.REPCOIN}</span>
+          <div className="row">
+            <div className="logo"><img src="http://res.cloudinary.com/repcoin/image/upload/v1423513285/2RepCoinHeader_mwyh9z.png"></img></div>
+          </div>
           <span className="slogan">
             <h1>Coming to you February 12, 2015</h1>
           </span>
