@@ -43,7 +43,7 @@
     "path": "~0.4.9",
     "pubsub-js": "^1.5.0",
     "react": "~0.12.0",
-    "react-router": "latest",
+    "react-router": "0.11.x",
     "react-tools": "~0.12.0",
     "reactify": "~0.15.2",
     "reduce": "~1.0.1",
