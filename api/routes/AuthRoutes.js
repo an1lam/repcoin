@@ -1,7 +1,7 @@
 // api/routes/AuthRoutes.js
 // Routes to login, logout, and signup
 
-module.exports = function(router, passport, acl) {
+module.exports = function(router, passport) {
   /*
   Passportjs automatically stores a user's session.
   This is done via a cookie, and the result can be observed
@@ -11,7 +11,7 @@ module.exports = function(router, passport, acl) {
   as loggedin or not.
   */
 
-  router.post('/login/facebook', acl.isAdmin,
+  router.post('/login/facebook',
     passport.authenticate('facebook-token'), function (req, res) {
       var user = req.user || {};
       return res.status(200).send(user);
@@ -20,17 +20,7 @@ module.exports = function(router, passport, acl) {
   // TODO: Revert this for the beta release
   router.route('/loggedin')
     .get(function(req, res) {
-      if (process.env.NODE_ENV !== 'production') {
-        return res.status(200).send(req.isAuthenticated());
-      }
-      if (!req.user) {
-        return res.status(200).send(false);
-      }
-      if (req.user.facebookId === process.env.MATT_RITTER_FACEBOOK_ID ||
-          req.user.facebookId === process.env.STEPHEN_MALINA_FACEBOOK_ID) {
-        return res.status(200).send(req.isAuthenticated());
-      }
-      return res.status(200).send(false);
+      return res.status(200).send(req.isAuthenticated());
     });
 
   // Get the current user. Null if no user logged in
@@ -40,7 +30,7 @@ module.exports = function(router, passport, acl) {
     });
 
   router.route('/login')
-    .post(acl.isAdmin, function(req, res, next) {
+    .post(function(req, res, next) {
       passport.authenticate('local', function(err, user, info) {
         if (!user || err) { return res.status(412).send(err.message); }
         req.logIn(user, function(err) {
