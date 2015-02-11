@@ -158,6 +158,7 @@ var strings = {
   TEAM_PART_4: 'We realized a marketplace would be the best way to let people pick and discover great content, so we got busy building the world’s first trading platform for reputation. We’re computer science majors who’ve built projects together before, but this is by far our most groundbreaking endeavor. We are very excited to have taken it all the way from the whiteboard to your hands.',
   TEAM_PART_5: 'Repcoin makes it possible for your choices to have influence. And, it\'s a brand new channel for you and your work to get recognition. We hope you will use it to find your favorite content, to discover those unknown greats, and to consolidate your online credibility.',
   TEAM_PICTURE: 'http://res.cloudinary.com/repcoin/image/upload/v1423014486/repcoin_team_ilvdmx.jpg',
+  TERMS_OF_SERVICE: 'Terms of Service',
   TEXT_BLANK: 'Text cannot be blank',
   TEXT_LONGER_THAN_200: 'Text cannot be longer than 200 characters',
   THIS_MONTH: 'This month',

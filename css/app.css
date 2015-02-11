@@ -244,6 +244,10 @@
   float:right;
 }
 
+.accept-terms {
+  color: #707273
+}
+
 
 /* Toolbar Items /////////////////////////////////// */
 .searchBar {
@@ -774,3 +778,5 @@ textarea {
 .error-page {
   text-align: center;
 }
+
+/* Terms of Service */
