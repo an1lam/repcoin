@@ -210,6 +210,15 @@
 
 .login-form {
   z-index: 999;
+  position: absolute;
+  margin-left: 83%;
+  margin-right: 30px;
+  width: 250px;
+}
+
+.login-wrapper {
+  margin-top: 60px;
+  margin-left: -200px;
 }
 
 .passwordResetTitle {
