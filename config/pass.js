@@ -46,17 +46,6 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
           return done(err);
         }
 
-        // TODO: remove this once we are in Beta
-        // This hack allows us to login with facebook
-        if (process.env.NODE_ENV === 'production') {
-          if (!user) {
-            return done('Sorry, Repcoin is closed until the Beta release');
-          }
-          if (user.facebookId !== process.env.MATT_RITTER_FACEBOOK_ID && user.facebookId !== process.env.STEPHEN_MALINA_FACEBOOK_ID)  {
-            return done('Sorry, Repcoin is closed until the Beta release');
-          }
-        }
-
         // If the user does not exist, then create it
         if (!user) {
           if (profile._json.email) {

@@ -179,14 +179,6 @@
 }
 
 /* LoginPage /////////////////////////////////////////// */
-.login-toggle {
-  display:none;
-}
-
-.signup-form {
-  display:none;
-}
-
 .facebook-signup {
   margin-bottom:10px;
 }

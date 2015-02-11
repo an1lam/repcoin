@@ -99,7 +99,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
 
   router.route('/users')
     // Create a new user
-    .post(acl.isAdmin, censor.isNaughty, censor.hasSpamEmail, function(req, res) {
+    .post(censor.isNaughty, censor.hasSpamEmail, function(req, res) {
 
       if (!utils.validateCreateUserInputs(req)) {
         return res.status(412).send('Invalid inputs');
