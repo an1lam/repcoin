@@ -19,14 +19,14 @@ describe('Job utils: ', function() {
     expect(cb.callCount).toEqual(1);
   });
 
-  describe('migrateCategoryReps: ', function() {
+  describe('recountCategoryRepsExpertsAndInvestors: ', function() {
     var users, category;
     beforeEach(function() {
       category = { name: 'Coding', reps: 0 };
       users = [
-        { categories: [{name: 'Coding', reps: 5 }, { name: 'Ballet', reps: 10 }] },
-        { categories: [{name: 'Coding', reps: 6 }] },
-        { categories: [{name: 'Foobar', reps: 6 }] },
+        { categories: [{name: 'Coding', reps: 5 }, { name: 'Ballet', reps: 10 }], portfolio: [] },
+        { categories: [{name: 'Coding', reps: 6 }], portfolio: [ { category: 'Coding', reps: 10 } ] },
+        { categories: [{name: 'Foobar', reps: 6 }], portfolio: [ { category: 'Coding' } ] },
       ];
     });
 
@@ -34,7 +34,7 @@ describe('Job utils: ', function() {
       spyOn(User, 'find').andCallFake(function(callback) {
         return callback('Error', null);
       });
-      utils.migrateCategoryReps(cb);
+      utils.recountCategoryRepsExpertsAndInvestors(cb);
       expect(winston.log).toHaveBeenCalledWith('error', 'Error migrating category reps: %s', 'Error');
       expect(category.reps).toEqual(0);
     });
@@ -46,7 +46,7 @@ describe('Job utils: ', function() {
       spyOn(Category, 'find').andCallFake(function(callback) {
         return callback('Error', null);
       });
-      utils.migrateCategoryReps(cb);
+      utils.recountCategoryRepsExpertsAndInvestors(cb);
       expect(winston.log).toHaveBeenCalledWith('error', 'Error migrating category reps: %s', 'Error');
       expect(category.reps).toEqual(0);
     });
@@ -61,8 +61,10 @@ describe('Job utils: ', function() {
       spyOn(routeUtils, 'saveAll').andCallFake(function(categories, callback) {
         return callback([]);
       });
-      utils.migrateCategoryReps(cb);
+      utils.recountCategoryRepsExpertsAndInvestors(cb);
       expect(category.reps).toEqual(11);
+      expect(category.experts).toEqual(2);
+      expect(category.investors).toEqual(2);
     });
   });
 

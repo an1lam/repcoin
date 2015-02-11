@@ -36,6 +36,141 @@ var utils = {
     });
   },
 
+  removeInappropriateUsers: function(cb) {
+    var inappropriateUsernames = [
+      'robert frost',
+      'Noah Reichblum',
+      'Barack Obama',
+    ];
+
+    // Remove all the users with inappropriate names
+    User.remove({ 'username': { $in: inappropriateUsernames }}, function(err) {
+      if (err) {
+        winston.log('error', 'Error removing inappropriate users: %s', err.toString());
+        cb(err);
+      } else {
+        winston.log('info', 'Successfully removed inappropriate users docs.');
+
+        // Remove all of the transactions involving those users
+        Transaction.remove({ $or: [ { "to.name" : { $in: inappropriateUsernames }}, { "from.name" : { $in: inappropriateUsernames }} ] }, function(err) {
+          if (err) {
+            winston.log('error', 'Error removing transaction docs: %s', err.toString());
+            cb(err);
+          } else {
+            winston.log('info', 'Successfully removed inappropriate users');
+            cb(null);
+          }
+        });
+      }
+    });
+  },
+
+  removeInappropriateCategories: function(cb) {
+    // The list of names that need to be removed
+    var inappropriateNames = [
+      'aftereffects',
+      'andrew lindner',
+      'banjo',
+      'bipartisanship',
+      'bitcoin',
+      'buffoonary',
+      'dueling',
+      'e-mails',
+      'expertise',
+      'fox',
+      'fox hunting',
+      'hpc',
+      'im sports',
+      'investing',
+      'microsoft word',
+      'native relations',
+      'photoshp',
+      'pilot',
+      'pointing',
+      'politics',
+      'production scheduling',
+      'raptor jesus',
+      'reps',
+      'sex',
+      'spelling',
+      'television',
+      'will baird',
+    ];
+
+    // Remove all the categories with inappropriate names
+    Category.remove({ 'name': { $in: inappropriateNames }}, function(err) {
+      if (err) {
+        winston.log('error', 'Error removing inappropriate categories: %s', err.toString());
+        cb(err);
+      } else {
+        winston.log('info', 'Successfully removed inappropriate category docs.');
+
+        // Remove all of the transactions for those inappropriate categories
+        Transaction.remove({ 'category': { $in: inappropriateNames }}, function(err) {
+          if (err) {
+            winston.log('error', 'Error removing inappropriate categories: %s', err.toString());
+            cb(err);
+          } else {
+            // Reset user data
+            User.find(function(err, users) {
+              if (err) {
+                winston.log('error', 'Error removing inappropriate categories: %s', err.toString());
+                cb(err);
+              } else {
+                var user, newCategories, newPortfolio;
+                for (var i = 0; i < users.length; i++) {
+                  user = users[i];
+                  newCategories = [];
+                  newPortfolio = [];
+
+                  // Reset every user's investors
+                  // Give every early expert 10 reps
+                  for (var j = 0; j < user.categories.length; j++) {
+
+                    // Only include categories that are not being destroyed
+                    if (inappropriateNames.indexOf(user.categories[j].name) <= -1) {
+                      user.categories[j].investors = [];
+                      user.categories[j].reps = 10;
+                      user.categories[j].percentile = 50;
+                      user.categories[j].previousPercentile = 50;
+                      newCategories.push(user.categories[j]);
+                    }
+                  }
+
+                  // Remove every user's investments
+                  // Give every early investor 15 reps
+                  for (var j = 0; j < user.portfolio.length; j++) {
+                    // Only include categories that are not being destroyed
+                    if (inappropriateNames.indexOf(user.portfolio[j].category) <= -1) {
+                      user.portfolio[j].investments = [];
+                      user.portfolio[j].percentile = 50;
+                      user.portfolio[j].previousPercentile = 50;
+                      newPortfolio.push(user.portfolio[j]);
+                    }
+                  }
+                  user.categories = newCategories;
+                  user.portfolio = newPortfolio;
+                  user.reps = 15;
+                }
+
+                // Save all of the updated users
+                routeUtils.saveAll(users, function(errs) {
+                  if (errs.length > 0) {
+                    winston.log('error', 'Error removing inappropriate categories: %s', errs.toString());
+                    cb(errs);
+                  } else {
+                    winston.log('info', 'Successfully updated user docs.');
+                    cb(null);
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  },
+
   setPreviousPercentileToCurrent: function(cb) {
     var i = 0;
     User.find(function(err, users) {
@@ -201,9 +336,11 @@ var utils = {
     lowerUserModelCategories(lowerCategoryModelNames, [lowerTransactionModelCategoryNames, cb]);
   },
 
-  // Make category reps the sum of all expert reps for that category
-  // TO BE USED ONCE ONLY TO MIGRATE TO THE NEW REPS MODEL
-  migrateCategoryReps: function(cb) {
+  // Recounts the reps, experts, and investors for a category
+  // Experts: number of experts in the category
+  // Invetors: number of investors in the category
+  // Reps: number of reps that experts in the category hold
+  recountCategoryRepsExpertsAndInvestors: function(cb) {
     User.find(function(err, users) {
       if (err) {
         winston.log('error', 'Error migrating category reps: %s', err.toString());
@@ -214,29 +351,39 @@ var utils = {
             winston.log('error', 'Error migrating category reps: %s', err.toString());
             cb();
           } else {
-            var category, totalReps, user;
+            var category, totalReps, user, experts, investors;
             for (var i = 0; i < categories.length; i++) {
               category = categories[i];
               totalReps = 0;
+              experts = 0;
+              investors = 0;
               for (var j = 0; j < users.length; j++) {
                 user = users[j];
                 for (var p = 0; p < user.categories.length; p++) {
                   if (user.categories[p].name === category.name) {
+                    experts++;
                     totalReps += user.categories[p].reps;
+                  }
+                }
+                for (var p = 0; p < user.portfolio.length; p++) {
+                  if (user.portfolio[p].category === category.name) {
+                    investors++;
                   }
                 }
               }
               category.reps = Math.floor(totalReps * 100)/100;
+              category.experts = experts;
+              category.investors = investors;
+              routeUtils.saveAll(categories, function(errs) {
+                if (errs.length > 0) {
+                  winston.log('error', 'Error migrating category reps: %s', errs);
+                  cb(errs);
+                } else {
+                  winston.log('info', 'Successfully migrated category reps.');
+                  cb(null);
+                }
+              });
             }
-            routeUtils.saveAll(categories, function(errs) {
-              if (errs.length > 0) {
-                winston.log('error', 'Error migrating category reps: %s', errs);
-                cb(errs);
-              } else {
-                winston.log('info', 'Successfully migrated category reps.');
-                cb(null);
-              }
-            });
           }
         });
       }
