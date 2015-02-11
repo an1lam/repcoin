@@ -44,7 +44,7 @@ var utils = {
     ];
 
     // Remove all the users with inappropriate names
-    User.remove({ 'name': { $in: inappropriateUsernames }}, function(err) {
+    User.remove({ 'username': { $in: inappropriateUsernames }}, function(err) {
       if (err) {
         winston.log('error', 'Error removing inappropriate users: %s', err.toString());
         cb(err);
@@ -337,9 +337,11 @@ var utils = {
     lowerUserModelCategories(lowerCategoryModelNames, [lowerTransactionModelCategoryNames, cb]);
   },
 
-  // Make category reps the sum of all expert reps for that category
-  // TO BE USED ONCE ONLY TO MIGRATE TO THE NEW REPS MODEL
-  migrateCategoryReps: function(cb) {
+  // Recounts the reps, experts, and investors for a category
+  // Experts: number of experts in the category
+  // Invetors: number of investors in the category
+  // Reps: number of reps that experts in the category hold
+  recountCategoryRepsExpertsAndInvestors: function(cb) {
     User.find(function(err, users) {
       if (err) {
         winston.log('error', 'Error migrating category reps: %s', err.toString());
@@ -350,29 +352,39 @@ var utils = {
             winston.log('error', 'Error migrating category reps: %s', err.toString());
             cb();
           } else {
-            var category, totalReps, user;
+            var category, totalReps, user, experts, investors;
             for (var i = 0; i < categories.length; i++) {
               category = categories[i];
               totalReps = 0;
+              experts = 0;
+              investors = 0;
               for (var j = 0; j < users.length; j++) {
                 user = users[j];
                 for (var p = 0; p < user.categories.length; p++) {
                   if (user.categories[p].name === category.name) {
+                    experts++;
                     totalReps += user.categories[p].reps;
+                  }
+                }
+                for (var p = 0; p < user.portfolio.length; p++) {
+                  if (user.portfolio[p].category === category.name) {
+                    investors++;
                   }
                 }
               }
               category.reps = Math.floor(totalReps * 100)/100;
+              category.experts = experts;
+              category.investors = investors;
+              routeUtils.saveAll(categories, function(errs) {
+                if (errs.length > 0) {
+                  winston.log('error', 'Error migrating category reps: %s', errs);
+                  cb(errs);
+                } else {
+                  winston.log('info', 'Successfully migrated category reps.');
+                  cb(null);
+                }
+              });
             }
-            routeUtils.saveAll(categories, function(errs) {
-              if (errs.length > 0) {
-                winston.log('error', 'Error migrating category reps: %s', errs);
-                cb(errs);
-              } else {
-                winston.log('info', 'Successfully migrated category reps.');
-                cb(null);
-              }
-            });
           }
         });
       }
