@@ -534,6 +534,7 @@ var utils = {
 
     // Update the expert reps
     expert.categories[i].reps += amount;
+    expert.categories[i].reps = Math.round(expert.categories[i].reps * 100) / 100;
     return expert.categories[i].reps;
   },
 
@@ -616,6 +617,7 @@ var utils = {
 
       // Update the investment's amount, percentage, and dividend
       investment.amount = newAmount;
+      investment.amount = Math.round(investment.amount * 100) / 100;
       investment.percentage = newPercentage;
       investment.dividend = Math.round(newPercentage * toUserReps * DIVIDEND_RATE * 100) / 100;
     }
