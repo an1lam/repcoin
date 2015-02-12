@@ -57,7 +57,7 @@ var Modal = React.createClass({
     }
 
     // Make sure the investor has enough reps
-    if (portfolio.reps < amount) {
+    if (this.props.currentUser.reps < amount) {
       this.setState({ error: true, message: strings.NOT_ENOUGH_REPS });
       return;
     }

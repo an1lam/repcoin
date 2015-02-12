@@ -18,7 +18,7 @@ var utils = {
         cb();
       } else {
         users.forEach(function(user) {
-          if (Math.floor(user.reps * 100)/100 === 0) {
+          if (Math.floor(user.reps * 100)/100 <= 0) {
             user.reps = 5;
           }
           user.reps = Math.floor(user.reps * 100)/100;
