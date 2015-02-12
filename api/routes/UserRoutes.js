@@ -153,14 +153,12 @@ module.exports = function(router, isAuthenticated, acl, censor) {
             transporter.sendMail(mailOptions, function(err, info) {
               if (err) {
                 winston.log('error', 'Error sending email: %s', err);
-                return res.status(554).send(err);
+                return res.status(554).send('Error sending email');
               } else {
-                winston.log('error', 'Sent email to: %s', user.email);
+                winston.log('info', 'Sent email to: %s', user.email);
                 return res.status(200).end();
               }
             });
-
-            utils.createEvent('join', [user.username, user._id]);
           });
         }
       });
