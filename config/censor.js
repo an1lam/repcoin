@@ -19,8 +19,8 @@ var censor = {
     next();
   },
 
+  // Checks if a word is naughty and disables script tags
   isNaughty: function(req, res, next) {
-
     // Check if a word is in the naughty list
     var isNaughtyWord = function(word) {
       for (var i = 0; i < length; i++) {
@@ -37,6 +37,7 @@ var censor = {
         if (isNaughtyWord(req.params[key].toString().toLowerCase())) {
           return res.status(422).send('Inappropriate content detected.');
         }
+        req.params[key] = req.params[key].replace(/</g, "&lt;").replace(/>/g, "&gt;");
       }
     }
 
@@ -46,12 +47,12 @@ var censor = {
         if (isNaughtyWord(req.query[key].toString().toLowerCase())) {
           return res.status(422).send('Inappropriate content detected.');
         }
+        req.query[key] = req.query[key].replace(/</g, "&lt;").replace(/>/g, "&gt;");
       }
     }
 
     // Examine req.body
     for (var key in req.body) {
-
       // Passwords are allowed to be in the naughty list
       if (key === 'password') {
         continue;
@@ -60,6 +61,7 @@ var censor = {
         if (isNaughtyWord(req.body[key].toString().toLowerCase())) {
           return res.status(422).send('Inappropriate content detected.');
         }
+        req.body[key] = req.body[key].replace(/</g, "&lt;").replace(/>/g, "&gt;");
       }
     }
 
