@@ -89,12 +89,23 @@ var LinkItem = React.createClass({
     });
   },
 
+  getUrl: function(url) {
+    if (url.lastIndexOf('http://www', 0) !== 0) {
+      if (url.lastIndexOf('www', 0) === 0) {
+        return 'http://' + url;
+      } else {
+        return 'http://www.' + url;
+      }
+    }
+    return url;
+  },
+
   render: function() {
     var edit = '';
     var del = '';
     var linkPlace =
         <div className="text">
-          <strong>{this.props.link.title}</strong>: <a href={this.props.link.url}>{this.props.link.url}</a>
+          <strong>{this.props.link.title}</strong>: <a href={this.getUrl(this.props.link.url)}>{this.props.link.url}</a>
         </div>;
 
     if (this.props.currentUser._id == this.props.user._id) {
