@@ -49,6 +49,9 @@ var UserHandler = {
             });
             notification.save();
 
+            // Create a join event
+            utils.createEvent('join', [user.username, user._id]);
+
             req.login(user, function(err) {
               if (err) {
                 winston.log('error', 'Error logging in user: %s', err.toString());
