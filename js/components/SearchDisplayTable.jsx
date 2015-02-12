@@ -53,24 +53,45 @@ var SearchDisplayTable = React.createClass({
     event.preventDefault();
   },
 
+  getSearchResults: function(data) {
+    var datum, name;
+    var results = [];
+    var i = 0;
+    while (i < 8 && i < data.length) {
+      name = 'searchItem-' + i;
+      datum = data[i];
+      if (datum.name) {
+        results.push(
+          <li key={datum._id} className="list-group-item">
+            <Link onKeyDown={this.handleKeyDown} className={name} to="category" params={{category: datum.name}}><SearchItem type='category' data={datum} index={i-1}/></Link>
+          </li>
+        );
+      } else {
+        results.push(
+          <li key={datum._id} className="list-group-item">
+            <Link onKeyDown={this.handleKeyDown} className={name} to="profile" params={{userId: datum._id}}><SearchItem data={datum} index={i-1}/></Link>
+          </li>
+        );
+      }
+      i++;
+    }
+    if (data.length > i) {
+      name = 'searchItem-' + i;
+      results.push(
+        <li key={data[i]._id} className="list-group-item">
+          <Link onKeyDown={this.handleKeyDown} className={name} to="search" params={{query: this.props.query}}>See all results for '{this.props.query}'</Link>
+        </li>
+      );
+    }
+    return results;
+  },
+
   render: function() {
     var i = 0;
     return (
       <div className="searchDisplayTable mainSearchTable">
         <ul className="list-group">
-          {this.props.data.map(function(datum) {
-            var name = "searchItem-" + i;
-            i += 1;
-            if (datum.name) {
-              return <li key={datum._id} className="list-group-item">
-                <Link onKeyDown={this.handleKeyDown} className={name} to="category" params={{category: datum.name}}><SearchItem type='category' data={datum} index={i-1}/></Link>
-              </li>;
-            } else {
-              return <li key={datum._id} className="list-group-item">
-                <Link onKeyDown={this.handleKeyDown} className={name} to="profile" params={{userId: datum._id}}><SearchItem data={datum} index={i-1}/></Link>
-              </li>;
-            }
-          }.bind(this))}
+          {this.getSearchResults(this.props.data)}
         </ul>
       </div>
     );
