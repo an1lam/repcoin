@@ -90,12 +90,8 @@ var LinkItem = React.createClass({
   },
 
   getUrl: function(url) {
-    if (url.lastIndexOf('http://www', 0) !== 0) {
-      if (url.lastIndexOf('www', 0) === 0) {
-        return 'http://' + url;
-      } else {
-        return 'http://www.' + url;
-      }
+    if (url.lastIndexOf('http://', 0) !== 0) {
+      return 'http://' + url;
     }
     return url;
   },
