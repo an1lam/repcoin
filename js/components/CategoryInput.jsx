@@ -2,11 +2,13 @@
 
 var CategorySearch = require('./CategorySearch.jsx');
 var CategorySearchDisplayTable = require('./CategorySearchDisplayTable.jsx');
+var InputMixin = require('../mixins/InputMixin.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
 var strings = require('../lib/strings_utils.js');
 
 var CategoryInput = React.createClass({
+  mixins: [InputMixin],
   getInitialState: function() {
     return {
       query: '',
@@ -39,6 +41,8 @@ var CategoryInput = React.createClass({
   },
 
   setInvestorCategory: function(name) {
+    name = this.sanitizeInput(name);
+
     $.ajax({
       url: '/api/users/' + this.props.user._id + '/addinvestor/' + name,
       type: 'PUT',
@@ -68,6 +72,8 @@ var CategoryInput = React.createClass({
   },
 
   setExpertCategory: function(name) {
+    name = this.sanitizeInput(name);
+
     $.ajax({
       url: '/api/users/' + this.props.user._id + '/addexpert/' + name,
       type: 'PUT',
