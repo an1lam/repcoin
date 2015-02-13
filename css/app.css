@@ -311,6 +311,13 @@
   font-size:26px;
 }
 
+.categories-link {
+  margin-left: 20px;
+  float: left;
+  font-size: 18px;
+  margin-right: 25px;
+}
+
 /* Profile Page Items ////////////////////////////// */
 .reps-available-info {
   margin-left:5px;

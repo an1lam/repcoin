@@ -80,6 +80,7 @@ var Toolbar = React.createClass({
     var instantBox = this.state.loggedIn ? <InstantBox /> : '';
     var profileLink = '';
     var notifications = '';
+    var categories = '';
     if (this.state.currentUser) {
       profileLink =
         <div className="profilelink ">
@@ -96,6 +97,11 @@ var Toolbar = React.createClass({
           {notificationTotal}
         </a>;
       var notificationDisplay = this.state.showNotifications ? <NotificationDisplay notifications={this.state.notifications}/> : '';
+      var categories = (
+        <div className="categories-link">
+          <Link to="categories">Categories</Link>
+        </div>
+      );
     }
     return (
       <div className="toolbar navbar navbar-default" role="navigation">
@@ -110,6 +116,7 @@ var Toolbar = React.createClass({
         <div className="toolbar-nav-right">
         <ul className="nav navbar-nav toolbar-nav-right">
           <li>{profileLink}</li>
+          <li>{categories}</li>
           <li>
             {notifications}
           </li>
