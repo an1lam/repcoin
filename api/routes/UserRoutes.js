@@ -131,7 +131,10 @@ module.exports = function(router, isAuthenticated, acl, censor) {
 
           // If the error is not from Mongoose, try parsing MongoDB errors
           } else if (err.err.indexOf('email') !== -1) {
-            msg = 'Email is already taken';
+            msg = ' This email address is already in use by a user on the site. ' + 
+              ' If you\'ve already signed up through the site, you\'re receiving this error ' +
+              'because your Facebook email matches the email you\'ve already used to sign up. For '+ 
+              'now, please just log in using the account you created.';
           } else {
             // Otherwise, send back generic 'Error' message
             msg = 'Error';
