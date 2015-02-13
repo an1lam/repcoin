@@ -282,6 +282,39 @@ describe('UserHandler: ', function() {
     });
 
     describe('userId: ', function() {
+      describe('nudge: ', function() {
+        it('handles a null user', function() {
+          spyOn(User, 'findById').andReturn({
+            exec: function() {
+              return {
+                then: function(cbS, cbF) { return cbS(null); }
+              };
+            }
+          });
+          req.params = { user_id: '123', user_id2: '456' };
+          UserHandler.users.userId.nudge.post(req, res);
+          expect(User.findById.callCount).toEqual(1);
+          expect(res.status).toHaveBeenCalledWith(501);
+          expect(res.send).toHaveBeenCalledWith(new Error('No asker found'));
+        });
+
+        it('handles an error finding the user', function() {
+          spyOn(User, 'findById').andReturn({
+            exec: function() {
+              return {
+                then: function(cbS, cbF) { return cbF('Error'); }
+              };
+            }
+          });
+
+          req.params = { user_id: '123', user_id2: '456' };
+          UserHandler.users.userId.nudge.post(req, res);
+          expect(User.findById.callCount).toEqual(1);
+          expect(res.status).toHaveBeenCalledWith(501);
+          expect(res.send).toHaveBeenCalledWith('Error');
+        });
+      });
+
       describe('get: ', function() {
         it('gets the user with the public method if a different user is requesting', function() {
           spyOn(User, 'findByIdPublic').andCallFake(function(query, cb) {
