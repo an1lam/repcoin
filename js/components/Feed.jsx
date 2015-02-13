@@ -3,7 +3,8 @@
 var $ = require('jquery');
 var FeedHeader = require('./FeedHeader.jsx');
 var FeedItem = require('./FeedItem.jsx');
-var EventFeedItem = require('./EventFeedItem.jsx');
+var JoinFeedItem = require('./JoinFeedItem.jsx');
+var NewCategoryFeedItem = require('./NewCategoryFeedItem.jsx');
 var InvestmentButton = require('./InvestmentButton.jsx');
 var React = require('react');
 var strings = require('../lib/strings_utils.js');
@@ -72,17 +73,29 @@ var Feed = React.createClass({
     var start = this.state.pagination;
     var end = start + PAGINATION_SIZE;
     var transactions = this.state.transactions;
+    var curr;
+
     for (var i = start; i < end && i < transactions.length; i++) {
-      // If it's a transaction
-      if (transactions[i].amount) {
+      curr = transactions[i];
+
+      // Transaction
+      if (curr.amount) {
         feedItems.push(
-          <li key={transactions[i]._id} className="list-group-item"><FeedItem transaction={transactions[i]} /></li>
+          <li key={curr._id} className="list-group-item"><FeedItem transaction={curr} /></li>
         );
 
-      // If it's an event
-      } else {
+      // If the event is a transaction without a type, ignore it
+      } else if (!curr.type) {
+        continue;
+
+      // Join event
+      } else if (curr.type === 'join') {
         feedItems.push(
-          <li key={transactions[i]._id} className="list-group-item"><EventFeedItem event={transactions[i]} /></li>
+          <li key={curr._id} className="list-group-item"><JoinFeedItem event={curr} /></li>
+        );
+      } else if (curr.type === 'newcategory') {
+        feedItems.push(
+          <li key={curr._id} className="list-group-item"><NewCategoryFeedItem event={curr} /></li>
         );
       }
     }

@@ -203,6 +203,16 @@ module.exports = function(router, isAuthenticated, acl, censor) {
         });
         notification.save();
 
+        // Create a notification that the category was created
+        var user = User.findById(userId, function(err, user) {
+          // On failure, simply skip creating the event
+          if (err) {
+            winston.log('error', 'Error creating new category event: %s', err.toString());
+          } else {
+            utils.createEvent('newcategory', [user.username, user._id, categoryName]);
+          }
+        });
+
         if (expert) {
           return addExpertCategory(req, res, category);
         }

@@ -89,7 +89,6 @@ var TransactionHandler = {
         winston.log('error', 'Error creating transaction: %s', err.toString());
         return res.status(400).send(err);
       });
-
     },
   },
 };

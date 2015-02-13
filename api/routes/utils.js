@@ -7,6 +7,7 @@ var nodeUtil = require('util');
 // Models
 var Category = require('../models/Category.js');
 var JoinEvent = require('../models/JoinEvent.js');
+var NewCategoryEvent = require('../models/NewCategoryEvent.js');
 var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 var VerificationToken = require('../models/VerificationToken.js');
@@ -893,9 +894,24 @@ var utils = {
       case 'join':
         this.createJoinEvent.apply(this, params);
         break;
+      case 'newcategory':
+        this.createNewCategoryEvent.apply(this, params);
+        break;
 
       default: return;
     }
+  },
+
+  createNewCategoryEvent: function(username, userId, category) {
+    var evt = new NewCategoryEvent({ username: username, userId: userId, category: category });
+    evt.save(function(err, svdEvt) {
+      if (err) {
+        winston.log('error', 'Error creating newcategory event: %s', err);
+        return err;
+      }
+
+      return svdEvt;
+    });
   },
 
   createJoinEvent: function(name, id) {
