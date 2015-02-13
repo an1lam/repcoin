@@ -6,6 +6,7 @@ var nodeUtil = require('util');
 
 // Models
 var Category = require('../models/Category.js');
+var AddExpertEvent = require('../models/AddExpertEvent.js');
 var JoinEvent = require('../models/JoinEvent.js');
 var NewCategoryEvent = require('../models/NewCategoryEvent.js');
 var Transaction = require('../models/Transaction.js');
@@ -902,9 +903,23 @@ var utils = {
       case 'newcategory':
         this.createNewCategoryEvent.apply(this, params);
         break;
+      case 'addexpert':
+        this.createAddExpertEvent.apply(this, params);
+        break;
 
       default: return;
     }
+  },
+
+  createAddExpertEvent: function(username, userId, category) {
+    var evt = new AddExpertEvent({ username: username, userId: userId, category: category });
+    evt.save(function(err, svdEvt) {
+      if (err) {
+        winston.log('error', 'Error creating addexpert event: %s', err);
+        return err;
+      }
+      return svdEvt;
+    });
   },
 
   createNewCategoryEvent: function(username, userId, category) {
@@ -914,7 +929,6 @@ var utils = {
         winston.log('error', 'Error creating newcategory event: %s', err);
         return err;
       }
-
       return svdEvt;
     });
   },
@@ -926,7 +940,6 @@ var utils = {
         winston.log('error', 'Error creating join event: %s', err);
         return err;
       }
-
       return svdEvt;
     });
   },

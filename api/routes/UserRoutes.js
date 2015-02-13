@@ -35,6 +35,9 @@ module.exports = function(router, isAuthenticated, acl, censor) {
           // Add to the expert count
           category.experts += 1;
           category.save();
+
+          // Create an event for the user becoming an expert
+          utils.createEvent('addexpert', [user.username, user._id, category.name]);
           utils.updateExpertPercentiles(category.name, function(err) {
             if (err) {
               winston.log('error', 'Error updating expert percentiles: %s', err);
