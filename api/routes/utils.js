@@ -246,6 +246,11 @@ var utils = {
         !req.body.email) {
       return false;
     }
+
+    var reg = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+    if (!reg.test(req.body.email)) {
+      return false;
+    }
     return true;
   },
 
