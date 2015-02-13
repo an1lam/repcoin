@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var AddExpertEventFeedItem = require('./AddExpertEventFeedItem.jsx');
 var FeedHeader = require('./FeedHeader.jsx');
 var FeedItem = require('./FeedItem.jsx');
 var JoinFeedItem = require('./JoinFeedItem.jsx');
@@ -96,6 +97,10 @@ var Feed = React.createClass({
       } else if (curr.type === 'newcategory') {
         feedItems.push(
           <li key={curr._id} className="list-group-item"><NewCategoryFeedItem event={curr} /></li>
+        );
+      } else if (curr.type === 'addexpert') {
+        feedItems.push(
+          <li key={curr._id} className="list-group-item"><AddExpertEventFeedItem event={curr} /></li>
         );
       }
     }

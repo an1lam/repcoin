@@ -1,6 +1,7 @@
 'use strict';
 var winston = require('winston');
 
+var AddExpertEvent = require('../models/AddExpertEvent.js');
 var JoinEvent = require('../models/JoinEvent.js');
 var NewCategoryEvent = require('../models/NewCategoryEvent.js');
 var Transaction = require('../models/Transaction.js');
@@ -25,12 +26,18 @@ var ComboHandler = {
           throw err;
         }).then(function(newCategories) {
           combined = combined.concat(newCategories);
+          return AddExpertEvent.find().exec();
+        }, function(err) {
+          winston.log('error', 'Error finding new category event: %s', err.toString());
+          throw err;
+        }).then(function(addExpertEvents) {
+          combined = combined.concat(addExpertEvents);
           combined.sort(function(a,b) {
             return b.timeStamp - a.timeStamp;
           });
           return res.status(200).send(combined);
         }, function(err) {
-          winston.log('error', 'Error finding new category event: %s', err.toString());
+          winston.log('error', 'Error finding addexpert event: %s', err.toString());
           throw err;
         });
       }

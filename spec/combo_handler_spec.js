@@ -1,6 +1,7 @@
 process.env.NODE_ENV = 'test';
 var winston = require('winston');
 
+var AddExpertEvent = require('../api/models/AddExpertEvent.js');
 var ComboHandler = require('../api/handlers/combo.js');
 var JoinEvent = require('../api/models/JoinEvent.js');
 var NewCategoryEvent = require('../api/models/NewCategoryEvent.js');
@@ -75,6 +76,15 @@ describe('ComboHandler: ', function() {
         }
       };
 
+      addExpertEventPromise = {
+        e1: {
+          timeStamp: new Date('1996')
+        },
+
+        then: function(cb) {
+          return cb([this.e1]);
+        }
+      };
     });
 
     describe('get: ', function() {
@@ -86,8 +96,12 @@ describe('ComboHandler: ', function() {
         spyOn(NewCategoryEvent, 'find').andReturn({
           exec: function() { return newCategoryEventPromise; }
         });
+        spyOn(AddExpertEvent, 'find').andReturn({
+          exec: function() { return addExpertEventPromise; }
+        });
         ComboHandler.feedItems.get(req, res);
         expect(res.send).toHaveBeenCalledWith([
+          { timeStamp: new Date('1996') },
           { timeStamp: new Date('1995') },
           { timeStamp: new Date('1994') },
           { timeStamp: new Date('1993') },
@@ -141,7 +155,36 @@ describe('ComboHandler: ', function() {
         expect(res.status).toHaveBeenCalledWith(503);
         expect(res.send).toHaveBeenCalledWith('failure!');
       });
+
+      it('should log an error when the addexpert event find fails', function() {
+        spyOn(Transaction, 'findPublic').andReturn(transactionPromise);
+        spyOn(JoinEvent, 'find').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbS(joinEventPromise); }
+            };
+          }
+        });
+        spyOn(NewCategoryEvent, 'find').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbS(newCategoryEventPromise); }
+            };
+          }
+        });
+
+        spyOn(AddExpertEvent, 'find').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbF('failure!'); }
+            };
+          }
+        });
+        ComboHandler.feedItems.get(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
     });
   });
-
 });
