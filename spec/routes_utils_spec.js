@@ -870,72 +870,114 @@ describe('Utils: ', function() {
     });
   });
 
-  describe('updateTransactionFromUser', function() {
-    var fromUser, category, toUser, amount, toUserReps;
+  describe('getTransactionPortfolioIndex', function() {
+    var fromUser, category, toUser, amount, toUserReps, callback;
 
-    it('should return null if the user is not an investor for this category', function() {
-      fromUser = { portfolio: [{ category: 'Ballet' }] };
-      category = 'Coding';
-      var err = utils.updateTransactionFromUser(fromUser, toUser, category, amount, toUserReps);
-      expect(err).toEqual('User is not an investor for this category');
+    beforeEach(function() {
+      toUser = { _id: '123' };
+      callback = jasmine.createSpy().andReturn();
     });
 
-    it('should return null if revoking from a non-existent investment', function() {
+    it('should execute callback with portfolio index if found', function() {
       fromUser = { portfolio: [{ category: 'Coding', investments: [] }] };
-      category = 'Coding';
-      amount = -1;
-      var err = utils.updateTransactionFromUser(fromUser, toUser, category, amount, toUserReps);
-      expect(err).toEqual('Investment for revoke was not found');
+      category = { name: 'Coding', investors: 0 };
+      amount = 1;
+      toUserReps = 10;
+      var err = utils.getTransactionPortfolioIndex(amount, fromUser, toUser, toUserReps, null, category, callback);
+      expect(callback).toHaveBeenCalledWith(0, amount, fromUser, toUser, toUserReps, category, null);
+      expect(callback.callCount).toEqual(1);
     });
 
-    it('should add user to the portfolio if investment is a give', function() {
-      fromUser = { reps: 100, portfolio: [{ category: 'Coding', investments: [] }] };
-      amount = 10;
-      toUserReps = 20;
-      toUser = { _id: '123', username: 'Matt' };
-
-      var err = utils.updateTransactionFromUser(fromUser, toUser, category, amount, toUserReps);
-      var newInvestment = { user: 'Matt', userId: '123', amount: 10, percentage: 0.50, dividend: 1 };
-      expect(fromUser.portfolio[0].investments).toEqual([newInvestment]);
-      expect(fromUser.reps).toEqual(90);
-      expect(err).toEqual(null);
+    it('should execute callback after adding portfolio index if not found', function() {
+      var updatedFromUser = { portfolio: [{ category: 'Coding', investments: [] }, { category: 'Ballet', investments: [] }] }
+      spyOn(User, 'findOneAndUpdate').andCallFake(function(arg1, arg2, cb) {
+        return cb(null, updatedFromUser);
+      });
+      fromUser = { portfolio: [{ category: 'Coding', investments: [] }] };
+      category = { name: 'Ballet', investors: 0 };
+      amount = 1;
+      toUserReps = 10;
+      var err = utils.getTransactionPortfolioIndex(amount, fromUser, toUser, toUserReps, null, category, callback);
+      expect(callback).toHaveBeenCalledWith(1, amount, updatedFromUser, toUser, toUserReps, category, null);
+      expect(callback.callCount).toEqual(1);
     });
 
-    it('should update the existing investment and dividend if revoke', function() {
-      var existingInvestment = { _id: '1', user: 'Matt', userId: '123', amount: 10, percentage: 0.1, dividend: 10 };
-      var fromUser = { reps: 100, portfolio: [{ category: 'Coding', investments: [existingInvestment] }] };
-      amount = -2;
-      toUserReps = 998;
-      toUser = { id: '123', name: 'Matt' };
-      var id = '1';
-      var err = utils.updateTransactionFromUser(fromUser, toUser, category, amount, toUserReps, id);
-
-      expect(fromUser.portfolio[0].investments.length).toEqual(1);
-      expect(fromUser.portfolio[0].investments[0].amount).toEqual(8);
-      expect(fromUser.portfolio[0].investments[0].percentage).toEqual(0.08);
-      expect(fromUser.portfolio[0].investments[0].dividend).toEqual(7.98);
-      expect(fromUser.reps).toEqual(102);
-      expect(err).toEqual(null);
-    });
-
-    it('should remove the investment if it is entirely revoked', function() {
-      var investment = { _id: '1', user: "Matt", userId: "123", amount: 10, dividend: 1, percentage: 10 };
-      var investment2 = { _id: '2', user: "Bob", userId: "456", amount: 10, dividend: 1, percentage: 10 };
-      var investment3 = { _id: '3', user: "Matt", userId: "123", amount: 10, dividend: 1, percentage: 10 };
-      var fromUser = { reps: 100, portfolio: [{ category: "Coding", roi: { value: 0, length: 0 }, investments: [investment, investment2, investment3] }] };
-      amount = -10;
-      toUserReps = 990;
-      toUser = { id: '123', name: 'Matt' };
-      var id = '1';
-      spyOn(utils, 'removeInvestorFromExpertOnRevoke').andReturn();
-
-      var err = utils.updateTransactionFromUser(fromUser, toUser, category, amount, toUserReps, id);
-      expect(fromUser.portfolio[0].investments.length).toEqual(2);
-      expect(fromUser.portfolio[0].investments[0]._id).toEqual('2');
-      expect(fromUser.reps).toEqual(110);
-      expect(err).toEqual(null);
+    it('should handle error updating the user', function() {
+      var updatedFromUser = { portfolio: [{ category: 'Coding', investments: [] }, { category: 'Ballet', investments: [] }] }
+      spyOn(User, 'findOneAndUpdate').andCallFake(function(arg1, arg2, cb) {
+        return cb('Error', null);
+      });
+      fromUser = { portfolio: [{ category: 'Coding', investments: [] }] };
+      category = { name: 'Ballet', investors: 0 };
+      amount = 1;
+      toUserReps = 10;
+      var err = utils.getTransactionPortfolioIndex(amount, fromUser, toUser, toUserReps, null, category, callback);
+      expect(err).toEqual('Error');
+      expect(callback.callCount).toEqual(0);
     });
   });
+
+  describe('
+//   describe('updateTransactionFromUser', function() {
+//     var fromUser, category, toUser, amount, toUserReps;
+// 
+//     it('should return null if revoking from a non-existent investment', function() {
+//       console.log('should return null');
+//       fromUser = { portfolio: [{ category: 'Coding', investments: [] }] };
+//       category = 'Coding';
+//       amount = -1;
+//       var err = utils.updateTransactionFromUser(fromUser, toUser, category, amount, toUserReps);
+//       expect(err).toEqual('Investment for revoke was not found');
+//     });
+// 
+//     it('should add user to the portfolio if investment is a give', function() {
+//       fromUser = { reps: 100, portfolio: [{ category: 'Coding', investments: [] }] };
+//       amount = 10;
+//       toUserReps = 20;
+//       toUser = { _id: '123', username: 'Matt' };
+// 
+//       var err = utils.updateTransactionFromUser(fromUser, toUser, category, amount, toUserReps);
+//       var newInvestment = { user: 'Matt', userId: '123', amount: 10, percentage: 0.50, dividend: 1 };
+//       expect(fromUser.portfolio[0].investments).toEqual([newInvestment]);
+//       expect(fromUser.reps).toEqual(90);
+//       expect(err).toEqual(null);
+//     });
+// 
+//     it('should update the existing investment and dividend if revoke', function() {
+//       var existingInvestment = { _id: '1', user: 'Matt', userId: '123', amount: 10, percentage: 0.1, dividend: 10 };
+//       var fromUser = { reps: 100, portfolio: [{ category: 'Coding', investments: [existingInvestment] }] };
+//       amount = -2;
+//       toUserReps = 998;
+//       toUser = { id: '123', name: 'Matt' };
+//       var id = '1';
+//       var err = utils.updateTransactionFromUser(fromUser, toUser, category, amount, toUserReps, id);
+// 
+//       expect(fromUser.portfolio[0].investments.length).toEqual(1);
+//       expect(fromUser.portfolio[0].investments[0].amount).toEqual(8);
+//       expect(fromUser.portfolio[0].investments[0].percentage).toEqual(0.08);
+//       expect(fromUser.portfolio[0].investments[0].dividend).toEqual(7.98);
+//       expect(fromUser.reps).toEqual(102);
+//       expect(err).toEqual(null);
+//     });
+// 
+//     it('should remove the investment if it is entirely revoked', function() {
+//       var investment = { _id: '1', user: "Matt", userId: "123", amount: 10, dividend: 1, percentage: 10 };
+//       var investment2 = { _id: '2', user: "Bob", userId: "456", amount: 10, dividend: 1, percentage: 10 };
+//       var investment3 = { _id: '3', user: "Matt", userId: "123", amount: 10, dividend: 1, percentage: 10 };
+//       var fromUser = { reps: 100, portfolio: [{ category: "Coding", roi: { value: 0, length: 0 }, investments: [investment, investment2, investment3] }] };
+//       amount = -10;
+//       toUserReps = 990;
+//       toUser = { id: '123', name: 'Matt' };
+//       var id = '1';
+//       spyOn(utils, 'removeInvestorFromExpertOnRevoke').andReturn();
+// 
+//       var err = utils.updateTransactionFromUser(fromUser, toUser, category, amount, toUserReps, id);
+//       expect(fromUser.portfolio[0].investments.length).toEqual(2);
+//       expect(fromUser.portfolio[0].investments[0]._id).toEqual('2');
+//       expect(fromUser.reps).toEqual(110);
+//       expect(err).toEqual(null);
+//     });
+//   });
 
   describe('addInvestorToExpertCategory', function() {
     var investor = { username: 'Bob', _id: '123' };

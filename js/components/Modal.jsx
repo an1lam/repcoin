@@ -26,7 +26,8 @@ var Modal = React.createClass({
 
   // Validate a give
   validateAndGive: function(category, amount, anonymous) {
-    // Validate that the category is possible
+
+    // Validate that the expert really is an expert in this category
     var category;
     var categories = this.props.user.categories;
     var length = categories.length;
@@ -39,20 +40,6 @@ var Modal = React.createClass({
     // If the category was not found, throw an error
     if (!category) {
       this.setState({ error: true, msg: strings.CATEGORY_NOT_FOUND(this.props.user.username) });
-      return;
-    }
-
-    // Get the portfolio index if the investment is possible
-    var portIndex = -1;
-    var portfolio = this.props.currentUser.portfolio;
-    length = portfolio.length;
-    for (var i = 0; i < length; i++) {
-      if (portfolio[i].category === category.name) {
-        portIndex = i;
-      }
-    }
-    if (portIndex === -1) {
-      this.setState({ error: true, message: strings.NOT_AN_INVESTOR(category.name) });
       return;
     }
 
