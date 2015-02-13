@@ -3,6 +3,7 @@ var winston = require('winston');
 
 var ComboHandler = require('../api/handlers/combo.js');
 var JoinEvent = require('../api/models/JoinEvent.js');
+var NewCategoryEvent = require('../api/models/NewCategoryEvent.js');
 var Transaction = require('../api/models/Transaction.js');
 
 describe('ComboHandler: ', function() {
@@ -64,6 +65,16 @@ describe('ComboHandler: ', function() {
         }
       };
 
+      newCategoryEventPromise = {
+        e1: {
+          timeStamp: new Date('1995')
+        },
+
+        then: function(cb) {
+          return cb([this.e1]);
+        }
+      };
+
     });
 
     describe('get: ', function() {
@@ -72,10 +83,16 @@ describe('ComboHandler: ', function() {
         spyOn(JoinEvent, 'find').andReturn({
           exec: function() { return joinEventPromise; }
         });
+        spyOn(NewCategoryEvent, 'find').andReturn({
+          exec: function() { return newCategoryEventPromise; }
+        });
         ComboHandler.feedItems.get(req, res);
         expect(res.send).toHaveBeenCalledWith([
-          { timeStamp: new Date('1994') }, { timeStamp: new Date('1993') },
-          { timeStamp: new Date('1992') }]);
+          { timeStamp: new Date('1995') },
+          { timeStamp: new Date('1994') },
+          { timeStamp: new Date('1993') },
+          { timeStamp: new Date('1992') }
+        ]);
       });
 
       it('should log an error when the transaction find fails', function() {
@@ -91,6 +108,28 @@ describe('ComboHandler: ', function() {
       it('should log an error when the join event find fails', function() {
         spyOn(Transaction, 'findPublic').andReturn(transactionPromise);
         spyOn(JoinEvent, 'find').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbF('failure!'); }
+            };
+          }
+        });
+        ComboHandler.feedItems.get(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
+
+      it('should log an error when the newcategory event find fails', function() {
+        spyOn(Transaction, 'findPublic').andReturn(transactionPromise);
+        spyOn(JoinEvent, 'find').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbS(joinEventPromise); }
+            };
+          }
+        });
+        spyOn(NewCategoryEvent, 'find').andReturn({
           exec: function() {
             return {
               then: function(cbS, cbF) { return cbF('failure!'); }
