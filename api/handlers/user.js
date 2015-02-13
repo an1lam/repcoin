@@ -45,7 +45,7 @@ var UserHandler = {
             // Create a welcome notification
             var notification = new Notification({
               user    : { id: user._id, name: user.username },
-              message : 'Welcome to Repcoin!',
+              message : 'Welcome to Repcoin! Go to your categories table and start adding categories!',
             });
             notification.save();
 
