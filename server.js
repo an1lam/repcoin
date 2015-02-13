@@ -33,9 +33,8 @@ if (!module.parent) {
 var app = express();
 
 // Configure bodyParser to parse post requests
-app.use(bodyParser.json()); // parse application/json
-app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
-app.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-form-urlencoded
+app.use(bodyParser.json({ limit: '50mb', type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 // Configure ORM and database
 var db = require('./config/db');
