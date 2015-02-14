@@ -505,7 +505,7 @@ var utils = {
 
   // Changes fields for all of the documents necessary for a transaction to occur
   // Returns null if successful, error message otherwise
-  processTransaction: function(toUser, fromUser, category, transaction, investmentId) {
+  processTransaction: function(toUser, fromUser, category, transaction, investmentId, cb) {
     // Round the amount to the nearest hundredth
     transaction.amount = Math.round(transaction.amount * 100) / 100;
 
@@ -524,7 +524,6 @@ var utils = {
     // Update the category reps
     category.reps += transaction.amount;
     category.reps = Math.floor(category.reps * 100)/100;
-
     return null;
   },
 
@@ -545,38 +544,34 @@ var utils = {
     return expert.categories[i].reps;
   },
 
-  getTransactionPortfolioIndex: function(amount, fromUser, toUser, toUserReps, investmentId, category, cb) {
-    var portfolio = fromUser.portfolio;
+  getTransactionPortfolioIndex: function(amount, fromUser, toUser, toUserReps, investmentId, category) {
 
     // Find the portfolio entry that should be updated
     var index = this.getPortfolioIndex(fromUser, category.name);
     if (index !== -1) {
-      return cb(index, amount, fromUser, toUser, toUserReps, category, investmentId);
+      return index;
     }
 
-    // The from user is not an investor for this category (ERROR!)
     // If the user is not an investor for this category, add it
-    return User.findOneAndUpdate(
-      {_id: fromUser._id, 'portfolio.category': {$ne: category.name}},
-      {$push: { portfolio: { category: category.name, id: category._id } }},
-      function(err, user) {
-        if (err) {
-          return err;
-        }
-        category.investors++;
-        fromUser = user;
-        return cb(fromUser.portfolio.length-1, amount, fromUser, toUser, toUserReps, category, investmentId);
-      });
+    fromUser.portfolio.push({ category: category.name, id: category._id, percentile: 0, investments: [] });
+    category.investors++;
+    return fromUser.portfolio.length-1;
   },
 
   addTransactionInvestment: function(index, amount, fromUser, toUser, toUserReps, category, investmentId) {
     var portfolio = fromUser.portfolio;
     if (amount > 0) {
+
+      // Make sure the user has enough reps to give
+      if (amount > fromUser.reps) {
+        return 'Not enough reps to give';
+      }
+
       var percentage = Number(amount/toUserReps);
       var dividend   = Math.round(percentage * toUserReps * DIVIDEND_RATE * 100) / 100;
       var investment = {
         userId     : (String) (toUser._id),
-        user       : toUs,
+        user       : toUser.username,
         amount     : amount,
         percentage : percentage,
         dividend   : dividend
@@ -601,13 +596,17 @@ var utils = {
         return 'Investment for revoke was not found';
       }
 
+      var investment = portfolio[index].investments[j];
       amount *= -1;
+
+      // Make sure the investment has enough reps
+      if (amount > investment.amount) {
+        return 'Investment only has ' + investment.amount + ' reps to revoke';
+      }
 
       // Adjust the investor's reps
       fromUser.reps += amount;
       fromUser.reps = Math.floor(fromUser.reps * 100)/100;
-
-      var investment = portfolio[index].investments[j];
 
       var prevAmount = investment.amount;
       var prevPercentage = investment.percentage;
@@ -620,6 +619,11 @@ var utils = {
       if (newAmount === 0) {
         portfolio[index].investments.splice(j, 1);
         this.removeInvestorFromExpertOnRevoke(toUser, fromUser._id, portfolio[index]);
+        // If the portfolio entry now has no investments, remove the entry
+        if (portfolio[index].investments.length === 0) {
+          portfolio.splice(index, 1);
+          category.investors--;
+        }
         return null;
       }
 
@@ -638,9 +642,8 @@ var utils = {
   // Update an investor making an investment for a given category
   // Returns null if success, error message otherwise
   updateTransactionFromUser: function(fromUser, toUser, category, amount, toUserReps, investmentId) {
-    var self = this;
-    return self.getTransactionPortfolioIndex(amount, fromUser, toUser, toUserReps, investmentId, category,
-      this.addTransactionInvestment);
+    var index = this.getTransactionPortfolioIndex(amount, fromUser, toUser, toUserReps, investmentId, category);
+    return this.addTransactionInvestment(index, amount, fromUser, toUser, toUserReps, category, investmentId);
   },
 
   // Given a transaction, update all dividends for investors investing in that expert

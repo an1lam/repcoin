@@ -20,8 +20,7 @@ var PortfolioTable = React.createClass({
     for (var i = 0; i < length; i++) {
       var category = this.props.user.portfolio[i];
       portfolioItems.push(
-        <PortfolioItem key={category.category} category={category}
-          deleteMode={this.state.deleteMode} showDeleteBox={this.showDeleteBox} privateFields={privateFields} />
+        <PortfolioItem key={category.category} category={category} privateFields={privateFields} />
       );
     }
     return portfolioItems;
@@ -53,7 +52,7 @@ var PortfolioTable = React.createClass({
       if (isSelf) {
         var text = strings.NO_EXISTING_INVESTMENTS;
       } else {
-        var text = strings.NO_EXISTING_INVESTMENTS(this.props.user.username);
+        var text = strings.NO_EXISTING_INVESTMENTS_IMPERSONAL(this.props.user.username);
         addCategoriesText = <div className="add-category-text">{text}</div>;
       }
     }
