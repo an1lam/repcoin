@@ -14,13 +14,14 @@ var Modal = React.createClass({
     return {
       give: true,
       error: false,
+      nudged: false,
       message: '',
     };
   },
 
   componentWillReceiveProps: function(newProps) {
     if (this.props.user._id !== newProps.user._id) {
-      this.setState({ give: true, error: false, message: '' });
+      this.setState({ give: true, error: false, message: '', nudged: false });
     }
   },
 
@@ -231,6 +232,22 @@ var Modal = React.createClass({
     return true;
   },
 
+  sendNudge: function() {
+    var user_id = this.props.currentUser._id;
+    var user_id2 = this.props.user._id;
+    $.ajax({
+      url: '/api/users/' + user_id + '/nudge/' + user_id2,
+      type: 'POST',
+      success: function(msg) {
+        this.setState({ error: false, message: msg, nudged: true });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        this.setState({ error: true, message: xhr.responseText });
+        console.error(status, xhr.responseText);
+      }.bind(this)
+    });
+  },
+
   render: function() {
     var revokeError = '';
     var modalStyleOverride = {
@@ -240,7 +257,17 @@ var Modal = React.createClass({
     var modalContent = '';
     if (this.noPossibleCategories()) {
       var text = strings.NO_MATCHING_CATEGORIES(this.props.user.firstname);
-      modalContent = <div className="no-categories">{text}</div>
+      var nudge = '';
+      if (!this.state.nudged) {
+        nudge = <button onClick={this.sendNudge} className="btn btn-success nudge-btn">Tell {this.props.user.firstname} to add some expert categories!</button>;
+      } else {
+        nudge = <div className="nudge-success alert alert-success" role="alert">Sent request to {this.props.user.firstname}</div>;
+      }
+      modalContent =
+        <div className="no-categories">
+          {text}
+          {nudge}
+        </div>
     } else {
       var action = this.state.give ? 'Give' : 'Revoke'; // The text for the action button
       var clazz = this.state.error ? 'alert alert-danger modal-msg' : 'alert alert-info modal-msg';

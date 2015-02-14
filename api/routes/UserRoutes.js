@@ -134,6 +134,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
   router.get('/users/:user_id', isAuthenticated, UserHandler.users.userId.get);
   router.delete('/users/:user_id', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.delete);
   router.put('/users/:user_id', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.put);
+  router.post('/users/:user_id/nudge/:user_id2', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.nudge.post);
 
   // Get leaders for a given category and count. Set expert to '1' for expert category, else for investor
   router.get('/users/:categoryName/leaders/:count', isAuthenticated, UserHandler.users.leaders.get);

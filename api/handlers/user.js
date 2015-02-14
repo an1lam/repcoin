@@ -139,6 +139,45 @@ var UserHandler = {
 
     // Routes with /users/user_id
     userId: {
+      // Nudge a user to become an expert in more categories
+      // /users/user_id/nudge/user_id2
+      nudge: {
+        post: function(req, res) {
+          var nudgeUserId = req.params.user_id;
+          var receiverId = req.params.user_id2;
+          var asker;
+          try {
+            User.findById(nudgeUserId).exec().then(function(askerr) {
+              if (!askerr) {
+                throw new Error('No asker found');
+              }
+              asker = askerr;
+              return User.findById(receiverId).exec();
+            }, function(err) {
+              winston.log('error', 'Error nudging user: %s', err.toString());
+              throw err;
+            }).then(function(receiver) {
+              if (!receiver) {
+                throw new Error('No receiver found');
+              }
+              // Create a notification for the prompt
+              var notification = new Notification({
+                user    : { id: receiver._id, name: receiver.username },
+                message : asker.username + ' wants you to add more expert categories. Enhance your profile and get more investments!',
+              });
+              notification.save();
+              return res.status(200).send('Sent request to ' + receiver.username + '!');
+            }, function(err) {
+              winston.log('error', 'Error nudging user: %s', err);
+              throw err;
+            });
+          }
+          catch(err) {
+            return res.status(501).send(err);
+          }
+        },
+      },
+
       get: function(req, res) {
         var cb = function(err, user) {
           if (err) {
