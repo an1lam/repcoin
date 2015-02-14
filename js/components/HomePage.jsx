@@ -2,10 +2,12 @@
 
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
+var FacebookInvite = require('./FacebookInvite.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
 var ProfileQuickView = require('./ProfileQuickView.jsx');
 var React = require('react');
+var strings = require('../lib/strings_utils.js');
 var Toolbar = require('./Toolbar.jsx');
 
 var HomePage = React.createClass({
@@ -22,6 +24,9 @@ var HomePage = React.createClass({
           </div>
           <div className="col-md-6">
             <Feed parent="HomePage" />
+          </div>
+          <div className="col-md-2">
+            <FacebookInvite />
           </div>
         </div>
         <div className="row footerrow">
