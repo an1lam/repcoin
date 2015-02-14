@@ -505,7 +505,7 @@ var utils = {
 
   // Changes fields for all of the documents necessary for a transaction to occur
   // Returns null if successful, error message otherwise
-  processTransaction: function(toUser, fromUser, category, transaction, investmentId, cb) {
+  processTransaction: function(toUser, fromUser, category, transaction, investmentId) {
     // Round the amount to the nearest hundredth
     transaction.amount = Math.round(transaction.amount * 100) / 100;
 
