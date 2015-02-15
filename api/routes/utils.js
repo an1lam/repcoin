@@ -511,8 +511,8 @@ var utils = {
 
     // Update all fields for the toUser
     var toUserReps = this.updateTransactionToUser(toUser, fromUser, category.name, transaction.amount);
-    if (!toUserReps) {
-      return 'User is not an expert for category';
+    if (toUserReps === null) {
+      return 'User is not an expert for category: ' + category.name;
     }
 
     // Update all fields for the fromUser
