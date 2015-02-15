@@ -516,7 +516,7 @@ var utils = {
     }
 
     // Update all fields for the fromUser
-    var err = this.updateTransactionFromUser(fromUser, toUser, category.name, transaction.amount, toUserReps, investmentId);
+    var err = this.updateTransactionFromUser(fromUser, toUser, category, transaction.amount, toUserReps, investmentId);
     if (err) {
       return err;
     }
@@ -524,7 +524,6 @@ var utils = {
     // Update the category reps
     category.reps += transaction.amount;
     category.reps = Math.floor(category.reps * 100)/100;
-
     return null;
   },
 
@@ -545,29 +544,29 @@ var utils = {
     return expert.categories[i].reps;
   },
 
-  // Update an investor making an investment for a given category
-  // Returns null if success, error message otherwise
-  updateTransactionFromUser: function(fromUser, toUser, category, amount, toUserReps, investmentId) {
-    var portfolio = fromUser.portfolio;
+  getTransactionPortfolioIndex: function(amount, fromUser, toUser, toUserReps, investmentId, category) {
 
     // Find the portfolio entry that should be updated
-    var index = -1;
-    var length = portfolio.length;
-    for (var i = 0; i < length; i++) {
-      if (portfolio[i].category === category) {
-        var investments = portfolio[i].investments;
-        index = i;
-        break;
-      }
+    var index = this.getPortfolioIndex(fromUser, category.name);
+    if (index !== -1) {
+      return index;
     }
 
-    // The from user is not an investor for this category (ERROR!)
-    if (index === -1) {
-      return 'User is not an investor for this category';
-    }
+    // If the user is not an investor for this category, add it
+    fromUser.portfolio.push({ category: category.name, id: category._id, percentile: 0, investments: [] });
+    category.investors++;
+    return fromUser.portfolio.length-1;
+  },
 
-    // Add the investment to the portfolio
+  addTransactionInvestment: function(index, amount, fromUser, toUser, toUserReps, category, investmentId) {
+    var portfolio = fromUser.portfolio;
     if (amount > 0) {
+
+      // Make sure the user has enough reps to give
+      if (amount > fromUser.reps) {
+        return 'Not enough reps to give';
+      }
+
       var percentage = Number(amount/toUserReps);
       var dividend   = Math.round(percentage * toUserReps * DIVIDEND_RATE * 100) / 100;
       var investment = {
@@ -597,13 +596,17 @@ var utils = {
         return 'Investment for revoke was not found';
       }
 
+      var investment = portfolio[index].investments[j];
       amount *= -1;
+
+      // Make sure the investment has enough reps
+      if (amount > investment.amount) {
+        return 'Investment only has ' + investment.amount + ' reps to revoke';
+      }
 
       // Adjust the investor's reps
       fromUser.reps += amount;
       fromUser.reps = Math.floor(fromUser.reps * 100)/100;
-
-      var investment = portfolio[index].investments[j];
 
       var prevAmount = investment.amount;
       var prevPercentage = investment.percentage;
@@ -616,6 +619,11 @@ var utils = {
       if (newAmount === 0) {
         portfolio[index].investments.splice(j, 1);
         this.removeInvestorFromExpertOnRevoke(toUser, fromUser._id, portfolio[index]);
+        // If the portfolio entry now has no investments, remove the entry
+        if (portfolio[index].investments.length === 0) {
+          portfolio.splice(index, 1);
+          category.investors--;
+        }
         return null;
       }
 
@@ -629,6 +637,13 @@ var utils = {
       investment.dividend = Math.round(newPercentage * toUserReps * DIVIDEND_RATE * 100) / 100;
     }
     return null;
+  },
+
+  // Update an investor making an investment for a given category
+  // Returns null if success, error message otherwise
+  updateTransactionFromUser: function(fromUser, toUser, category, amount, toUserReps, investmentId) {
+    var index = this.getTransactionPortfolioIndex(amount, fromUser, toUser, toUserReps, investmentId, category);
+    return this.addTransactionInvestment(index, amount, fromUser, toUser, toUserReps, category, investmentId);
   },
 
   // Given a transaction, update all dividends for investors investing in that expert

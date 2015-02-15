@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var BecomeInvestorPrompt = require('./BecomeInvestorPrompt.jsx');
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
@@ -27,7 +26,8 @@ var Modal = React.createClass({
 
   // Validate a give
   validateAndGive: function(category, amount, anonymous) {
-    // Validate that the category is possible
+
+    // Validate that the expert really is an expert in this category
     var category;
     var categories = this.props.user.categories;
     var length = categories.length;
@@ -40,20 +40,6 @@ var Modal = React.createClass({
     // If the category was not found, throw an error
     if (!category) {
       this.setState({ error: true, msg: strings.CATEGORY_NOT_FOUND(this.props.user.username) });
-      return;
-    }
-
-    // Get the portfolio index if the investment is possible
-    var portIndex = -1;
-    var portfolio = this.props.currentUser.portfolio;
-    length = portfolio.length;
-    for (var i = 0; i < length; i++) {
-      if (portfolio[i].category === category.name) {
-        portIndex = i;
-      }
-    }
-    if (portIndex === -1) {
-      this.setState({ error: true, message: strings.NOT_AN_INVESTOR(category.name) });
       return;
     }
 
@@ -211,38 +197,15 @@ var Modal = React.createClass({
     return investmentNumbers;
   },
 
+  // Get the list of categories for which the user can invest
   getInvestmentCategories: function() {
-    // TODO: use the investmentList to create this and avoid too many loops
-    var portfolio = this.props.currentUser.portfolio;
     var categories = this.props.user.categories;
-    var portLen = portfolio.length;
-    var catLen = categories.length;
     var categoriesList = [];
-    for (var i = 0; i < catLen; i++) {
-      for (var j = 0; j < portLen; j++) {
-        if (portfolio[j].category === categories[i].name) {
-          var key = categories[i].id;
-          categoriesList.push(<option key={key} value={categories[i].name}>{categories[i].name}</option>);
-        }
-      }
+    for (var i = 0; i < categories.length; i++) {
+      var key = categories[i].id;
+      categoriesList.push(<option key={key} value={categories[i].name}>{categories[i].name}</option>);
     }
     return categoriesList;
-  },
-
-  // Determines if the currentUser can invest in any of the user's categories
-  noPossibleCategories: function() {
-    var categories = this.props.user.categories;
-    var portfolio = this.props.currentUser.portfolio;
-    var length = categories.length;
-    var portfolioLen = portfolio.length;
-    for (var i = 0; i < length; i++) {
-      for (var j = 0; j < portfolioLen; j++) {
-        if (categories[i].name === portfolio[j].category) {
-          return false;
-        }
-      }
-    }
-    return true;
   },
 
   sendNudge: function() {
@@ -268,8 +231,8 @@ var Modal = React.createClass({
     };
 
     var modalContent = '';
-    if (this.noPossibleCategories()) {
-      var text = strings.NO_MATCHING_CATEGORIES(this.props.user.firstname);
+    if (this.props.user.categories.length === 0) {
+      var text = strings.USER_IS_NOT_EXPERT_IN_ANY_CATEGORIES(this.props.user.firstname);
       var nudge = '';
       if (!this.state.nudged) {
         nudge = <button onClick={this.sendNudge} className="btn btn-success nudge-btn">Tell {this.props.user.firstname} to add some expert categories!</button>;
@@ -382,9 +345,6 @@ var Modal = React.createClass({
               {message}
             </div>
             {modalContent}
-            <div className="modal-footer investment-modal-footer">
-              <BecomeInvestorPrompt user={this.props.user} currentUser={this.props.currentUser}/>
-            </div>
           </div>
         </div>
       </div>

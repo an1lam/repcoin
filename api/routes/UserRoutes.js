@@ -59,42 +59,6 @@ module.exports = function(router, isAuthenticated, acl, censor) {
     });
   }
 
-  // Add an investor category to a given user
-  function addInvestorCategory(req, res, category) {
-    var userId = req.params.user_id;
-    User.findOneAndUpdate(
-      {_id: userId, 'portfolio.category': {$ne: category.name}},
-      {$push: { portfolio: { category: category.name, id: category._id } }},
-      function(err, user) {
-        if (err) {
-          winston.log('error', 'Error updating user: %s', err);
-          return res.status(501).send(err);
-        } else if (!user) {
-          return res.status(501).send('Already an investor');
-        } else {
-          category.investors += 1;
-          category.save();
-          utils.updateInvestorPercentilesAndDividends(category.name, function(err) {
-            if (err) {
-              winston.log('error', 'Error updating investor percentiles: %s', err);
-              return res.status(501).send(err);
-            } else {
-              User.findById(userId, function(err, user) {
-                if (err) {
-                  winston.log('error', 'Error finding user: %s', err);
-                  return res.status(501).send(err);
-                } else if (!user) {
-                  return res.status(501).send(err);
-                } else {
-                  return res.status(200).send(user);
-                }
-              });
-            }
-          });
-        }
-    });
-  }
-
   router.get('/users/list/byids', isAuthenticated, UserHandler.users.listByIds.get);
   router.get('/users/:category/trending/experts/:date', isAuthenticated, UserHandler.users.trending.experts.get);
   router.get('/users', isAuthenticated, UserHandler.users.get);
@@ -220,7 +184,8 @@ module.exports = function(router, isAuthenticated, acl, censor) {
         if (expert) {
           return addExpertCategory(req, res, category);
         }
-        return addInvestorCategory(req, res, category);
+        // TODO: make this statement execute by allowing category creation without becoming an expert
+        return res.status(200).send('Category creation succeeded');
       });
     });
 
@@ -252,41 +217,9 @@ module.exports = function(router, isAuthenticated, acl, censor) {
       });
     });
 
-  // Add an investor category to a user if it is not already added
-  // Request a new category if it does not exist
-  router.route('/users/:user_id/addinvestor/:category_name')
-    .put(isAuthenticated, acl.isAdminOrSelf, censor.isNaughty, function(req, res) {
-      var categoryName = req.params.category_name;
-      var userId = req.params.user_id;
-
-      Category.findByName(categoryName).then(function(category) {
-        if (category) {
-          return addInvestorCategory(req, res, category);
-        } else {
-          // If the category does not exist, email the admin
-          var mailOptions = utils.getCategoryRequestEmailOptions(categoryName, userId, 0);
-          transporter.sendMail(mailOptions, function(err, info) {
-            if (err) {
-              winston.log('error', 'Error sending email: %s', err);
-              return res.status(503).send('An internal error occurred. Please try again.');
-            } else {
-              return res.status(200).end();
-            }
-          });
-        }
-      }, function(err) {
-        winston.log('error', 'Error finding category: %s', err);
-        return res.status(503).send(err);
-      });
-    });
-
   // Delete an expert category for a user
   router.put('/users/:user_id/:category_name/expert/delete', isAuthenticated, acl.isAdminOrSelf,
     UserHandler.users.userId.expertCategory.delete);
-
-  // Delete an investor category for a user
-  router.put('/users/:user_id/:category_name/investor/delete', isAuthenticated, acl.isAdminOrSelf,
-    UserHandler.users.userId.investorCategory.delete);
 
   // Reset a user's password by sending them an email with a reset link
   router.route('/users/sendPasswordResetEmail')

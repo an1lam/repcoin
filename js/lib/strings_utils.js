@@ -9,22 +9,12 @@ var strings = {
   ALREADY_AN_EXPERT: function(name) {
     return 'Already an expert in ' + name;
   },
-  ALREADY_AN_INVESTOR: function(name) {
-    return 'Already an investor in ' + name;
-  },
   AMOUNT_TO_GIVE: 'Amount to give',
   AMOUNT_TO_REVOKE: 'Amount to revoke',
   ARE_YOU_SURE_DELETE_EXPERT_CATEGORY: function(name) {
     return 'Are you sure you want to delete the category \'' + name
       + '\'? This action cannot be undone. Your investors will all receive the current value of '
       + 'your investments, and you will lose the reps you have in this category.';
-  },
-  ARE_YOU_SURE_DELETE_INVESTOR_CATEGORY: function(name) {
-    return 'Are you sure you want to delete the category \'' + name
-      + '\'? All of your investments will be immediately revoked';
-  },
-  BECOME_AN_INVESTOR: function(firstname) {
-    return 'Become an investor in some of ' + firstname + '\'s categories';
   },
   CANCEL_DELETE_CATEGORY: 'Cancel',
   CATEGORIES: 'Categories',
@@ -86,10 +76,6 @@ var strings = {
   INVESTMENT_BUTTON_INFO_CONTENT: 'Click to pull up the investment menu and invest in this user',
   INVESTMENTS: 'Investments',
   INVESTOR_CATEGORIES: 'Investor categories',
-  INVESTOR_CATEGORY_PENDING: function(name) {
-    return 'The category \'' + name + '\' is pending approval. Upon approval, you will be ' +
-      'added as an investor, and the category will be created.';
-  },
   INVESTORS_HIGH_TO_LOW: 'Investors (High to Low)',
   LEADING_EXPERTS: 'Leading experts',
   LEADING_INVESTORS: 'Leading investors',
@@ -102,29 +88,18 @@ var strings = {
   NO_CONTENT_DISPLAYED: function(username) {
     return username + ' currently has no content displayed';
   },
+  NO_EXISTING_INVESTMENTS: 'You have not made any investments yet!',
+  NO_EXISTING_INVESTMENTS_IMPERSONAL: function(username) {
+    return username  + ' has not made any investments yet.';
+  },
   NO_EXPERT_CATEGORIES: 'You have no expert categories',
   NO_INVESTMENTS_TO_REVOKE: 'You do not have any investments to revoke',
-  NO_INVESTOR_CATEGORIES: 'You have no investor categories',
-  NO_MATCHING_CATEGORIES: function(firstname) {
-    return 'You are not an investor for any of ' + firstname + '\'s expert categories.'
-      + ' To invest in ' + firstname + ', you must become an investor for one of their categories.';
-  },
   NO_RESULTS: function(query) {
     return 'Sorry, no results were for found \'' + query + '\'';
   },
   NO_TRANSACTIONS_FOUND: 'No transactions were found',
   NOW_AN_EXPERT: function(name) {
     return 'You are now an expert in ' + name;
-  },
-  NOW_AN_INVESTOR: function(name) {
-    return 'You are now an investor in ' + name;
-  },
-  NOT_AN_INVESTOR: function(name) {
-    return 'You are not an investor for ' + name;
-  },
-  NOT_AN_INVESTOR_FOR_ANYTHING: 'You are not an investor for any categories yet!',
-  NOT_AN_INVESTOR_FOR_ANYTHING_IMPERSONAL: function(username) {
-    return username  + ' is not an investor for any categories yet.';
   },
   NOT_ENOUGH_REPS: 'You do not have enough reps!',
   PASSWORDS_DO_NOT_MATCH: 'Passwords do not match',
@@ -181,9 +156,6 @@ var strings = {
   VERIFICATION_EMAIL_SENT: 'Verification email sent',
   YOU_ARE_AN_EXPERT: function(name) {
     return 'You are a ' + name + ' expert';
-  },
-  YOU_ARE_AN_INVESTOR: function(name) {
-    return 'You are a ' + name + ' investor';
   },
   YOU_ARE_NOT_EXPERT_IN_ANY_CATEGORIES: 'You are not an expert in any categories yet.',
   YOU_HAVE_NO_CONTENT_DISPLAYED: 'You currently have no content displayed. Add some links so that users can check out your skills!',

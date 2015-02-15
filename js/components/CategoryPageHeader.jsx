@@ -7,25 +7,7 @@ var strings = require('../lib/strings_utils.js');
 
 var CategoryPageHeader = React.createClass({
 
-  setInvestorCategory: function(event) {
-    event.preventDefault();
-    $.ajax({
-      url: '/api/users/' + this.props.currentUser._id + '/addinvestor/' +
-        this.props.category.name,
-      type: 'PUT',
-      success: function(user) {
-        // No user means the user is already an investor
-        if (user) {
-          PubSub.publish('userupdate');
-          return user;
-        }
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(status, err.toString());
-      }.bind(this)
-   });
-  },
-
+  // Make a user an expert for this category
   setExpertCategory: function(event) {
     event.preventDefault();
     $.ajax({
@@ -33,7 +15,7 @@ var CategoryPageHeader = React.createClass({
         this.props.category.name,
       type: 'PUT',
       success: function(user) {
-        // No user means the user is already an investor
+        // No user means the user is already an expert
         if (user) {
           PubSub.publish('userupdate');
           return user;
@@ -45,18 +27,10 @@ var CategoryPageHeader = React.createClass({
     });
   },
 
+  // Determine whether or not a user is already an expert
   isExpert: function(user) {
     for (var i = 0; i < user.categories.length; i++) {
       if (user.categories[i].id === this.props.category._id) {
-        return true;
-      }
-    }
-    return false;
-  },
-
-  isInvestor: function(user) {
-    for (var i = 0; i < user.portfolio.length; i++) {
-      if (user.portfolio[i].category === this.props.category.name) {
         return true;
       }
     }
@@ -69,11 +43,6 @@ var CategoryPageHeader = React.createClass({
       expertBtn = <div className="alert alert-success" role="alert">{strings.YOU_ARE_AN_EXPERT(this.props.category.name)}</div>
     }
 
-    var investorBtn = <button onClick={this.setInvestorCategory} className="btn btn-default">Become a {this.props.category.name} investor!</button>;
-    if (this.isInvestor(this.props.currentUser)) {
-      investorBtn = <div className="alert alert-success" role="alert">{strings.YOU_ARE_AN_INVESTOR(this.props.category.name)}</div>
-    }
-
     return (
       <div className="categoryPageHeader row">
         <div className="col-md-4 col-md-offset-4">
@@ -84,7 +53,6 @@ var CategoryPageHeader = React.createClass({
         </div>
         <div className="col-md-2 col-md-offset-1">
           {expertBtn}
-          {investorBtn}
         </div>
       </div>
     );
