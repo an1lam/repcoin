@@ -40,32 +40,32 @@ var TransactionHandler = {
         return fromUserPromise;
        }, function(err) {
         winston.log('error', 'Error creating transaction: %s', err.toString());
-        return res.status(400).send(err);
+        return res.status(501).send(err);
       }).then(function(fromuser) {
         fromUser = fromuser;
         return categoryPromise;
       }, function(err) {
         winston.log('error', 'Error creating transaction: %s', err.toString());
-        return res.status(400).send(err);
+        return res.status(501).send(err);
       }).then(function(categoryP) {
         category = categoryP;
         // Update fields for all of the documents as they should be for the transaction
         var err = utils.processTransaction(toUser, fromUser, category, transaction, investmentId);
         if (err) {
           winston.log('error', err);
-          return res.status(400).send('Error updating portfolio');
+          return res.status(501).send(err);
         }
         // Save all of the documents
         var docs = [toUser, fromUser, category, transaction];
         utils.saveAll(docs, function(errs) {
           if (errs.length > 0) {
             winston.log('error', 'Error saving transaction: %s', err.toString());
-            return res.status(400).send(err);
+            return res.status(501).send(err);
           }
           utils.updatePercentilesAndDividends(category.name, toUser, function(err) {
             if (err) {
               winston.log('error', 'Error updating percentiles: %s', err.toString());
-              return res.status(400).send(err);
+              return res.status(501).send(err);
             }
 
             // Notify the to user of the transaction
@@ -87,7 +87,7 @@ var TransactionHandler = {
         });
       }, function(err) {
         winston.log('error', 'Error creating transaction: %s', err.toString());
-        return res.status(400).send(err);
+        return res.status(501).send(err);
       });
     },
   },

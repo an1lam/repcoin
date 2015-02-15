@@ -828,7 +828,7 @@ describe('Utils: ', function() {
     it('handles error updating toUser', function() {
       spyOn(utils, 'updateTransactionToUser').andReturn(null);
       var err = utils.processTransaction(toUser, fromUser, category, transaction, investmentId);
-      expect(err).toEqual('User is not an expert for category');
+      expect(err).toEqual('User is not an expert for category: Coding');
     });
 
     it('handles error updating fromUser', function() {
@@ -838,12 +838,20 @@ describe('Utils: ', function() {
       expect(err).toEqual('Error');
     });
 
-    it('rounds amount to nearest hundredth and updates category reps', function() {
-      spyOn(utils, 'updateTransactionToUser').andReturn(12);
+    it('returns with null with no errors', function() {
+      spyOn(utils, 'updateTransactionToUser').andReturn(11);
       spyOn(utils, 'updateTransactionFromUser').andReturn(null);
       var err = utils.processTransaction(toUser, fromUser, category, transaction, investmentId);
       expect(err).toEqual(null);
     });
+
+    it('handles expert reps going to 0 after revoke', function() {
+      spyOn(utils, 'updateTransactionToUser').andReturn(0);
+      spyOn(utils, 'updateTransactionFromUser').andReturn(null);
+      var err = utils.processTransaction(toUser, fromUser, category, transaction, investmentId);
+      expect(err).toEqual(null);
+    });
+
   });
 
   describe('updateTransactionToUser', function() {
