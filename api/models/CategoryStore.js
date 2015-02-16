@@ -1,9 +1,9 @@
-// api/models/CategoryStoreStore.js
+// api/models/CategoryStore.js
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var CategoryStoreStoreSchema = new Schema({
+var CategoryStoreSchema = new Schema({
   name          : { type: String, required: true },
   reps          : { type: Number, required: true },
   experts       : { type: Number, required: true },
@@ -11,4 +11,4 @@ var CategoryStoreStoreSchema = new Schema({
   timeStamp     : { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('CategoryStore', CategoryStoreStoreSchema);
+module.exports = mongoose.model('CategoryStore', CategoryStoreSchema);
