@@ -1,7 +1,7 @@
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
-var UserStoreSchema = new Schema({
+var UserSnapshotSchema = new Schema({
 
   // The id of the user to whom we refer
   id: { type: Schema.Types.ObjectId, required: true},
@@ -68,4 +68,4 @@ var UserStoreSchema = new Schema({
   timeStamp : {type: Date, default: Date.now, required: true },
 });
 
-module.exports = mongoose.model('UserStore', UserStoreSchema);
+module.exports = mongoose.model('UserSnapshot', UserSnapshotSchema);

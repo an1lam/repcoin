@@ -47,7 +47,7 @@ describe('Data collection utils: ', function() {
       expect(cb).toHaveBeenCalledWith(['Error']);
     });
 
-    it('creates a categoryStore for each category', function() {
+    it('creates a categorySnapshot for each category', function() {
       categories = [
         { _id: Schema.Types.ObjectId('123'), reps: 2, experts: 8, investors: 10 },
         { _id: Schema.Types.ObjectId('456'), reps: 1, experts: 5, investors: 12 },
@@ -92,7 +92,7 @@ describe('Data collection utils: ', function() {
       expect(cb).toHaveBeenCalledWith(['Error']);
     });
 
-    it('creates a userStore for each user', function() {
+    it('creates a userSnapshot for each user', function() {
       users = [
         { _id: Schema.Types.ObjectId('123'), reps: 2, portfolio: [], categories: [] },
         { _id: Schema.Types.ObjectId('456'), reps: 1, portfolio: [], categories: [] },

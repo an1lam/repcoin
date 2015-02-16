@@ -1,8 +1,8 @@
 'use strict';
 var Category = require('../api/models/Category.js');
-var CategoryStore = require('../api/models/CategoryStore.js');
+var CategorySnapshot = require('../api/models/CategorySnapshot.js');
 var User = require('../api/models/User.js');
-var UserStore = require('../api/models/UserStore.js');
+var UserSnapshot = require('../api/models/UserSnapshot.js');
 var routeUtils = require('../api/routes/utils.js');
 var winston = require('winston');
 
@@ -15,11 +15,11 @@ var dataCollectionUtils = {
         return cb(err);
       }
       var len = categories.length;
-      var category, categoryStore;
-      var categoryStores = [];
+      var category, categorySnapshot;
+      var categorySnapshots = [];
       for (var i = 0; i < len; i++) {
         category = categories[i];
-        categoryStores.push(new CategoryStore({
+        categorySnapshots.push(new CategorySnapshot({
           id          : category._id,
           name        : category.name,
           reps        : category.reps,
@@ -27,7 +27,7 @@ var dataCollectionUtils = {
           investors   : category.investors,
         }));
       }
-      routeUtils.saveAll(categoryStores, function(errs) {
+      routeUtils.saveAll(categorySnapshots, function(errs) {
         if (errs.length > 0) {
           winston.log('error', 'Error creating category stores: %s', errs.toString());
           cb(errs);
@@ -46,18 +46,18 @@ var dataCollectionUtils = {
         return cb(err);
       }
       var len = users.length;
-      var user, userStore;
-      var userStores = [];
+      var user, userSnapshot;
+      var userSnapshots = [];
       for (var i = 0; i < len; i++) {
         user = users[i];
-        userStores.push(new UserStore({
+        userSnapshots.push(new UserSnapshot({
           id          : user._id,
           reps        : user.reps,
           portfolio   : user.portfolio,
           categories  : user.categories,
         }));
       }
-      routeUtils.saveAll(userStores, function(errs) {
+      routeUtils.saveAll(userSnapshots, function(errs) {
         if (errs.length > 0) {
           winston.log('error', 'Error creating user stores: %s', errs.toString());
           cb(errs);
