@@ -6,7 +6,7 @@ var Link = Router.Link;
 
 var InvestmentItem = React.createClass({
   render: function() {
-    var dividendPercentage = (Math.floor(this.props.investment.dividend / this.props.investment.amount)*100);
+    var dividendPercentage = Math.floor(this.props.investment.dividend / this.props.investment.amount*100);
     return (
       <tr className="investmentItem">
         <td>
