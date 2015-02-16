@@ -16,6 +16,11 @@
     <link href="css/app.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
+    <div class="links" style="display: none">
+      <% users.forEach(function(user){ %>
+        <a href="www.repcoin.com<%= user._id %>"><%= user.username %></a>
+      <% }); %>
+    </div>
     <div id="wrap">
       <div id="fb-root"></div>
       <section id="repsapp"></section>

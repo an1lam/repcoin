@@ -15,7 +15,9 @@
     "cloudinary": "",
     "coffeeify": "^1.0.0",
     "connect-livereload": "^0.4.0",
+    "cookie-session": "~1.1.0",
     "cropit": "latest",
+    "ejs": "^2.2.4",
     "express": "~4.9.4",
     "express-session": "~1.8.2",
     "flux": "~2.0.1",
@@ -48,8 +50,7 @@
     "reactify": "~0.15.2",
     "reduce": "~1.0.1",
     "watchify": "^2.1.0",
-    "winston": "^0.8.3",
-    "cookie-session": "~1.1.0"
+    "winston": "^0.8.3"
   },
   "devDependencies": {
     "jasmine-node": "~1.14.5"
@@ -85,9 +86,9 @@
     "watch": "npm run build-fonts & npm run watch-html & npm run watch-css & npm run build-jsx",
     "build-jsx": "watchify --debug --watch js/ --extension=.jsx js/app.jsx -o public/app.js -dv",
     "build-css": "cp -r css public/",
-    "build-html": "cp index.html public/index.html",
+    "build-html": "cp index.ejs public/index.ejs",
     "watch-css": "nodemon -e css --watch css/ --exec 'cp -r css public/'",
-    "watch-html": "nodemon -e html --ignore public/ --watch index.html --exec 'cp index.html public/index.html'",
+    "watch-html": "nodemon -e html --ignore public/ --watch index.ejs --exec 'cp index.ejs public/index.ejs'",
     "build-lib": "cp -r js/lib public/js/",
     "build-fonts": "cp -r fonts public/",
     "kill": "pkill -f npm & pkill -f node;",
