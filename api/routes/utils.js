@@ -256,13 +256,9 @@ var utils = {
     return true;
   },
 
-  // Validate the inputs for /users/:categoryName/leaders/:count
-  validateLeadersCountInputs: function(req) {
-    if (!req.query || req.query.expert === null) {
-      return false;
-    }
-
-    if (isNaN(parseInt(req.params.count))) {
+  // Validate the inputs for /users/:categoryName/leaders
+  validateLeadersInputs: function(req) {
+    if (!req.query || !req.query.expert) {
       return false;
     }
     return true;

@@ -136,8 +136,8 @@ module.exports = function(router, isAuthenticated, acl, censor) {
   router.put('/users/:user_id', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.put);
   router.post('/users/:user_id/nudge/:user_id2', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.nudge.post);
 
-  // Get leaders for a given category and count. Set expert to '1' for expert category, else for investor
-  router.get('/users/:categoryName/leaders/:count', isAuthenticated, UserHandler.users.leaders.get);
+  // Get experts for a given category. Set expert to '1' for expert category, '0' for investor
+  router.get('/users/:categoryName/leaders', isAuthenticated, UserHandler.users.leaders.get);
 
   // Handle a requested category
   // Triggered by an administrator

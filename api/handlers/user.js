@@ -362,25 +362,25 @@ var UserHandler = {
       },
     },
 
-    // /users/:categoryName/leaders/:count
+    // /users/:categoryName/leaders
     leaders: {
       get: function(req, res) {
-        if (!utils.validateLeadersCountInputs(req)) {
+        if (!utils.validateLeadersInputs(req)) {
           return res.status(412).send('Invalid inputs');
         }
 
         var categoryName = req.params.categoryName;
-        var count = req.params.count;
         var expert = req.query.expert === '1';
 
-        User.findNLeadersPublic(categoryName, parseInt(count), expert, function(err, leaders) {
+        User.findUserByCategoryPublic(categoryName, expert, function(err, leaders) {
           if (err) {
             winston.log('error', 'Error finding users: %s', err);
             return res.status(501).send(err);
           } else {
             // sort the users in decreasing order of directScore
             var percentileComparator = utils.getPercentileComparator(categoryName, expert);
-            return res.status(200).send(leaders.sort(percentileComparator));
+            leaders = leaders.sort(percentileComparator);
+            return res.status(200).send(leaders.slice(0,10));
           }
         });
       }
