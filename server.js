@@ -14,6 +14,7 @@ var path = require('path');
 // Configure passport
 require('./config/pass.js')(passport, LocalStrategy, FacebookTokenStrategy);
 var mailerConfig = require('./config/mailer.js');
+var User = require('./api/models/User.js');
 var winston = require('winston');
 
 winston.info('Starting up application');
@@ -43,8 +44,8 @@ var port = process.env.PORT || 8080; // set up our port
 app.use(express.static(STATIC_PATH));
 winston.log('info', 'Serving static files from %s', __dirname + '/public');
 
+app.set('view engine', 'ejs');
 app.set('views', STATIC_PATH);
-app.engine('.html', require('jade').__express);
 
 app.use(cookieSession({
   keys: ['ubermensch1', 'ubermensch2'],
@@ -55,7 +56,11 @@ app.use(passport.session());
 /* GET the starting page for our app.
    This is the bridge to all of the react components */
 app.get('/', function(req, res) {
-  res.render('index.html');
+  User.find().limit(300).exec().then(function(users) {
+    res.render('index.ejs', {
+      users: users,
+    });
+  });
 });
 
 // ACL middleware
