@@ -249,13 +249,13 @@ describe('UserHandler: ', function() {
         var users = [ { categories: [ { name: 'Foo', percentile: 20 } ] } ];
 
         it('gets the leaders for a given category', function() {
-          spyOn(User, 'findNLeadersPublic').andCallFake(function(query, category, count, cb) {
+          spyOn(User, 'findUserByCategoryPublic').andCallFake(function(query, category, cb) {
             return cb(null, [{ username: 'Matt' }]);
           });
           req.query = { expert: '1' };
-          req.params = { categoryName: 'Foo', count: '10' };
+          req.params = { categoryName: 'Foo' };
           UserHandler.users.leaders.get(req, res);
-          expect(User.findNLeadersPublic.callCount).toEqual(1);
+          expect(User.findUserByCategoryPublic.callCount).toEqual(1);
           expect(res.status).toHaveBeenCalledWith(200);
           expect(res.send).toHaveBeenCalledWith([{ username: 'Matt' }]);
         });
@@ -267,17 +267,16 @@ describe('UserHandler: ', function() {
         });
 
         it('handles error finding leaders', function() {
-          spyOn(User, 'findNLeadersPublic').andCallFake(function(query, category, count, cb) {
+          spyOn(User, 'findUserByCategoryPublic').andCallFake(function(query, category, cb) {
             return cb('Error', null);
           });
           req.query = { expert: '1' };
-          req.params = { categoryName: 'Foo', count: '10' };
+          req.params = { categoryName: 'Foo' };
           UserHandler.users.leaders.get(req, res);
-          expect(User.findNLeadersPublic.callCount).toEqual(1);
+          expect(User.findUserByCategoryPublic.callCount).toEqual(1);
           expect(res.status).toHaveBeenCalledWith(501);
           expect(res.send).toHaveBeenCalledWith('Error');
         });
-
       });
     });
 

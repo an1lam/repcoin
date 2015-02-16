@@ -20,7 +20,7 @@ var LeaderTable = React.createClass({
   },
 
   setLeaders: function(category) {
-    var url = '/api/users/' + category + '/leaders/10';
+    var url = '/api/users/' + category + '/leaders';
     var expert = this.props.expert ? 1 : 0;
     var data = { expert: expert };
     $.ajax({
