@@ -22,7 +22,7 @@ var SearchDisplayTable = React.createClass({
   componentWillReceiveProps: function(newProps) {
     this.setState({
       index: 0,
-      maxIndex: newProps.data.length - 1
+      maxIndex: 8,
     });
   },
 
