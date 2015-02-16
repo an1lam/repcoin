@@ -121,12 +121,12 @@ var UserHandler = {
             for (var i = 0; i < userIds.length; i++) {
               idArray.push(userIds[i]._id);
             }
-            User.findPublic({ '_id': { $in: idArray }}, function(err, users) {
+            User.findPublic({ '_id': { $in: idArray }, "categories.name": category }, function(err, users) {
               if (err) {
                 winston.log('error', 'Error finding trending experts %s', err.toString());
                 return res.status(501).send(err);
               } else {
-                return res.status(200).send(users);
+                return res.status(200).send(users.slice(0,10));
               }
             });
           }, function(err) {
