@@ -68,7 +68,7 @@ var CategoriesItem = React.createClass({
           <Link to="category" params={{category: this.props.category.name}}>{this.props.category.name}</Link>
           {deleteBtn}
         </td>
-        <td><ScoreBar percentile={this.props.category.percentile}
+        <td className="percentile-col"><ScoreBar percentile={this.props.category.percentile}
           previousPercentile={this.props.category.previousPercentile} category={this.props.category.name}/></td>
         <td>
           <InvestorList category={this.props.category} investors={this.state.investors} />
