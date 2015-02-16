@@ -150,7 +150,7 @@ var TermsOfServicePage = React.createClass({
           without restriction. Any attempted transfer or assignment in violation hereof shall be null and void.</p>
 
           <h3>Entire Agreement/Severability</h3>
-          <p>If the latter, Privacy Policy and any amendments and any additional agreements you may enter into with Repcoin,, shall constitute the entire agreement
+          <p>This agreement, the Privacy Policy and any amendments and any additional agreements you may enter into with Repcoin, shall constitute the entire agreement
           between you and Repcoin concerning your use of this site and the products and services offered on this site. If any provision of these terms and conditions
           is deemed invalid, then that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions of these terms and
           conditions will remain in full force and effect.</p>
