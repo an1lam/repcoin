@@ -155,7 +155,8 @@ describe('Utils: ', function() {
       { userId: '123', amount: 5 },
       { userId: '456', amount: 6 }
     ];
-    var users = [{ portfolio: [{ category: 'Coding', reps: 0, investments: investments }] }];
+    var users = [{ reps: 2, portfolio: [{ category: 'Coding', investments: investments }] }];
+
     it('reimburses investors', function() {
       spyOn(utils, 'saveAll').andCallFake(function(users, cb) {
         return cb([]);
@@ -165,7 +166,7 @@ describe('Utils: ', function() {
       });
       var investors = [ { name: 'Foo', id: 'bar' }];
 
-      var expectedUsers = [{ portfolio: [{ category: 'Coding', reps: 5, investments: [investments[1]] }] }];
+      var expectedUsers = [{ reps: 7, portfolio: [{ category: 'Coding', investments: [investments[1]] }] }];
       utils.reimburseInvestors(investors, 'Coding', '123', cb);
       expect(cb.callCount).toEqual(1);
       expect(cb).toHaveBeenCalledWith(null);
@@ -234,9 +235,9 @@ describe('Utils: ', function() {
         { userId: '123', amount: 5 },
         { userId: '456', amount: 6 }
       ];
-      var investor = { portfolio: [{ category: 'Coding', reps: 0, investments: investments }] };
+      var investor = { reps: 0, portfolio: [{ category: 'Coding', investments: investments }] };
       var result = utils.reimburseInvestor(investor, 'Coding', '123');
-      var expected = { portfolio: [{ category: 'Coding', reps: 5, investments: [investments[1]] }] };
+      var expected = { reps: 5, portfolio: [{ category: 'Coding', investments: [investments[1]] }] };
       expect(result).toEqual(expected);
     });
   });

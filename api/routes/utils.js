@@ -85,7 +85,7 @@ var utils = {
           var investment = investor.portfolio[j].investments[p];
           if (String(investment.userId) === String(expertId)) {
             // Give the investor the amount
-            investor.portfolio[j].reps += investment.amount;
+            investor.reps += investment.amount;
           } else {
             newInvestments.push(investment);
           }
@@ -196,7 +196,6 @@ var utils = {
           var user = users[i];
           newUsers.push(self.reimburseInvestor(user, categoryName, expertId));
         }
-
         // Finally, save all the modified investors
         self.saveAll(newUsers, function(errs) {
           if (errs.length > 0) {
