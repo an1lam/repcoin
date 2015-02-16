@@ -59,7 +59,6 @@ TransactionSchema.statics.findTrendingExperts = function(timeStamp, category) {
     { $project: { "to.id": 1 } },
     { $group: { _id: "$to.id", count: {$sum: 1} }  },
     { $sort: { "count": -1 } },
-    { $limit: 10 }
   ]).exec();
 };
 
