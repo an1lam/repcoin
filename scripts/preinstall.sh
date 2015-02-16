@@ -6,5 +6,5 @@ mkdir public/js
 mkdir public/js/lib
 npm run build-lib
 npm run build-fonts
-cp index.html public/index.html
+cp index.ejs public/index.ejs
 cp css/*.css public/css/
