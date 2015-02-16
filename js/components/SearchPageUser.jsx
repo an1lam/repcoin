@@ -3,7 +3,6 @@
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
-var SuperScore = require('./SuperScore.jsx');
 var strings = require('../lib/strings_utils.js');
 
 var SearchPageUser = React.createClass({
