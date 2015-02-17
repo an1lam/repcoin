@@ -9,6 +9,7 @@ var ProfileQuickView = require('./ProfileQuickView.jsx');
 var React = require('react');
 var strings = require('../lib/strings_utils.js');
 var Toolbar = require('./Toolbar.jsx');
+var TutorialManager = require('./TutorialPanelManager.jsx');
 
 var HomePage = React.createClass({
   mixins: [AuthenticatedRoute],
@@ -27,6 +28,7 @@ var HomePage = React.createClass({
           </div>
           <div className="col-md-2">
             <FacebookInvite />
+            <TutorialManager />
           </div>
         </div>
         <div className="row footerrow">
