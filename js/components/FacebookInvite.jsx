@@ -1,21 +1,61 @@
 'use strict';
+
+var $ = require('jquery');
 var React = require('react');
 
+var auth = require('../auth.jsx')
+
 var FacebookInvite = React.createClass({
-  handleClick: function() {
-    FB.ui({
-      method: 'send',
-      link: 'http://repcoin.com',
-    });
+  getInitialState: function() {
+    return {
+      shareLink: null,
+    };
   },
 
+  componentDidMount: function() {
+    this.generateShareLink()
+  },
+
+  componentWillMount: function(newProps) {
+    this.generateShareLink()
+  },
+
+  handleClick: function() {
+
+    if (this.state.shareLink) {
+      var fullLink =
+      FB.ui({
+        method: 'send',
+        link: this.state.shareLink,
+      });
+    }
+  },
+
+  generateShareLink: function() {
+    $.ajax({
+      url: '/api/users/share/',
+      success: function(shareLink) {
+        this.setState({
+          shareLink: shareLink,
+        })
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.log(err);
+        this.setState({
+          shareLink: null,
+        })
+      }.bind(this),
+    })
+  },
 
   render: function() {
     return (
-      <button className="facebook-invite btn btn-default" onClick={this.handleClick}>
-        Invite your friends
-      </button>
+        <button className="facebook-invite btn btn-default"
+          onClick={this.handleClick}>
+          Invite your friends
+        </button>
     );
+
   }
 });
 

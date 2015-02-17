@@ -38,6 +38,9 @@ var Signup = React.createClass({
       type: 'POST',
       data: { access_token: accessToken },
       success: function(user) {
+        if (this.props.email && this.props.hash) {
+          this.logShared(this.props.email, this.props.hash)
+        }
         // Only rewrite the picture if it is not there
         if (!user.picture) {
           this.getFacebookProfilePicture(user);
@@ -134,6 +137,9 @@ var Signup = React.createClass({
       data: data,
       success: function() {
         this.setState({ error: false, msg: strings.VERIFICATION_EMAIL_SENT });
+        if (this.props.hash && this.props.email) {
+          this.logShared(this.props.email, this.props.hash);
+        }
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText !== 'Error') {
@@ -141,6 +147,17 @@ var Signup = React.createClass({
         }
         console.error(xhr.responseText);
       }.bind(this)
+    });
+  },
+
+  logShared: function(email, hash) {
+    $.ajax({
+      url: '/api/users/share',
+      type: 'POST',
+      data: {
+        email: email,
+        hash: hash,
+      },
     });
   },
 
