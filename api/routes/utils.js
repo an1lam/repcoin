@@ -967,6 +967,7 @@ var utils = {
         winston.log('error', 'Error creating newghost event: %s', err);
         return err;
       }
+      console.log(svdEvt);
       return svdEvt;
     });
   },

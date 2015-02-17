@@ -79,7 +79,6 @@ var Feed = React.createClass({
 
     for (var i = start; i < end && i < transactions.length; i++) {
       curr = transactions[i];
-
       // Transaction
       if (curr.amount) {
         feedItems.push(
@@ -99,7 +98,8 @@ var Feed = React.createClass({
         feedItems.push(
           <li key={curr._id} className="list-group-item"><NewCategoryFeedItem event={curr} /></li>
         );
-      } else if (curr.type === 'newhost') {
+      } else if (curr.type === 'newghost') {
+        console.log('newghost!');
         feedItems.push(
           <li key={curr._id} className="list-group-item"><NewGhostFeedItem event={curr} /></li>
         );

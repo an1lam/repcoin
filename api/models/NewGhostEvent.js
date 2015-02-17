@@ -6,7 +6,7 @@ var NewGhostEventSchema = new Schema({
   userId: { type: String, required: true },
   ghostName: { type: String, required: true },
   ghostId: { type: String, required: true },
-  type: { type: String, default: 'newcategory', required: true },
+  type: { type: String, default: 'newghost', required: true },
   timeStamp: { type: Date, default: Date.now, required: true },
 });
 

@@ -4,6 +4,7 @@ var winston = require('winston');
 var AddExpertEvent = require('../models/AddExpertEvent.js');
 var JoinEvent = require('../models/JoinEvent.js');
 var NewCategoryEvent = require('../models/NewCategoryEvent.js');
+var NewGhostEvent = require('../models/NewGhostEvent.js');
 var Transaction = require('../models/Transaction.js');
 
 var ComboHandler = {
@@ -26,9 +27,15 @@ var ComboHandler = {
           throw err;
         }).then(function(newCategories) {
           combined = combined.concat(newCategories);
-          return AddExpertEvent.find().exec();
+          return NewGhostEvent.find().exec();
         }, function(err) {
           winston.log('error', 'Error finding new category event: %s', err.toString());
+          throw err;
+        }).then(function(ghosts) {
+          combined = combined.concat(ghosts);
+          return AddExpertEvent.find().exec();
+        }, function(err) {
+          winston.log('error', 'Error finding new ghost event: %s', err.toString());
           throw err;
         }).then(function(addExpertEvents) {
           combined = combined.concat(addExpertEvents);
