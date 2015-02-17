@@ -6,6 +6,7 @@ var FeedHeader = require('./FeedHeader.jsx');
 var FeedItem = require('./FeedItem.jsx');
 var JoinFeedItem = require('./JoinFeedItem.jsx');
 var NewCategoryFeedItem = require('./NewCategoryFeedItem.jsx');
+var NewGhostFeedItem = require('./NewGhostFeedItem.jsx');
 var InvestmentButton = require('./InvestmentButton.jsx');
 var React = require('react');
 var strings = require('../lib/strings_utils.js');
@@ -97,6 +98,10 @@ var Feed = React.createClass({
       } else if (curr.type === 'newcategory') {
         feedItems.push(
           <li key={curr._id} className="list-group-item"><NewCategoryFeedItem event={curr} /></li>
+        );
+      } else if (curr.type === 'newhost') {
+        feedItems.push(
+          <li key={curr._id} className="list-group-item"><NewGhostFeedItem event={curr} /></li>
         );
       } else if (curr.type === 'addexpert') {
         feedItems.push(

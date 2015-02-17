@@ -63,6 +63,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
   router.get('/users/:category/trending/experts/:date', isAuthenticated, UserHandler.users.trending.experts.get);
   router.get('/users', isAuthenticated, UserHandler.users.get);
   router.post('/verify', UserHandler.verify.post);
+  router.post('/users/:user_id/ghost/:ghostname', censor.isNaughty, isAuthenticated, UserHandler.users.userId.ghost.post);
 
   router.route('/users')
     // Create a new user
@@ -138,6 +139,59 @@ module.exports = function(router, isAuthenticated, acl, censor) {
 
   // Get experts for a given category. Set expert to '1' for expert category, '0' for investor
   router.get('/users/:categoryName/leaders', isAuthenticated, UserHandler.users.leaders.get);
+
+  // Handle a requested ghost user
+  // Triggered by an administrator
+  router.route('/users/:user_id/ghost/:ghost_name/:action')
+    .post(acl.isAdmin, function(req, res) {
+      var ghostName = req.params.ghost_name;
+      var userId = req.params.user_id;
+      var approved = req.params.action === 'approve' ? true : false;
+
+      User.find({ "username": ghostName}).exec().then(function(ghosts) {
+        if (ghosts.length > 0) {
+          return res.status(412).send('User with name ' + ghostName + ' already exists!');
+        } else {
+          if (!approved) {
+            // Create a denial notification
+            var notification = new Notification({
+              user    : { id: userId },
+              message : 'We regret to inform you that the ghost \'' + ghostName + '\' was not approved.',
+            });
+            notification.save();
+            return res.status(200).send('Denial succeeded');
+          }
+
+          var ghost = new User({ firstname: ghostName.split(' ')[0], username: ghostName, ghost: true });
+          ghost.save(function(err, ghost) {
+            if (err) {
+              return res.status(501).send(err);
+            }
+
+            // Create an approval notification
+            var notification = new Notification({
+              user    : { id: userId },
+              message : 'Congratulations! The ghost \'' + ghostName + '\' was approved!',
+            });
+            notification.save();
+
+            // Create a notification that the category was created
+            var user = User.findById(userId, function(err, user) {
+              // On failure, simply skip creating the event
+              if (err) {
+                winston.log('error', 'Error creating new category event: %s', err.toString());
+              } else {
+                utils.createEvent('newghost', [user.username, user._id, ghost.username, ghost._id ]);
+              }
+            });
+            return res.status(200).send('Ghost creation succeeded');
+          });
+        }
+      }, function(err) {
+        winston.log('error', 'Error finding user: %s', err);
+        return res.status(503).send(err);
+      });
+    });
 
   // Handle a requested category
   // Triggered by an administrator

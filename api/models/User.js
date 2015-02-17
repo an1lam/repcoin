@@ -28,6 +28,7 @@ function toLower(w) {
 }
 
 var UserSchema = new Schema({
+  ghost: { type: Boolean, default: false },
   facebookId: { type: String, index: { unique: true, sparse: true } },
   firstname: {type: String, required: true, trim: true },
   lastname: {type: String, trim: true },
@@ -139,7 +140,7 @@ var UserSchema = new Schema({
 UserSchema.pre('validate', function(next) {
   var user = this;
 
-  if (user.facebookId) {
+  if (user.facebookId || user.ghost) {
     return next();
   }
 
@@ -168,7 +169,7 @@ UserSchema.pre('save', function(next) {
     }
   }
 
-  if (!user.password && user.facebookId) {
+  if (!user.password && (user.facebookId || user.ghost)) {
     return next();
   }
 

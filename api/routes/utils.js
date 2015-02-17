@@ -9,6 +9,7 @@ var Category = require('../models/Category.js');
 var AddExpertEvent = require('../models/AddExpertEvent.js');
 var JoinEvent = require('../models/JoinEvent.js');
 var NewCategoryEvent = require('../models/NewCategoryEvent.js');
+var NewGhostEvent = require('../models/NewGhostEvent.js');
 var Transaction = require('../models/Transaction.js');
 var User = require('../models/User.js');
 var VerificationToken = require('../models/VerificationToken.js');
@@ -882,6 +883,19 @@ var utils = {
     };
   },
 
+  // name of ghost, user requesting
+  getGhostRequestEmailOptions: function(ghostName, userId) {
+    ghostName = ghostName.replace(' ', '%20');
+    var approveUrl = urlConfig[process.env.NODE_ENV] + '#/ghostRequest/' + userId + '/' + ghostName + '/approve';
+    var denyUrl = urlConfig[process.env.NODE_ENV] + '#/ghostRequest/' + userId + '/' + ghostName + '/deny';
+    return {
+      from: emailConfig.ghostRequest.from,
+      to: emailConfig.ghostRequest.to,
+      subject: nodeUtil.format(emailConfig.ghostRequest.subject, ghostName),
+      text: nodeUtil.format(emailConfig.ghostRequest.text, ghostName, approveUrl, denyUrl),
+    };
+  },
+
   // name of category, user requesting, boolean whether requested expert or investor
   getCategoryRequestEmailOptions: function(categoryName, userId, expert) {
     categoryName = categoryName.replace(' ', '%20');
@@ -913,6 +927,9 @@ var utils = {
       case 'newcategory':
         this.createNewCategoryEvent.apply(this, params);
         break;
+      case 'newghost':
+        this.createNewGhostEvent.apply(this, params);
+        break;
       case 'addexpert':
         this.createAddExpertEvent.apply(this, params);
         break;
@@ -937,6 +954,17 @@ var utils = {
     evt.save(function(err, svdEvt) {
       if (err) {
         winston.log('error', 'Error creating newcategory event: %s', err);
+        return err;
+      }
+      return svdEvt;
+    });
+  },
+
+  createNewGhostEvent: function(username, userId, ghostName, ghostId) {
+    var evt = new NewGhostEvent({ username: username, userId: userId, ghostName: ghostName, ghostId: ghostId });
+    evt.save(function(err, svdEvt) {
+      if (err) {
+        winston.log('error', 'Error creating newghost event: %s', err);
         return err;
       }
       return svdEvt;

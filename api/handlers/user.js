@@ -4,11 +4,13 @@ var winston = require('winston');
 var Category = require('../models/Category.js');
 var Notification = require('../models/Notification.js');
 var Transaction = require('../models/Transaction.js');
+var transporter = require('../../config/mailer.js').transporterFactory();
 var User = require('../models/User.js');
 var utils = require('../routes/utils.js');
 var VerificationToken = require('../models/VerificationToken.js');
 
 var UserHandler = {
+
   // Route that verifies email
   verify: {
     post: function(req, res) {
@@ -139,6 +141,35 @@ var UserHandler = {
 
     // Routes with /users/user_id
     userId: {
+      // Request to create a ghost user
+      // /users/user_id/ghost/ghostname
+      ghost: {
+        post: function(req, res) {
+          var ghostName = req.params.ghostname;
+          var userId = req.params.user_id;
+
+          User.find({ "username": ghostName}).exec().then(function(ghosts) {
+            if (ghosts.length > 0) {
+              return res.status(412).send('User with name ' + ghostName + ' already exists!');
+            } else {
+              // If the ghost does not exist, email the admin
+              var mailOptions = utils.getGhostRequestEmailOptions(ghostName, userId);
+              transporter.sendMail(mailOptions, function(err, info) {
+                if (err) {
+                  winston.log('error', 'Error sending email: %s', err);
+                  return res.status(503).send('An internal error occurred. Please try again.');
+                } else {
+                  return res.status(200).send('Ghost pending approval');
+                }
+              });
+            }
+          }, function(err) {
+            winston.log('error', 'Error finding user: %s', err);
+            return res.status(503).send(err);
+          });
+        },
+      },
+
       // Nudge a user to become an expert in more categories
       // /users/user_id/nudge/user_id2
       nudge: {

@@ -18,6 +18,13 @@ module.exports = {
     text: 'Hi,\n\nYou\'ve requested that we let you reset your password. Go here: %s\n\nThanks,\nThe Repcoin Team',
   },
 
+  ghostRequest: {
+    from: process.env.REPCOIN_EMAIL,
+    to: process.env.REPCOIN_EMAIL,
+    subject: 'Repcoin Ghost Approval for %s',
+    text: 'Do you approve of the ghost %s?\n\nClick here if yes: %s\n\nClick here if no: %s',
+  },
+
   categoryRequest: {
     from: process.env.REPCOIN_EMAIL,
     to: process.env.REPCOIN_EMAIL,

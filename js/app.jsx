@@ -7,6 +7,7 @@ var ContactUsPage = require('./components/ContactUsPage.jsx');
 var CategoriesPage = require('./components/CategoriesPage.jsx');
 var CategoryRequestPage = require('./components/CategoryRequestPage.jsx');
 var CategoryPage = require('./components/CategoryPage.jsx');
+var GhostRequestPage = require('./components/GhostRequestPage.jsx');
 var HomePage = require('./components/HomePage.jsx');
 var LoginPage = require('./components/LoginPage.jsx');
 var PasswordResetPage = require('./components/PasswordResetPage.jsx');
@@ -112,6 +113,7 @@ var routes = (
     <Route name="termsOfService" handler={TermsOfServicePage} />
     <Route name="verification" path="/verify/:token/" handler={VerificationPage} />
     <Route name="categoryRequest" path="/categoryRequest/:userId/:categoryName/:action/:expert" handler={CategoryRequestPage} />
+    <Route name="ghostRequest" path="/ghostRequest/:userId/:ghostName/:action" handler={GhostRequestPage} />
   </Route>
 );
 Router.run(routes, function (Handler, state) {

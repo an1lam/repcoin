@@ -26,6 +26,9 @@ var strings = {
   CONTACT_US: 'Contact Us',
   CONTENT: 'Content',
   CONTENT_INFO_CONTENT: 'Put links to all of your relevant content here so that users can find your material!',
+  CREATE_A_GHOST: 'Submit a name to create a ghost profile! Ghost profiles represent users you would like to invest in '
+    + 'who are not on the site. Ghost profiles must receiver administrator approval, and once approved, users can '
+    + 'sign them up as experts for categories',
   DEFAULT_CATEGORY_PIC: 'http://res.cloudinary.com/repcoin/image/upload/v1421283105/tag_yib4xo.svg',
   DELETE_THIS_LINK: 'Delete this link?',
   DEFAULT_USER_PIC: 'http://res.cloudinary.com/repcoin/image/upload/v1419620814/default_profile_od0xw5.jpg',

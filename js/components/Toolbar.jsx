@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
+var GhostButton = require('./GhostButton.jsx');
 var InstantBox = require('./InstantBox.jsx');
 var Logout = require('./Logout.jsx');
 var NotificationDisplay = require('./NotificationDisplay.jsx');
@@ -81,11 +82,13 @@ var Toolbar = React.createClass({
     var profileLink = '';
     var notifications = '';
     var categories = '';
+    var ghostButton = '';
     if (this.state.currentUser) {
       profileLink =
         <div className="profilelink ">
           <Link to="profile" params={{userId: this.state.currentUser._id}}>{this.state.currentUser.firstname}</Link>
         </div>;
+      ghostButton = <li><GhostButton currentUser={this.state.currentUser}/></li>;
       var notificationTotal = '';
       var notificationLen = this.state.notifications.length;
       if (notificationLen !== 0) {
@@ -114,14 +117,13 @@ var Toolbar = React.createClass({
           {instantBox}
         </div>
         <div className="toolbar-nav-right">
-        <ul className="nav navbar-nav toolbar-nav-right">
-          <li>{profileLink}</li>
-          <li>{categories}</li>
-          <li>
-            {notifications}
-          </li>
-          <li>{logout}</li>
-        </ul>
+          <ul className="nav navbar-nav toolbar-nav-right">
+            <li>{profileLink}</li>
+            <li>{categories}</li>
+            <li>{ghostButton}</li>
+            <li>{notifications}</li>
+            <li>{logout}</li>
+          </ul>
           {notificationDisplay}
         </div>
       </div>
