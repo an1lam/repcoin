@@ -337,7 +337,7 @@ var Modal = React.createClass({
 
     return (
       <div className="modal reps_modal">
-        <div className="modal-dialog" style={modalStyleOverride}>
+        <div className="modal-dialog investment-modal" style={modalStyleOverride}>
           <div className="modal-content">
             <div className="modal-header">
               {this.renderCloseButton()}

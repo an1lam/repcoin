@@ -9,9 +9,13 @@ var ProfileQuickView = require('./ProfileQuickView.jsx');
 var React = require('react');
 var strings = require('../lib/strings_utils.js');
 var Toolbar = require('./Toolbar.jsx');
+var TutorialPanel = require('./TutorialPanel.jsx');
 
 var HomePage = React.createClass({
   mixins: [AuthenticatedRoute],
+  startTutorial: function() {
+    this.refs.tutorial.show();
+  },
   render: function() {
     return (
       <div className="homePage">
@@ -27,6 +31,15 @@ var HomePage = React.createClass({
           </div>
           <div className="col-md-2">
             <FacebookInvite />
+            <div className="tutorial">
+              <button className="btn btn-default" onClick={this.startTutorial}>
+                Take a Tour of the Site
+              </button>
+              <TutorialPanel show={false} key="tutorial-panel-1"
+                title={strings.FEED_INFO_TITLE}
+                content={strings.FEED_INFO_CONTENT} ref="tutorial"
+                clazz={"feed-tutorial-panel"} className={"modal-open"} />
+            </div>
           </div>
         </div>
         <div className="row footerrow">

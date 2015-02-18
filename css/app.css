@@ -628,7 +628,7 @@ html, body {
   margin: 10px 10px 10px 10px;
 }
 
-.modal-dialog {
+.investment-modal {
   width:650px;
 }
 
@@ -816,3 +816,33 @@ textarea {
 }
 
 /* Terms of Service */
+
+/* Tutorial Panel */
+.tutorial-panel {
+  position: fixed;
+
+}
+
+.tutorial-text {
+  margin: 10px 10px 10px 10px;
+}
+
+.feed-explanation {
+}
+
+.feed-position {
+}
+
+.reps-explanation {
+}
+
+.reps-position {
+}
+
+.investments-expert-explanation {
+  left: -40%;
+}
+
+.investments-expert-position {
+  width: 200px;
+}
