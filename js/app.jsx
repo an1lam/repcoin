@@ -103,6 +103,7 @@ var routes = (
     <Route name="categories" handler={CategoriesPage} />
     <Route name="category" path="/categories/:category" handler={CategoryPage}/>
     <Route name="contactUs" handler={ContactUsPage} />
+    <Route name="home/:firstTime" handler={HomePage} />
     <Route name="home" handler={HomePage} />
     <Route name="login" handler={LoginPage} />
     <Route name="profile" path="/user/:userId" handler={ProfilePage}/>

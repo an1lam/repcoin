@@ -25,7 +25,7 @@ var VerificationPage = React.createClass({
       data: data,
       success: function(user) {
         // A successful verify means the user is already logged in
-        this.transitionTo('/home');
+        this.transitionTo('/home/firstTimeUser');
       }.bind(this),
       error: function(xhr, status, err) {
         this.setState({ error: xhr.responseText });
