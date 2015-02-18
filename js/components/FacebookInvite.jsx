@@ -23,10 +23,10 @@ var FacebookInvite = React.createClass({
   handleClick: function() {
 
     if (this.state.shareLink) {
-      var fullLink =
       FB.ui({
         method: 'send',
         link: this.state.shareLink,
+        picture: "http://res.cloudinary.com/repcoin/image/upload/v1423513285/2RepCoinHeader_mwyh9z.png",
       });
     }
   },
