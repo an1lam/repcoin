@@ -39,7 +39,6 @@ var utils = {
   removeInappropriateUsers: function(cb) {
     var inappropriateUsernames = [
       'robert frost',
-      'Noah Reichblum',
       'Barack Obama',
     ];
 
@@ -69,6 +68,7 @@ var utils = {
     // The list of names that need to be removed
     var inappropriateNames = [
       'aftereffects',
+      'air bending',
       'andrew lindner',
       'banjo',
       'bipartisanship',
