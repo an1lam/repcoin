@@ -10,6 +10,39 @@ var DIVIDEND_PERCENTAGE = 0.1;
 
 // Utility functions for jobs
 var utils = {
+
+  // Remove investors from categories for which they hold no investments
+  // Necessary because of the change to automatically enter and leave an investor category
+  removeInvestorsWithNoInvestments: function(cb) {
+    User.find(function(err, users) {
+      if (err) {
+        winston.log('error', 'Error removing investors with no investments: %s', err.toString());
+        cb(null);
+      } else {
+        var user, newPortfolio;
+        for (var i = 0; i < users.length; i++) {
+          user = users[i];
+          newPortfolio = [];
+          for (var j = 0; j < user.portfolio.length; j++) {
+            if (user.portfolio[j].investments.length > 0) {
+              newPortfolio.push(user.portfolio[j]);
+            }
+          }
+          user.portfolio = newPortfolio;
+        };
+        routeUtils.saveAll(users, function(errs) {
+          if (errs.length > 0) {
+            winston.log('error', 'Error removing investors with no investments: %s', errs.toString());
+            cb(errs);
+          } else {
+            winston.log('info', 'Successfully removed investors with no investments.');
+            cb(null);
+          }
+        });
+      }
+    });
+  },
+
   incrementInvestorReps: function(cb) {
     var i = 0;
     User.find(function(err, users) {
@@ -343,44 +376,54 @@ var utils = {
   recountCategoryRepsExpertsAndInvestors: function(cb) {
     User.find(function(err, users) {
       if (err) {
-        winston.log('error', 'Error migrating category reps: %s', err.toString());
-        cb();
+        winston.log('error', 'Error recounting category fields: %s', err.toString());
+        return cb();
       } else {
         Category.find(function(err, categories) {
           if (err) {
-            winston.log('error', 'Error migrating category reps: %s', err.toString());
-            cb();
+            winston.log('error', 'Error recounting category fields: %s', err.toString());
+            return cb();
           } else {
             var category, totalReps, user, experts, investors;
+
+            // Go through each category
             for (var i = 0; i < categories.length; i++) {
               category = categories[i];
               totalReps = 0;
               experts = 0;
               investors = 0;
+
+              // Go through all of the users
               for (var j = 0; j < users.length; j++) {
                 user = users[j];
+
+                // If a user is an expert for that category, increment experts and reps
                 for (var p = 0; p < user.categories.length; p++) {
                   if (user.categories[p].name === category.name) {
                     experts++;
                     totalReps += user.categories[p].reps;
                   }
                 }
+
+                // If a user is an investor for that category, increment investors
                 for (var p = 0; p < user.portfolio.length; p++) {
                   if (user.portfolio[p].category === category.name) {
                     investors++;
                   }
                 }
               }
+
+              // Reset the category fields and save
               category.reps = Math.floor(totalReps * 100)/100;
               category.experts = experts;
               category.investors = investors;
               routeUtils.saveAll(categories, function(errs) {
                 if (errs.length > 0) {
-                  winston.log('error', 'Error migrating category reps: %s', errs);
-                  cb(errs);
+                  winston.log('error', 'Error recounting category fields: %s', errs);
+                  return cb(errs);
                 } else {
-                  winston.log('info', 'Successfully migrated category reps.');
-                  cb(null);
+                  winston.log('info', 'Successfully recounted category fields.');
+                  return cb(null);
                 }
               });
             }

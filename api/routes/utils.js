@@ -435,7 +435,7 @@ var utils = {
     for (var i = 0; i < length; i++) {
       docs[i].save(function(err) {
         if (err) {
-          winston.log('error', 'utils.saveAll: error saving doc: %s', err);
+          winston.log('error', 'utils.saveAll: error saving doc: %s', err.toString());
           errs.push(err);
         }
         done++;
