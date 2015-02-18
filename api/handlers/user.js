@@ -99,40 +99,40 @@ var UserHandler = {
 
     share: {
       get: function(req, res) {
-        if (!req.user) {
+        if (!req.user || !req.user._id) {
           winston.log('error', 'User not authenticated');
           return res.status(412).send('Not authenticated');
         } else {
-          var toHash = req.user.email + process.env.SECRET_KEY;
+          var toHash = req.user._id + process.env.REPCOIN_EMAIL_PWD;
           var hashed = crypto.createHash("md5").update(toHash)
                              .digest('hex');
           var fullUrl = urlConfig[process.env.NODE_ENV] +
-            '#/login/' + req.user.email + '/' + hashed;
+            '#/login/' + req.user._id + '/' + hashed;
           res.status(200).send(fullUrl);
         }
       },
 
 
       post: function(req, res) {
-        if (!req.body.email || !req.body.hash) {
-          return res.status(412).send("No email or hash given.")
+        if (!req.body.id || !req.body.hash) {
+          return res.status(412).send("No id or hash given.")
         } else {
-          var toHash = req.body.email + process.env.SECRET_KEY;
-          var hashedEmail = crypto.createHash("md5")
+          var toHash = req.body.id + process.env.REPCOIN_EMAIL_PWD;
+          var hashedID = crypto.createHash("md5")
             .update(toHash)
             .digest('hex');
 
-          if (hashedEmail === req.body.hash) {
-            User.update({email: req.body.email}, {$inc: {reps: 5}},
+          if (hashedID === req.body.hash) {
+            User.update({_id: req.body.id}, {$inc: {reps: 5}},
               function(err, numAffected) {
                 if (err) {
-                  winston.log('error', 'Failed to update user with email ' +
-                    req.body.email)
+                  winston.log('error', 'Failed to update user with id ' +
+                    req.body.id)
                   return res.status(501).send("Failed to update user");
                 }
 
                 return res.status(200).send('Success: ' +
-                   req.body.email + '\'s ' + 'profile updated!')
+                   req.body.id + '\'s ' + 'profile updated!')
               })
           }
 

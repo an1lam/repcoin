@@ -38,8 +38,8 @@ var Signup = React.createClass({
       type: 'POST',
       data: { access_token: accessToken },
       success: function(user) {
-        if (this.props.email && this.props.hash) {
-          this.logShared(this.props.email, this.props.hash)
+        if (this.props.id && this.props.hash) {
+          this.logShared(this.props.id, this.props.hash)
         }
         // Only rewrite the picture if it is not there
         if (!user.picture) {
@@ -137,8 +137,8 @@ var Signup = React.createClass({
       data: data,
       success: function() {
         this.setState({ error: false, msg: strings.VERIFICATION_EMAIL_SENT });
-        if (this.props.hash && this.props.email) {
-          this.logShared(this.props.email, this.props.hash);
+        if (this.props.hash && this.props.id) {
+          this.logShared(this.props.id, this.props.hash);
         }
       }.bind(this),
       error: function(xhr, status, err) {
@@ -150,12 +150,12 @@ var Signup = React.createClass({
     });
   },
 
-  logShared: function(email, hash) {
+  logShared: function(id, hash) {
     $.ajax({
       url: '/api/users/share',
       type: 'POST',
       data: {
-        email: email,
+        id: id,
         hash: hash,
       },
     });

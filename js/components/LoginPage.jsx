@@ -36,8 +36,8 @@ var LoginPage = React.createClass({
   render: function() {
     var login = this.state.showLogin ? <Login /> : '';
     var signUp;
-    if (this.props.params.hash && this.props.params.email) {
-      signUp = <Signup email={this.props.params.email}
+    if (this.props.params.hash && this.props.params.id) {
+      signUp = <Signup id={this.props.params.id}
                     hash={this.props.params.hash} />
     } else {
       signUp = <Signup />

@@ -108,7 +108,7 @@ var routes = (
     <Route name="login" handler={LoginPage} />
     <Route name="profile" path="/user/:userId" handler={ProfilePage}/>
     <Route name="search" path="/search/:query" handler={SearchPage}/>
-    <Route name="/login/:email/:hash" handler={LoginPage} />
+    <Route name="/login/:id/:hash" handler={LoginPage} />
     <Route name="passwordReset" path="/passwordReset/:token" handler={PasswordResetPage} />
     <Route name="team" handler={TeamPage} />
     <Route name="termsOfService" handler={TermsOfServicePage} />
