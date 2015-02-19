@@ -9,6 +9,21 @@ var winston = require('winston');
 
 var TransactionHandler = {
   transactions: {
+    total: {
+      get: function(req, res) {
+        Transaction.getTotalRepsTraded().then(function(result) {
+          var total = Math.floor(result[0].total);
+          if (isNaN(total)) {
+            return res.status(501).send('Error retrieving total reps traded');
+          }
+          return res.status(200).send({ total: total});
+        }, function(err) {
+          winston.log('error', 'Error getting total reps traded: %s', err.toString());
+          return res.status(501).send(err);
+        });
+      },
+    },
+
     post: function(req, res) {
       if (!utils.validateTransactionInputs(req)) {
         winston.log('info', 'Invalid transaction inputs');

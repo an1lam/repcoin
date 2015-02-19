@@ -40,6 +40,55 @@ describe('TransactionHandler: ', function() {
   });
 
   describe('transactions: ', function() {
+    describe('total: ', function() {
+      describe('get: ', function() {
+
+        invalidTotalPromise = {
+          result: [
+            { _id: '1', total: 'aa' }
+          ],
+
+          then: function(cb) {
+            return cb(this.result);
+          }
+        };
+
+        totalPromise = {
+          result: [
+            { _id: '1', total: 14.453453 }
+          ],
+
+          then: function(cb) {
+            return cb(this.result);
+          }
+        };
+
+        it('handles error retrieving result', function() {
+          spyOn(Transaction, 'getTotalRepsTraded').andReturn({
+            then: function(cbS, cbF) { return cbF('Error'); }
+          });
+          TransactionHandler.transactions.total.get(req, res);
+          expect(res.status).toHaveBeenCalledWith(501);
+          expect(res.send).toHaveBeenCalledWith('Error');
+        });
+
+        it('handles invalid total', function() {
+          spyOn(Transaction, 'getTotalRepsTraded').andReturn(invalidTotalPromise);
+          TransactionHandler.transactions.total.get(req, res);
+          expect(res.status).toHaveBeenCalledWith(501);
+          expect(res.send).toHaveBeenCalledWith('Error retrieving total reps traded');
+        });
+
+        it('returns the total reps traded', function() {
+          spyOn(Transaction, 'getTotalRepsTraded').andReturn(totalPromise);
+          TransactionHandler.transactions.total.get(req, res);
+          expect(res.status).toHaveBeenCalledWith(200);
+          expect(res.send).toHaveBeenCalledWith({ total: 14 });
+        });
+
+      });
+    });
+
     describe('post: ', function() {
       it('handles invalid inputs', function() {
         TransactionHandler.transactions.post(req, res);

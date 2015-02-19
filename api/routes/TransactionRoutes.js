@@ -10,6 +10,7 @@ var winston = require('winston');
 // Routes that end in /transactions
 module.exports = function(router, isAuthenticated, acl) {
   router.post('/transactions', isAuthenticated, acl.isAdminOrFrom, TransactionHandler.transactions.post);
+  router.get('/transactions/totaltraded', TransactionHandler.transactions.total.get);
 
   router.route('/transactions')
     // Get all the transactions, obscuring private fields
