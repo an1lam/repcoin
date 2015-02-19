@@ -113,31 +113,7 @@ var UserHandler = {
       },
 
 
-      post: function(req, res) {
-        if (!req.body.id || !req.body.hash) {
-          return res.status(412).send("No id or hash given.")
-        } else {
-          var toHash = req.body.id + process.env.REPCOIN_EMAIL_PWD;
-          var hashedID = crypto.createHash("md5")
-            .update(toHash)
-            .digest('hex');
 
-          if (hashedID === req.body.hash) {
-            User.update({_id: req.body.id}, {$inc: {reps: 5}},
-              function(err, numAffected) {
-                if (err) {
-                  winston.log('error', 'Failed to update user with id ' +
-                    req.body.id)
-                  return res.status(501).send("Failed to update user");
-                }
-
-                return res.status(200).send('Success: ' +
-                   req.body.id + '\'s ' + 'profile updated!')
-              })
-          }
-
-        }
-      }
     },
 
     // Route /users/list/byids/

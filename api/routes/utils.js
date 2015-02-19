@@ -953,6 +953,29 @@ var utils = {
       return svdEvt;
     });
   },
+
+  giveUserRepsForSharing: function(id, hash) {
+    // Confirm that we actually created the hash
+    var toHash = id + process.env.REPCOIN_EMAIL_PWD;
+    var hashedID = crypto.createHash("md5")
+      .update(toHash)
+      .digest('hex');
+
+
+    if (hashedID === hash) {
+      // Give the user five extra reps since the invite was valid
+      User.update({_id: id}, {$inc: {reps: 5}},
+        function(err, numAffected) {
+          if (err) {
+            winston.log('error', 'Failed to update user with id ' +
+              req.body.id)
+            return res.status(501).send("Failed to update user");
+          }
+
+          return res.status(200).send('Success: ' + id + '\'s profile updated!')
+        });
+    }
+  },
 };
 
 module.exports = utils;
