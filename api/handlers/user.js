@@ -1,9 +1,12 @@
 'use strict';
 
+var crypto = require('crypto');
 var winston = require('winston');
+
 var Category = require('../models/Category.js');
 var Notification = require('../models/Notification.js');
 var Transaction = require('../models/Transaction.js');
+var urlConfig = require('../../config/url.js');
 var User = require('../models/User.js');
 var utils = require('../routes/utils.js');
 var VerificationToken = require('../models/VerificationToken.js');
@@ -92,6 +95,25 @@ var UserHandler = {
           }
         });
       }
+    },
+
+    share: {
+      get: function(req, res) {
+        if (!req.user || !req.user._id) {
+          winston.log('error', 'User not authenticated');
+          return res.status(412).send('Not authenticated');
+        } else {
+          var toHash = req.user._id + process.env.REPCOIN_EMAIL_PWD;
+          var hashed = crypto.createHash("md5").update(toHash)
+                             .digest('hex');
+          var fullUrl = urlConfig[process.env.NODE_ENV] +
+            '#/login/' + req.user._id + '/' + hashed;
+          res.status(200).send(fullUrl);
+        }
+      },
+
+
+
     },
 
     // Route /users/list/byids/

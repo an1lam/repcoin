@@ -62,6 +62,8 @@ module.exports = function(router, isAuthenticated, acl, censor) {
   router.get('/users/list/byids', isAuthenticated, UserHandler.users.listByIds.get);
   router.get('/users/:category/trending/experts/:date', isAuthenticated, UserHandler.users.trending.experts.get);
   router.get('/users', isAuthenticated, UserHandler.users.get);
+  router.get('/users/share', isAuthenticated, UserHandler.users.share.get);
+  router.post('/users/share', UserHandler.users.share.post);
   router.post('/verify', UserHandler.verify.post);
 
   router.route('/users')
