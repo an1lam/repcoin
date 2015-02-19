@@ -43,7 +43,7 @@ var PasswordReset = React.createClass({
     }
 
     return (
-      <div className="col-md-2 col-md-offset-10 password-reset">
+      <div className="password-reset">
         <form onSubmit={this.handleSubmit}>
           <div className="input-group">
             <input type="text" ref="email" className="form-control" placeholder="Enter email address">

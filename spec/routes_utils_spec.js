@@ -14,6 +14,47 @@ describe('Utils: ', function() {
     });
   });
 
+  describe('giveInviterRepsForSharing: ', function() {
+    var cb;
+    beforeEach(function() {
+      cb = jasmine.createSpy();
+    });
+
+    afterEach(function() {
+      expect(cb.callCount).toEqual(1);
+    });
+
+    it('does nothing when hashes do not match', function() {
+      var id = 'foobar';
+      var hash = 'e82925af40e73dfeba187eb63de395d';
+      spyOn(User, 'update').andCallFake(function(user, update, cb){
+        return cb(null, 1);
+      });
+      utils.giveInviterRepsForSharing(id, hash, cb);
+      expect(cb).toHaveBeenCalledWith('Hash ID and hash do not match');
+    });
+
+    it('updates the user, giving them 5 more reps', function() {
+      var id = 'foobar';
+      var hash = 'e82925af40e73dfeba187eb63d4e395d';
+      spyOn(User, 'update').andCallFake(function(user, update, cb){
+        return cb(null, 1);
+      });
+      utils.giveInviterRepsForSharing(id, hash, cb);
+      expect(cb).toHaveBeenCalledWith(null);
+    });
+
+    it('fails when mongo returns an error', function() {
+      var id =  'foobar';
+      var hash = 'e82925af40e73dfeba187eb63d4e395d';
+      spyOn(User, 'update').andCallFake(function(user, update, cb){
+        return cb('error', 0);
+      });
+      utils.giveInviterRepsForSharing(id, hash, cb);
+      expect(cb).toHaveBeenCalledWith('error');
+    })
+  });
+
   describe('getTotalDividends: ', function() {
     it('adds up the dividend from each investment', function() {
       var portfolioEntry = { investments: [ { dividend: 1 }, { dividend: 3 } ] };

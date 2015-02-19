@@ -130,6 +130,25 @@ describe('UserHandler: ', function() {
   });
 
   describe('users: ', function() {
+    describe('share: ', function() {
+      describe('get', function() {
+        it('returns the full URL', function () {
+          req.user = {_id: 'foobar'};
+          UserHandler.users.share.get(req, res);
+          expect(res.status).toHaveBeenCalledWith(200);
+          expect(res.send).toHaveBeenCalledWith(
+            'test/#/login/' + req.user._id + '/' +
+            'e82925af40e73dfeba187eb63d4e395d')
+        });
+
+        it('fails when req.user has no id value', function() {
+          req.user = {};
+          UserHandler.users.share.get(req, res);
+          expect(res.status).toHaveBeenCalledWith(412);
+        })
+      });
+    });
+
     describe('trending: ', function() {
       describe('experts: ', function() {
         describe('get: ', function() {
@@ -759,6 +778,7 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith({ username: 'Matt' });
           });
         });
+
       });
     });
   });
