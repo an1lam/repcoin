@@ -35,7 +35,7 @@ var PasswordResetPage = React.createClass({
         this.transitionTo('/home');
       }.bind(this),
       error: function(xhr, status, err) {
-        console.log(xhr);
+        console.log(xhr.responseText);
         this.setState({
           error: xhr.responseText,
         });
