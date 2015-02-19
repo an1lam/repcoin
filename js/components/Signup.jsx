@@ -36,7 +36,11 @@ var Signup = React.createClass({
     $.ajax({
       url: '/api/login/facebook',
       type: 'POST',
-      data: { access_token: accessToken },
+      data: {
+        access_token: accessToken,
+        hash: this.props.hash,
+        inviterId: this.props.id
+      },
       success: function(user) {
         // Only rewrite the picture if it is not there
         if (!user.picture) {
@@ -126,7 +130,9 @@ var Signup = React.createClass({
       firstname: firstname,
       lastname: lastname,
       email: email,
-      password: password
+      password: password,
+      hash: this.props.hash,
+      inviterId: this.props.id,
     };
     $.ajax({
       url: '/api/users',
@@ -141,6 +147,17 @@ var Signup = React.createClass({
         }
         console.error(xhr.responseText);
       }.bind(this)
+    });
+  },
+
+  logShared: function(id, hash) {
+    $.ajax({
+      url: '/api/users/share',
+      type: 'POST',
+      data: {
+        id: id,
+        hash: hash,
+      },
     });
   },
 

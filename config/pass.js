@@ -1,6 +1,7 @@
 var Notification = require('../api/models/Notification.js');
 var User = require('../api/models/User.js');
 var utils = require('../api/routes/utils.js');
+var winston = require('winston');
 
 module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
   passport.use(new LocalStrategy({
@@ -38,9 +39,10 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
 
   passport.use(new FacebookTokenStrategy({
       clientID: clientID,
-      clientSecret: clientSecret
+      clientSecret: clientSecret,
+      passReqToCallback: true,
     },
-    function(accessToken, refreshToken, profile, done) {
+    function(req, accessToken, refreshToken, profile, done) {
       User.findOne({ facebookId: profile.id }, function(err, user) {
         if (err) {
           return done(err);
@@ -48,6 +50,13 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
 
         // If the user does not exist, then create it
         if (!user) {
+          // If the user was invited, then pay the inviter
+          utils.giveInviterRepsForSharing(req.body.inviterId, req.body.hash, function(err) {
+            if (err) {
+              winston.log('error', 'Error paying inviter reps: %s', err.toString());
+            }
+          });
+
           if (profile._json.email) {
             user = User({
               firstname: profile.displayName.split(' ')[0],
