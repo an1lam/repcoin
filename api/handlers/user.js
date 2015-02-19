@@ -42,7 +42,6 @@ var UserHandler = {
               winston.log('error', 'Error updating user: %s', err.toString());
               return res.status(501).send(err);
             }
-
             verificationToken.save();
 
             // Create a welcome notification
@@ -54,6 +53,15 @@ var UserHandler = {
 
             // Create a join event
             utils.createEvent('join', [user.username, user._id]);
+
+            // If the user was invited, pay the inviter
+            if (req.body.hash && req.body.inviterId) {
+              utils.giveInviterRepsForSharing(req.body.inviterId, req.body.hash, function(err) {
+                if (err) {
+                  winston.log('error', 'Error paying inviter reps: %s', err.toString());
+                }
+              });
+            }
 
             req.login(user, function(err) {
               if (err) {

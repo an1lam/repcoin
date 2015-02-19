@@ -113,6 +113,7 @@ var routes = (
     <Route name="team" handler={TeamPage} />
     <Route name="termsOfService" handler={TermsOfServicePage} />
     <Route name="verification" path="/verify/:token/" handler={VerificationPage} />
+    <Route name="verificationWithInvite" path="/verify/:token/:inviterId/:hash" handler={VerificationPage} />
   </Route>
 );
 Router.run(routes, function (Handler, state) {

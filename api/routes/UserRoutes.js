@@ -63,7 +63,6 @@ module.exports = function(router, isAuthenticated, acl, censor) {
   router.get('/users/:category/trending/experts/:date', isAuthenticated, UserHandler.users.trending.experts.get);
   router.get('/users', isAuthenticated, UserHandler.users.get);
   router.get('/users/share', isAuthenticated, UserHandler.users.share.get);
-  router.post('/users/share', UserHandler.users.share.post);
   router.post('/verify', UserHandler.verify.post);
 
   router.route('/users')
@@ -117,7 +116,8 @@ module.exports = function(router, isAuthenticated, acl, censor) {
               winston.log('error', 'Error saving verification token: %s', err);
               return res.status(501).send('Unable to save new verificationToken');
             }
-            var mailOptions = utils.getVerificationEmailOptions(user.email, verificationString);
+            var mailOptions = utils.getVerificationEmailOptions(
+              user.email, verificationString, req.body.inviterId, req.body.hash);
 
             transporter.sendMail(mailOptions, function(err, info) {
               if (err) {

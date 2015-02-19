@@ -36,11 +36,12 @@ var Signup = React.createClass({
     $.ajax({
       url: '/api/login/facebook',
       type: 'POST',
-      data: { access_token: accessToken },
+      data: {
+        access_token: accessToken,
+        hash: this.props.hash,
+        inviterId: this.props.id
+      },
       success: function(user) {
-        if (this.props.id && this.props.hash) {
-          this.logShared(this.props.id, this.props.hash)
-        }
         // Only rewrite the picture if it is not there
         if (!user.picture) {
           this.getFacebookProfilePicture(user);
@@ -129,7 +130,9 @@ var Signup = React.createClass({
       firstname: firstname,
       lastname: lastname,
       email: email,
-      password: password
+      password: password,
+      hash: this.props.hash,
+      inviterId: this.props.id,
     };
     $.ajax({
       url: '/api/users',
@@ -137,9 +140,6 @@ var Signup = React.createClass({
       data: data,
       success: function() {
         this.setState({ error: false, msg: strings.VERIFICATION_EMAIL_SENT });
-        if (this.props.hash && this.props.id) {
-          this.logShared(this.props.id, this.props.hash);
-        }
       }.bind(this),
       error: function(xhr, status, err) {
         if (xhr.responseText !== 'Error') {

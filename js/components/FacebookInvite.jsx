@@ -21,7 +21,6 @@ var FacebookInvite = React.createClass({
   },
 
   handleClick: function() {
-
     if (this.state.shareLink) {
       FB.ui({
         method: 'send',

@@ -872,8 +872,14 @@ var utils = {
     return crypto.randomBytes(12).toString('hex');
   },
 
-  getVerificationEmailOptions: function(email, randomString) {
-    var url = urlConfig[process.env.NODE_ENV] + '#/verify/' + randomString + '/';
+  getVerificationEmailOptions: function(email, randomString, inviterId, hash) {
+    var url;
+    if (hash && inviterId) {
+      url = urlConfig[process.env.NODE_ENV] + '#/verify/' + randomString + '/' + inviterId + '/' + hash;
+    } else {
+      url = urlConfig[process.env.NODE_ENV] + '#/verify/' + randomString + '/';
+    }
+
     return {
       from: emailConfig.verification.from,
       to: email,
@@ -954,26 +960,24 @@ var utils = {
     });
   },
 
-  giveUserRepsForSharing: function(id, hash) {
+  giveInviterRepsForSharing: function(inviterId, hash, cb) {
     // Confirm that we actually created the hash
-    var toHash = id + process.env.REPCOIN_EMAIL_PWD;
-    var hashedID = crypto.createHash("md5")
+    var toHash = inviterId + process.env.REPCOIN_EMAIL_PWD;
+    var hashedID = crypto.createHash('md5')
       .update(toHash)
       .digest('hex');
 
-
     if (hashedID === hash) {
       // Give the user five extra reps since the invite was valid
-      User.update({_id: id}, {$inc: {reps: 5}},
-        function(err, numAffected) {
-          if (err) {
-            winston.log('error', 'Failed to update user with id ' +
-              req.body.id)
-            return res.status(501).send("Failed to update user");
-          }
-
-          return res.status(200).send('Success: ' + id + '\'s profile updated!')
-        });
+      User.update({_id: inviterId}, {$inc: {reps: 5}}, function(err, numAffected) {
+        if (err) {
+          winston.log('error', 'Failed to update user with id ' + inviterId + ' %s', err.toString());
+          return cb(err);
+        }
+        return cb(null);
+      });
+    } else {
+      return cb('Hash ID and hash do not match');
     }
   },
 };

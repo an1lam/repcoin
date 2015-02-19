@@ -147,45 +147,6 @@ describe('UserHandler: ', function() {
           expect(res.status).toHaveBeenCalledWith(412);
         })
       });
-
-      describe('post: ', function() {
-        it('updates the user, giving them 5 more reps', function() {
-          req.body = {
-            id: 'foobar',
-            hash: 'e82925af40e73dfeba187eb63d4e395d',
-          };
-          spyOn(User, 'update').andCallFake(function(user, update, cb){
-            return cb(null, 1);
-          });
-          UserHandler.users.share.post(req, res);
-          expect(res.status).toHaveBeenCalledWith(200);
-          expect(res.send).toHaveBeenCalledWith('Success: ' +
-             req.body.id + '\'s ' + 'profile updated!')
-        });
-
-        it('fails when the req.user has no id value', function() {
-          req.body = {
-            hash: 'e82925af40e73dfeba187eb63d4e395d',
-          };
-
-          UserHandler.users.share.post(req, res);
-          expect(res.status).toHaveBeenCalledWith(412);
-          expect(res.send).toHaveBeenCalledWith('No id or hash given.');
-        })
-
-        it('fails when mongo returns an error', function() {
-          req.body = {
-            id: 'foobar',
-            hash: 'e82925af40e73dfeba187eb63d4e395d',
-          };
-          spyOn(User, 'update').andCallFake(function(user, update, cb){
-            return cb('error', 0);
-          });
-          UserHandler.users.share.post(req, res);
-          expect(res.status).toHaveBeenCalledWith(501);
-          expect(res.send).toHaveBeenCalledWith('Failed to update user');
-        })
-      });
     });
 
     describe('trending: ', function() {
