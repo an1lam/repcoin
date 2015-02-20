@@ -12,7 +12,6 @@ var strings = require('../lib/strings_utils.js');
 var Toolbar = require('./Toolbar.jsx');
 
 function getStateFromStores() {
-  console.log(CategoriesStore.getAll());
   return {
     categories: CategoriesStore.getAll()
   };
@@ -21,13 +20,31 @@ function getStateFromStores() {
 var CategoriesPage = React.createClass({
   mixins: [AuthenticatedRoute],
 
+  /* This is the typical pattern for retrieving state in a Flux app.
+      We ask different stores for different bags of data
+  */
   getInitialState: function() {
     return getStateFromStores();
   },
 
+  /* Once the component mounts, we want to retrieve our categories, so we
+     create an Action that's going to trigger an api request. We also listen
+     to our Store's event stream waiting for it to emit changes.
+
+     In practice, we'll create Actions which do something and then trigger
+     events on different Stores through the Dispatcher. The View will then
+     update when the Store emits an event for which it's listening.
+
+     In this case, we create an Action to retrieve Categories from the server
+     and wait for our CategoriesStore to tell us that it's retrieved this data.
+  */
   componentDidMount: function() {
     CategoriesStore.addChangeListener(this._onChange);
     CategoriesActionCreator.getCategories();
+  },
+
+  componentWillUnmount: function() {
+    CategoriesStore.removeChangeListener(this._onChange);
   },
 
   render: function() {

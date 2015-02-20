@@ -11,20 +11,41 @@ var CHANGE_EVENT = 'change';
 
 var _categories = [];
 
+/* This will be the canonical example of a store.
+   Besides 'sortCategories', all the functions in this store
+   will likely exist in all of the stores we create.
+*/
 var CategoriesStore = assign({}, EventEmitter.prototype, {
 
+  /* Emits an event on which views can base their update cycle.
+     This function will typically get called, causing views to call
+     whatever 'callback' function they've registered using 'addChangeListener'
+  */
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },
 
+  /* Function for registering view's change handlers */
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
+  /* Typically gets called in 'componentWillUnmount' in views */
+  removeChangeListener: function(callback) {
+  this.removeListener(CHANGE_EVENT, callback);
+  },
+
+  /* Returns all of the categories.
+     This function is called both by the 'CategoriesPage' when it mounts
+     and is triggered by Actions passed to this store through the Dispatcher
+  */
   getAll: function() {
     return _categories;
   },
 
+  /* Sorts our '_categories' variable which will then be used to update
+     the 'CategoriesPage'
+  */
   sortCategories: function(selected) {
     var comparator;
     switch(selected) {
@@ -52,9 +73,6 @@ var CategoriesStore = assign({}, EventEmitter.prototype, {
 
     _categories.sort(comparator);
   },
-
-
-
 });
 
 function _getExpertComparator() {
@@ -102,18 +120,28 @@ function _getMarketComparator(high) {
   }
 }
 
+/* Registers a callback on the Dispatcher. Basically, whatever function we call
+   'register' on will get called whenever we trigger on the Dispatcher.
+
+   We then update the store and views depending on its changes if the Action's
+   type matches a type which affects our data.
+*/
 CategoriesStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
   var action = payload.action;
   switch(action.type) {
+    
+    // Received categories from the server
     case ActionTypes.RECEIVE_CATEGORIES:
       _categories = action.categories;
       CategoriesStore.emitChange();
       break;
+
+    // 'CategoriesPage' wants the categories sorted
     case ActionTypes.SORT_CATEGORIES:
       CategoriesStore.sortCategories(action.selected);
       CategoriesStore.emitChange();
     default:
-    // do nothing
+      // do nothing
   }
 });
 
