@@ -17,6 +17,10 @@ var HomePage = React.createClass({
     this.refs.tutorial.show();
   },
   render: function() {
+    var toShowTutorial = false;
+    if (this.props.params.firstTime) {
+      toShowTutorial = true;
+    }
     return (
       <div className="homePage">
         <div className="row">
@@ -35,7 +39,7 @@ var HomePage = React.createClass({
               <button className="btn btn-default" onClick={this.startTutorial}>
                 Take a Tour of the Site
               </button>
-              <TutorialPanel show={false} key="tutorial-panel-1"
+              <TutorialPanel show={toShowTutorial} key="tutorial-panel-1"
                 title={strings.FEED_INFO_TITLE}
                 content={strings.FEED_INFO_CONTENT} ref="tutorial"
                 clazz={"feed-tutorial-panel"} className={"modal-open"} />

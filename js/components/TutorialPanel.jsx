@@ -22,6 +22,7 @@ var TutorialPanel = React.createClass({
       this.setState({ step: nextStep });
     } else {
       this.setState({ step: 0 });
+      this.hide();
     }
   },
 
@@ -33,6 +34,12 @@ var TutorialPanel = React.createClass({
     var content = strings.TUTORIAL_CONTENTS[this.state.step].CONTENT;
     var classes1 = "tutorial-panel modal reps_modal modal-open " + strings.TUTORIAL_CONTENTS[this.state.step].CLASS + "-explanation";
     var classes2 = "modal-dialog " + strings.TUTORIAL_CONTENTS[this.state.step].CLASS + "-position";
+    var btnContent;
+    if (this.state.step < strings.TUTORIAL_CONTENTS.length - 1) {
+      btnContent = 'Next';
+    } else {
+      btnContent = 'Close';
+    }
 
     return (
       <div className={classes1} >
@@ -45,7 +52,7 @@ var TutorialPanel = React.createClass({
               {content}
             </div>
             <div className="modal-footer">
-              <button onClick={this.goToNext}>Next</button>
+              <button className="btn btn-default" onClick={this.goToNext}>{btnContent}</button>
             </div>
           </div>
         </div>

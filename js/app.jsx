@@ -104,6 +104,7 @@ var routes = (
     <Route name="category" path="/categories/:category" handler={CategoryPage}/>
     <Route name="categoryRequest" path="/categoryRequest/:userId/:categoryName/:action/:expert" handler={CategoryRequestPage} />
     <Route name="contactUs" handler={ContactUsPage} />
+    <Route name="home/:firstTime" handler={HomePage} />
     <Route name="home" handler={HomePage} />
     <Route name="login" handler={LoginPage} />
     <Route name="profile" path="/user/:userId" handler={ProfilePage}/>
