@@ -2,15 +2,13 @@
 var React = require('react');
 var strings = require('../lib/strings_utils.js');
 
-var CategoriesPageFilter = React.createClass({
-  applySort: function(e) {
-    this.props.sortResults(e.target.value);
-  },
+var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
 
+var CategoriesPageFilter = React.createClass({
   render: function() {
     return (
       <div className="categoriesPageFilter">Sort by:
-        <select onChange={this.applySort}>
+        <select onChange={this.props.onFilter}>
           <option>{strings.ALPHABETICAL}</option>
           <option>{strings.MARKET_SIZE_HIGH_TO_LOW}</option>
           <option>{strings.MARKET_SIZE_LOW_TO_HIGH}</option>
@@ -20,7 +18,7 @@ var CategoriesPageFilter = React.createClass({
       </div>
     );
   },
+
 });
 
 module.exports = CategoriesPageFilter;
-
