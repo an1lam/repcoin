@@ -107,6 +107,9 @@ var strings = {
   PORTFOLIO_HEADER_REPS: function(amount) {
     return amount + ' reps available';
   },
+  PORTFOLIO_HEADER_DIVIDENDS: function(dividend) {
+    return 'Total Dividends: ' + dividend;
+  },
   PORTFOLIO_TABLE_TITLE: function(name) {
     return name + '\'s Investor Categories';
   },
