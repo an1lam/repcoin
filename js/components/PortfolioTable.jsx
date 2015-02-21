@@ -34,10 +34,7 @@ var PortfolioTable = React.createClass({
       if (!category.investments) {
         continue;
       }
-<<<<<<< HEAD
-=======
 
->>>>>>> 47beec2... Fix getotaldividends
       for (var j = 0; j < category.investments.length; j++) {
         totalDividends += category.investments[j].dividend;
       }
