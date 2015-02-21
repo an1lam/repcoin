@@ -53,7 +53,8 @@
     "winston": "^0.8.3"
   },
   "devDependencies": {
-    "jasmine-node": "~1.14.5"
+    "jasmine-node": "~1.14.5",
+    "jest-cli": "^0.4.0"
   },
   "jshintConfig": {
     "node": "true",
@@ -75,9 +76,16 @@
       "reactify"
     ]
   },
+  "jest": {
+    "unmockedModulePathPatterns": ["react"],
+    "modulePathIgnorePatterns": [
+      "/newrelic/",
+      "/keymirror/"
+    ]
+  },
   "scripts": {
     "start": "node server.js",
-    "test": "karma start",
+    "test": "jest",
     "frontend-test": "karma start",
     "backend-test": "jasmine-node spec/",
     "preinstall": "./scripts/preinstall.sh",
