@@ -19,13 +19,20 @@ var FeedItem = React.createClass({
     $("." + this.props.transaction._id).css("color", color);
 
     this.getUser(this.props.transaction.from.id, function(user) {
-      if (user) {
-        this.setState({ fromUser: user });
+
+      // We check that the component is mounted because flipping through the pages
+      // quickly will lead to the page having changed before the callback
+      if (this.isMounted()) {
+        if (user) {
+          this.setState({ fromUser: user });
+        }
       }
     }.bind(this));
     this.getUser(this.props.transaction.to.id, function(user) {
-      if (user) {
-        this.setState({ toUser: user });
+      if (this.isMounted()) {
+        if (user) {
+          this.setState({ toUser: user });
+        }
       }
     }.bind(this));
   },
