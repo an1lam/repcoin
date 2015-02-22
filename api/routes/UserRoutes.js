@@ -64,7 +64,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
   router.get('/users', isAuthenticated, UserHandler.users.get);
   router.get('/users/share', isAuthenticated, UserHandler.users.share.get);
   router.post('/verify', UserHandler.verify.post);
-  router.post('/users/:user_id/ghost/:ghostname', censor.isNaughty, isAuthenticated, UserHandler.users.userId.ghost.post);
+  router.post('/users/:user_id/ghost/:firstname/:lastname/:about', censor.isNaughty, isAuthenticated, UserHandler.users.userId.ghost.post);
 
   router.route('/users')
     // Create a new user
@@ -144,27 +144,37 @@ module.exports = function(router, isAuthenticated, acl, censor) {
 
   // Handle a requested ghost user
   // Triggered by an administrator
-  router.route('/users/:user_id/ghost/:ghost_name/:action')
+  router.route('/users/:user_id/ghost/:firstname/:lastname/:about/:action')
     .post(acl.isAdmin, function(req, res) {
-      var ghostName = req.params.ghost_name;
+      var firstname = req.params.firstname;
+      var lastname = req.params.lastname;
+      var about = req.params.about;
       var userId = req.params.user_id;
       var approved = req.params.action === 'approve' ? true : false;
 
-      User.find({ "username": ghostName}).exec().then(function(ghosts) {
+      var ghostname = firstname + ' ' + lastname;
+      User.find({ "username": ghostname}).exec().then(function(ghosts) {
         if (ghosts.length > 0) {
-          return res.status(412).send('User with name ' + ghostName + ' already exists!');
+          return res.status(412).send('User with name ' + ghostname + ' already exists!');
         } else {
           if (!approved) {
             // Create a denial notification
             var notification = new Notification({
               user    : { id: userId },
-              message : 'We regret to inform you that the ghost \'' + ghostName + '\' was not approved.',
+              message : 'We regret to inform you that the ghost \'' + ghostname + '\' was not approved.',
             });
             notification.save();
             return res.status(200).send('Denial succeeded');
           }
 
-          var ghost = new User({ firstname: ghostName.split(' ')[0], username: ghostName, ghost: true });
+          var ghost = new User({
+            username: ghostname,
+            firstname: firstname,
+            lastname: lastname,
+            about: about,
+            ghost: true
+          });
+
           ghost.save(function(err, ghost) {
             if (err) {
               return res.status(501).send(err);
@@ -173,7 +183,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
             // Create an approval notification
             var notification = new Notification({
               user    : { id: userId },
-              message : 'Congratulations! The ghost \'' + ghostName + '\' was approved!',
+              message : 'Congratulations! The ghost \'' + ghostname + '\' was approved!',
             });
             notification.save();
 
@@ -190,7 +200,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
           });
         }
       }, function(err) {
-        winston.log('error', 'Error finding user: %s', err);
+        winston.log('error', 'Error finding user: %s', err.toString());
         return res.status(503).send(err);
       });
     });

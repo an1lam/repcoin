@@ -200,9 +200,12 @@ var Feed = React.createClass({
         </li>;
 
     }
+
+    var key = this.props.user ? this.props.user._id : this.props.parent;
+    var isGhost = this.props.user && this.props.user.ghost;
     return (
-      <div key={this.props.user._id} className="feed panel panel-default">
-        <FeedHeader onClick={this.handleClick} isSelf={this.props.isSelf} parent={this.props.parent} isGhost={this.props.user.ghost}/>
+      <div key={key} className="feed panel panel-default">
+        <FeedHeader onClick={this.handleClick} isSelf={this.props.isSelf} parent={this.props.parent} isGhost={isGhost}/>
         <ul className="list-group">
           {feedItems}
         </ul>

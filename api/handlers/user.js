@@ -172,24 +172,27 @@ var UserHandler = {
     // Routes with /users/user_id
     userId: {
       // Request to create a ghost user
-      // /users/user_id/ghost/ghostname
+      // /users/user_id/ghost/firstname/lastname/about
       ghost: {
         post: function(req, res) {
-          var ghostName = req.params.ghostname;
+          var firstName = req.params.firstname;
+          var lastName = req.params.lastname;
+          var about = req.params.about;
           var userId = req.params.user_id;
 
+          var ghostName = firstName + ' ' + lastName;
           User.find({ "username": ghostName}).exec().then(function(ghosts) {
             if (ghosts.length > 0) {
               return res.status(412).send('User with name ' + ghostName + ' already exists!');
             } else {
               // If the ghost does not exist, email the admin
-              var mailOptions = utils.getGhostRequestEmailOptions(ghostName, userId);
+              var mailOptions = utils.getGhostRequestEmailOptions(firstName, lastName, about, userId);
               transporter.sendMail(mailOptions, function(err, info) {
                 if (err) {
                   winston.log('error', 'Error sending email: %s', err);
                   return res.status(503).send('An internal error occurred. Please try again.');
                 } else {
-                  return res.status(200).send('Ghost pending approval');
+                  return res.status(200).send('Your ghost submission for ' + ghostName + ' is pending approval');
                 }
               });
             }

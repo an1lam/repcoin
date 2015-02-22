@@ -890,10 +890,19 @@ var utils = {
   },
 
   // name of ghost, user requesting
-  getGhostRequestEmailOptions: function(ghostName, userId) {
-    ghostName = ghostName.replace(' ', '%20');
-    var approveUrl = urlConfig[process.env.NODE_ENV] + '#/ghostRequest/' + userId + '/' + ghostName + '/approve';
-    var denyUrl = urlConfig[process.env.NODE_ENV] + '#/ghostRequest/' + userId + '/' + ghostName + '/deny';
+  getGhostRequestEmailOptions: function(firstname, lastname, about, userId) {
+    var ghostName = firstname + ' ' + lastname;
+    lastname = lastname.replace(' ', '%20');
+    firstname = firstname.replace(' ', '%20');
+    about = about.replace(' ', '%20');
+
+    var argStr = urlConfig[process.env.NODE_ENV] + '#/ghostRequest/'
+      + userId + '/'
+      + firstname + '/'
+      + lastname + '/'
+      + about;
+    var approveUrl = argStr + '/approve';
+    var denyUrl = argStr + '/deny';
     return {
       from: emailConfig.ghostRequest.from,
       to: emailConfig.ghostRequest.to,

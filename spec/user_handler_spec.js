@@ -6,7 +6,6 @@ var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
 var VerificationToken = require('../api/models/VerificationToken.js');
 
-var transporter = require('../config/mailer.js').transporterFactory();
 var winston = require('winston');
 var utils = require('../api/routes/utils.js');
 
@@ -300,6 +299,36 @@ describe('UserHandler: ', function() {
     });
 
     describe('userId: ', function() {
+      describe('ghost: ', function() {
+        it('handles error fetching user', function() {
+          req.params = { user_id: '123', firstname: 'Greatest', lastname: 'Ever', about: 'Hello!' };
+          spyOn(User, 'find').andReturn({
+            exec: function() {
+              return {
+                then: function(cbS, cbF) { return cbF('Error'); }
+              };
+            }
+          });
+          UserHandler.users.userId.ghost.post(req, res);
+          expect(res.status).toHaveBeenCalledWith(503);
+          expect(res.send).toHaveBeenCalledWith('Error');
+        });
+
+        it('notices if the ghost already exists', function() {
+          req.params = { user_id: '123', firstname: 'Greatest', lastname: 'Ever', about: 'Hello!' };
+          spyOn(User, 'find').andReturn({
+            exec: function() {
+              return {
+                then: function(cbS, cbF) { return cbS([{}]); }
+              };
+            }
+          });
+          UserHandler.users.userId.ghost.post(req, res);
+          expect(res.status).toHaveBeenCalledWith(412);
+          expect(res.send).toHaveBeenCalledWith('User with name Greatest Ever already exists!');
+        });
+      });
+
       describe('nudge: ', function() {
         it('handles a null user', function() {
           spyOn(User, 'findById').andReturn({

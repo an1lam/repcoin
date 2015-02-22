@@ -19,14 +19,21 @@ var GhostModal = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var ghostName = this.refs.ghostName.getDOMNode().value.trim();
-    if (!ghostName) {
-      this.setState({ error: true, msg: 'No name provided' });
+    var ghostFirstName = this.refs.ghostFirstName.getDOMNode().value.trim();
+    var ghostLastName = this.refs.ghostLastName.getDOMNode().value.trim();
+    var ghostAbout = this.refs.ghostAbout.getDOMNode().value.trim();
+    if (!ghostFirstName || !ghostLastName || !ghostAbout) {
+      this.setState({ error: true, msg: 'Missing fields' });
       return;
     }
 
+    var url = '/api/users/' + this.props.currentUser._id
+        + '/ghost'
+        + '/' + ghostFirstName
+        + '/' + ghostLastName
+        + '/' + ghostAbout;
     $.ajax({
-      url: '/api/users/' + this.props.currentUser._id + '/ghost/' + ghostName,
+      url: url,
       type: 'POST',
       success: function(msg) {
         this.setState({ error: false, msg: msg });
@@ -64,7 +71,9 @@ var GhostModal = React.createClass({
               <p>{strings.CREATE_A_GHOST}</p>
               {msg}
               <form onSubmit={this.handleSubmit}>
-                <input type="text" className="form-control" ref="ghostName" placeholder="Enter ghost name" />
+                <input type="text" className="form-control" ref="ghostFirstName" placeholder="Ghost first name" />
+                <input type="text" className="form-control" ref="ghostLastName" placeholder="Ghost last name" />
+                <input type="text" className="form-control" ref="ghostAbout" placeholder="Ghost about (max 200 characters)" />
                 <button className="btn btn-primary">Submit</button>
               </form>
             </div>

@@ -15,6 +15,17 @@ var ProfileBox = React.createClass({
     if (this.props.currentUser._id !== this.props.user._id) {
       investmentButton = <InvestmentButton user={this.props.user} currentUser={this.props.currentUser}/>;
     }
+
+    var profileUsername = '';
+    if (this.props.user.ghost) {
+      profileUsername =
+        <div className="profileUsername">{this.props.user.username}
+          <span className="glyphicon glyphicon-sunglasses"></span>
+        </div>;
+    } else {
+      profileUsername = <div className="profileUsername">{this.props.user.username}</div>;
+    }
+
     return (
       <div className="profileBox">
         <div className="col-md-2">
@@ -22,7 +33,7 @@ var ProfileBox = React.createClass({
         </div>
         <div className="col-md-3">
           <div className="row">
-            <div className="profileUsername">{this.props.user.username}</div>
+            {profileUsername}
           </div>
           <div className="row">
             <AboutBox user={this.props.user} currentUser={this.props.currentUser}/>

@@ -115,7 +115,7 @@ var routes = (
     <Route name="team" handler={TeamPage} />
     <Route name="termsOfService" handler={TermsOfServicePage} />
     <Route name="verification" path="/verify/:token/" handler={VerificationPage} />
-    <Route name="ghostRequest" path="/ghostRequest/:userId/:ghostName/:action" handler={GhostRequestPage} />
+    <Route name="ghostRequest" path="/ghostRequest/:userId/:firstname/:lastname/:about/:action" handler={GhostRequestPage} />
     <Route name="verificationWithInvite" path="/verify/:token/:inviterId/:hash" handler={VerificationPage} />
   </Route>
 );

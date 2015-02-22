@@ -13,12 +13,20 @@ var GhostRequestPage = React.createClass({
     var password = this.refs.password.getDOMNode().value;
     $('.pwd').val('');
     var params = this.props.params;
-    this.handleRequestedGhost(params.userId, params.ghostName, params.action, password);
+    this.handleRequestedGhost(params.userId, params.firstname, params.lastname,
+      params.about, params.action, password);
   },
 
-  handleRequestedGhost: function(userId, name, action, password) {
+  handleRequestedGhost: function(userId, firstname, lastname, about, action, password) {
+    var url = '/api/users'
+      + '/' + userId
+      + '/ghost'
+      + '/' + firstname
+      + '/' + lastname
+      + '/' + about
+      + '/' + action;
     $.ajax({
-      url: '/api/users/' + userId + '/ghost/' + name + '/' + action,
+      url: url,
       data: { password: password },
       type: 'POST',
       success: function(msg) {
