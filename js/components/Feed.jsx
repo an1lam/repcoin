@@ -18,24 +18,25 @@ var Feed = React.createClass({
       transactions: [],
       filter: 'all',
       pagination: 0,
+      endOfResults: false,
      };
   },
 
   componentDidMount: function() {
-    this.setTransactions(this.state.filter);
+    this.resetTransactions(this.props);
   },
 
-  generateUrl: function(filter) {
+  generateUrl: function(filter, timeStamp, category) {
     var url;
     switch(this.props.parent) {
       case "ProfilePage":
-        url = '/api/transactions/users/' + this.props.userId + '/' + filter + '/public';
+        url = '/api/transactions/users/' + this.props.userId + '/' + filter + '/public/' + timeStamp;
         break;
       case "CategoryPage":
-        url = '/api/transactions/categories/' + this.props.category;
+        url = '/api/transactions/categories/' + category  + '/' + timeStamp;
         break;
       case "HomePage":
-        url = '/api/feedItems';
+        url = '/api/feedItems/' + timeStamp;
         break;
       default:
         url = '';
@@ -44,14 +45,42 @@ var Feed = React.createClass({
     return url;
   },
 
-  setTransactions: function(filter) {
-    var url = this.generateUrl(filter);
-    // TODO : paginations
+  // Given a new page, reset the pagination and transactions
+  resetTransactions: function(props) {
+    var url = this.generateUrl(props.filter, new Date(), props.category);
     $.ajax({
       url: url,
       dataType: 'json',
       success: function(transactions) {
-        this.setState({ transactions : transactions });
+        this.setState({ transactions : transactions.slice(0,15), pagination: 0 });
+
+        // If we have less than the pagination size + 1, then there are no more pages to fetch
+        if (transactions.length < PAGINATION_SIZE + 1) {
+          this.setState({ endOfResults: true });
+        } else {
+          this.setState({ endOfResults: false });
+        }
+
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+
+  getTransactions: function(filter, timeStamp, category) {
+    var url = this.generateUrl(filter, timeStamp, category);
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      success: function(transactions) {
+        // Concatenate the new transactions with the old ones found
+        this.setState({ transactions : this.state.transactions.concat(transactions.slice(0,15)) });
+
+        // If we have less than the pagination size + 1, then there are no more pages to fetch
+        if (transactions.length < PAGINATION_SIZE + 1) {
+          this.setState({ endOfResults: true });
+        }
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -61,12 +90,14 @@ var Feed = React.createClass({
 
   componentWillReceiveProps: function(newProps) {
     this.setState({ filter: newProps.filter });
-    this.setTransactions(newProps.filter);
+    this.resetTransactions(newProps);
   },
 
+  // Handle clicking the filter buttons on the Profile Page Feed
   handleClick: function(newFilter) {
     this.setState({ filter: newFilter });
-    this.setTransactions(newFilter);
+    var data = { filter: newFilter, date: new Date(), category: this.props.category };
+    this.resetTransactions(data);
   },
 
   getFeedItems: function() {
@@ -107,18 +138,41 @@ var Feed = React.createClass({
     return feedItems;
   },
 
+  // Show newer transactions
+  // Simply go back to transactions that have already been fetched
   showNewer: function(e) {
     e.preventDefault();
+
+    // If we can get any newer, decrement the pagination and reset endOfResults
     if (this.state.pagination - PAGINATION_SIZE > -1) {
-      this.setState({ pagination: this.state.pagination - PAGINATION_SIZE });
+      this.setState({ pagination: this.state.pagination - PAGINATION_SIZE, endOfResults: false });
     }
   },
 
+  // Show older transactions
+  // Increment paginations and fetch new transactions
   showOlder: function(e) {
     e.preventDefault();
-    if (this.state.pagination + PAGINATION_SIZE < this.state.transactions.length) {
-      this.setState({ pagination: this.state.pagination + PAGINATION_SIZE });
+
+    var newPagination = this.state.pagination + PAGINATION_SIZE;
+
+    // If we're on the end of the pagination, we need to fetch more transactions
+    if (this.state.pagination + PAGINATION_SIZE >= this.state.transactions.length) {
+      // Get the date of the last transaction in the list
+      // Set the new timestamp to one millisecond earlier than that
+      var newTimeStamp = new Date(new Date(this.state.transactions[this.state.transactions.length-1].timeStamp)-1);
+      this.getTransactions(this.state.filter, newTimeStamp, this.props.category);
+
+    // Othwerwise, older transactions have already been fetched. Check whether or not the next page is the last
+    } else {
+      // If there are not PAGINATION_SIZE more transactions after this one, then we are at the end of the list
+      if (newPagination + PAGINATION_SIZE >= this.state.transactions.length) {
+        this.setState({ endOfResults: true });
+      }
     }
+
+    // Increment the pagination regardless of whether or not more transactions were fetched
+    this.setState({ pagination: newPagination });
   },
 
   render: function() {
@@ -128,13 +182,17 @@ var Feed = React.createClass({
       feedText = <div className="alert alert-warning no-transactions-warning">{text}</div>;
     }
     var feedItems = this.getFeedItems();
+
+    // Determine whether or not to show the previous btn
     var previousBtn = '';
-    if (this.state.pagination + PAGINATION_SIZE < this.state.transactions.length) {
+    if (!this.state.endOfResults) {
       previousBtn =
         <li className="previous">
           <a href="#" onClick={this.showOlder}><span aria-hidden="true">&larr;</span> Older</a>
         </li>;
     }
+
+    // Determine whether or not to show the next btn
     var nextBtn = '';
     if (this.state.pagination - PAGINATION_SIZE > -1) {
       nextBtn =
