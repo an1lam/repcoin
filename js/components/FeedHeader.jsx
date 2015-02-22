@@ -41,6 +41,11 @@ var FeedHeader = React.createClass({
           <button type="button" ref="To" value="to" onClick={this.propagateClick.bind(this, "to")} className="btn btn-default">To</button>
           <button type="button" ref="From" value="from" onClick={this.propagateClick.bind(this, "from")} className="btn btn-default">From</button>
         </div>;
+      } else if (this.props.isGhost) {
+        buttons = <div className="btn-group">
+          <button type="button" ref="All" value="all"  onClick={this.propagateClick.bind(this, "all")} className="btn btn-default">All</button>
+          <button type="button" ref="Us" value="us" onClick={this.propagateClick.bind(this, "us")} className="btn btn-default">Us</button>
+        </div>;
       } else {
         buttons = <div className="btn-group">
           <button type="button" ref="All" value="all"  onClick={this.propagateClick.bind(this, "all")} className="btn btn-default">All</button>

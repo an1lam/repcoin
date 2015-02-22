@@ -31,7 +31,7 @@ var Feed = React.createClass({
     var url;
     switch(this.props.parent) {
       case "ProfilePage":
-        url = '/api/transactions/users/' + this.props.userId + '/' + filter + '/public/' + timeStamp;
+        url = '/api/transactions/users/' + this.props.user._id + '/' + filter + '/public/' + timeStamp;
         break;
       case "CategoryPage":
         url = '/api/transactions/categories/' + category  + '/' + timeStamp;
@@ -130,7 +130,6 @@ var Feed = React.createClass({
           <li key={curr._id} className="list-group-item"><NewCategoryFeedItem event={curr} /></li>
         );
       } else if (curr.type === 'newghost') {
-        console.log('newghost!');
         feedItems.push(
           <li key={curr._id} className="list-group-item"><NewGhostFeedItem event={curr} /></li>
         );
@@ -207,8 +206,8 @@ var Feed = React.createClass({
 
     }
     return (
-      <div key={this.props.userId} className="feed panel panel-default">
-        <FeedHeader onClick={this.handleClick} isSelf={this.props.isSelf} parent={this.props.parent}/>
+      <div key={this.props.user._id} className="feed panel panel-default">
+        <FeedHeader onClick={this.handleClick} isSelf={this.props.isSelf} parent={this.props.parent} isGhost={this.props.user.ghost}/>
         <ul className="list-group">
           {feedItems}
         </ul>
