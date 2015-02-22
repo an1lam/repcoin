@@ -32,8 +32,10 @@ var EventFeedItem = React.createClass({
       url: url,
       type: 'GET',
       success: function(user) {
-        if (user.picture && user.picture.url) {
-          this.setState({ img: user.picture.url });
+        if (this.isMounted()) {
+          if (user.picture && user.picture.url) {
+            this.setState({ img: user.picture.url });
+          }
         }
       }.bind(this),
       error: function(xhr, status, err) {
