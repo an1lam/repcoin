@@ -16,14 +16,27 @@ var PortfolioTable = React.createClass({
 
   getPortfolioItems: function(privateFields) {
     var portfolioItems = [];
-    var length = this.props.user.portfolio.length;
-    for (var i = 0; i < length; i++) {
-      var category = this.props.user.portfolio[i];
+    var portfolio = this.props.user.portfolio;
+    var sortedPortfolio = this.props.user.portfolio.concat().sort(this.getPortfolioComparator());
+    for (var i = 0; i < sortedPortfolio.length; i++) {
+      var category = sortedPortfolio[i];
       portfolioItems.push(
         <PortfolioItem key={category.category} category={category} privateFields={privateFields} />
       );
     }
     return portfolioItems;
+  },
+
+  getPortfolioComparator: function() {
+    return function(a, b) {
+      if (a.percentile > b.percentile) {
+        return -1;
+      }
+      if (a.percentile < b.percentile) {
+        return 1;
+      }
+      return 0;
+    }
   },
 
   getTotalDividends: function() {
@@ -39,6 +52,7 @@ var PortfolioTable = React.createClass({
         totalDividends += category.investments[j].dividend;
       }
     }
+    totalDividends = Math.floor(totalDividends * 100)/100;
     return totalDividends;
   },
 
