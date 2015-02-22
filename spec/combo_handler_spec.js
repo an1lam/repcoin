@@ -5,6 +5,7 @@ var AddExpertEvent = require('../api/models/AddExpertEvent.js');
 var ComboHandler = require('../api/handlers/combo.js');
 var JoinEvent = require('../api/models/JoinEvent.js');
 var NewCategoryEvent = require('../api/models/NewCategoryEvent.js');
+var NewGhostEvent = require('../api/models/NewGhostEvent.js');
 var Transaction = require('../api/models/Transaction.js');
 
 describe('ComboHandler: ', function() {
@@ -76,6 +77,16 @@ describe('ComboHandler: ', function() {
         }
       };
 
+      newGhostEventPromise = {
+        e1: {
+          timeStamp: new Date('1989')
+        },
+
+        then: function(cb) {
+          return cb([this.e1]);
+        }
+      };
+
       addExpertEventPromise = {
         e1: {
           timeStamp: new Date('1996')
@@ -93,6 +104,7 @@ describe('ComboHandler: ', function() {
         spyOn(Transaction, 'findMostRecent').andReturn(transactionPromise);
         spyOn(JoinEvent, 'findMostRecent').andReturn(joinEventPromise);
         spyOn(NewCategoryEvent, 'findMostRecent').andReturn(newCategoryEventPromise);
+        spyOn(NewGhostEvent, 'findMostRecent').andReturn(newGhostEventPromise);
         spyOn(AddExpertEvent, 'findMostRecent').andReturn(addExpertEventPromise);
         ComboHandler.feedItems.get(req, res);
         expect(res.send).toHaveBeenCalledWith([
@@ -100,7 +112,8 @@ describe('ComboHandler: ', function() {
           { timeStamp: new Date('1995') },
           { timeStamp: new Date('1994') },
           { timeStamp: new Date('1993') },
-          { timeStamp: new Date('1992') }
+          { timeStamp: new Date('1992') },
+          { timeStamp: new Date('1989') },
         ]);
       });
 
