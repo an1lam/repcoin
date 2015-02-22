@@ -18,7 +18,7 @@ var Feed = React.createClass({
       transactions: [],
       filter: 'all',
       pagination: 0,
-      endOfResults: false,
+      finalPaginationIndex: Number.POSITIVE_INFINITY,
      };
   },
 
@@ -55,10 +55,11 @@ var Feed = React.createClass({
         this.setState({ transactions : transactions.slice(0,15), pagination: 0 });
 
         // If we have less than the pagination size + 1, then there are no more pages to fetch
+        // If there are no more pages to fetch, then 0 is the final pagination index
         if (transactions.length < PAGINATION_SIZE + 1) {
-          this.setState({ endOfResults: true });
+          this.setState({ finalPaginationIndex: 0 });
         } else {
-          this.setState({ endOfResults: false });
+          this.setState({ finalPaginationIndex: Number.POSITIVE_INFINITY });
         }
 
       }.bind(this),
@@ -79,7 +80,7 @@ var Feed = React.createClass({
 
         // If we have less than the pagination size + 1, then there are no more pages to fetch
         if (transactions.length < PAGINATION_SIZE + 1) {
-          this.setState({ endOfResults: true });
+          this.setState({ finalPaginationIndex: this.state.pagination });
         }
       }.bind(this),
       error: function(xhr, status, err) {
@@ -143,9 +144,9 @@ var Feed = React.createClass({
   showNewer: function(e) {
     e.preventDefault();
 
-    // If we can get any newer, decrement the pagination and reset endOfResults
+    // If we can get any newer, decrement the pagination
     if (this.state.pagination - PAGINATION_SIZE > -1) {
-      this.setState({ pagination: this.state.pagination - PAGINATION_SIZE, endOfResults: false });
+      this.setState({ pagination: this.state.pagination - PAGINATION_SIZE });
     }
   },
 
@@ -157,18 +158,12 @@ var Feed = React.createClass({
     var newPagination = this.state.pagination + PAGINATION_SIZE;
 
     // If we're on the end of the pagination, we need to fetch more transactions
-    if (this.state.pagination + PAGINATION_SIZE >= this.state.transactions.length) {
+    // Otherwise, we know we can flip to another page, since the button was shown in the first place
+    if (newPagination >= this.state.transactions.length) {
       // Get the date of the last transaction in the list
       // Set the new timestamp to one millisecond earlier than that
       var newTimeStamp = new Date(new Date(this.state.transactions[this.state.transactions.length-1].timeStamp)-1);
       this.getTransactions(this.state.filter, newTimeStamp, this.props.category);
-
-    // Othwerwise, older transactions have already been fetched. Check whether or not the next page is the last
-    } else {
-      // If there are not PAGINATION_SIZE more transactions after this one, then we are at the end of the list
-      if (newPagination + PAGINATION_SIZE >= this.state.transactions.length) {
-        this.setState({ endOfResults: true });
-      }
     }
 
     // Increment the pagination regardless of whether or not more transactions were fetched
@@ -185,7 +180,7 @@ var Feed = React.createClass({
 
     // Determine whether or not to show the previous btn
     var previousBtn = '';
-    if (!this.state.endOfResults) {
+    if (this.state.pagination < this.state.finalPaginationIndex) {
       previousBtn =
         <li className="previous">
           <a href="#" onClick={this.showOlder}><span aria-hidden="true">&larr;</span> Older</a>
