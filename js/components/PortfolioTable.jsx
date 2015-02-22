@@ -26,6 +26,22 @@ var PortfolioTable = React.createClass({
     return portfolioItems;
   },
 
+  getTotalDividends: function() {
+    var length = this.props.user.portfolio.length;
+    var totalDividends = 0;
+    for (var i = 0; i < length; i++) {
+      var category = this.props.user.portfolio[i];
+      if (!category.investments) {
+        continue;
+      }
+
+      for (var j = 0; j < category.investments.length; j++) {
+        totalDividends += category.investments[j].dividend;
+      }
+    }
+    return totalDividends;
+  },
+
   render: function() {
     var isSelf = this.props.currentUser._id === this.props.user._id;
 
@@ -46,6 +62,7 @@ var PortfolioTable = React.createClass({
     }
 
     var portfolioRows = this.getPortfolioItems(privateFields);
+    var totalDividends = this.getTotalDividends();
     var addCategoriesText = '';
 
     if (this.props.user.portfolio.length === 0) {
@@ -59,7 +76,8 @@ var PortfolioTable = React.createClass({
 
     return (
       <div key={this.props.user._id} className="categoriesTable panel panel-default">
-        <PortfolioHeader name={this.props.user.username} reps={repsAvailable} />
+        <PortfolioHeader name={this.props.user.username} reps={repsAvailable}
+          dividends={totalDividends} />
         <table className="table table-bordered table-striped">
           <tr className="PortfolioHeader">
             <th>Category</th>

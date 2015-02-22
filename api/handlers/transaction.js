@@ -9,6 +9,82 @@ var winston = require('winston');
 
 var TransactionHandler = {
   transactions: {
+    category: {
+      findMostRecent: function(req, res) {
+        var timeStamp = req.params.timeStamp;
+        var category = req.params.category;
+        Transaction.findMostRecentByCategory(timeStamp, category).then(function(transactions) {
+          return res.status(200).send(transactions);
+        }, function(err) {
+          winston.log('error', 'Error finding transactions: %s', err.toString());
+          return res.status(503).send(err);
+        });
+      },
+    },
+
+    findMostRecent: function(req, res) {
+      var timeStamp = req.params.timeStamp;
+      Transaction.findMostRecent(timeStamp).then(function(transactions) {
+        return res.status(200).send(transactions);
+      }, function(err) {
+        winston.log('error', 'Error finding transactions: %s', err.toString());
+        return res.status(503).send(err);
+      });
+    },
+
+    userId: {
+      findMostRecent: function(req, res) {
+        var timeStamp = req.params.timeStamp;
+        var filter = req.params.filter;
+        var userId = req.params.user_id;
+
+        var query;
+        switch(filter) {
+          case 'all':
+            query = Transaction.findMostRecentAllUser(timeStamp, userId);
+            break;
+
+          case 'to':
+            query = Transaction.findMostRecentToUser(timeStamp, userId);
+            break;
+
+          case 'from':
+            query = Transaction.findMostRecentFromUser(timeStamp, userId);
+            break;
+
+          case 'us':
+            query = Transaction.findMostRecentBetweenUsers(timeStamp, userId, req.session.passport.user);
+            break;
+
+          default:
+            query = Transaction.findMostRecentAllUser(timeStamp, userId);
+            break;
+        }
+
+        query.then(function(transactions) {
+          return res.status(200).send(transactions);
+        }, function(err) {
+          winston.log('error', 'Error finding transactions: %s', err.toString());
+          return res.status(503).send(err);
+        });
+      },
+    },
+
+    total: {
+      get: function(req, res) {
+        Transaction.getTotalRepsTraded().then(function(result) {
+          var total = Math.floor(result[0].total);
+          if (isNaN(total)) {
+            return res.status(501).send('Error retrieving total reps traded');
+          }
+          return res.status(200).send({ total: total});
+        }, function(err) {
+          winston.log('error', 'Error getting total reps traded: %s', err.toString());
+          return res.status(501).send(err);
+        });
+      },
+    },
+
     post: function(req, res) {
       if (!utils.validateTransactionInputs(req)) {
         winston.log('info', 'Invalid transaction inputs');

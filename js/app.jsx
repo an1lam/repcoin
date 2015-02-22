@@ -103,17 +103,20 @@ var routes = (
     <Route name="faq" handler={AboutPage} />
     <Route name="categories" handler={CategoriesPage} />
     <Route name="category" path="/categories/:category" handler={CategoryPage}/>
+    <Route name="categoryRequest" path="/categoryRequest/:userId/:categoryName/:action/:expert" handler={CategoryRequestPage} />
     <Route name="contactUs" handler={ContactUsPage} />
+    <Route name="home/:firstTime" handler={HomePage} />
     <Route name="home" handler={HomePage} />
     <Route name="login" handler={LoginPage} />
     <Route name="profile" path="/user/:userId" handler={ProfilePage}/>
     <Route name="search" path="/search/:query" handler={SearchPage}/>
+    <Route name="/login/:id/:hash" handler={LoginPage} />
     <Route name="passwordReset" path="/passwordReset/:token" handler={PasswordResetPage} />
     <Route name="team" handler={TeamPage} />
     <Route name="termsOfService" handler={TermsOfServicePage} />
     <Route name="verification" path="/verify/:token/" handler={VerificationPage} />
-    <Route name="categoryRequest" path="/categoryRequest/:userId/:categoryName/:action/:expert" handler={CategoryRequestPage} />
     <Route name="ghostRequest" path="/ghostRequest/:userId/:ghostName/:action" handler={GhostRequestPage} />
+    <Route name="verificationWithInvite" path="/verify/:token/:inviterId/:hash" handler={VerificationPage} />
   </Route>
 );
 Router.run(routes, function (Handler, state) {

@@ -62,6 +62,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
   router.get('/users/list/byids', isAuthenticated, UserHandler.users.listByIds.get);
   router.get('/users/:category/trending/experts/:date', isAuthenticated, UserHandler.users.trending.experts.get);
   router.get('/users', isAuthenticated, UserHandler.users.get);
+  router.get('/users/share', isAuthenticated, UserHandler.users.share.get);
   router.post('/verify', UserHandler.verify.post);
   router.post('/users/:user_id/ghost/:ghostname', censor.isNaughty, isAuthenticated, UserHandler.users.userId.ghost.post);
 
@@ -116,7 +117,8 @@ module.exports = function(router, isAuthenticated, acl, censor) {
               winston.log('error', 'Error saving verification token: %s', err);
               return res.status(501).send('Unable to save new verificationToken');
             }
-            var mailOptions = utils.getVerificationEmailOptions(user.email, verificationString);
+            var mailOptions = utils.getVerificationEmailOptions(
+              user.email, verificationString, req.body.inviterId, req.body.hash);
 
             transporter.sendMail(mailOptions, function(err, info) {
               if (err) {
@@ -331,12 +333,15 @@ module.exports = function(router, isAuthenticated, acl, censor) {
         return res.status(412).send('No token provided');
       }
 
+      // Remove the password reset token
       PasswordResetToken.findOneAndRemove({ 'string': token }, function(err, passwordResetToken) {
         if (err) {
           winston.log('error', 'Error finding password reset token: %s', err);
           return res.status(501).send(err);
+
+        // Check if the password reset token was not found or it is has no user
         } else if (!(passwordResetToken && passwordResetToken.user)) {
-          winston.log('error', 'The user provided (%s) was invalid.', email);
+          winston.log('error', 'Password reset token was not found for token: %s', token);
           return res.status(501).send('User verfication token not found in DB');
         } else {
           var email = passwordResetToken.user;

@@ -59,66 +59,107 @@ TransactionSchema.statics.findTrendingExperts = function(timeStamp, category) {
     { $project: { "to.id": 1 } },
     { $group: { _id: "$to.id", count: {$sum: 1} }  },
     { $sort: { "count": -1 } },
-    { $limit: 10 }
   ]).exec();
 };
 
-// Get filtered transactions based on conditions, obscuring private fields
-// Sorted from most recent to least recent
-TransactionSchema.statics.findPublic = function(conditions) {
+// Get the last 16 transactions involving to a given user
+// Used for pagination
+TransactionSchema.statics.findMostRecentToUser = function(timeStamp, userId) {
+  userId = mongoose.Types.ObjectId(userId);
   return this.aggregate([
-    { $match: conditions },
+    { $match: { "timeStamp": { $lte: new Date(timeStamp) }, "to.id": userId } },
     { $project: privateFilter },
-    { $sort: { "timeStamp": -1}}
+    { $sort: { "timeStamp": -1}},
+    { $limit: 16 },
   ]).exec();
 };
 
-// Get a transaction with the given id, obscuring anonymous fields
-TransactionSchema.statics.findByIdPublic = function(id) {
-  return this.findPublic( { _id: mongoose.Types.ObjectId(id) });
-};
-
-// Get all public transactions to a given user
-TransactionSchema.statics.findByUserIdToPublic = function(userId) {
+// Get the last 16 transactions involving a given user
+// Used for pagination
+TransactionSchema.statics.findMostRecentAllUser = function(timeStamp, userId) {
   userId = mongoose.Types.ObjectId(userId);
-  var to = { "to.id" : userId };
-  return this.findPublic(to);
+  return this.aggregate([
+    { $match: {
+        "timeStamp": { $lte: new Date(timeStamp) },
+        $or: [
+          { "to.id" : userId },
+          { "from.id" : userId, "from.anonymous" : false },
+        ],
+      }
+    },
+    { $project: privateFilter },
+    { $sort: { "timeStamp": -1}},
+    { $limit: 16 },
+  ]).exec();
 };
 
-// Get all public transactions involving a given user
-TransactionSchema.statics.findByUserIdAllPublic = function(userId) {
+// Get the last 16 transactions involving from a given user
+// Used for pagination
+TransactionSchema.statics.findMostRecentFromUser = function(timeStamp, userId) {
   userId = mongoose.Types.ObjectId(userId);
-  var all = {
-    $or: [ { "to.id" : userId },
-           { "from.id" : userId, "from.anonymous" : false }
-         ]
-  };
-  return this.findPublic(all);
+  return this.aggregate([
+    { $match: { "timeStamp": { $lte: new Date(timeStamp) }, "from.id" : userId, "from.anonymous": false } },
+    { $project: privateFilter },
+    { $sort: { "timeStamp": -1}},
+    { $limit: 16 },
+  ]).exec();
 };
 
-// Get all public transactions from a given user
-TransactionSchema.statics.findByUserIdFromPublic = function(userId) {
-    userId = mongoose.Types.ObjectId(userId);
-    var from = {"from.id" : userId, "from.anonymous": false };
-    return this.findPublic(from);
+// Get the last 16 transactions involving between two users
+// Used for pagination
+TransactionSchema.statics.findMostRecentBetweenUsers = function(timeStamp, userId1, userId2) {
+  userId1 = mongoose.Types.ObjectId(userId1);
+  userId2 = mongoose.Types.ObjectId(userId2);
+  return this.aggregate([
+    { $match: {
+        "timeStamp": { $lte: new Date(timeStamp) },
+        $or: [
+          { "from.id" : userId1, "from.anonymous": false, "to.id" : userId2 },
+          { "from.id": userId2, "from.anonymous": false, "to.id": userId1 }
+        ]
+      }
+    },
+    { $project: privateFilter },
+    { $sort: { "timeStamp": -1}},
+    { $limit: 16 },
+  ]).exec();
 };
 
-// Get all public transactions between two users
-TransactionSchema.statics.findByUserIdUsPublic = function(userId1, userId2) {
-    userId1 = mongoose.Types.ObjectId(userId1);
-    userId2 = mongoose.Types.ObjectId(userId2);
-    var between = {
-      $or: [ { "from.id" : userId1, "from.anonymous": false, "to.id" : userId2 },
-        { "from.id": userId2, "from.anonymous": false, "to.id": userId1 }
-      ]
-    };
-    return this.findPublic(between);
+// Get the last 16 from a given date
+// Used for pagination
+TransactionSchema.statics.findMostRecentByCategory = function(timeStamp, category) {
+  return this.aggregate([
+    { $match: { "timeStamp": { $lte: new Date(timeStamp) }, "category": category } },
+    { $project: privateFilter },
+    { $sort: { "timeStamp": -1}},
+    { $limit: 16 },
+  ]).exec();
 };
 
-// Get all transactions for a given category
-// Sorted from most recent to least recent
-TransactionSchema.statics.findByCategoryPublic = function(category) {
-  return this.findPublic({ category: category});
+// Get the last 16 from a given date
+// Used for pagination
+TransactionSchema.statics.findMostRecent = function(timeStamp) {
+  return this.aggregate([
+    { $match: { "timeStamp": { $lte: new Date(timeStamp) }} },
+    { $project: privateFilter },
+    { $sort: { "timeStamp": -1}},
+    { $limit: 16 },
+  ]).exec();
 };
+
+// Get the total number of reps that have been traded
+TransactionSchema.statics.getTotalRepsTraded = function() {
+  return this.aggregate([ {
+    $project: {
+      amount: {
+        $cond: [
+          { $lt: ['$amount', 0] },
+          {$subtract: [0, '$amount'] },
+          '$amount'
+        ]
+      }}}, {
+    $group: { _id: null, total: { $sum: '$amount'} }}
+  ]).exec();
+}
 
 module.exports = mongoose.model('Transaction', TransactionSchema);

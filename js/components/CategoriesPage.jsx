@@ -4,104 +4,47 @@ var $ = require('jquery');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var CategoriesList = require('./CategoriesList.jsx');
 var CategoriesPageFilter = require('./CategoriesPageFilter.jsx');
+var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
+var CategoriesStore = require('../stores/CategoriesStore.js');
 var Footer = require('./Footer.jsx');
 var React = require('react');
 var strings = require('../lib/strings_utils.js');
 var Toolbar = require('./Toolbar.jsx');
 
+function getStateFromStores() {
+  return {
+    categories: CategoriesStore.getAll()
+  };
+}
+
 var CategoriesPage = React.createClass({
   mixins: [AuthenticatedRoute],
 
+  /* This is the typical pattern for retrieving state in a Flux app.
+      We ask different stores for different bags of data
+  */
   getInitialState: function() {
-    return {
-      categories : [],
-      sortedCategories: [],
-    };
+    return getStateFromStores();
   },
 
+  /* Once the component mounts, we want to retrieve our categories, so we
+     create an Action that's going to trigger an api request. We also listen
+     to our Store's event stream waiting for it to emit changes.
+
+     In practice, we'll create Actions which do something and then trigger
+     events on different Stores through the Dispatcher. The View will then
+     update when the Store emits an event for which it's listening.
+
+     In this case, we create an Action to retrieve Categories from the server
+     and wait for our CategoriesStore to tell us that it's retrieved this data.
+  */
   componentDidMount: function() {
-    $.ajax({
-      url : '/api/categories',
-      dataType : 'json',
-      success: function(categories) {
-        this.setState({ categories : categories, sortedCategories: categories });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+    CategoriesStore.addChangeListener(this._onChange);
+    CategoriesActionCreator.getCategories();
   },
 
-  sortResults: function(selected) {
-    var comparator;
-    switch(selected) {
-      case strings.ALPHABETICAL:
-        comparator = this.getAlphabeticalComparator();
-        break;
-      case strings.MARKET_SIZE_HIGH_TO_LOW:
-        comparator = this.getMarketComparator(true);
-        break;
-      case strings.MARKET_SIZE_LOW_TO_HIGH:
-        comparator = this.getMarketComparator(false);
-        break;
-      case strings.EXPERTS_HIGH_TO_LOW:
-        comparator = this.getExpertComparator();
-        break;
-
-      case strings.INVESTORS_HIGH_TO_LOW:
-        comparator = this.getInvestorComparator();
-        break;
-
-      default:
-        comparator = this.getAlphabeticalComparator();
-        break;
-    }
-    this.setState({ sortedCategories: this.state.sortedCategories.sort(comparator) });
-  },
-
-  getExpertComparator: function() {
-    return function(a, b) {
-      if (a.experts > b.experts) {
-        return -1;
-      }
-      if (a.experts < b.experts) {
-        return 1;
-      }
-      return 0;
-    }
-  },
-
-  getInvestorComparator: function() {
-    return function(a, b) {
-      if (a.investors > b.investors) {
-        return -1;
-      }
-      if (a.investors < b.investors) {
-        return 1;
-      }
-      return 0;
-    }
-  },
-
-  getAlphabeticalComparator: function() {
-    return function(a, b) {
-      if (a.name < b.name) {
-        return -1;
-      }
-      if (a.name > b.name) {
-        return 1;
-      }
-      return 0;
-    }
-  },
-
-  getMarketComparator: function(high) {
-    return function(a, b) {
-      if (high) {
-        return b.reps - a.reps;
-      }
-      return a.reps - b.reps;
-    }
+  componentWillUnmount: function() {
+    CategoriesStore.removeChangeListener(this._onChange);
   },
 
   render: function() {
@@ -111,20 +54,30 @@ var CategoriesPage = React.createClass({
           <Toolbar />
         </div>
         <div className="row">
-          <h1 className="col-md-8 categories-page-title">{strings.CHECK_OUT_EXISTING_CATEGORIES}</h1>
+          <h1 className="col-md-8 categories-page-title">
+            {strings.CHECK_OUT_EXISTING_CATEGORIES}
+          </h1>
           <div className="col-md-3 cat-page-filter">
-            <CategoriesPageFilter sortResults={this.sortResults}/>
+            <CategoriesPageFilter onFilter={this._onFilter} />
           </div>
         </div>
         <div className="row">
-          <CategoriesList categories={this.state.sortedCategories} />
+          <CategoriesList categories={this.state.categories} />
         </div>
         <div className="row footerrow">
           <Footer />
         </div>
       </div>
     );
-  }
+  },
+
+  _onChange: function() {
+    this.setState(getStateFromStores());
+  },
+
+  _onFilter: function(evt) {
+    CategoriesActionCreator.sortCategories(evt.target.value);
+  },
 });
 
 module.exports = CategoriesPage;

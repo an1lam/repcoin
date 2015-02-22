@@ -19,6 +19,39 @@ describe('Job utils: ', function() {
     expect(cb.callCount).toEqual(1);
   });
 
+  describe('removeInvestorsWithNoInvestments: ', function() {
+    var users;
+    beforeEach(function() {
+      users = [
+        { portfolio: [{ category: 'Coding', investments: [] }, { category: 'Ballet', investments: [ { amount: 5 } ] } ] },
+        { portfolio: [ { category: 'Coding', investments: [] } ] },
+      ];
+    });
+
+    it('handles error finding users', function() {
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback('Error', null);
+      });
+      utils.removeInvestorsWithNoInvestments(cb);
+      expect(winston.log).toHaveBeenCalledWith('error', 'Error removing investors with no investments: %s', 'Error');
+    });
+
+    it('it removes investors from categories in which they have no investents', function() {
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
+      });
+      spyOn(routeUtils, 'saveAll').andCallFake(function(users, callback) {
+        return callback([]);
+      });
+      utils.removeInvestorsWithNoInvestments(cb);
+      var expectedUsers = [
+        { portfolio: [ { category: 'Ballet', investments: [ { amount: 5 } ] } ] },
+        { portfolio: [] },
+      ];
+      expect(users).toEqual(expectedUsers);
+    });
+  });
+
   describe('recountCategoryRepsExpertsAndInvestors: ', function() {
     var users, category;
     beforeEach(function() {
@@ -35,7 +68,7 @@ describe('Job utils: ', function() {
         return callback('Error', null);
       });
       utils.recountCategoryRepsExpertsAndInvestors(cb);
-      expect(winston.log).toHaveBeenCalledWith('error', 'Error migrating category reps: %s', 'Error');
+      expect(winston.log).toHaveBeenCalledWith('error', 'Error recounting category fields: %s', 'Error');
       expect(category.reps).toEqual(0);
     });
 
@@ -47,11 +80,11 @@ describe('Job utils: ', function() {
         return callback('Error', null);
       });
       utils.recountCategoryRepsExpertsAndInvestors(cb);
-      expect(winston.log).toHaveBeenCalledWith('error', 'Error migrating category reps: %s', 'Error');
+      expect(winston.log).toHaveBeenCalledWith('error', 'Error recounting category fields: %s', 'Error');
       expect(category.reps).toEqual(0);
     });
 
-    it('makes category reps the sum of expert reps in that category', function() {
+    it('correctly recounts reps, experts, and investors', function() {
       spyOn(User, 'find').andCallFake(function(callback) {
         return callback(null, users);
       });

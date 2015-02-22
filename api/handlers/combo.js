@@ -11,29 +11,29 @@ var ComboHandler = {
   feedItems: {
     get: function(req, res) {
       var combined = [];
-
+      var timeStamp = req.params.timeStamp;
       try {
-        Transaction.findPublic({}).then(function(transactions) {
+        Transaction.findMostRecent(timeStamp).then(function(transactions) {
           combined = combined.concat(transactions);
-          return JoinEvent.find().exec();
+          return JoinEvent.findMostRecent(timeStamp);
         }, function(err) {
           winston.log('error', 'Error finding transactions: %s', err.toString());
           throw err;
         }).then(function(joins) {
           combined = combined.concat(joins);
-          return NewCategoryEvent.find().exec();
+          return NewCategoryEvent.findMostRecent(timeStamp);
         }, function(err) {
           winston.log('error', 'Error finding join event: %s', err.toString());
           throw err;
         }).then(function(newCategories) {
           combined = combined.concat(newCategories);
-          return NewGhostEvent.find().exec();
+          return AddExpertEvent.findMostRecent(timeStamp);
         }, function(err) {
           winston.log('error', 'Error finding new category event: %s', err.toString());
           throw err;
         }).then(function(ghosts) {
           combined = combined.concat(ghosts);
-          return AddExpertEvent.find().exec();
+          return NewGhostEvent.findMostRecent(timeStamp);
         }, function(err) {
           winston.log('error', 'Error finding new ghost event: %s', err.toString());
           throw err;
@@ -42,7 +42,7 @@ var ComboHandler = {
           combined.sort(function(a,b) {
             return b.timeStamp - a.timeStamp;
           });
-          return res.status(200).send(combined);
+          return res.status(200).send(combined.slice(0,16));
         }, function(err) {
           winston.log('error', 'Error finding addexpert event: %s', err.toString());
           throw err;

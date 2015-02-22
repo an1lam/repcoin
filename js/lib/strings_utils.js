@@ -110,14 +110,40 @@ var strings = {
   PORTFOLIO_HEADER_REPS: function(amount) {
     return amount + ' reps available';
   },
+  PORTFOLIO_HEADER_DIVIDENDS: function(dividend) {
+    return 'Total Dividends: ' + dividend;
+  },
   PORTFOLIO_TABLE_TITLE: function(name) {
     return name + '\'s Investor Categories';
   },
   REPCOIN: 'Repcoin',
+  REPS: 'Reps',
   REPS_AVAILABLE: 'Reps Available',
   REPS_AVAILABLE_INFO_CONTENT: 'These are all of the reps you currently have to invest. Spend them to start earning dividends!',
   REPS_FROM: 'reps from',
   REPS_TO: 'reps to',
+  TUTORIAL_CONTENTS: [{
+    TITLE: 'Reps',
+    CONTENT: 'Reps are the main thing you need to keep track of on Repcoin. You invest reps ' +
+      'other users in categories for which you\'ve labeled yourself an investor,' +
+      'and other users invest Reps in you for categories in which you\'ve ' +
+      'labeled yourself an expert.',
+    CLASS: 'reps',
+  },
+  {
+    TITLE: 'Feed',
+    CONTENT: 'The feed shows all the action currently happening on Repcoin. Through the Feed, ' +
+      'you can see who\'s investing in whom and what categories are created.',
+    CLASS: 'feed',
+  },
+  {
+    TITLE: 'Investments and Expert Categories',
+    CONTENT: 'Your investments and expert tables summarize your activity on Repcoin. To add ' +
+      'investments, go to someone\'s page and click the \'Invest\' button. To add Expert ' +
+      'categories, go to your Profile Page and click the + sign on the top right of the ' +
+      'Expert Table.',
+    CLASS: 'investments-expert',
+  }],
   REVOKED: 'revoked',
   SAVE: 'Save',
   SELECT_IMAGE: 'Select an image',

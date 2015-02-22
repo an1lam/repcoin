@@ -18,14 +18,23 @@ var VerificationPage = React.createClass({
   },
 
   verifyUser: function(token) {
-    var data = {verificationToken: token};
+    var data;
+    if (this.props.params.inviterId && this.props.params.hash) {
+      data = {
+        verificationToken: token,
+        inviterId: this.props.params.inviterId,
+        hash: this.props.params.hash,
+      };
+    } else {
+      data = { verificationToken: token };
+    }
     $.ajax({
       url: '/api/verify/',
       type: 'POST',
       data: data,
       success: function(user) {
         // A successful verify means the user is already logged in
-        this.transitionTo('/home');
+        this.transitionTo('/home/firstTimeUser');
       }.bind(this),
       error: function(xhr, status, err) {
         this.setState({ error: xhr.responseText });
