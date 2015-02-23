@@ -32,7 +32,7 @@ var CategoriesStore = assign({}, EventEmitter.prototype, {
 
   /* Typically gets called in 'componentWillUnmount' in views */
   removeChangeListener: function(callback) {
-  this.removeListener(CHANGE_EVENT, callback);
+    this.removeListener(CHANGE_EVENT, callback);
   },
 
   /* Returns all of the categories.
@@ -129,7 +129,7 @@ function _getMarketComparator(high) {
 CategoriesStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
   var action = payload.action;
   switch(action.type) {
-    
+
     // Received categories from the server
     case ActionTypes.RECEIVE_CATEGORIES:
       _categories = action.categories;

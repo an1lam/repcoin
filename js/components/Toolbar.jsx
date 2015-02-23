@@ -2,77 +2,54 @@
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
+var AuthStore = require('../stores/AuthStore.js');
+var AuthActionCreator = require('../actions/AuthActionCreator.js');
 var InstantBox = require('./InstantBox.jsx');
 var Logout = require('./Logout.jsx');
 var NotificationDisplay = require('./NotificationDisplay.jsx');
+var NotificationsActionCreator = require('../actions/NotificationsActionCreator.js');
+var NotificationsStore = require('../stores/NotificationsStore.js');
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 var strings = require('../lib/strings_utils.js');
 
+function getStateFromStores() {
+  return {
+    loggedIn: AuthStore.getLoggedIn(),
+    currentUser: AuthStore.getCurrentUser(),
+    notifications: NotificationsStore.getAll(),
+    showNotifications: NotificationsStore.getDisplay()
+  }
+}
+
+
 var Toolbar = React.createClass({
   getInitialState: function() {
-    return {
-      loggedIn: false,
-      currentUser: null,
-      notifications: [],
-      showNotifications: false,
-    };
+    return getStateFromStores();
   },
 
   componentDidMount: function() {
-    auth.loggedIn(function(loggedIn) {
-      this.setState({ loggedIn: loggedIn });
-    }.bind(this));
+    AuthStore.addCurrentUserListener(this._onCurrentUserChange);
+    AuthStore.addLoggedInListener(this._onLoggedInChange);
+    NotificationsStore.addChangeListener(this._onNotificationsChange);
+    AuthActionCreator.getLoggedIn();
+    AuthActionCreator.getCurrentUserAndNotifications();
+  },
 
-    auth.getCurrentUser(function(user) {
-      this.setState({ currentUser: user });
-      if (user) {
-        this.getNotifications(user);
-      }
-    }.bind(this));
+  componentWillUnmount: function() {
+    NotificationsStore.removeChangeListener(this._onNotificationsChange);
+    AuthStore.removeCurrentUserListener(this._onCurrentUserChange);
+    AuthStore.removeLoggedInListener(this._onLoggedInChange);
   },
 
   toggleNotifications: function(e) {
     e.preventDefault();
     if (this.state.showNotifications) {
-      this.markNotificationsRead();
+      NotificationsActionCreator.setNotificationsRead();
     }
-    this.setState({ showNotifications: !this.state.showNotifications });
-  },
 
-  getNotifications: function(user) {
-    var url = '/api/notifications/user/' + user._id + '/unread';
-    $.ajax({
-      url: url,
-      success: function(notifications) {
-        this.setState({ notifications: notifications });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(xhr.responseText);
-      }.bind(this)
-    });
-  },
-
-  markNotificationsRead: function() {
-    var id = this.state.currentUser._id;
-    var url = '/api/notifications/user/' + id + '/markread';
-    var notificationIds = [];
-    for (var i = 0; i < this.state.notifications.length; i++) {
-      notificationIds.push(this.state.notifications[i]._id);
-    }
-    var data = { notificationIds: notificationIds };
-    $.ajax({
-      url: url,
-      type: 'PUT',
-      data: data,
-      success: function() {
-        this.setState({ notifications: [] });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(xhr.responseText);
-      }.bind(this)
-    });
+    NotificationsActionCreator.toggleNotificationsDisplay();
   },
 
   render: function() {
@@ -87,6 +64,7 @@ var Toolbar = React.createClass({
           <Link to="profile" params={{userId: this.state.currentUser._id}}>{this.state.currentUser.firstname}</Link>
         </div>;
       var notificationTotal = '';
+
       var notificationLen = this.state.notifications.length;
       if (notificationLen !== 0) {
         notificationTotal = <span className="label label-primary label-as-badge">{notificationLen}</span>;
@@ -126,7 +104,19 @@ var Toolbar = React.createClass({
         </div>
       </div>
     );
-  }
+  },
+
+  _onCurrentUserChange: function() {
+    this.setState(getStateFromStores());
+  },
+
+  _onLoggedInChange: function() {
+    this.setState(getStateFromStores());
+  },
+
+  _onNotificationsChange: function() {
+    this.setState(getStateFromStores());
+  },
 });
 
 module.exports = Toolbar;
