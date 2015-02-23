@@ -14,5 +14,43 @@ module.exports = {
       type: ActionTypes.RECEIVE_CATEGORIES,
       categories: categories
     });
-  }
+  },
+
+  receiveCurrentUser: function(user) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_CURRENT_USER,
+      user: user
+    });
+  },
+
+  receiveLoggedIn: function(loggedIn) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_LOGGED_IN,
+      loggedIn: loggedIn
+    });
+  },
+
+  receiveCurrentUserAndNotifications: function(user, notifications) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_CURRENT_USER_AND_NOTIFICATIONS,
+      user: user,
+      notifications: notifications
+    });
+  },
+
+  receiveNotifications: function(notifications) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_NOTIFICATIONS,
+      notifications: notifications
+    });
+  },
+
+  receiveNotificationsRead: function() {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_NOTIFICATIONS_READ
+    });
+  },
+
+
+
 };
