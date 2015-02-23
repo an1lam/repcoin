@@ -11,13 +11,13 @@ var winston = require('winston');
 module.exports = function(router, isAuthenticated, acl) {
   router.post('/transactions', isAuthenticated, acl.isAdminOrFrom, TransactionHandler.transactions.post);
 
+  // Get the total reps traded on Repcoin so far
+  router.get('/transactions/totaltraded', TransactionHandler.transactions.total.get);
+
   // Get most recent transactios by general, category, or userId
   router.get('/transactions/:timeStamp', isAuthenticated, TransactionHandler.transactions.findMostRecent);
   router.get('/transactions/categories/:category/:timeStamp', isAuthenticated, TransactionHandler.transactions.category.findMostRecent);
   router.get('/transactions/users/:user_id/:filter/public/:timeStamp', isAuthenticated, TransactionHandler.transactions.userId.findMostRecent);
-
-  // Get the total reps traded on Repcoin so far
-  router.get('/transactions/totaltraded', TransactionHandler.transactions.total.get);
 
 ///////// Routes that have /transcations/:transaction_id ////////
   router.route('/transactions/:transaction_id')
