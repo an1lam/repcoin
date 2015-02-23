@@ -70,7 +70,6 @@ module.exports = {
   },
 
   setNotificationsRead: function(currentUserId, notificationIds) {
-    console.log(notificationIds);
     var url = '/api/notifications/user/' + currentUserId + '/markread';
     var data = { notificationIds: notificationIds };
     $.ajax({

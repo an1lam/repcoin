@@ -13,7 +13,9 @@ module.exports = {
 
     var notificationIds = NotificationsStore.getAllIds();
     var currentUserId = AuthStore.getCurrentUser()._id;
-    api.setNotificationsRead(currentUserId, notificationIds);
+    if (currentUserId && notificationIds.length > 1) {
+      api.setNotificationsRead(currentUserId, notificationIds);
+    }
   },
 
   toggleNotificationsDisplay: function() {
