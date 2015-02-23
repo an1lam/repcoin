@@ -9,9 +9,12 @@ var ActionTypes = RepcoinConstants.ActionTypes;
 
 var CURRENT_USER_CHANGE = 'current_user';
 var LOGGED_IN_CHANGE = 'logged_in';
+var STATUS_CHANGE = 'status';
 
 var _currentUser = null;
 var _loggedIn = false;
+var _showLogin = false;
+var _signUpStatus = '';
 
 var AuthStore = assign({}, EventEmitter.prototype, {
 
@@ -23,6 +26,10 @@ var AuthStore = assign({}, EventEmitter.prototype, {
 
   emitLoggedInChange: function() {
     this.emit(LOGGED_IN_CHANGE);
+  },
+
+  emitStatusChange: function() {
+    this.emit(STATUS_CHANGE);
   },
 
   addCurrentUserListener: function(callback) {
@@ -41,12 +48,32 @@ var AuthStore = assign({}, EventEmitter.prototype, {
     this.removeListener(LOGGED_IN_CHANGE, callback);
   },
 
+  addStatusListener: function(callback) {
+    this.on(STATUS_CHANGE, callback);
+  },
+
+  removeStatusListener: function(callback) {
+    this.removeListener(STATUS_CHANGE, callback);
+  },
+
   getCurrentUser: function() {
     return _currentUser;
   },
 
   getLoggedIn: function() {
     return _loggedIn;
+  },
+
+  getShowLogin: function() {
+    return _showLogin;
+  },
+
+  getSignUpStatus: function() {
+    return _signUpStatus;
+  },
+
+  toggleShowLogin: function() {
+    _showLogin = !_showLogin;
   }
 });
 
@@ -68,6 +95,21 @@ AuthStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
       AuthStore.emitLoggedInChange();
       break;
 
+    case ActionTypes.TOGGLE_SHOW_LOGIN:
+      AuthStore.toggleShowLogin();
+      AuthStore.emitStatusChange();
+
+    case ActionTypes.SIGN_UP_USER:
+      _signUpStatus = strings.VALIDATING;
+      AuthStore.emitStatusChange();
+
+    case ActionTypes.SIGN_UP_FAILED:
+      _signUpStatus = action.error;
+      AuthStore.emitStatusChange();
+
+    case ActionTypes.VERIFICATION_EMAIL_SENT:
+      _signUpStatus = strings.VERIFICATION_EMAIL_SENT;
+      AuthStore.emitStatusChange();
     default:
       // do nothing
 
