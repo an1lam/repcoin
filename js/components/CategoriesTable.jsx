@@ -98,15 +98,14 @@ var CategoriesTable = React.createClass({
   },
 
   // Get the categories rows for the table
-  // Show reps if includeReps is true
-  getCategoriesItems: function(includeReps) {
+  getCategoriesItems: function() {
     var categoriesItems = [];
     var length = this.props.user.categories.length;
     var category;
     for (var i = 0; i < length; i++) {
       var category = this.props.user.categories[i];
       categoriesItems.push(
-        <CategoriesItem userId={this.props.user._id} category={category} includeReps={includeReps}
+        <CategoriesItem userId={this.props.user._id} category={category}
           deleteMode={this.state.deleteMode} showDeleteBox={this.showDeleteBox} />
       );
     }
@@ -150,17 +149,10 @@ var CategoriesTable = React.createClass({
       }
     }
 
-    var includeReps = false;
-    var repsHeader = '';
-    if (isSelf) {
-        includeReps = true;
-        repsHeader = <th>Reps</th>;
-    }
-
     // The key for the expert table will change if a category is deleted
     var length = this.props.user.categories.length;
     var key = this.props.user._id + length;
-    var categoryRows = this.getCategoriesItems(includeReps);
+    var categoryRows = this.getCategoriesItems();
     var addCategoriesText = '';
     if (length === 0) {
       if (isSelf) {
@@ -188,8 +180,8 @@ var CategoriesTable = React.createClass({
             <tr>
               <th>Category</th>
               <th>Percentile</th>
+              <th>Reps Received</th>
               <th>Top Investors (Percentile)</th>
-              {repsHeader}
             </tr>
             {categoryRows}
           </tbody>
