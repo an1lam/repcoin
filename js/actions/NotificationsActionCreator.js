@@ -13,7 +13,7 @@ module.exports = {
 
     var notificationIds = NotificationsStore.getAllIds();
     var currentUserId = AuthStore.getCurrentUser()._id;
-    if (currentUserId && notificationIds.length > 1) {
+    if (currentUserId && notificationIds.length > 0) {
       api.setNotificationsRead(currentUserId, notificationIds);
     }
   },
