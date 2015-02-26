@@ -4,51 +4,43 @@ var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 
-var $ = require('jquery');
-var auth = require('../auth.jsx');
+var AuthActionCreator = require('../actions/AuthActionCreator.js')
+var AuthStore = require('../stores/AuthStore.js');
+var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
+var CategoriesStore = require('../stores/CategoriesStore.js');
 var Footer = require('./Footer.jsx');
 var LoggedInRoute = require('../mixins/LoggedInRoute.jsx');
 var Login = require('./Login.jsx');
 var Signup = require('./Signup.jsx');
 var strings = require('../lib/strings_utils.js');
 
+function getStateFromStores() {
+  return {
+    totalTraded: CategoriesStore.getTotalTraded(),
+    showLogin: AuthStore.getShowLogin(),
+  }
+}
+
 var LoginPage = React.createClass({
   mixins: [ Router.Navigation ],
 
   getInitialState: function() {
-    return {
-      totalTraded : null,
-      showLogin   : false,
-    };
+    return getStateFromStores();
   },
 
   componentDidMount: function() {
-    // Redirect to the home page if logged in
-    auth.loggedIn(function(loggedIn) {
-      if (loggedIn) {
-        this.transitionTo('/home');
-      }
-    }.bind(this));
-
-    this.getTotalRepsTraded();
+    CategoriesStore.addTotalTradedChangeListener(this._onChange);
+    AuthStore.addStatusListener(this._onChange);
+    CategoriesActionCreator.getTotalTraded();
   },
 
-  getTotalRepsTraded: function() {
-    $.ajax({
-      url: '/api/transactions/totaltraded',
-      success: function(res) {
-        this.setState({ totalTraded: res.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(xhr.responseText);
-      }.bind(this)
-    });
+  componentWillUnmount: function() {
+    CategoriesStore.removeTotalTradedChangeListener(this._onChange);
+    AuthStore.removeStatusListener(this._onChange);
   },
 
   handleLoginClick: function() {
-    this.setState({
-      showLogin: !this.state.showLogin,
-    });
+    AuthActionCreator.toggleShowLogin();
   },
 
   render: function() {
@@ -86,7 +78,11 @@ var LoginPage = React.createClass({
         </div>
       </div>
     );
-  }
+  },
+
+  _onChange: function() {
+    this.setState(getStateFromStores());
+  },
 });
 
 module.exports = LoginPage;

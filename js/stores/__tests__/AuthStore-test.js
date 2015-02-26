@@ -5,30 +5,13 @@ jest.dontMock('object-assign');
 jest.dontMock('keymirror');
 jest.dontMock('react/lib/merge');
 
-
 describe('CategoriesStore', function() {
 
   var RepcoinConstants = require('../../constants/RepcoinConstants.js');
+  var strings = require('../../lib/strings_utils.js');
   var AppDispatcher;
   var AuthStore;
   var cb;
-
-  var actionReceiveCurrentUser = {
-    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
-    action: {
-      type: RepcoinConstants.ActionTypes.RECEIVE_CURRENT_USER_AND_NOTIFICATIONS,
-      user: {username: 'Test User'},
-      notifications: [],
-    }
-  };
-
-  var actionReceiveLoggedIn = {
-    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
-    action: {
-      type: RepcoinConstants.ActionTypes.RECEIVE_LOGGED_IN,
-      loggedIn: true
-    }
-  }
 
   beforeEach(function() {
     AppDispatcher = require('../../dispatcher/RepcoinAppDispatcher');
@@ -47,15 +30,145 @@ describe('CategoriesStore', function() {
     expect(loggedIn).toEqual(false);
   });
 
+  var actionReceiveCurrentUser = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.RECEIVE_CURRENT_USER_AND_NOTIFICATIONS,
+      user: {username: 'Test User'},
+      notifications: [],
+    }
+  };
+
   it('gets the current user after it\'s received from the server', function() {
     callback(actionReceiveCurrentUser);
     var user = AuthStore.getCurrentUser();
     expect(user).toEqual({username: 'Test User'});
-  })
+  });
+
+  var actionReceiveLoggedIn = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.RECEIVE_LOGGED_IN,
+      loggedIn: true
+    }
+  };
 
   it('gets loggedIn after it\'s received from the server', function() {
     callback(actionReceiveLoggedIn);
     var loggedIn = AuthStore.getLoggedIn();
     expect(loggedIn).toEqual(true);
-  })
+  });
+
+  var actionLoginFailed = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.LOGIN_FAILED,
+      error: 'Error!'
+    }
+  };
+
+  it('handles errors from the server when logging in', function() {
+    callback(actionLoginFailed);
+    var error = AuthStore.getLoginError();
+    var msg = AuthStore.getLoginStatus();
+    expect(error).toEqual(true);
+    expect(msg).toEqual('Error!');
+  });
+
+  var actionForgotPassword = {
+    source: RepcoinConstants.PayloadSources.VIEW_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.FORGOT_PASSWORD,
+    }
+  };
+
+  var actionToggleShowLogin = {
+    source: RepcoinConstants.PayloadSources.VIEW_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.TOGGLE_SHOW_LOGIN
+    }
+  };
+
+  it('toggles forgot password and show login', function() {
+    callback(actionForgotPassword);
+    callback(actionToggleShowLogin);
+
+    expect(AuthStore.getShowLogin()).toEqual(true);
+    expect(AuthStore.getForgotPassword()).toEqual(true);
+  });
+
+  var actionVerificationEmailSent = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.VERIFICATION_EMAIL_SENT
+    }
+  };
+
+  it('alerts the user the verification email has been sent', function() {
+    callback(actionVerificationEmailSent);
+
+    expect(AuthStore.getSignUpError()).toEqual(false);
+    expect(AuthStore.getSignUpStatus()).toEqual(strings.VERIFICATION_EMAIL_SENT);
+  });
+
+  var actionSignUpFailed = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.SIGN_UP_FAILED,
+      error: 'Error!'
+    }
+  };
+
+  it('handles errors from the server when signing up', function() {
+    callback(actionSignUpFailed);
+
+    expect(AuthStore.getSignUpError()).toEqual(true);
+    expect(AuthStore.getSignUpStatus()).toEqual('Error!');
+  });
+
+
+  var actionSigningUpUser = {
+    source: RepcoinConstants.PayloadSources.VIEW_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.SIGN_UP_USER
+    }
+  };
+
+  it('alerts the user that their account is being validated', function() {
+    callback(actionSigningUpUser);
+
+    expect(AuthStore.getSignUpError()).toEqual(false);
+    expect(AuthStore.getSignUpStatus()).toEqual(strings.VALIDATING);
+  });
+
+  var actionResetUserPasswordSuccess = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.PASSWORD_RESET_EMAIL_SENT,
+      email: 'a@b.com'
+    }
+  };
+
+  var actionResetUserPasswordFail = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.PASSWORD_RESET_EMAIL_FAILED,
+      msg: 'Unrecognized email address.'
+    }
+  };
+
+  it('handles success and failure cases for password reset emails',
+    function() {
+    callback(actionResetUserPasswordFail);
+
+    expect(AuthStore.getPasswordResetStatus()).toEqual(
+      'Unrecognized email address.');
+    expect(AuthStore.getPasswordResetError()).toEqual(true);
+
+    callback(actionResetUserPasswordSuccess);
+    expect(AuthStore.getPasswordResetStatus()).toEqual(
+      'An email has been sent to a@b.com with a link to reset your password.');
+    expect(AuthStore.getPasswordResetError()).toEqual(false);
+  });
+
 });

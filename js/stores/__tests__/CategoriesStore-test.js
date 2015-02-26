@@ -12,22 +12,6 @@ describe('CategoriesStore', function() {
   var CategoriesStore;
   var cb;
 
-  var actionReceiveCategories = {
-    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
-    action: {
-      type: RepcoinConstants.ActionTypes.RECEIVE_CATEGORIES,
-      categories: [{'name': 'foo'}, {'name': 'bar'}]
-    }
-  };
-
-  var actionSortCategories = {
-    source: RepcoinConstants.PayloadSources.VIEW_ACTION,
-    action: {
-      type: RepcoinConstants.ActionTypes.SORT_CATEGORIES,
-      selected: 'Alphabetical'
-    }
-  };
-
   beforeEach(function() {
     AppDispatcher = require('../../dispatcher/RepcoinAppDispatcher');
     CategoriesStore = require('../CategoriesStore');
@@ -43,19 +27,52 @@ describe('CategoriesStore', function() {
     expect(all).toEqual([]);
   });
 
+
+  var actionReceiveCategories = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.RECEIVE_CATEGORIES,
+      categories: [{'name': 'foo'}, {'name': 'bar'}]
+    }
+  };
+
   it('gets the categories returned from the server', function() {
     callback(actionReceiveCategories);
+
     var all = CategoriesStore.getAll();
     expect(all.length).toBe(2);
     expect(all[0]).toEqual({ name: 'foo'});
-  })
+  });
+
+  var actionSortCategories = {
+    source: RepcoinConstants.PayloadSources.VIEW_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.SORT_CATEGORIES,
+      selected: 'Alphabetical'
+    }
+  };
 
   it('sorts the categories by selected', function() {
     callback(actionReceiveCategories);
     callback(actionSortCategories);
+
     var all = CategoriesStore.getAll();
     expect(all.length).toBe(2);
     expect(all[0]).toEqual({ name: 'bar' });
+  });
+
+  var actionReceiveTotalTraded = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.RECEIVE_TOTAL_TRADED,
+      totalTraded: 1000
+    }
+  };
+
+  it('stores the total traded from the server', function() {
+    callback(actionReceiveTotalTraded);
+
+    expect(CategoriesStore.getTotalTraded()).toEqual('1,000');
   })
 
 })

@@ -16,6 +16,14 @@ module.exports = {
     RepcoinAppDispatcher.handleViewAction({
       type: ActionTypes.SORT_CATEGORIES,
       selected: selected
-    })
+    });
+  },
+
+  getTotalTraded: function() {
+    RepcoinAppDispatcher.handleViewAction({
+      type: ActionTypes.GET_TOTAL_TRADED
+    });
+
+    api.getTotalRepsTraded();
   },
 };
