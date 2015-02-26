@@ -368,6 +368,7 @@
 }
 
 .pictureBox {
+  max-width:180px;
   display:inline-block;
   position:relative;
 }
