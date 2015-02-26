@@ -1,103 +1,49 @@
 'use strict';
 var $ = require('jquery');
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute');
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 var Navigation = Router.Navigation;
+
+var AuthActionCreator = require('../actions/AuthActionCreator.js');
+var AuthStore = require('../stores/AuthStore.js')
 var strings = require('../lib/strings_utils.js');
+
+
+function getStateFromStores() {
+  return {
+    error: AuthStore.getSignUpError(),
+    msg: AuthStore.getSignUpStatus(),
+    currentUser: AuthStore.getCurrentUser(),
+  };
+}
 
 var Signup = React.createClass({
   mixins: [Navigation],
 
   getInitialState: function() {
-    return {
-      error: false,
-      msg: null
-    };
+    return getStateFromStores();
+  },
+
+  componentDidMount: function() {
+    AuthStore.addStatusListener(this._onChange);
+    AuthStore.addCurrentUserListener(this._onUserChange);
+  },
+
+  componentWillUnmount: function() {
+    AuthStore.removeStatusListener(this._onChange);
+    AuthStore.removeCurrentUserListener(this._onUserChange);
   },
 
   handleFacebookClick: function(e) {
     e.preventDefault();
-    FB.login(this.loginCallback, { scope: 'email', return_scopes: true });
+    AuthActionCreator.loginWithFacebook();
   },
 
-  loginCallback: function(response) {
-    if (response.status === 'connected') {
-      this.loginUser(response.authResponse.accessToken);
-      } else if (response.status === 'not_authorized') {
-      this.setState({ error: true, msg: strings.FACEBOOK_UNAUTHORIZED_CREDENTIALS });
-    } else {
-      this.setState({ error: true, msg: strings.ERROR_LOGGING_INTO_FACEBOOK });
-    }
-  },
-
-  loginUser: function(accessToken) {
-    $.ajax({
-      url: '/api/login/facebook',
-      type: 'POST',
-      data: {
-        access_token: accessToken,
-        hash: this.props.hash,
-        inviterId: this.props.id
-      },
-      success: function(user) {
-        // Only rewrite the picture if it is not there
-        if (!user.picture) {
-          this.getFacebookProfilePicture(user);
-        } else {
-          this.transitionTo('/home');
-        }
-      }.bind(this),
-      error: function(xhr, status, err) {
-        if (xhr.responseText !== 'Error') {
-          this.setState({ error: true, msg: xhr.responseText });
-        }
-        console.error(xhr.responseText);
-      }.bind(this)
-    });
-  },
-
-  getFacebookProfilePicture: function(user) {
-    var cb = function(user) {
+  transitionIfReady: function() {
+    if (this.state.currentUser) {
       this.transitionTo('/home');
-    }.bind(this);
-
-    FB.api('/me/picture',
-      {
-        'redirect': false,
-        'type': 'normal',
-        'width': 200,
-        'height': 200
-      },
-      function (response) {
-        if (response && !response.error) {
-          this.saveFacebookPhoto(user,
-            response.data.url, cb);
-        } else {
-          cb(user);
-        }
-      }.bind(this)
-    );
-  },
-
-  saveFacebookPhoto: function(user, link, cb) {
-    var url = '/api/users/'+ user._id;
-
-    // Mark facebook pictures as such with the special public_id
-    user.picture = { url: link, public_id: 'FACEBOOK' };
-    $.ajax({
-      url: url,
-      type: 'PUT',
-      data: user,
-      success: function(user) {
-        cb(user);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(status, err.toString());
-        cb(user)
-      }.bind(this)
-    });
+    }
   },
 
   handleSubmit: function(e) {
@@ -108,58 +54,13 @@ var Signup = React.createClass({
     var email2 = this.refs.email2.getDOMNode().value.trim();
     var password = this.refs.password.getDOMNode().value;
     var password2 = this.refs.password2.getDOMNode().value;
+    AuthActionCreator.signUpUser(
+      firstname, lastname, email, email2, password, password2, this.props.hash,
+      this.props.id);
     $(".pwd-field1").val('');
     $(".pwd-field2").val('');
-
-    if (!firstname || !lastname || !email || !email2 || !password || !password2) {
-      this.setState({ error: true, msg: strings.FIELDS_BLANK });
-      return;
-    }
-
-    if (email !== email2) {
-      this.setState({ error: true, msg: strings.EMAILS_DO_NOT_MATCH });
-      return;
-    }
-    if (password !== password2) {
-      this.setState({ error: true, msg: strings.PASSWORDS_DO_NOT_MATCH });
-      return;
-    }
-
-    this.setState({ error: false, msg: strings.VALIDATING });
-    var data = {
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
-      password: password,
-      hash: this.props.hash,
-      inviterId: this.props.id,
-    };
-    $.ajax({
-      url: '/api/users',
-      type: 'POST',
-      data: data,
-      success: function() {
-        this.setState({ error: false, msg: strings.VERIFICATION_EMAIL_SENT });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        if (xhr.responseText !== 'Error') {
-          this.setState({ error: true, msg: xhr.responseText });
-        }
-        console.error(xhr.responseText);
-      }.bind(this)
-    });
   },
 
-  logShared: function(id, hash) {
-    $.ajax({
-      url: '/api/users/share',
-      type: 'POST',
-      data: {
-        id: id,
-        hash: hash,
-      },
-    });
-  },
 
   render: function() {
     var msg = '';
@@ -186,7 +87,16 @@ var Signup = React.createClass({
         </form>
       </div>
     );
-  }
+  },
+
+  _onChange: function() {
+    this.setState(getStateFromStores());
+  },
+
+  _onUserChange: function() {
+    this.setState(getStateFromStores());
+    this.transitionIfReady();
+  },
 });
 
 module.exports = Signup;

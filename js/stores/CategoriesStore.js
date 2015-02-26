@@ -8,8 +8,10 @@ var RepcoinConstants = require('../constants/RepcoinConstants');
 var ActionTypes = RepcoinConstants.ActionTypes;
 
 var CHANGE_EVENT = 'change';
+var TOTAL_TRADED_CHANGE_EVENT = 'total_traded_change';
 
 var _categories = [];
+var _totalTraded = null;
 
 /* This will be the canonical example of a store.
    Besides 'sortCategories', all the functions in this store
@@ -25,6 +27,10 @@ var CategoriesStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
+  emitTotalTradedChange: function() {
+    this.emit(TOTAL_TRADED_CHANGE_EVENT);
+  },
+
   /* Function for registering view's change handlers */
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
@@ -35,12 +41,28 @@ var CategoriesStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
+  addTotalTradedChangeListener: function(callback) {
+    this.on(TOTAL_TRADED_CHANGE_EVENT, callback);
+  },
+
+  removeTotalTradedChangeListener: function(callback) {
+    this.removeListener(TOTAL_TRADED_CHANGE_EVENT, callback);
+  },
+
   /* Returns all of the categories.
      This function is called both by the 'CategoriesPage' when it mounts
      and is triggered by Actions passed to this store through the Dispatcher
   */
   getAll: function() {
     return _categories;
+  },
+
+  getTotalTraded: function() {
+    if (_totalTraded) {
+      return _totalTraded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } else {
+      return '';
+    }
   },
 
   /* Sorts our '_categories' variable which will then be used to update
@@ -140,6 +162,10 @@ CategoriesStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) 
     case ActionTypes.SORT_CATEGORIES:
       CategoriesStore.sortCategories(action.selected);
       CategoriesStore.emitChange();
+
+    case ActionTypes.RECEIVE_TOTAL_TRADED:
+      _totalTraded = action.totalTraded;
+      CategoriesStore.emitTotalTradedChange();
     default:
       // do nothing
   }

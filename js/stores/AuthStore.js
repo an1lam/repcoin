@@ -14,7 +14,9 @@ var STATUS_CHANGE = 'status';
 var _currentUser = null;
 var _loggedIn = false;
 var _showLogin = false;
-var _signUpStatus = '';
+var _signUpStatus = {error: false, msg: ''};
+var _loginStatus = {error: false, msg: ''};
+var _forgotPassword = false;
 
 var AuthStore = assign({}, EventEmitter.prototype, {
 
@@ -60,6 +62,10 @@ var AuthStore = assign({}, EventEmitter.prototype, {
     return _currentUser;
   },
 
+  getForgotPassword: function() {
+    return _forgotPassword;
+  },
+
   getLoggedIn: function() {
     return _loggedIn;
   },
@@ -69,7 +75,19 @@ var AuthStore = assign({}, EventEmitter.prototype, {
   },
 
   getSignUpStatus: function() {
-    return _signUpStatus;
+    return _signUpStatus.msg;
+  },
+
+  getSignUpError: function() {
+    return _signUpStatus.error;
+  },
+
+  getLoginStatus: function() {
+    return _loginStatus.msg;
+  },
+
+  getLoginError: function() {
+    return _loginStatus.error;
   },
 
   toggleShowLogin: function() {
@@ -81,6 +99,16 @@ AuthStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
   var action = payload.action;
 
   switch(action.type) {
+    case ActionTypes.FORGOT_PASSWORD:
+      _forgotPassword = true;
+      AuthStore.emitStatusChange();
+      break;
+
+    case ActionTypes.LOGIN_FAILED:
+      _loginStatus.msg = action.error;
+      _loginStatus.error = true;
+      AuthStore.emitStatusChange();
+      break;
 
     // Set our current user
     case ActionTypes.RECEIVE_CURRENT_USER_AND_NOTIFICATIONS:
@@ -88,6 +116,11 @@ AuthStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
       AuthStore.emitCurrentUserChange();
       break;
 
+    case ActionTypes.RECEIVE_CURRENT_USER_AND_LOGIN:
+      _currentUser = action.user;
+      _loggedIn = true;
+      AuthStore.emitCurrentUserChange();
+      break;
 
     // Let listeners know we're logged in
     case ActionTypes.RECEIVE_LOGGED_IN:
@@ -95,21 +128,29 @@ AuthStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
       AuthStore.emitLoggedInChange();
       break;
 
+    case ActionTypes.SIGN_UP_USER:
+      _signUpStatus.msg = strings.VALIDATING;
+      _signUpStatus.error = false;
+      AuthStore.emitStatusChange();
+      break;
+
+    case ActionTypes.SIGN_UP_FAILED:
+      _signUpStatus.msg = action.error;
+      _signUpStatus.error = true;
+      AuthStore.emitStatusChange();
+      break;
+
     case ActionTypes.TOGGLE_SHOW_LOGIN:
       AuthStore.toggleShowLogin();
       AuthStore.emitStatusChange();
-
-    case ActionTypes.SIGN_UP_USER:
-      _signUpStatus = strings.VALIDATING;
-      AuthStore.emitStatusChange();
-
-    case ActionTypes.SIGN_UP_FAILED:
-      _signUpStatus = action.error;
-      AuthStore.emitStatusChange();
+      break;
 
     case ActionTypes.VERIFICATION_EMAIL_SENT:
-      _signUpStatus = strings.VERIFICATION_EMAIL_SENT;
+      _signUpStatus.msg = strings.VERIFICATION_EMAIL_SENT;
+      _signUpStatus.error = false;
       AuthStore.emitStatusChange();
+      break;
+
     default:
       // do nothing
 

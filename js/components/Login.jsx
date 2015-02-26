@@ -1,120 +1,62 @@
 'use strict';
 var auth = require('../auth.jsx');
+var AuthActionCreator = require('../actions/AuthActionCreator.js');
+var AuthStore = require('../stores/AuthStore.js');
 var React = require('react');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var PasswordReset = require('./PasswordReset.jsx');
 var strings = require('../lib/strings_utils.js');
 
+function getStateFromStores() {
+  return {
+    msg: AuthStore.getLoginStatus(),
+    error: AuthStore.getLoginError(),
+    forgotPassword: AuthStore.getForgotPassword(),
+    currentUser: AuthStore.getCurrentUser(),
+  }
+}
+
 var Login = React.createClass({
   mixins: [Navigation],
 
   getInitialState: function() {
-    return {
-      error: false,
-      forgotPassword: false,
-      msg: null,
-    };
+    return getStateFromStores();
+  },
+
+  componentDidMount: function() {
+    AuthStore.addStatusListener(this._onChange);
+    AuthStore.addCurrentUserListener(this._onUserChange);
+  },
+
+  componentWillUnmount: function() {
+    AuthStore.removeStatusListener(this._onChange);
+    AuthStore.removeCurrentUserListener(this._onUserChange);
   },
 
   handleSubmit: function(event) {
     event.preventDefault();
     var email = this.refs.email.getDOMNode().value;
     var password = this.refs.password.getDOMNode().value;
+    AuthActionCreator.loginUser(email, password);
     $(".login-pwd").val('');
-    auth.logIn(email, password, function(loggedIn, err) {
-      if (loggedIn) {
-        this.transitionTo('/home');
-      } else {
-        return this.setState({ error: true, msg: err });
-      }
-    }.bind(this));
   },
 
   handleForgotPasswordClick: function(e) {
     e.preventDefault();
-    this.setState({ forgotPassword: true });
+    AuthActionCreator.forgotPassword();
   },
 
   handleFacebookClick: function(e) {
     e.preventDefault();
-    FB.login(this.loginCallback, { scope: 'email', return_scopes: true });
+    AuthActionCreator.loginWithFacebook();
   },
 
-  loginCallback: function(response) {
-    if (response.status === 'connected') {
-      this.loginUser(response.authResponse.accessToken);
-    } else if (response.status === 'not_authorized') {
-      this.setState({ error: true, msg: strings.FACEBOOK_UNAUTHORIZED_CREDENTIALS });
-    } else {
-      this.setState({ error: true, msg: strings.ERROR_LOGGING_INTO_FACEBOOK });
+  transitionIfReady: function() {
+    if (this.state.currentUser) {
+      this.transitionTo('/home');
     }
   },
-
-  loginUser: function(accessToken) {
-    $.ajax({
-      url: '/api/login/facebook',
-      type: 'POST',
-      data: { access_token: accessToken },
-      success: function(user) {
-        // Only rewrite the picture if it is not there
-        if (!user.picture) {
-          this.getFacebookProfilePicture(user);
-        } else {
-          this.transitionTo('/home');
-        }
-      }.bind(this),
-      error: function(xhr, status, err) {
-        if (xhr.responseText !== 'Error') {
-          this.setState({ error: true, msg: xhr.responseText });
-        }
-        console.error(xhr.responseText);
-      }.bind(this)
-    });
-  },
-
-  getFacebookProfilePicture: function(user) {
-    var cb = function(user) {
-      this.transitionTo('/home');
-    }.bind(this);
-
-    FB.api('/me/picture',
-      {
-        'redirect': false,
-        'type': 'normal',
-        'width': 200,
-        'height': 200
-      },
-      function (response) {
-        if (response && !response.error) {
-          this.saveFacebookPhoto(user,
-            response.data.url, cb);
-        } else {
-          cb(user);
-        }
-      }.bind(this)
-    );
-  },
-
-  saveFacebookPhoto: function(user, link, cb) {
-    var url = '/api/users/'+ user._id;
-
-    // Mark facebook pictures as such with the special public_id
-    user.picture = { url: link, public_id: 'FACEBOOK' };
-    $.ajax({
-      url: url,
-      type: 'PUT',
-      data: user,
-      success: function(user) {
-        cb(user);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(status, err.toString());
-        cb(user)
-      }.bind(this)
-    });
-  },
-
 
   render: function() {
     var errors = this.state.error ? <div className="alert alert-danger" role="alert"><strong>{this.state.msg}</strong></div> : '';
@@ -148,7 +90,16 @@ var Login = React.createClass({
         {loginDisplay}
       </div>
     );
-  }
+  },
+
+  _onUserChange: function() {
+    this.setState(getStateFromStores());
+    this.transitionIfReady();
+  },
+
+  _onChange: function() {
+    this.setState(getStateFromStores());
+  },
 });
 
 module.exports = Login;

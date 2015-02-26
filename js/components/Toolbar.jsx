@@ -23,16 +23,18 @@ function getStateFromStores() {
   }
 }
 
-
 var Toolbar = React.createClass({
   getInitialState: function() {
     return getStateFromStores();
   },
 
-  componentDidMount: function() {
+  componentWillMount: function() {
     AuthStore.addCurrentUserListener(this._onCurrentUserChange);
     AuthStore.addLoggedInListener(this._onLoggedInChange);
     NotificationsStore.addChangeListener(this._onNotificationsChange);
+  },
+
+  componentDidMount: function() {
     AuthActionCreator.getLoggedIn();
     AuthActionCreator.getCurrentUserAndNotifications();
   },
@@ -65,16 +67,19 @@ var Toolbar = React.createClass({
         </div>;
       var notificationTotal = '';
 
-      var notificationLen = this.state.notifications.length;
-      if (notificationLen !== 0) {
-        notificationTotal = <span className="label label-primary label-as-badge">{notificationLen}</span>;
+      if (this.state.notifications) {
+        var notificationLen = this.state.notifications.length;
+        if (notificationLen !== 0) {
+          notificationTotal = <span className="label label-primary label-as-badge">{notificationLen}</span>;
+        }
+        notifications =
+          <a className="toolbar-notification" href="#" onClick={this.toggleNotifications}>
+            <span className="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+            {notificationTotal}
+          </a>;
+        var notificationDisplay = this.state.showNotifications ? <NotificationDisplay notifications={this.state.notifications}/> : '';
       }
-      notifications =
-        <a className="toolbar-notification" href="#" onClick={this.toggleNotifications}>
-          <span className="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-          {notificationTotal}
-        </a>;
-      var notificationDisplay = this.state.showNotifications ? <NotificationDisplay notifications={this.state.notifications}/> : '';
+
       var categories = (
         <div className="categories-link">
           <Link to="categories">Categories</Link>
