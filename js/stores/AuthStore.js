@@ -13,6 +13,7 @@ var STATUS_CHANGE = 'status';
 
 var _currentUser = null;
 var _loggedIn = false;
+var _passwordResetStatus = {error: false, msg: ''};
 var _showLogin = false;
 var _signUpStatus = {error: false, msg: ''};
 var _loginStatus = {error: false, msg: ''};
@@ -90,6 +91,14 @@ var AuthStore = assign({}, EventEmitter.prototype, {
     return _loginStatus.error;
   },
 
+  getPasswordResetStatus: function() {
+    return _passwordResetStatus.msg;
+  },
+
+  getPasswordResetError: function() {
+    return _passwordResetStatus.error;
+  },
+
   toggleShowLogin: function() {
     _showLogin = !_showLogin;
   }
@@ -107,6 +116,18 @@ AuthStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
     case ActionTypes.LOGIN_FAILED:
       _loginStatus.msg = action.error;
       _loginStatus.error = true;
+      AuthStore.emitStatusChange();
+      break;
+
+    case ActionTypes.PASSWORD_RESET_EMAIL_SENT:
+      _passwordResetStatus.msg = strings.EMAIL_SENT(action.email);
+      _passwordResetStatus.error = false;
+      AuthStore.emitStatusChange();
+      break;
+
+    case ActionTypes.PASSWORD_RESET_EMAIL_FAILED:
+      _passwordResetStatus.msg = action.msg;
+      _passwordResetStatus.error = true;
       AuthStore.emitStatusChange();
       break;
 

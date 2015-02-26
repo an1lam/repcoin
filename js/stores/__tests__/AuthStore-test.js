@@ -139,5 +139,36 @@ describe('CategoriesStore', function() {
 
     expect(AuthStore.getSignUpError()).toEqual(false);
     expect(AuthStore.getSignUpStatus()).toEqual(strings.VALIDATING);
-  })
+  });
+
+  var actionResetUserPasswordSuccess = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.PASSWORD_RESET_EMAIL_SENT,
+      email: 'a@b.com'
+    }
+  };
+
+  var actionResetUserPasswordFail = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.PASSWORD_RESET_EMAIL_FAILED,
+      msg: 'Unrecognized email address.'
+    }
+  };
+
+  it('handles success and failure cases for password reset emails',
+    function() {
+    callback(actionResetUserPasswordFail);
+
+    expect(AuthStore.getPasswordResetStatus()).toEqual(
+      'Unrecognized email address.');
+    expect(AuthStore.getPasswordResetError()).toEqual(true);
+
+    callback(actionResetUserPasswordSuccess);
+    expect(AuthStore.getPasswordResetStatus()).toEqual(
+      'An email has been sent to a@b.com with a link to reset your password.');
+    expect(AuthStore.getPasswordResetError()).toEqual(false);
+  });
+
 });

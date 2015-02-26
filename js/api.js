@@ -124,6 +124,23 @@ module.exports = {
     });
   },
 
+  sendPasswordResetEmail: function(email) {
+    $.ajax({
+      type: 'POST',
+      url: '/api/users/sendPasswordResetEmail',
+      data: {
+        'email': email
+      },
+
+      success: function() {
+        ServerActionCreator.passwordResetEmailSent(email);
+      }.bind(this),
+      error: function(xhr, status, err) {
+        ServerActionCreator.passwordResetEmailFailed(xhr.responseText);
+      }.bind(this),
+    });
+  },
+
   facebook: {
     authorize: function(hash, id) {
       function responseHandler(res) {

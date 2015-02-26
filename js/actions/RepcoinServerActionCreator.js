@@ -83,8 +83,19 @@ module.exports = {
       type: ActionTypes.LOGIN_FAILED,
       error: msg
     })
+  },
+
+  passwordResetEmailSent: function(email) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.PASSWORD_RESET_EMAIL_SENT,
+      email: email
+    });
+  },
+
+  passwordResetEmailFailed: function(msg) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.PASSWORD_RESET_EMAIL_FAILED,
+      msg: msg
+    });
   }
-
-
-
 };

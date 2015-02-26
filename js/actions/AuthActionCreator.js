@@ -81,6 +81,10 @@ module.exports = {
 
   loginWithFacebook: function(hash, id) {
     api.facebook.authorize(hash, id);
-  }
+  },
+
+  sendPasswordResetEmail: function(email) {
+    api.sendPasswordResetEmail(email);
+  },
 
 };

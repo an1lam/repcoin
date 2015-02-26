@@ -21,6 +21,9 @@ module.exports = {
     FORGOT_PASSWORD: null,
     LOGIN_FAILED: null,
     RECEIVE_CURRENT_USER_AND_LOGIN: null,
+    SEND_PASSWORD_RESET_EMAIL: null,
+    PASSWORD_RESET_EMAIL_SENT: null,
+    PASSWORD_RESET_EMAIL_FAILED: null,
   }),
 
   PayloadSources: keyMirror({
