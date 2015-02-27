@@ -135,8 +135,8 @@ var TransactionHandler = {
         var docs = [toUser, fromUser, category, transaction];
         utils.saveAll(docs, function(errs) {
           if (errs.length > 0) {
-            winston.log('error', 'Error saving transaction: %s', err.toString());
-            return res.status(501).send(err);
+            winston.log('error', 'Error saving docs in create transaction');
+            return res.status(501).send(errs);
           }
           utils.updatePercentilesAndDividends(category.name, toUser, function(err) {
             if (err) {
