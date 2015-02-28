@@ -138,27 +138,33 @@ var TransactionHandler = {
             winston.log('error', 'Error saving docs in create transaction');
             return res.status(501).send(errs);
           }
-          utils.updatePercentilesAndDividends(category.name, toUser, function(err) {
+          utils.updateDividends(category.name, toUser, function(err) {
             if (err) {
-              winston.log('error', 'Error updating percentiles: %s', err.toString());
+              winston.log('error', 'Error updating dividends: %s', err.toString());
               return res.status(501).send(err);
             }
+            utils.updateRank(category.name, function(err) {
+              if (err) {
+                winston.log('error', 'Error updating rank: %s', err.toString());
+                return res.status(501).send(err);
+              }
 
-            // Notify the to user of the transaction
-            var action;
-            if (amount < 0) {
-              action = ' revoked ' + amount * -1 + ' reps from you for ' + transaction.category;
-            } else {
-              action = ' gave ' + amount + ' reps to you for ' + transaction.category;
-            }
-            var fromText = transaction.from.anonymous ? 'Someone' : transaction.from.name;
-            var notification = new Notification({
-              user    : { id: transaction.to.id, name: transaction.to.name },
-              message : fromText + action,
+              // Notify the to user of the transaction
+              var action;
+              if (amount < 0) {
+                action = ' revoked ' + amount * -1 + ' reps from you for ' + transaction.category;
+              } else {
+                action = ' gave ' + amount + ' reps to you for ' + transaction.category;
+              }
+              var fromText = transaction.from.anonymous ? 'Someone' : transaction.from.name;
+              var notification = new Notification({
+                user    : { id: transaction.to.id, name: transaction.to.name },
+                message : fromText + action,
+              });
+              notification.save();
+
+              return res.status(200).send(transaction);
             });
-            notification.save();
-
-            return res.status(200).send(transaction);
           });
         });
       }, function(err) {
