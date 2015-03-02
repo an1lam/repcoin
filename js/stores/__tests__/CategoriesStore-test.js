@@ -73,6 +73,29 @@ describe('CategoriesStore', function() {
     callback(actionReceiveTotalTraded);
 
     expect(CategoriesStore.getTotalTraded()).toEqual('1,000');
-  })
+  });
 
+  var actionReceiveHotCategoriesAndUsers = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.HOT_CATEGORIES_AND_USERS,
+      categories: [{
+        name: 'testCat',
+        users: [{
+          name: 'testUser'
+        }]
+      }]
+    }
+  };
+
+  it('stores the hot categories and users from the server', function() {
+    callback(actionReceiveHotCategoriesAndUsers);
+
+    expect(CategoriesStore.getHot()).toEqual([{
+      name: 'testCat',
+      users: [{
+        name: 'testUser'
+      }]
+    }]);
+  });
 })

@@ -140,6 +140,17 @@ module.exports = {
     });
   },
 
+  getHotCategoriesAndUsers: function() {
+    $.ajax({
+      url: '/api/categories/hot',
+      success: ServerActionCreator.receiveHotCategoriesAndUsers,
+      error: function(xhr, status, err) {
+        ServerActionCreator.receiveHotCategoriesAndUsersError(
+          xhr.responseText);
+      }.bind(this)
+    });
+  },
+
   facebook: {
     authorize: function(hash, id) {
       function responseHandler(res) {

@@ -185,6 +185,33 @@
   padding-right:5px;
 }
 
+.category-card {
+  margin-right: 10px;
+  height: 300px;
+}
+
+.category-card img {
+  float: right;
+}
+
+.category-card li {
+  display: block;
+  margin-bottom: 30px;
+}
+
+.category-card ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-card button {
+  width: 50px;
+  height: 20px;
+  text-align: center;
+  line-height: 0px;
+  font-size: x-small;
+}
 /* LoginPage /////////////////////////////////////////// */
 .facebook-signup {
   margin-bottom:10px;

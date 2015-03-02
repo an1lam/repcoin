@@ -236,4 +236,8 @@ UserSchema.statics.findInvestorByCategory= function(category, cb) {
   return this.find({ "portfolio.category": category }).exec(cb);
 };
 
+UserSchema.statics.getUserPictureAboutCategories = function (userId) {
+  return this.findById(userId, 'picture about categories').exec();
+};
+
 module.exports = mongoose.model('User', UserSchema);

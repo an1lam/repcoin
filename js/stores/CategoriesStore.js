@@ -10,6 +10,7 @@ var ActionTypes = RepcoinConstants.ActionTypes;
 var CHANGE_EVENT = 'change';
 var TOTAL_TRADED_CHANGE_EVENT = 'total_traded_change';
 
+var _hotCategoriesAndUsers = [];
 var _categories = [];
 var _totalTraded = null;
 
@@ -65,6 +66,10 @@ var CategoriesStore = assign({}, EventEmitter.prototype, {
     }
   },
 
+  getHot: function() {
+    return _hotCategoriesAndUsers;
+  },
+
   /* Sorts our '_categories' variable which will then be used to update
      the 'CategoriesPage'
   */
@@ -94,7 +99,7 @@ var CategoriesStore = assign({}, EventEmitter.prototype, {
     }
 
     _categories.sort(comparator);
-  },
+  }
 });
 
 function _getExpertComparator() {
@@ -151,6 +156,11 @@ function _getMarketComparator(high) {
 CategoriesStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
   var action = payload.action;
   switch(action.type) {
+
+    case ActionTypes.HOT_CATEGORIES_AND_USERS:
+      _hotCategoriesAndUsers = action.categories;
+      CategoriesStore.emitChange();
+      break;
 
     // Received categories from the server
     case ActionTypes.RECEIVE_CATEGORIES:

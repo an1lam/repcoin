@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var winston = require('winston');
 
 // Fields to include and obscure for public transaction information
 // Used in an aggregate() to appropriately filter documents
@@ -149,17 +150,92 @@ TransactionSchema.statics.findMostRecent = function(timeStamp) {
 
 // Get the total number of reps that have been traded
 TransactionSchema.statics.getTotalRepsTraded = function() {
-  return this.aggregate([ {
-    $project: {
-      amount: {
-        $cond: [
-          { $lt: ['$amount', 0] },
-          {$subtract: [0, '$amount'] },
-          '$amount'
-        ]
-      }}}, {
-    $group: { _id: null, total: { $sum: '$amount'} }}
+  return this.aggregate([
+    {
+      $project: {
+        amount: {
+          $cond: [
+            { $lt: ['$amount', 0] },
+            {$subtract: [0, '$amount'] },
+            '$amount'
+          ]
+        }
+      }
+    },
+    { $group: { _id: null, total: { $sum: '$amount'} } },
+    { $sort: { total: 1 } },
+    { $limit: 6 }
   ]).exec();
-}
+};
+
+TransactionSchema.statics.getHotCategories = function(userId) {
+  var d1 = new Date();
+  d1.setDate(d1.getDate() - 7);
+  return this.aggregate([
+    {
+      $match: {
+        timeStamp: {
+          $gte: d1, $lt: new Date()
+        },
+      }
+    },
+    {
+      $project: {
+        volume: {
+          $cond: [
+            {
+              $lt: [ "$amount", 0]
+            },
+            -1,
+            1
+          ]
+        },
+        "category": 1
+      }
+    },
+    { $group: { _id: "$category", volume: { $sum: "$volume" } }},
+    { $sort: { volume: -1 } },
+    { $limit: 6 }
+  ]).exec();
+};
+
+TransactionSchema.statics.getHotUsersInCategory = function(category) {
+  var d1 = new Date();
+  d1.setDate(d1.getDate() - 7);
+  return this.aggregate([
+    {
+      $match: {
+        timeStamp: {
+          $gte: d1,
+          $lt: new Date()
+        },
+        category: category
+      }
+    },
+    {
+      $project:
+        {
+          volume:
+            {
+              $cond: [
+               { $lt: [ "$amount", 0] },
+               -1,
+                1
+              ]
+            },
+          "to.id": 1,
+          "to.name": 1
+          }
+        },
+    {
+      $group: {
+        _id: {id: "$to.id", name: "$to.name"},
+        volume: { $sum: "$volume" }
+      }
+    },
+    { $sort: { volume: -1 } },
+    { $limit: 3 }
+  ]).exec();
+};
 
 module.exports = mongoose.model('Transaction', TransactionSchema);

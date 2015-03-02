@@ -48,6 +48,7 @@
     "passport-oauth": "^1.0.0",
     "path": "~0.4.9",
     "pubsub-js": "^1.5.0",
+    "q": "^1.2.0",
     "react": "~0.12.0",
     "react-router": "0.11.x",
     "react-tools": "~0.12.0",
