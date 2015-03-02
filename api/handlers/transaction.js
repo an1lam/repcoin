@@ -91,86 +91,96 @@ var TransactionHandler = {
         return res.status(412).send('Invalid transaction inputs');
       }
       var from, to, amount, categoryName, category, investmentId, transaction,
-        fromUserPromise, toUserPromise, categoryPromise,
-        fromUser, toUser, toUserReps;
+        fromUserPromise, toUserPromise, categoryPromise, transactionPromise,
+        fromUser, toUser;
 
       from = req.body.from;
       to = req.body.to;
       amount = Number(req.body.amount);
       categoryName = req.body.category;
       investmentId = req.body.id;
-      transaction = new Transaction({
+
+      // Create all of the promises that are needed to make a transaction
+      transactionPromise = Transaction.create({
         to          : to,
         from        : from,
-        amount      : amount,
+        amount      : Math.floor(amount * 100)/100,
         category    : categoryName
       });
-
       fromUserPromise = User.findById(from.id).exec();
       toUserPromise = User.findById(to.id).exec();
       categoryPromise = Category.findByName(categoryName);
 
-      // Get all of the docs that will be updated
-      toUserPromise.then(function(touser) {
-        toUser = touser;
-        return fromUserPromise;
-       }, function(err) {
+      // The callback for failure on any promise error
+      var cbF = function(err) {
         winston.log('error', 'Error creating transaction: %s', err.toString());
-        return res.status(501).send(err);
-      }).then(function(fromuser) {
-        fromUser = fromuser;
-        return categoryPromise;
-      }, function(err) {
-        winston.log('error', 'Error creating transaction: %s', err.toString());
-        return res.status(501).send(err);
-      }).then(function(categoryP) {
-        category = categoryP;
-        // Update fields for all of the documents as they should be for the transaction
-        var err = utils.processTransaction(toUser, fromUser, category, transaction, investmentId);
-        if (err) {
-          winston.log('error', err);
-          return res.status(501).send(err);
-        }
-        // Save all of the documents
-        var docs = [toUser, fromUser, category, transaction];
-        utils.saveAll(docs, function(errs) {
-          if (errs.length > 0) {
-            winston.log('error', 'Error saving docs in create transaction');
-            return res.status(501).send(errs);
+        throw err;
+      };
+
+      try {
+        var promise = transactionPromise.then(function(transactionP) {
+          transaction = transactionP;
+          return toUserPromise;
+        }, cbF).then(function(touser) {
+          toUser = touser;
+          return fromUserPromise;
+        }, cbF).then(function(fromuser) {
+          fromUser = fromuser;
+          return categoryPromise;
+        }, cbF).then(function(categoryP) {
+          category = categoryP;
+
+          // Update fields for all of the documents as they should be for the transaction
+          var err = utils.processTransaction(toUser, fromUser, category, transaction, investmentId);
+          if (err) {
+            cbF(err);
           }
-          utils.updateDividends(category.name, toUser, function(err) {
-            if (err) {
-              winston.log('error', 'Error updating dividends: %s', err.toString());
-              return res.status(501).send(err);
-            }
-            utils.updateRank(category.name, function(err) {
+
+          // Save all of the users in updates
+          toUserSave = User.findOneAndUpdate(toUser._id, toUser).exec();
+          fromUserSave = User.findOneAndUpdate(fromUser._id, fromUser).exec();
+          categorySave = Category.findOneAndUpdate(category._id, category).exec();
+          var savePromise = toUserSave.then(function(toUser) {
+            return fromUserSave;
+          }, cbF).then(function(fromUser) {
+            return categorySave;
+          }, cbF).then(function(category) {
+            utils.updateDividends(toUser, category.name, function(err) {
               if (err) {
-                winston.log('error', 'Error updating rank: %s', err.toString());
-                return res.status(501).send(err);
+                winston.log('error', 'Error updating dividends: %s', err.toString());
+                throw err;
               }
+              utils.updateAllRank(category.name, function(err) {
+                if (err) {
+                  winston.log('error', 'Error updating rank: %s', err.toString());
+                  throw err;
+                }
 
-              // Notify the to user of the transaction
-              var action;
-              if (amount < 0) {
-                action = ' revoked ' + amount * -1 + ' reps from you for ' + transaction.category;
-              } else {
-                action = ' gave ' + amount + ' reps to you for ' + transaction.category;
-              }
-              var fromText = transaction.from.anonymous ? 'Someone' : transaction.from.name;
-              var notification = new Notification({
-                user    : { id: transaction.to.id, name: transaction.to.name },
-                message : fromText + action,
+                // Notify the to user of the transaction
+                var action;
+                if (amount < 0) {
+                  action = ' revoked ' + amount * -1 + ' reps from you for ' + transaction.category;
+                } else {
+                  action = ' gave ' + amount + ' reps to you for ' + transaction.category;
+                }
+                var fromText = transaction.from.anonymous ? 'Someone' : transaction.from.name;
+                var notification = new Notification({
+                  user    : { id: transaction.to.id, name: transaction.to.name },
+                  message : fromText + action,
+                });
+                notification.save();
+
+                return res.status(200).send(transaction);
               });
-              notification.save();
-
-              return res.status(200).send(transaction);
             });
-          });
-        });
-      }, function(err) {
-        winston.log('error', 'Error creating transaction: %s', err.toString());
-        return res.status(501).send(err);
-      });
+          }, cbF);
+        }, cbF);
+      }
+      catch(err) {
+        console.log('CATCHING ERROR');
+        console.log(err);
+        return res.status(503).send(err);
+      }
     },
   },
 };

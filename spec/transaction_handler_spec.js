@@ -200,10 +200,140 @@ describe('TransactionHandler: ', function() {
     });
 
     describe('post: ', function() {
+      var transactionPromise, toUserPromise, fromUserPromise, categoryPromise;
+
+      beforeEach(function() {
+        categoryPromise = {
+          category: {
+            timeStamp: new Date()
+          },
+
+          then: function(cb) {
+            return cb(this.category);
+          }
+        };
+
+        transactionPromise = {
+          transaction: {
+            timeStamp: new Date()
+          },
+
+          then: function(cb) {
+            return cb(this.transaction);
+          }
+        };
+
+        toUserPromise = {
+          exec: function() {
+            return {
+              then: function(cb) {
+                console.log('THEN');
+                return cb({ _id: '123' });
+              }
+            };
+          }
+        };
+
+        fromUserPromise = {
+          exec: function() {
+            return {
+              then: function(cb) {
+                console.log('FROM USER');
+                return cb({ _id: '456' });
+              }
+            };
+          }
+        };
+      });
+
       it('handles invalid inputs', function() {
         TransactionHandler.transactions.post(req, res);
         expect(res.status).toHaveBeenCalledWith(412);
         expect(res.send).toHaveBeenCalledWith('Invalid transaction inputs');
+      });
+
+      it('handles error creating transaction', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn({
+          then: function(cbS, cbF) { return cbF('failure!'); }
+        });
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
+
+      it('handles error finding user', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn(transactionPromise);
+        spyOn(User, 'findById').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbF('failure!'); }
+            };
+          }
+        });
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
+
+      it('handles error finding category', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn(transactionPromise);
+        spyOn(User, 'findById').andCallFake(function(userId) {
+          if (userId === '123' ) {
+            return toUserPromise;
+          } else {
+            return fromUserPromise;
+          }
+        });
+        spyOn(Category, 'findByName').andReturn({
+            then: function(cbS, cbF) { return cbF('failure!'); }
+        });
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
+
+      it('handles error processing transaction', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn(transactionPromise);
+        spyOn(User, 'findById').andCallFake(function(userId) {
+          if (userId === '123' ) {
+            return toUserPromise;
+          } else {
+            return fromUserPromise;
+          }
+        });
+        spyOn(Category, 'findByName').andReturn(categoryPromise);
+        spyOn(utils, 'processTransaction').andReturn('Error!');
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('Error!');
       });
     });
   });

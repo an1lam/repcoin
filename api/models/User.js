@@ -246,7 +246,7 @@ UserSchema.statics.findRankedExperts = function(category) {
     { $match: { "categories.name": category }},
     { $unwind: "$categories" },
     { $match: { "categories.name": category }},
-    { $sort: { "$categories.reps": -1 }},
+    { $sort: { "categories.reps": -1 }},
     { $project: { _id: 1 }},
   ]).exec();
 };
@@ -266,12 +266,12 @@ UserSchema.statics.findRankedInvestors = function(category) {
 };
 
 // Update the rank for a given investor and category
-UserSchema.statics.updateRank = function(userId, categoryName, rank, expert, then) {
+UserSchema.statics.updateRank = function(userId, categoryName, rank, expert, cb) {
   var category = expert ? "categories.name" : "portfolio.category";
   var rank = expert ? "categories.$.rank" : "portfolio.$.rank";
   return this.update(
-    { "_id": userId, category: categoryName },
-    { "$set": { rank: rank } }
+    { _id: userId, category: categoryName },
+    { $set: { rank: rank } }
   ).exec(cb);
 };
 
@@ -279,8 +279,8 @@ UserSchema.statics.updateRank = function(userId, categoryName, rank, expert, the
 // Used to update dividends upon a transaction occurring
 UserSchema.statics.updateInvestments = function(userId, categoryName, investments, cb) {
   return this.update(
-    { "_id": userId, "portfolio.category": categoryName },
-    { "$set": { "portfolio.$.investments": investments } }
+    { _id: userId, "portfolio.category": categoryName },
+    { $set: { "portfolio.$.investments": investments } }
   ).exec(cb);;
 };
 
@@ -290,10 +290,10 @@ UserSchema.statics.updateInvestments = function(userId, categoryName, investment
 // Since there could be many investments in this user
 UserSchema.statics.findInvestments = function(userId, category) {
   return this.aggregate([
-    { $match: { "portfolio.category": "editing", "portfolio.investments.userId": mongoose.Types.ObjectId(userId) }},
-    { $unwind: "$portfolio"},
-    { $match: { "portfolio.category": "editing" } },
-    { $project: { _id: 1, "portfolio.investments": 1 } }
+    { $match: { "portfolio.category": category, "portfolio.investments.userId": mongoose.Types.ObjectId(userId) }},
+    { $unwind: "$portfolio" },
+    { $match: { "portfolio.category": category } },
+    { $project: { _id: 1, investments: "$portfolio.investments" } }
   ]).exec();
 };
 
