@@ -33,7 +33,6 @@ var HomePage = React.createClass({
   render: function() {
     var categoriesCards = '';
 
-    console.log(this.state.isNewby);
     if (this.state.isNewby) {
       console.log(this.state.currentUser);
       categoriesCards = (
