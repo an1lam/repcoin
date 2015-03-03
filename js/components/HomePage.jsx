@@ -1,6 +1,7 @@
 'use strict';
 
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
+var AuthActionCreator = require('../actions/AuthActionCreator.js');
 var AuthStore = require('../stores/AuthStore.js');
 var CategoriesCards = require('./CategoriesCards.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
@@ -22,6 +23,15 @@ function getStateFromStores() {
 
 var HomePage = React.createClass({
   mixins: [AuthenticatedRoute],
+  componentDidMount: function() {
+    AuthStore.addCurrentUserListener(this._onChange);
+    AuthActionCreator.getCurrentUser();
+  },
+
+  componentWillUnmount: function() {
+    AuthStore.removeCurrentUserListener(this._onChange);
+  },
+
   getInitialState: function() {
     return getStateFromStores();
   },
@@ -33,9 +43,7 @@ var HomePage = React.createClass({
   render: function() {
     var categoriesCards = '';
 
-    console.log(this.state.isNewby);
     if (this.state.isNewby) {
-      console.log(this.state.currentUser);
       categoriesCards = (
         <CategoriesCards currentUser={this.state.currentUser} />
       );

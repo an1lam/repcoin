@@ -1,6 +1,5 @@
 var React = require('react');
 
-var AuthStore = require('../stores/AuthStore.js');
 var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
 var CategoriesStore = require('../stores/CategoriesStore.js');
 var CategoryCard = require('./CategoryCard.jsx');
@@ -8,7 +7,6 @@ var CategoryCard = require('./CategoryCard.jsx');
 function getStateFromStores() {
   return {
     categories: CategoriesStore.getHot(),
-    currentUser: AuthStore.getCurrentUser(),
   };
 }
 
@@ -19,26 +17,24 @@ var CategoriesCards = React.createClass({
 
   componentDidMount: function() {
     CategoriesStore.addChangeListener(this._onChange);
-    AuthStore.addCurrentUserListener(this._onChange);
     CategoriesActionCreator.getHotCategoriesAndUsers();
   },
 
   componentWillUnmount: function() {
     CategoriesStore.removeChangeListener(this._onChange);
-    AuthStore.addCurrentUserListener(this._onChange);
   },
 
   render: function() {
     var cards = [];
     var category;
 
-    if (this.state.categories && this.state.currentUser) {
+    if (this.state.categories && this.props.currentUser) {
       for (var i = 0; i < this.state.categories.length; i++) {
         category = this.state.categories[i];
         cards.push(
           <div>
             <CategoryCard name={category.name} users={category.users}
-              currentUser={this.state.currentUser}/>
+              currentUser={this.props.currentUser}/>
           </div>
         );
       }
