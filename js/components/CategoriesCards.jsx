@@ -17,7 +17,6 @@ var CategoriesCards = React.createClass({
 
   componentDidMount: function() {
     CategoriesStore.addChangeListener(this._onChange);
-    CategoriesActionCreator.getHotCategoriesAndUsers();
   },
 
   componentWillUnmount: function() {

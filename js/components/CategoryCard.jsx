@@ -17,11 +17,6 @@ var CategoryCard = React.createClass({
        );
       }
 
-      if (user.about) {
-        about = (
-          <p>{user.about.substr(0,50)}...</p>
-        );
-      }
       return (
         <li>
           <Link to="profile" params={{userId: user.id}}>
@@ -30,7 +25,6 @@ var CategoryCard = React.createClass({
           {img}
           <MiniInvestButton user={user}
             currentUser={this.props.currentUser} />
-          {about}
 
         </li>
       );

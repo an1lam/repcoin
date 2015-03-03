@@ -3,6 +3,7 @@
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var AuthActionCreator = require('../actions/AuthActionCreator.js');
 var AuthStore = require('../stores/AuthStore.js');
+var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
 var CategoriesCards = require('./CategoriesCards.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
 var FacebookInvite = require('./FacebookInvite.jsx');
@@ -26,6 +27,7 @@ var HomePage = React.createClass({
   componentDidMount: function() {
     AuthStore.addCurrentUserListener(this._onChange);
     AuthActionCreator.getCurrentUser();
+    CategoriesActionCreator.getHotCategoriesAndUsers();
   },
 
   componentWillUnmount: function() {
