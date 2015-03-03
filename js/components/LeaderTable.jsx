@@ -12,11 +12,11 @@ var LeaderTable = React.createClass({
   },
 
   componentDidMount: function() {
-    this.setLeaders(this.props.category);
+    this.setLeaders(this.props.category.name);
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setLeaders(newProps.category);
+    this.setLeaders(newProps.category.name);
   },
 
   setLeaders: function(category) {
@@ -30,36 +30,28 @@ var LeaderTable = React.createClass({
         this.setState({ leaders: leaders });
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.params.category, status, err.toString());
+        console.error(xhr.responseText, status, err.toString());
       }.bind(this)
     });
   },
 
   getLeaderRows: function() {
     var leaderRows = [];
-    var percentile, leader;
+    var rank, leader, size;
     var length = this.state.leaders.length;
     for (var i = 0; i < length; i++) {
       leader = this.state.leaders[i];
       if (this.props.expert) {
-        for (var j = 0; j < leader.categories.length; j++) {
-          if (leader.categories[j].name.toLowerCase() === this.props.category.toLowerCase()) {
-            percentile = leader.categories[j].percentile;
-            break;
-          }
-        }
+        rank = leader.categories.rank;
+        size = this.props.category.experts;
       } else {
-        for (var j = 0; j < leader.portfolio.length; j++) {
-          if (leader.portfolio[j].category.toLowerCase() === this.props.category.toLowerCase()) {
-            percentile = leader.portfolio[j].percentile;
-            break;
-          }
-        }
+        rank = leader.portfolio.rank;
+        size = this.props.category.investors;
       }
       leaderRows.push(
         <tr key={leader._id}>
           <td><Link to="profile" params={{userId: leader._id}}>{leader.username}</Link></td>
-          <td>{percentile}</td>
+          <td>{rank} / {size}</td>
         </tr>
       );
     }
@@ -76,7 +68,7 @@ var LeaderTable = React.createClass({
           <tr><th colSpan="3">{title}</th></tr>
           <tr>
             <th>Name</th>
-            <th>Percentile</th>
+            <th>Rank</th>
           </tr>
           </thead>
           <tbody>

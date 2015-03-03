@@ -179,9 +179,9 @@ var CategoriesTable = React.createClass({
           <tbody>
             <tr>
               <th>Category</th>
-              <th>Percentile</th>
+              <th>Rank</th>
               <th>Reps Received</th>
-              <th>Top Investors (Percentile)</th>
+              <th>Top Investors (Rank)</th>
             </tr>
             {categoryRows}
           </tbody>

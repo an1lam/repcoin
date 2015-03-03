@@ -1,5 +1,6 @@
 'use strict';
 
+var mongoose = require('mongoose');
 var Category = require('../models/Category.js');
 var Notification = require('../models/Notification.js');
 var Transaction = require('../models/Transaction.js');
@@ -92,7 +93,7 @@ var TransactionHandler = {
       }
       var from, to, amount, categoryName, category, investmentId, transaction,
         fromUserPromise, toUserPromise, categoryPromise, transactionPromise,
-        fromUser, toUser;
+        fromUser, toUser, toUserSave, fromUserSave, categorySave, toUserObj, fromUserObj, categoryObj;
 
       from = req.body.from;
       to = req.body.to;
@@ -137,9 +138,16 @@ var TransactionHandler = {
           }
 
           // Save all of the users in updates
-          toUserSave = User.findOneAndUpdate(toUser._id, toUser).exec();
-          fromUserSave = User.findOneAndUpdate(fromUser._id, fromUser).exec();
-          categorySave = Category.findOneAndUpdate(category._id, category).exec();
+          toUserObj = toUser.toObject();
+          delete toUserObj._id;
+          fromUserObj = fromUser.toObject();
+          delete fromUserObj._id;
+          categoryObj = category.toObject();
+          delete categoryObj._id;
+
+          toUserSave = User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(toUser._id) }, toUserObj).exec();
+          fromUserSave = User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(fromUser._id) }, fromUserObj).exec();
+          categorySave = Category.findOneAndUpdate({ _id: mongoose.Types.ObjectId(category._id) }, categoryObj).exec();
           var savePromise = toUserSave.then(function(toUser) {
             return fromUserSave;
           }, cbF).then(function(fromUser) {
@@ -164,12 +172,10 @@ var TransactionHandler = {
                   action = ' gave ' + amount + ' reps to you for ' + transaction.category;
                 }
                 var fromText = transaction.from.anonymous ? 'Someone' : transaction.from.name;
-                var notification = new Notification({
+                Notification.create({
                   user    : { id: transaction.to.id, name: transaction.to.name },
                   message : fromText + action,
                 });
-                notification.save();
-
                 return res.status(200).send(transaction);
               });
             });
@@ -177,7 +183,6 @@ var TransactionHandler = {
         }, cbF);
       }
       catch(err) {
-        console.log('CATCHING ERROR');
         console.log(err);
         return res.status(503).send(err);
       }

@@ -62,8 +62,16 @@ var CategoryPage = React.createClass({
 
   render: function() {
     var categoryPageHeader = '';
+    var leaderTable = '';
+    var trendingTable = '';
+    var investorTable = '';
     if (this.state.category && this.state.currentUser) {
       categoryPageHeader = <CategoryPageHeader category={this.state.category} currentUser={this.state.currentUser} />;
+    }
+    if (this.state.category) {
+      trendingTable = <TrendingTable category={this.state.category} />
+      leaderTable = <LeaderTable category={this.state.category} expert={true}/>
+      investorTable = <LeaderTable category={this.state.category} expert={false}/>
     }
 
     if (this.state.error) {
@@ -78,8 +86,8 @@ var CategoryPage = React.createClass({
           <div className="row">
             <div className="col-md-3">
               <div className="expert-table">
-                <TrendingTable category={this.props.params.category} />
-                <LeaderTable category={this.props.params.category} expert={true}/>
+                {trendingTable}
+                {leaderTable}
               </div>
             </div>
             <div className="col-md-6">
@@ -89,7 +97,7 @@ var CategoryPage = React.createClass({
             </div>
             <div className="col-md-3">
               <div className="investor-table">
-                <LeaderTable category={this.props.params.category} expert={false}/>
+                {investorTable}
               </div>
             </div>
           </div>

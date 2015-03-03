@@ -10,17 +10,17 @@ var InvestorList = React.createClass({
     var investors = [];
     if (this.props.investors) {
       var investors = this.props.investors.map(function(investor) {
-        var percentile = 0;
+        var rank = 0;
         var length = investor.portfolio.length;
         for (var j = 0; j < length; j++) {
           if (investor.portfolio[j].category === category) {
-            percentile = investor.portfolio[j].percentile;
+            rank = investor.portfolio[j].rank;
           }
         }
         if (i < 3) {
           i++;
           return (
-            <li key={investor._id} className="list-group-item">{investor.username} ({percentile})</li>
+            <li key={investor._id} className="list-group-item">{investor.username} ({rank})</li>
           );
         }
       });

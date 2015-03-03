@@ -49,18 +49,18 @@ var AboutPage = React.createClass({
               investment time. If that expert blows up to 100 reps, your dividend also grows by 10 times.
             </p>
             <br />
-            <h2>What is my percentile?</h2>
-            <p>Every investor and expert has a percentile for each of their categories. The percentile is relative
-              to all competing investors or experts in a given category. For investors, percentile is calculated by total
-              dividends. For experts, the percentile is calculated by total reps.
+            <h2>What is my rank?</h2>
+            <p>Every investor and expert has a rank for each of their categories. The rank is relative
+              to all competing investors or experts in a given category. For investors, rank is calculated by total
+              dividends. For experts, the rank is calculated by total reps.
             </p>
             <br />
             <h2>How are all time leaderboards calculated?</h2>
-            <p>All time leaders are simply the leaders with the highest percentiles.</p>
+            <p>All time leaders are simply the leaders with the highest rank.</p>
             <br />
             <h2>How are trending experts calculated?</h2>
             <p>Trending over a given time period is determined by which experts had the most 'gives' in that time.
-              This is different from getting the most reps over that time, and it's also different from the percentile.
+              This is different from getting the most reps over that time, and it's also different from the rank.
             </p>
             <br />
             <h2>How can I get noticed faster?</h2>

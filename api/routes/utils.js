@@ -361,69 +361,6 @@ var utils = {
     return true;
   },
 
-  // Given a portfolio entry, get the total dividends
-  getTotalDividends: function(portfolioEntry) {
-    var dividends = 0;
-    if (!portfolioEntry.investments) {
-      return 0;
-    };
-    var length = portfolioEntry.investments.length;
-    var investments = portfolioEntry.investments;
-    for (var i = 0; i < length; i++) {
-      dividends += investments[i].dividend;
-    }
-    return dividends;
-  },
-
-  // Sort users by dividends for a given category, increasing order
-  getDividendsComparator: function(category) {
-    return function(a, b) {
-      var indexA = this.getPortfolioIndex(a, category);
-      var indexB = this.getPortfolioIndex(b, category);
-
-      var dividendsA = this.getTotalDividends(a.portfolio[indexA]);
-      var dividendsB = this.getTotalDividends(b.portfolio[indexB]);
-      return dividendsA - dividendsB;
-    }.bind(this);
-  },
-
-  // Sort users by reps for a given category, increasing order
-  getRepsComparator: function(category) {
-    return function(a, b) {
-      var indexA = this.getCategoryIndex(a, category);
-      var indexB = this.getCategoryIndex(b, category);
-
-      var repsA = a.categories[indexA].reps;
-      var repsB = b.categories[indexB].reps;
-
-      return repsA - repsB;
-    }.bind(this);
-  },
-
-  // Sort users by direct score for a given category, decreasing order
-  // Set expert to true to compare for an expert category, false for investor
-  getPercentileComparator: function(category, expert) {
-    return function(a, b) {
-      var indexA, indexB, percentileA, percentileB;
-
-      if (expert) {
-        indexA = this.getCategoryIndex(a, category);
-        indexB = this.getCategoryIndex(b, category);
-
-        percentileA = a.categories[indexA].percentile;
-        percentileB = b.categories[indexB].percentile;
-      } else {
-        indexA = this.getPortfolioIndex(a, category);
-        indexB = this.getPortfolioIndex(b, category);
-
-        percentileA = a.portfolio[indexA].percentile;
-        percentileB = b.portfolio[indexB].percentile;
-      }
-
-      return percentileB - percentileA;
-    }.bind(this);
-  },
-
   // Save an array of documents
   saveAll: function(docs, cb) {
     var errs = [];
@@ -546,7 +483,7 @@ var utils = {
     }
 
     // If the user is not an investor for this category, add it
-    fromUser.portfolio.push({ category: category.name, id: category._id, percentile: 0, investments: [] });
+    fromUser.portfolio.push({ category: category.name, id: category._id, rank: 0, investments: [] });
     category.investors++;
     return fromUser.portfolio.length-1;
   },
@@ -697,7 +634,7 @@ var utils = {
     query.then(function(results) {
       var length = results.length;
       for (var i = 0; i < results.length; i++) {
-        User.updateRank(results[i]._id, categoryName, (i+1)/length, expert, function() {});
+        User.updateRank(results[i]._id, categoryName, i+1, expert, function() {});
       }
       cb(null);
     }, function(err) {

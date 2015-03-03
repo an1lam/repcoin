@@ -13,13 +13,13 @@ var ScoreBar = React.createClass({
   },
 
   updateDOM: function(props) {
-    var change = props.percentile - props.previousPercentile;
+    var change = props.rank - props.previousRank;
     var color = change < 0 ? '#BD362F' : '#51A351';
 
     // Calculate the percentage of the column to fill
-    var totalW = $('.percentile-col').width();
+    var totalW = $('.rank-col').width();
     var maxPercent = (totalW - $('.number').outerWidth(true))/totalW;
-    var w = maxPercent * props.percentile + '%';
+    var w = maxPercent * props.rank * 100 + '%';
 
     var id = props.category.split(' ').join('_');
 
@@ -32,7 +32,7 @@ var ScoreBar = React.createClass({
     return (
       <div className="scoreBar">
         <div className={classes}></div>
-        <div className="number">{this.props.percentile}</div>
+        <div className="number">{this.props.rank}</div>
       </div>
     );
   }

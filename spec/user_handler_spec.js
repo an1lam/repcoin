@@ -265,18 +265,34 @@ describe('UserHandler: ', function() {
 
     describe('leaders: ', function() {
       describe('get: ', function() {
-        var users = [ { categories: [ { name: 'Foo', percentile: 20 } ] } ];
+        var users = [ { categories: [ { name: 'Foo', rank: 20 } ] } ];
 
-        it('gets the leaders for a given category', function() {
-          spyOn(User, 'findUserByCategoryPublic').andCallFake(function(query, category, cb) {
-            return cb(null, [{ username: 'Matt' }]);
+        it('returns ranked investors', function() {
+          spyOn(User, 'findTopRankedInvestors').andReturn({
+            then: function(cbS, cbF) {
+              return cbS([]);
+            }
+          });
+          req.query = { expert: '0' };
+          req.params = { categoryName: 'Foo' };
+          UserHandler.users.leaders.get(req, res);
+          expect(User.findTopRankedInvestors.callCount).toEqual(1);
+          expect(res.status).toHaveBeenCalledWith(200);
+          expect(res.send).toHaveBeenCalledWith([]);
+        });
+
+        it('returns ranked experts', function() {
+          spyOn(User, 'findTopRankedExperts').andReturn({
+            then: function(cbS, cbF) {
+              return cbS([]);
+            }
           });
           req.query = { expert: '1' };
           req.params = { categoryName: 'Foo' };
           UserHandler.users.leaders.get(req, res);
-          expect(User.findUserByCategoryPublic.callCount).toEqual(1);
+          expect(User.findTopRankedExperts.callCount).toEqual(1);
           expect(res.status).toHaveBeenCalledWith(200);
-          expect(res.send).toHaveBeenCalledWith([{ username: 'Matt' }]);
+          expect(res.send).toHaveBeenCalledWith([]);
         });
 
         it('handles invalid inputs', function() {
@@ -286,15 +302,17 @@ describe('UserHandler: ', function() {
         });
 
         it('handles error finding leaders', function() {
-          spyOn(User, 'findUserByCategoryPublic').andCallFake(function(query, category, cb) {
-            return cb('Error', null);
+          spyOn(User, 'findTopRankedExperts').andReturn({
+            then: function(cbS, cbF) {
+                return cbF('Error!');
+            }
           });
           req.query = { expert: '1' };
           req.params = { categoryName: 'Foo' };
           UserHandler.users.leaders.get(req, res);
-          expect(User.findUserByCategoryPublic.callCount).toEqual(1);
-          expect(res.status).toHaveBeenCalledWith(501);
-          expect(res.send).toHaveBeenCalledWith('Error');
+          expect(User.findTopRankedExperts.callCount).toEqual(1);
+          expect(res.status).toHaveBeenCalledWith(503);
+          expect(res.send).toHaveBeenCalledWith('Error!');
         });
       });
     });
@@ -581,7 +599,7 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith('Error');
           });
 
-          it('handles error updating percentiles and dividends', function() {
+          it('handles error updating ranks and dividends', function() {
             var user = {
               username: 'Matt',
               save: jasmine.createSpy().andCallFake(function(cb) {
@@ -596,8 +614,8 @@ describe('UserHandler: ', function() {
               function(category, investor, cb) {
                 cb(null, { username: 'Matt' });
               });
-            spyOn(utils, 'updatePercentilesAndDividends').andCallFake(
-              function(category, expert, cb) {
+            spyOn(utils, 'updateAllRank').andCallFake(
+              function(category, cb) {
                 cb('Error');
               });
             req.params = { user_id: '123', categoryName: 'Foo' };
@@ -622,8 +640,8 @@ describe('UserHandler: ', function() {
               function(category, investor, cb) {
                 cb(null, { username: 'Matt' });
               });
-            spyOn(utils, 'updatePercentilesAndDividends').andCallFake(
-              function(category, expert, cb) {
+            spyOn(utils, 'updateAllRank').andCallFake(
+              function(category, cb) {
                 cb(null);
               });
             req.params = { user_id: '123', categoryName: 'Foo' };
@@ -722,7 +740,7 @@ describe('UserHandler: ', function() {
             expect(res.send).toHaveBeenCalledWith('Error');
           });
 
-          it('handles error updating percentiles and dividends', function() {
+          it('handles error updating ranks', function() {
             var user = {
               username: 'Matt',
               save: jasmine.createSpy().andCallFake(function(cb) {
@@ -739,8 +757,8 @@ describe('UserHandler: ', function() {
                 cb(null);
               });
             spyOn(utils, 'deleteExpertCategory').andReturn(user);
-            spyOn(utils, 'updatePercentilesAndDividends').andCallFake(
-              function(category, expert, cb) {
+            spyOn(utils, 'updateAllRank').andCallFake(
+              function(category, cb) {
                 cb('Error');
               });
             req.params = { user_id: '123', categoryName: 'Foo' };
@@ -767,8 +785,8 @@ describe('UserHandler: ', function() {
                 cb(null);
               });
             spyOn(utils, 'deleteExpertCategory').andReturn(user);
-            spyOn(utils, 'updatePercentilesAndDividends').andCallFake(
-              function(category, expert, cb) {
+            spyOn(utils, 'updateAllRank').andCallFake(
+              function(category, cb) {
                 cb(null);
               });
             req.params = { user_id: '123', categoryName: 'Foo' };

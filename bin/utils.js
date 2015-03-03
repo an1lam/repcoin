@@ -97,6 +97,8 @@ var utils = {
     });
   },
 
+  // CAREFUL
+  // NOT TO BE USED MORE THAN ONCE
   removeInappropriateCategories: function(cb) {
     // The list of names that need to be removed
     var inappropriateNames = [
@@ -204,24 +206,24 @@ var utils = {
     });
   },
 
-  setPreviousPercentileToCurrent: function(cb) {
+  setPreviousRankToCurrent: function(cb) {
     var i = 0;
     User.find(function(err, users) {
       if (err) {
         cb();
-        winston.log('error', 'Error setting previous percentiles to current: %s', err.toString());
+        winston.log('error', 'Error setting previous ranks to current: %s', err.toString());
       } else {
         users.forEach(function(user) {
           user.categories.forEach(function(category) {
-            category.previousPercentile = category.percentile;
+            category.previousRank = category.rank;
           });
         });
         routeUtils.saveAll(users, function(errs) {
           if (errs.length > 0) {
-            winston.log('error', 'Error migrating percentiles and dividends: %s', errs);
+            winston.log('error', 'Error updating ranks: %s', errs);
             cb(errs);
           } else {
-            winston.log('info', 'Successfully migrated percentages and dividends.');
+            winston.log('info', 'Successfully migrated ranks.');
             cb(null);
           }
         });

@@ -54,8 +54,12 @@ var UserSchema = new Schema({
       length  : { type: Number },
     },
 
+    // DEPRECATED
     // Percentile relative to all investors in this category
     percentile: {type: Number, default: 0, required: true },
+
+    // The rank for this category
+    rank: { type: Number, default: 0, required: true },
 
     // Category for this portfolio entry
     category: {type: String, required: true },
@@ -101,9 +105,11 @@ var UserSchema = new Schema({
     // The id of the category
     id: {type: Schema.Types.ObjectId, required: true },
 
+    // DEPRECATED
     // The percentile for this user compared to users in this category
     percentile: {type: Number, default: 0, required: true },
 
+    // DEPRECATED
     // The percentile from yesterday
     previousPercentile: {type: Number, default: 0, required: true },
 
@@ -112,6 +118,9 @@ var UserSchema = new Schema({
 
     // The rank for this category
     rank: { type: Number, default: 0, required: true },
+
+    // The rank from yesterday
+    previousRank: { type: Number, default: 0, required: true },
 
     // A list of investors who hold reps in this user for this category
     investors: [{
@@ -239,8 +248,37 @@ UserSchema.statics.findInvestorByCategory= function(category, cb) {
   return this.find({ "portfolio.category": category }).exec(cb);
 };
 
+// Get top ranked user ids for a given investor category, descending
+// Ranking done by total reps
+// Only returns the username, picture, rank, and reps for the category
+UserSchema.statics.findTopRankedInvestors = function(category) {
+  return this.aggregate([
+    { $match: { "portfolio.category": category }},
+    { $unwind: "$portfolio" },
+    { $match: { "portfolio.category": category }},
+    { $sort: { "portfolio.rank": 1 }},
+    { $project: { _id: 1, picture: 1, "portfolio.rank": 1, username: 1 }},
+    { $limit: 10 },
+  ]).exec();
+};
+
+// Get top ranked user ids for a given expert category, descending
+// Ranking done by total reps
+// Only returns the username, picture, rank, and reps for the category
+UserSchema.statics.findTopRankedExperts = function(category) {
+  return this.aggregate([
+    { $match: { "categories.name": category }},
+    { $unwind: "$categories" },
+    { $match: { "categories.name": category }},
+    { $sort: { "categories.rank": 1 }},
+    { $project: { _id: 1, picture: 1, "categories.rank": 1, "categories.reps": 1, username: 1 }},
+    { $limit: 10 },
+  ]).exec();
+};
+
 // Get ranked user ids for a given expert category, descending
 // Ranking done by total reps
+// Only returns the IDs of the users in ranked order
 UserSchema.statics.findRankedExperts = function(category) {
   return this.aggregate([
     { $match: { "categories.name": category }},
@@ -267,12 +305,17 @@ UserSchema.statics.findRankedInvestors = function(category) {
 
 // Update the rank for a given investor and category
 UserSchema.statics.updateRank = function(userId, categoryName, rank, expert, cb) {
-  var category = expert ? "categories.name" : "portfolio.category";
-  var rank = expert ? "categories.$.rank" : "portfolio.$.rank";
-  return this.update(
-    { _id: userId, category: categoryName },
-    { $set: { rank: rank } }
-  ).exec(cb);
+  if (expert) {
+    return this.update(
+      { _id: mongoose.Types.ObjectId(userId), "categories.name": categoryName },
+      { $set: { "categories.$.rank": rank } }
+    ).exec(cb);
+  } else {
+    return this.update(
+      { _id: mongoose.Types.ObjectId(userId), "portfolio.category": categoryName },
+      { $set: { "portfolio.$.rank": rank } }
+    ).exec(cb);
+  }
 };
 
 // Update the investments for a given investor and category
@@ -281,7 +324,7 @@ UserSchema.statics.updateInvestments = function(userId, categoryName, investment
   return this.update(
     { _id: userId, "portfolio.category": categoryName },
     { $set: { "portfolio.$.investments": investments } }
-  ).exec(cb);;
+  ).exec(cb);
 };
 
 // Get investments for a given category for investors who have invested in the given user

@@ -55,20 +55,6 @@ describe('Utils: ', function() {
     })
   });
 
-  describe('getTotalDividends: ', function() {
-    it('adds up the dividend from each investment', function() {
-      var portfolioEntry = { investments: [ { dividend: 1 }, { dividend: 3 } ] };
-      var totalDividends = utils.getTotalDividends(portfolioEntry);
-      expect(totalDividends).toEqual(4);
-    });
-
-    it('returns 0 if the entry has no investments', function() {
-      var portfolioEntry = {};
-      var totalDividends = utils.getTotalDividends(portfolioEntry);
-      expect(totalDividends).toEqual(0);
-    });
-  });
-
   describe('isExpert: ', function() {
     var user = { categories: [{ name: 'Coding' }] };
     it('returns true if the user is an expert', function() {
@@ -498,96 +484,6 @@ describe('Utils: ', function() {
       utils.updateDividends(e, categoryName, cb);
       expect(investments).toEqual(expectedInvestments);
       expect(User.updateInvestments.callCount).toEqual(1);
-    });
-  });
-
-  describe('dividendsComparator: ', function() {
-    it('should correctly sort users by dividends in increasing order', function() {
-      var users = [
-        { _id: '1', portfolio: [ { category: 'Coding', investments: [{ dividend: 3 }] }] },
-        { _id: '2', portfolio: [ { category: 'Coding', investments: [{ dividend: 5 }] }] },
-        { _id: '3', portfolio: [ { category: 'Coding', investments: [{ dividend: 3 }] }] },
-        { _id: '4', portfolio: [ { category: 'Coding', investments: [{ dividend: 1 }] }] },
-      ];
-
-      var expected = [
-        { _id: '4', portfolio: [ { category: 'Coding', investments: [{ dividend: 1 }] }] },
-        { _id: '1', portfolio: [ { category: 'Coding', investments: [{ dividend: 3 }] }] },
-        { _id: '3', portfolio: [ { category: 'Coding', investments: [{ dividend: 3 }] }] },
-        { _id: '2', portfolio: [ { category: 'Coding', investments: [{ dividend: 5 }] }] },
-      ];
-
-      var dividendsComparator = utils.getDividendsComparator('Coding');
-      var results = users.sort(dividendsComparator);
-      expect(results.length).toEqual(4);
-      expect(results).toEqual(expected);
-    });
-  });
-
-  describe('percentileComparator: ', function() {
-    it('should correctly sort users by expert percentile in decreasing order if expert', function() {
-      var users = [
-        { _id: '1', categories: [{ name: 'Coding', percentile: 3 }] },
-        { _id: '2', categories: [{ name: 'Coding', percentile: 5 }] },
-        { _id: '3', categories: [{ name: 'Coding', percentile: 3 }] },
-        { _id: '4', categories: [{ name: 'Coding', percentile: 1 }] },
-      ];
-
-      var expected = [
-        { _id: '2', categories: [{ name: 'Coding', percentile: 5 }] },
-        { _id: '1', categories: [{ name: 'Coding', percentile: 3 }] },
-        { _id: '3', categories: [{ name: 'Coding', percentile: 3 }] },
-        { _id: '4', categories: [{ name: 'Coding', percentile: 1 }] },
-      ];
-
-      var percentileComparator = utils.getPercentileComparator('Coding', true);
-      var results = users.sort(percentileComparator);
-      expect(results.length).toEqual(4);
-      expect(results).toEqual(expected);
-    });
-
-    it('should correctly sort users by investor percentile in decreasing order if not expert', function() {
-      var users = [
-        { _id: '1', portfolio: [{ category: 'Coding', percentile: 3 }] },
-        { _id: '2', portfolio: [{ category: 'Coding', percentile: 5 }] },
-        { _id: '3', portfolio: [{ category: 'Coding', percentile: 3 }] },
-        { _id: '4', portfolio: [{ category: 'Coding', percentile: 1 }] },
-      ];
-
-      var expected = [
-        { _id: '2', portfolio: [{ category: 'Coding', percentile: 5 }] },
-        { _id: '1', portfolio: [{ category: 'Coding', percentile: 3 }] },
-        { _id: '3', portfolio: [{ category: 'Coding', percentile: 3 }] },
-        { _id: '4', portfolio: [{ category: 'Coding', percentile: 1 }] },
-      ];
-
-      var percentileComparator = utils.getPercentileComparator('Coding', false);
-      var results = users.sort(percentileComparator);
-      expect(results.length).toEqual(4);
-      expect(results).toEqual(expected);
-    });
-  });
-
-  describe('repsComparator: ', function() {
-    it('should correctly sort users by reps in increasing order', function() {
-      var users = [
-        { _id: '1', categories: [{ name: 'Coding', reps: 3 }] },
-        { _id: '2', categories: [{ name: 'Coding', reps: 5 }] },
-        { _id: '3', categories: [{ name: 'Coding', reps: 3 }] },
-        { _id: '4', categories: [{ name: 'Coding', reps: 1 }] },
-      ];
-
-      var expected = [
-        { _id: '4', categories: [{ name: 'Coding', reps: 1 }] },
-        { _id: '1', categories: [{ name: 'Coding', reps: 3 }] },
-        { _id: '3', categories: [{ name: 'Coding', reps: 3 }] },
-        { _id: '2', categories: [{ name: 'Coding', reps: 5 }] },
-      ];
-
-      var repsComparator = utils.getRepsComparator('Coding');
-      var results = users.sort(repsComparator);
-      expect(results.length).toEqual(4);
-      expect(results).toEqual(expected);
     });
   });
 
