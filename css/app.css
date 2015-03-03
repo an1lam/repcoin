@@ -185,9 +185,18 @@
   padding-right:5px;
 }
 
+.welcome-cards-heading {
+  background-color: #428bca !important;
+  color: white !important;
+}
+
+.welcome-cards-title {
+  font-size: x-large;
+}
+
 .category-card {
   margin-right: 10px;
-  height: 300px;
+  height: 325px;
 }
 
 .category-card img {
@@ -196,13 +205,12 @@
 
 .category-card li {
   display: block;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .category-card ul {
   list-style-type: none;
   padding: 0;
-  margin: 0;
 }
 
 .category-card button {

@@ -45,12 +45,12 @@ var CategoriesCards = React.createClass({
     }
 
     return (
-      <div className="welcomeCards panel panel-default">
-        <div className="panel-heading">
-          <h1 className="panel-title">
+      <div className="welcome-cards panel panel-default">
+        <div className="panel-heading welcome-cards-heading">
+          <p className="panel-title welcome-cards-title">
             Welcome to Repcoin! Here are some of the most popular categories
             on the site. Have a look! Decide which ones interest you.
-          </h1>
+          </p>
         </div>
         <div className="panel-body">
           {cards}

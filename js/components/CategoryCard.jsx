@@ -27,9 +27,9 @@ var CategoryCard = React.createClass({
           <Link to="profile" params={{userId: user.id}}>
             {user.name}
           </Link>
+          {img}
           <MiniInvestButton user={user}
             currentUser={this.props.currentUser} />
-          {img}
           {about}
 
         </li>
@@ -40,9 +40,9 @@ var CategoryCard = React.createClass({
       <div
         className="panel panel-default col-md-5 category-card">
         <div className="panel-body">
-          <h4><Link to="category" params={{category: this.props.name}}>
+          <h2><Link to="category" params={{category: this.props.name}}>
             {this.props.name}
-          </Link></h4>
+          </Link></h2>
           <ul>
             {users}
           </ul>

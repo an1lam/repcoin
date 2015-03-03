@@ -162,9 +162,7 @@ TransactionSchema.statics.getTotalRepsTraded = function() {
         }
       }
     },
-    { $group: { _id: null, total: { $sum: '$amount'} } },
-    { $sort: { total: 1 } },
-    { $limit: 6 }
+    { $group: { _id: null, total: { $sum: '$amount'} } }
   ]).exec();
 };
 

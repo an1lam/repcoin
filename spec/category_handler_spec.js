@@ -52,7 +52,7 @@ describe('CategoryHandler: ', function() {
          picture: {url: 'test.com'}, about: 'Test'};
       it('returns the hot categories with the corresponding users',
         function() {
-        spyOn(User, 'getUserPictureAndAbout').andReturn({
+        spyOn(User, 'getUserPictureAboutCategories').andReturn({
           then: function(cbS, cbF) {
             return cbS(hotUsersPictureAndAbout);
           }

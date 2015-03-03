@@ -100,12 +100,11 @@ var AuthStore = assign({}, EventEmitter.prototype, {
   },
 
   isNewby: function() {
-    /*if (_currentUser && _currentUser.portfolio.length < 1) {
+    if (_currentUser && _currentUser.portfolio.length < 1) {
       return true;
     } else {
       return false;
-    }*/
-    return true;
+    }
   },
 
   toggleShowLogin: function() {
