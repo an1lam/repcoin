@@ -108,7 +108,7 @@ var UserSchema = new Schema({
     previousPercentile: {type: Number, default: 0, required: true },
 
     // The reps received for this category
-    reps: {type: Number, default: 0, required: true },
+    reps: {type: Number, default: 5, required: true },
 
     // A list of investors who hold reps in this user for this category
     investors: [{
