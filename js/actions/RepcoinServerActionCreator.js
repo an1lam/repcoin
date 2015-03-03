@@ -97,5 +97,19 @@ module.exports = {
       type: ActionTypes.PASSWORD_RESET_EMAIL_FAILED,
       msg: msg
     });
+  },
+
+  receiveHotCategoriesAndUsers: function(categories) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.HOT_CATEGORIES_AND_USERS,
+      categories: categories
+    });
+  },
+
+  receiveHotCategoriesAndUsersError: function(msg) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.HOT_CATEGORIES_AND_USERS_ERROR,
+      msg: msg
+    });
   }
 };

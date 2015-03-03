@@ -26,4 +26,12 @@ module.exports = {
 
     api.getTotalRepsTraded();
   },
+
+  getHotCategoriesAndUsers: function() {
+    RepcoinAppDispatcher.handleViewAction({
+      type: ActionTypes.GET_HOT_CATEGORIES_AND_USERS
+    });
+
+    api.getHotCategoriesAndUsers();
+  },
 };

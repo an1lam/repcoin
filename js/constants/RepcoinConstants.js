@@ -24,6 +24,9 @@ module.exports = {
     SEND_PASSWORD_RESET_EMAIL: null,
     PASSWORD_RESET_EMAIL_SENT: null,
     PASSWORD_RESET_EMAIL_FAILED: null,
+    GET_HOT_CATEGORIES_AND_USERS: null,
+    HOT_CATEGORIES_AND_USERS: null,
+    HOT_CATEGORIES_AND_USERS_ERROR: null,
   }),
 
   PayloadSources: keyMirror({
