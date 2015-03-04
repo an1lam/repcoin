@@ -3,7 +3,6 @@
 var InvestorList = require('./InvestorList.jsx');
 var React = require('react');
 var Router = require('react-router');
-var ScoreBar = require('./ScoreBar.jsx');
 var Link = Router.Link;
 
 var CategoriesItem = React.createClass({
@@ -67,9 +66,7 @@ var CategoriesItem = React.createClass({
             <Link to="category" params={{category: this.props.category.name}}>{this.props.category.name}</Link>
             {deleteBtn}
           </td>
-          <td className="percentile-col"><ScoreBar percentile={this.props.category.percentile}
-            previousPercentile={this.props.category.previousPercentile} category={this.props.category.name}/>
-          </td>
+          <td>{this.props.category.rank}</td>
           <td>{this.props.category.reps}</td>
           <td>
             <InvestorList category={this.props.category} investors={this.state.investors} />

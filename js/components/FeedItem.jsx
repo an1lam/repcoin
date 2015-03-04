@@ -45,7 +45,7 @@ var FeedItem = React.createClass({
         cb(user);
       }.bind(this),
       error: function(xhr, status, err) {
-        console.log(xhr.responseText);
+        console.error(xhr.responseText);
         cb(null);
       }.bind(this)
     });

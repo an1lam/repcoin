@@ -1,2 +1,1 @@
 karma start --single-run
-npm run backend-test

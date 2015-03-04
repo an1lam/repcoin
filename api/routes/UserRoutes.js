@@ -38,9 +38,9 @@ module.exports = function(router, isAuthenticated, acl, censor) {
 
           // Create an event for the user becoming an expert
           utils.createEvent('addexpert', [user.username, user._id, category.name]);
-          utils.updateExpertPercentiles(category.name, function(err) {
+          utils.updateRank(category.name, true, function(err) {
             if (err) {
-              winston.log('error', 'Error updating expert percentiles: %s', err);
+              winston.log('error', 'Error updating expert rank: %s', err);
               return res.status(501).send(err);
             } else {
               User.findById(userId, function(err, user) {

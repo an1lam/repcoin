@@ -37,7 +37,16 @@ var CategoriesTable = React.createClass({
   componentWillReceiveProps: function(newProps) {
     if (newProps.user._id !== this.props.user._id) {
       this.resetState();
+      this.getCategoryExpertSizes(newProps.user.categories);
     }
+  },
+
+  getCategoryExpertSizes: function(categories) {
+    var list = [];
+    for (var i = 0; i < categories.length; i++) {
+      list.push(categories[i].name);
+    }
+    CategoriesActionCreator.getSizes(list, true);
   },
 
   handleMouseOver: function() {
@@ -179,9 +188,9 @@ var CategoriesTable = React.createClass({
           <tbody>
             <tr>
               <th>Category</th>
-              <th>Percentile</th>
+              <th>Rank</th>
               <th>Reps Received</th>
-              <th>Top Investors (Percentile)</th>
+              <th>Top Investors (Rank)</th>
             </tr>
             {categoryRows}
           </tbody>

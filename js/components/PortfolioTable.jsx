@@ -29,10 +29,10 @@ var PortfolioTable = React.createClass({
 
   getPortfolioComparator: function() {
     return function(a, b) {
-      if (a.percentile > b.percentile) {
+      if (a.rank > b.rank) {
         return -1;
       }
-      if (a.percentile < b.percentile) {
+      if (a.rank < b.rank) {
         return 1;
       }
       return 0;
@@ -95,7 +95,7 @@ var PortfolioTable = React.createClass({
         <table className="table table-bordered table-striped">
           <tr className="PortfolioHeader">
             <th>Category</th>
-            <th>Percentile</th>
+            <th>Rank</th>
             {investmentHeader}
           </tr>
           <tbody>
