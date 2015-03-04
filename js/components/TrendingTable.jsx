@@ -14,16 +14,16 @@ var TrendingTable = React.createClass({
   },
 
   componentDidMount: function() {
-    this.getLeaders(this.props.category);
+    this.getLeaders(this.props.category.name);
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.getLeaders(newProps.category, strings.THIS_MONTH);
+    this.getLeaders(newProps.category.name, strings.THIS_MONTH);
   },
 
   setTimeframe: function(e) {
     e.preventDefault();
-    this.getLeaders(this.props.category, e.target.value);
+    this.getLeaders(this.props.category.name, e.target.value);
   },
 
   getDate: function(timeframe) {
@@ -66,24 +66,30 @@ var TrendingTable = React.createClass({
   },
 
   getLeaderRows: function() {
+    console.log('category name: ' + this.props.category.name);
+    console.log('leaders: ' + this.state.leaders);
     var leaderRows = [];
-    var percentile, leader;
+    var rank, leader;
     var length = this.state.leaders.length;
     for (var i = 0; i < length; i++) {
       leader = this.state.leaders[i];
       for (var j = 0; j < leader.categories.length; j++) {
-        if (leader.categories[j].name.toLowerCase() === this.props.category.toLowerCase()) {
-          percentile = leader.categories[j].percentile;
+        if (leader.categories[j].name.toLowerCase() === this.props.category.name.toLowerCase()) {
+          console.log('found match');
+          rank = leader.categories[j].rank + ' / ' + this.props.category.experts;
           break;
         }
       }
       leaderRows.push(
         <tr key={leader._id}>
           <td><Link to="profile" params={{userId: leader._id}}>{leader.username}</Link></td>
-          <td>{percentile}</td>
+          <td>{rank}</td>
         </tr>
       );
     }
+    console.log('leader rows');
+    console.log(leaderRows);
+    console.log('done printing');
     return leaderRows;
   },
 
@@ -107,7 +113,7 @@ var TrendingTable = React.createClass({
           </tr>
           <tr>
             <th>{strings.NAME}</th>
-            <th>{strings.PERCENTILE}</th>
+            <th>{strings.RANK}</th>
           </tr>
           </thead>
           <tbody>

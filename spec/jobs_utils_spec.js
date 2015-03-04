@@ -341,18 +341,18 @@ describe('Job utils: ', function() {
     });
   });
 
-  describe('setPreviousPercentileToCurrent: ', function() {
+  describe('setPreviousRankToCurrent: ', function() {
     var users;
     beforeEach(function() {
       users = [
         {
           _id: '123',
-          categories: [ { name: 'Foo', percentile: 24, previousPercentile: 30 } ],
+          categories: [ { name: 'Foo', rank: 24, previousRank: 30 } ],
           save: jasmine.createSpy().andReturn()
         },
         {
           _id: '456',
-          categories: [ { name: 'Bar', percentile: 40, previousPercentile: 19 } ],
+          categories: [ { name: 'Bar', rank: 40, previousRank: 19 } ],
           save: jasmine.createSpy().andReturn()
         },
       ];
@@ -362,14 +362,14 @@ describe('Job utils: ', function() {
       spyOn(User, 'find').andCallFake(function(callback) {
         return callback('Error', null);
       });
-      utils.setPreviousPercentileToCurrent(cb);
+      utils.setPreviousRankToCurrent(cb);
       expect(winston.log).toHaveBeenCalledWith('error',
-        'Error setting previous percentiles to current: %s', 'Error');
-      expect(users[0].categories[0].percentile).toEqual(24);
-      expect(users[1].categories[0].percentile).toEqual(40);
+        'Error setting previous ranks to current: %s', 'Error');
+      expect(users[0].categories[0].rank).toEqual(24);
+      expect(users[1].categories[0].rank).toEqual(40);
     });
 
-    it('sets previous percentiles to percentiles', function() {
+    it('sets previous ranks to ranks', function() {
       spyOn(User, 'find').andCallFake(function(callback) {
         return callback(null, users);
       });
@@ -377,11 +377,11 @@ describe('Job utils: ', function() {
         return callback([]);
       });
 
-      utils.setPreviousPercentileToCurrent(cb);
-      expect(users[0].categories[0].previousPercentile).toEqual(
-        users[0].categories[0].percentile);
-      expect(users[1].categories[0].previousPercentile).toEqual(
-        users[1].categories[0].percentile);
+      utils.setPreviousRankToCurrent(cb);
+      expect(users[0].categories[0].previousRank).toEqual(
+        users[0].categories[0].rank);
+      expect(users[1].categories[0].previousRank).toEqual(
+        users[1].categories[0].rank);
     });
   });
 
