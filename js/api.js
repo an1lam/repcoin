@@ -154,10 +154,10 @@ module.exports = {
       }.bind(this),
       error: function(xhr, status, err) {
         if (expert) {
-          ServerActionCreator.receiveCategoryExpertSizes(
+          ServerActionCreator.receiveCategoryExpertSizesError(
             xhr.responseText);
         } else {
-          ServerActionCreator.receiveCategoryInvestorSizes(
+          ServerActionCreator.receiveCategoryInvestorSizesError(
             xhr.responseText);
         }
       }.bind(this),
