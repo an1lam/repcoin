@@ -66,14 +66,6 @@ var CategoriesTable = React.createClass({
     CategoriesActionCreator.getSizes(list, true);
   },
 
-  getCategoryExpertSizes: function(categories) {
-    var list = [];
-    for (var i = 0; i < categories.length; i++) {
-      list.push(categories[i].name);
-    }
-    CategoriesActionCreator.getSizes(list, true);
-  },
-
   handleMouseOver: function() {
     if (!this.state.showDeleteBox && !this.state.addMode && !this.state.deleteMode) {
       this.setState({ editHover: true });
