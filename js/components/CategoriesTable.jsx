@@ -54,7 +54,7 @@ var CategoriesTable = React.createClass({
   componentWillReceiveProps: function(newProps) {
     if (newProps.user._id !== this.props.user._id) {
       this.resetState();
-      this.getCategoryExpertSize(newProps.user.categories);
+      this.getCategoryExpertSizes(newProps.user.categories);
     }
   },
 
