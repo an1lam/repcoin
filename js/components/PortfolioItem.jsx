@@ -18,7 +18,7 @@ var PortfolioItem = React.createClass({
         <td>
           <Link to="category" params={{category: name}}>{name}</Link>
         </td>
-        <td>{this.props.category.percentile}</td>
+        <td>{this.props.category.rank}</td>
         {investments}
       </tr>
     );

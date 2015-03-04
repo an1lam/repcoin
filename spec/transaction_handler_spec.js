@@ -1,5 +1,6 @@
 process.env.NODE_ENV = 'test';
 var Category = require('../api/models/Category.js');
+var Notification = require('../api/models/Notification.js');
 var Transaction = require('../api/models/Transaction.js');
 var TransactionHandler = require('../api/handlers/transaction.js');
 var User = require('../api/models/User.js');
@@ -200,10 +201,364 @@ describe('TransactionHandler: ', function() {
     });
 
     describe('post: ', function() {
+      var transactionPromise, toUserPromise, fromUserPromise, categoryPromise;
+
+      beforeEach(function() {
+        categoryPromise = {
+          category: {
+            timeStamp: new Date(),
+            toObject: function() {
+              return this;
+            }
+          },
+
+          then: function(cb) {
+            return cb(this.category);
+          }
+        };
+
+        transactionPromise = {
+          transaction: {
+            timeStamp: new Date(),
+            from: { anonymous: false, name: 'Bob', id: '123' },
+            to: { name: 'Matt', id: '456' },
+            amount: 10,
+            toObject: function() {
+              return this;
+            }
+
+          },
+
+          then: function(cb) {
+            return cb(this.transaction);
+          }
+        };
+
+          toUserPromise = {
+            exec: function() {
+              return {
+                then: function(cb) {
+                  return cb(
+                    {
+                      _id: '123',
+                      toObject: function() {
+                        return this;
+                      },
+                    }
+                  );
+                }
+              }
+            }
+          };
+
+        fromUserPromise = {
+          exec: function() {
+            return {
+              then: function(cb) {
+                return cb(
+                  {
+                    _id: '456',
+                    toObject: function() {
+                      return this;
+                    },
+                  }
+                );
+              }
+            }
+          }
+        };
+      });
+
       it('handles invalid inputs', function() {
         TransactionHandler.transactions.post(req, res);
         expect(res.status).toHaveBeenCalledWith(412);
         expect(res.send).toHaveBeenCalledWith('Invalid transaction inputs');
+      });
+
+      it('handles error creating transaction', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn({
+          then: function(cbS, cbF) { return cbF('failure!'); }
+        });
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
+
+      it('handles error finding user', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn(transactionPromise);
+        spyOn(User, 'findById').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbF('failure!'); }
+            };
+          }
+        });
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
+
+      it('handles error finding category', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn(transactionPromise);
+        spyOn(User, 'findById').andCallFake(function(userId) {
+          if (userId === '123' ) {
+            return toUserPromise;
+          } else {
+            return fromUserPromise;
+          }
+        });
+        spyOn(Category, 'findByName').andReturn({
+            then: function(cbS, cbF) { return cbF('failure!'); }
+        });
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
+
+      it('handles error processing transaction', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn(transactionPromise);
+        spyOn(User, 'findById').andCallFake(function(userId) {
+          if (userId === '123' ) {
+            return toUserPromise;
+          } else {
+            return fromUserPromise;
+          }
+        });
+        spyOn(Category, 'findByName').andReturn(categoryPromise);
+        spyOn(utils, 'processTransaction').andReturn('Error!');
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('Error!');
+      });
+
+      it('handles error saving user', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn(transactionPromise);
+        spyOn(User, 'findById').andCallFake(function(userId) {
+          if (userId === '123' ) {
+            return toUserPromise;
+          } else {
+            return fromUserPromise;
+          }
+        });
+        spyOn(Category, 'findByName').andReturn(categoryPromise);
+        spyOn(utils, 'processTransaction').andReturn(null);
+        spyOn(User, 'findOneAndUpdate').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbF('failure!'); }
+            };
+          }
+        });
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
+
+      it('handles error ', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn(transactionPromise);
+        spyOn(User, 'findById').andCallFake(function(userId) {
+          if (userId === '123' ) {
+            return toUserPromise;
+          } else {
+            return fromUserPromise;
+          }
+        });
+        spyOn(Category, 'findByName').andReturn(categoryPromise);
+        spyOn(utils, 'processTransaction').andReturn(null);
+        spyOn(User, 'findOneAndUpdate').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbS(null); }
+            };
+          }
+        });
+        spyOn(Category, 'findOneAndUpdate').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbF('failure!'); }
+            };
+          }
+        });
+
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
+
+      it('handles error updating dividends', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn(transactionPromise);
+        spyOn(User, 'findById').andCallFake(function(userId) {
+          if (userId === '123' ) {
+            return toUserPromise;
+          } else {
+            return fromUserPromise;
+          }
+        });
+        spyOn(Category, 'findByName').andReturn(categoryPromise);
+        spyOn(utils, 'processTransaction').andReturn(null);
+        spyOn(User, 'findOneAndUpdate').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbS(null); }
+            };
+          }
+        });
+
+        var category = { name: 'Coding' };
+        spyOn(Category, 'findOneAndUpdate').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbS(category); }
+            };
+          }
+        });
+        spyOn(utils, 'updateDividends').andCallFake(function(a, b, cb) {
+          return cb('failure!');
+        });
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
+
+      it('handles error updating rank', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn(transactionPromise);
+        spyOn(User, 'findById').andCallFake(function(userId) {
+          if (userId === '123' ) {
+            return toUserPromise;
+          } else {
+            return fromUserPromise;
+          }
+        });
+        spyOn(Category, 'findByName').andReturn(categoryPromise);
+        spyOn(utils, 'processTransaction').andReturn(null);
+        spyOn(User, 'findOneAndUpdate').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbS(null); }
+            };
+          }
+        });
+
+        var category = { name: 'Coding' };
+        spyOn(Category, 'findOneAndUpdate').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbS(category); }
+            };
+          }
+        });
+        spyOn(utils, 'updateDividends').andCallFake(function(a, b, cb) {
+          return cb(null);
+        });
+        spyOn(utils, 'updateAllRank').andCallFake(function(a, cb) {
+          return cb('failure!');
+        });
+        TransactionHandler.transactions.post(req, res);
+        expect(res.status).toHaveBeenCalledWith(503);
+        expect(res.send).toHaveBeenCalledWith('failure!');
+      });
+
+      it('creates notification and returns transaction', function() {
+        req.body = {
+          category: 'coding',
+          amount: 10,
+          to: { name: 'Matt', id: '123' },
+          from: { name: 'Stephen', id: '456' },
+        };
+
+        spyOn(Transaction, 'create').andReturn(transactionPromise);
+        spyOn(User, 'findById').andCallFake(function(userId) {
+          if (userId === '123' ) {
+            return toUserPromise;
+          } else {
+            return fromUserPromise;
+          }
+        });
+        spyOn(Category, 'findByName').andReturn(categoryPromise);
+        spyOn(utils, 'processTransaction').andReturn(null);
+        spyOn(User, 'findOneAndUpdate').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbS(null); }
+            };
+          }
+        });
+
+        var category = { name: 'Coding' };
+        spyOn(Category, 'findOneAndUpdate').andReturn({
+          exec: function() {
+            return {
+              then: function(cbS, cbF) { return cbS(category); }
+            };
+          }
+        });
+        spyOn(utils, 'updateDividends').andCallFake(function(a, b, cb) {
+          return cb(null);
+        });
+        spyOn(utils, 'updateAllRank').andCallFake(function(a, cb) {
+          return cb(null);
+        });
+        spyOn(Notification, 'create').andReturn();
+        TransactionHandler.transactions.post(req, res);
+        expect(Notification.create.callCount).toEqual(1);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.send).toHaveBeenCalledWith(transactionPromise.transaction);
       });
     });
   });

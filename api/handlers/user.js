@@ -322,9 +322,9 @@ var UserHandler = {
                     winston.log('error', 'Error undoing investor activity: %s', err.toString());
                     return res.status(501).send(err);
                   }
-                  utils.updatePercentilesAndDividends(category.name, null, function(err) {
+                  utils.updateAllRank(category.name, function(err) {
                     if (err) {
-                      winston.log('error', 'Error updating percentiles: %s', err.toString());
+                      winston.log('error', 'Error updating rank: %s', err.toString());
                       return res.status(400).send(err);
                     }
                     return res.status(200).send(user);
@@ -372,9 +372,9 @@ var UserHandler = {
                         winston.log('error', 'Error saving user: %s', err);
                         return res.status(501).send(err);
                       }
-                      utils.updatePercentilesAndDividends(categoryName, null, function(err) {
+                      utils.updateAllRank(categoryName, function(err) {
                         if (err) {
-                          winston.log('error', 'Error updating percentiles: %s', err.toString());
+                          winston.log('error', 'Error updating rank: %s', err.toString());
                           return res.status(400).send(err);
                         }
                         return res.status(200).send(user);
@@ -398,20 +398,20 @@ var UserHandler = {
         if (!utils.validateLeadersInputs(req)) {
           return res.status(412).send('Invalid inputs');
         }
-
         var categoryName = req.params.categoryName;
         var expert = req.query.expert === '1';
+        var query;
+        if (expert) {
+          query = User.findTopRankedExperts(categoryName);
+        } else {
+          query = User.findTopRankedInvestors(categoryName);
+        }
 
-        User.findUserByCategoryPublic(categoryName, expert, function(err, leaders) {
-          if (err) {
-            winston.log('error', 'Error finding users: %s', err);
-            return res.status(501).send(err);
-          } else {
-            // sort the users in decreasing order of directScore
-            var percentileComparator = utils.getPercentileComparator(categoryName, expert);
-            leaders = leaders.sort(percentileComparator);
-            return res.status(200).send(leaders.slice(0,10));
-          }
+        query.then(function(leaders) {
+          return res.status(200).send(leaders);
+        }, function(err) {
+          winston.log('error', 'Error finding ranked leaders: %s', err.toString());
+          return res.status(503).send(err);
         });
       }
     },
