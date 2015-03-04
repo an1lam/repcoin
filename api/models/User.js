@@ -54,8 +54,12 @@ var UserSchema = new Schema({
       length  : { type: Number },
     },
 
+    // DEPRECATED
     // Percentile relative to all investors in this category
     percentile: {type: Number, default: 0, required: true },
+
+    // The rank for this category
+    rank: { type: Number, default: 0, required: true },
 
     // Category for this portfolio entry
     category: {type: String, required: true },
@@ -101,14 +105,22 @@ var UserSchema = new Schema({
     // The id of the category
     id: {type: Schema.Types.ObjectId, required: true },
 
+    // DEPRECATED
     // The percentile for this user compared to users in this category
     percentile: {type: Number, default: 0, required: true },
 
+    // DEPRECATED
     // The percentile from yesterday
     previousPercentile: {type: Number, default: 0, required: true },
 
     // The reps received for this category
     reps: {type: Number, default: 5, required: true },
+
+    // The rank for this category
+    rank: { type: Number, default: 0, required: true },
+
+    // The rank from yesterday
+    previousRank: { type: Number, default: 0, required: true },
 
     // A list of investors who hold reps in this user for this category
     investors: [{
@@ -238,6 +250,98 @@ UserSchema.statics.findInvestorByCategory= function(category, cb) {
 
 UserSchema.statics.getUserPictureAboutCategories = function (userId) {
   return this.findById(userId, 'picture about categories').exec();
+};
+
+// Get top ranked user ids for a given investor category, descending
+// Ranking done by total reps
+// Only returns the username, picture, rank, and reps for the category
+UserSchema.statics.findTopRankedInvestors = function(category) {
+  return this.aggregate([
+    { $match: { "portfolio.category": category }},
+    { $unwind: "$portfolio" },
+    { $match: { "portfolio.category": category }},
+    { $sort: { "portfolio.rank": 1 }},
+    { $project: { _id: 1, picture: 1, "portfolio.rank": 1, username: 1 }},
+    { $limit: 10 },
+  ]).exec();
+};
+
+// Get top ranked user ids for a given expert category, descending
+// Ranking done by total reps
+// Only returns the username, picture, rank, and reps for the category
+UserSchema.statics.findTopRankedExperts = function(category) {
+  return this.aggregate([
+    { $match: { "categories.name": category }},
+    { $unwind: "$categories" },
+    { $match: { "categories.name": category }},
+    { $sort: { "categories.rank": 1 }},
+    { $project: { _id: 1, picture: 1, "categories.rank": 1, "categories.reps": 1, username: 1 }},
+    { $limit: 10 },
+  ]).exec();
+};
+
+// Get ranked user ids for a given expert category, descending
+// Ranking done by total reps
+// Only returns the IDs of the users in ranked order
+UserSchema.statics.findRankedExperts = function(category) {
+  return this.aggregate([
+    { $match: { "categories.name": category }},
+    { $unwind: "$categories" },
+    { $match: { "categories.name": category }},
+    { $sort: { "categories.reps": -1 }},
+    { $project: { _id: 1 }},
+  ]).exec();
+};
+
+// Get ranked user ids for a given expert category, decreasing
+// Ranking done by total dividends
+UserSchema.statics.findRankedInvestors = function(category) {
+  return this.aggregate([
+    { $match: { "portfolio.category": category }},
+    { $unwind: "$portfolio" },
+    { $unwind: "$portfolio.investments" },
+    { $match: { "portfolio.category": category } },
+    { $group: { _id: "$_id", dividends: { $sum: "$portfolio.investments.dividend" } }},
+    { $sort: { "dividends": -1 }},
+    { $project: { "_id": 1 } },
+  ]).exec();
+};
+
+// Update the rank for a given investor and category
+UserSchema.statics.updateRank = function(userId, categoryName, rank, expert, cb) {
+  if (expert) {
+    return this.update(
+      { _id: mongoose.Types.ObjectId(userId), "categories.name": categoryName },
+      { $set: { "categories.$.rank": rank } }
+    ).exec(cb);
+  } else {
+    return this.update(
+      { _id: mongoose.Types.ObjectId(userId), "portfolio.category": categoryName },
+      { $set: { "portfolio.$.rank": rank } }
+    ).exec(cb);
+  }
+};
+
+// Update the investments for a given investor and category
+// Used to update dividends upon a transaction occurring
+UserSchema.statics.updateInvestments = function(userId, categoryName, investments, cb) {
+  return this.update(
+    { _id: userId, "portfolio.category": categoryName },
+    { $set: { "portfolio.$.investments": investments } }
+  ).exec(cb);
+};
+
+// Get investments for a given category for investors who have invested in the given user
+// Used to update dividends for all investors who invested in this user for this category
+// We cannot say for sure that the investment made in the user is the one we want for this category
+// Since there could be many investments in this user
+UserSchema.statics.findInvestments = function(userId, category) {
+  return this.aggregate([
+    { $match: { "portfolio.category": category, "portfolio.investments.userId": mongoose.Types.ObjectId(userId) }},
+    { $unwind: "$portfolio" },
+    { $match: { "portfolio.category": category } },
+    { $project: { _id: 1, investments: "$portfolio.investments" } }
+  ]).exec();
 };
 
 module.exports = mongoose.model('User', UserSchema);

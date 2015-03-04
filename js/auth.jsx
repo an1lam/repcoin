@@ -20,7 +20,7 @@ var auth = {
         return true;
       },
       error: function(xhr, status, err) {
-        console.log(err);
+        console.error(err);
         cb(false, xhr.responseText);
         return false;
       }

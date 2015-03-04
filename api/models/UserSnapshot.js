@@ -12,8 +12,11 @@ var UserSnapshotSchema = new Schema({
   // The investor categories for this user
   portfolio: [{
 
+    // DEPRECATED
     // Percentile relative to all investors in this category
     percentile: {type: Number, required: true },
+
+    rank: { type: Number, required: true },
 
     // Category for this portfolio entry
     category: {type: String, required: true },
@@ -52,9 +55,11 @@ var UserSnapshotSchema = new Schema({
     // The id of the category
     id: {type: Schema.Types.ObjectId, required: true },
 
+    // DEPRECATED
     // The percentile for this user compared to users in this category
     percentile: {type: Number, required: true},
 
+    rank: { type: Number, required: true },
     // The reps received for this category
     reps: {type: Number, required: true },
 

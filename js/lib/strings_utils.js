@@ -103,7 +103,6 @@ var strings = {
   },
   NOT_ENOUGH_REPS: 'You do not have enough reps!',
   PASSWORDS_DO_NOT_MATCH: 'Passwords do not match',
-  PERCENTILE: 'Percentile',
   PORTFOLIO_HEADER_REPS: function(amount) {
     return amount + ' reps available';
   },
@@ -113,6 +112,7 @@ var strings = {
   PORTFOLIO_TABLE_TITLE: function(name) {
     return name + '\'s Investor Categories';
   },
+  RANK: 'Rank',
   REPCOIN: 'Repcoin',
   REPS: 'Reps',
   REPS_AVAILABLE: 'Reps Available',
