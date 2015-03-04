@@ -97,5 +97,47 @@ module.exports = {
       type: ActionTypes.PASSWORD_RESET_EMAIL_FAILED,
       msg: msg
     });
+  },
+
+  receiveCategoryExpertSizes: function(categories) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.CATEGORY_EXPERT_SIZES,
+      categories: categories
+    });
+  },
+
+  receiveCategoryExpertSizesError: function(msg) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.CATEGORY_EXPERT_SIZES_ERROR,
+      msg: msg,
+    });
+  },
+
+  receiveCategoryInvestorSizes: function(categories) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.CATEGORY_INVESTOR_SIZES,
+      categories: categories
+    });
+  },
+
+  receiveCategoryInvestorSizesError: function(msg) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.CATEGORY_INVESTOR_SIZES_ERROR,
+      msg: msg,
+    });
+  },
+
+  receiveHotCategoriesAndUsers: function(categories) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.HOT_CATEGORIES_AND_USERS,
+      categories: categories
+    });
+  },
+
+  receiveHotCategoriesAndUsersError: function(msg) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.HOT_CATEGORIES_AND_USERS_ERROR,
+      msg: msg
+    });
   }
 };

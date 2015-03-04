@@ -140,6 +140,41 @@ module.exports = {
     });
   },
 
+  getCategorySizes: function(categories, expert) {
+    var e = expert ? '1' : '0';
+    $.ajax({
+      url: '/api/categories/members/' + e,
+      data: { categories: categories },
+      success: function(categories) {
+        if (expert) {
+          ServerActionCreator.receiveCategoryExpertSizes(categories);
+        } else {
+          ServerActionCreator.receiveCategoryInvestorSizes(categories);
+        }
+      }.bind(this),
+      error: function(xhr, status, err) {
+        if (expert) {
+          ServerActionCreator.receiveCategoryExpertSizes(
+            xhr.responseText);
+        } else {
+          ServerActionCreator.receiveCategoryInvestorSizes(
+            xhr.responseText);
+        }
+      }.bind(this),
+    });
+  },
+
+  getHotCategoriesAndUsers: function() {
+    $.ajax({
+      url: '/api/categories/hot',
+      success: ServerActionCreator.receiveHotCategoriesAndUsers,
+      error: function(xhr, status, err) {
+        ServerActionCreator.receiveHotCategoriesAndUsersError(
+          xhr.responseText);
+      }.bind(this)
+    });
+  },
+
   facebook: {
     authorize: function(hash, id) {
       function responseHandler(res) {

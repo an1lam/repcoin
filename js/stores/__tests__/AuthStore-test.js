@@ -34,7 +34,7 @@ describe('CategoriesStore', function() {
     source: RepcoinConstants.PayloadSources.SERVER_ACTION,
     action: {
       type: RepcoinConstants.ActionTypes.RECEIVE_CURRENT_USER_AND_NOTIFICATIONS,
-      user: {username: 'Test User'},
+      user: {username: 'Test User', portfolio: []},
       notifications: [],
     }
   };
@@ -42,8 +42,29 @@ describe('CategoriesStore', function() {
   it('gets the current user after it\'s received from the server', function() {
     callback(actionReceiveCurrentUser);
     var user = AuthStore.getCurrentUser();
-    expect(user).toEqual({username: 'Test User'});
+    expect(user).toEqual({
+      username: 'Test User',
+      portfolio: []
+    });
   });
+
+  it('recognizes that the user is a newby', function() {
+    callback(actionReceiveCurrentUser);
+    expect(AuthStore.isNewby()).toEqual(true);
+  });
+
+  var actionReceiveCurrentUserWithPortfolio = {
+    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+    action: {
+      type: RepcoinConstants.ActionTypes.RECEIVE_CURRENT_USER_AND_NOTIFICATIONS,
+      user: {username: 'Test User', portfolio: [{test: 'test'}]},
+      notifications: [],
+    }
+  }
+  it('recognizes that the user is no longer a newby', function() {
+    callback(actionReceiveCurrentUserWithPortfolio);
+    expect(AuthStore.isNewby()).toEqual(false);
+  })
 
   var actionReceiveLoggedIn = {
     source: RepcoinConstants.PayloadSources.SERVER_ACTION,

@@ -99,6 +99,14 @@ var AuthStore = assign({}, EventEmitter.prototype, {
     return _passwordResetStatus.error;
   },
 
+  isNewby: function() {
+    if (_currentUser && _currentUser.portfolio.length < 1) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
   toggleShowLogin: function() {
     _showLogin = !_showLogin;
   }

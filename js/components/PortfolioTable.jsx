@@ -1,17 +1,43 @@
 'use strict';
 
 var $ = require('jquery');
+var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
 var CategoryDelete = require('./CategoryDelete.jsx');
 var CategoryInput = require('./CategoryInput');
+var CategoriesStore = require('../stores/CategoriesStore.js');
 var PortfolioHeader = require('./PortfolioHeader.jsx');
 var PortfolioItem = require('./PortfolioItem.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
 var strings = require('../lib/strings_utils.js');
 
+function getStateFromStores() {
+  return {
+    sizes: CategoriesStore.getSizes(false)
+  }
+}
+
 var PortfolioTable = React.createClass({
+  getInitialState: function() {
+    return getStateFromStores();
+  },
+
   componentDidMount: function() {
     $('.dividend-info').popover({ trigger: 'hover focus' });
+    CategoriesStore.addChangeListener(this._onChange);
+    this.getCategoryInvestorSizes(this.props.user.portfolio);
+  },
+
+  componentWillUnmount: function() {
+    CategoriesStore.removeChangeListener(this._onChange);
+  },
+
+  getCategoryInvestorSizes: function(categories) {
+    var list = [];
+    for (var i = 0; i < categories.length; i++) {
+      list.push(categories[i].category);
+    }
+    CategoriesActionCreator.getSizes(list, false);
   },
 
   getPortfolioItems: function(privateFields) {
@@ -20,8 +46,18 @@ var PortfolioTable = React.createClass({
     var sortedPortfolio = this.props.user.portfolio.concat().sort(this.getPortfolioComparator());
     for (var i = 0; i < sortedPortfolio.length; i++) {
       var category = sortedPortfolio[i];
+
+      var size;
+      // Go through all of the category members to find the size
+      for (var j = 0; j < this.state.sizes.length; j++) {
+        if (this.state.sizes[j].name === category.category) {
+          size = this.state.sizes[j].investors;
+          break;
+        }
+      }
+
       portfolioItems.push(
-        <PortfolioItem key={category.category} category={category} privateFields={privateFields} />
+        <PortfolioItem key={category.category} size={size} category={category} privateFields={privateFields} />
       );
     }
     return portfolioItems;
@@ -105,6 +141,10 @@ var PortfolioTable = React.createClass({
         {addCategoriesText}
       </div>
     );
+  },
+
+  _onChange: function() {
+    this.setState(getStateFromStores())
   }
 });
 

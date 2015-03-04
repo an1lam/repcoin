@@ -114,7 +114,7 @@ var UserSchema = new Schema({
     previousPercentile: {type: Number, default: 0, required: true },
 
     // The reps received for this category
-    reps: {type: Number, default: 0, required: true },
+    reps: {type: Number, default: 5, required: true },
 
     // The rank for this category
     rank: { type: Number, default: 0, required: true },
@@ -338,6 +338,10 @@ UserSchema.statics.findInvestments = function(userId, category) {
     { $match: { "portfolio.category": category } },
     { $project: { _id: 1, investments: "$portfolio.investments" } }
   ]).exec();
+};
+
+UserSchema.statics.getUserPictureAboutCategories = function (userId) {
+  return this.findById(userId, 'picture about categories').exec();
 };
 
 module.exports = mongoose.model('User', UserSchema);

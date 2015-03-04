@@ -1,15 +1,87 @@
 'use strict';
 
+var Q = require('q');
 var Category = require('../api/models/Category.js');
 var routeUtils = require('../api/routes/utils.js');
 var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
+var UserSnapshot = require('../api/models/UserSnapshot.js');
 var winston = require('winston');
 
 var DIVIDEND_PERCENTAGE = 0.1;
 
 // Utility functions for jobs
 var utils = {
+
+  // Migrate rank to all user snapshots
+  migrateRankToUserSnapshots: function(cb) {
+    var categories;
+
+    // Update rank for investors and experts for a given category name
+    var updateAllRank = function(categoryName, start, end, cb) {
+      // Updates all of the users' ranks for a given category name
+      // Set expert to true for categories, false for portfolio
+      var updateRank =  function(categoryName, start, end, expert) {
+        var query;
+        if (expert) {
+          query = UserSnapshot.findRankedExperts(categoryName, start, end);
+        } else {
+          query = UserSnapshot.findRankedInvestors(categoryName, start, end);
+        }
+
+        return query.then(function(results) {
+          var i = -1;
+          return Q.all(results.map(function(result) {
+            i++;
+            return UserSnapshot.updateRank(result._id, categoryName, i+1, expert).then(function() { });
+          }));
+        });
+      };
+
+      return updateRank(categoryName, start, end, true).then(function() {
+        return updateRank(categoryName, start, end, false).then(function() {
+          winston.log('info', 'Finished updating rank for category: %s', categoryName);
+        });
+      });
+    };
+
+    var categoryPromise = Category.find().exec();
+    var uniqueDatePromise = UserSnapshot.aggregate([
+      { $group: { _id: { month: { $month: "$timeStamp" }, day: { $dayOfMonth: "$timeStamp" }}} }]).exec();
+
+    // Get all of the categories
+    winston.log('info', 'Fetching categories...');
+    categoryPromise.then(function(categoriess) {
+      winston.log('info', 'Fetching unique days...');
+      categories = categoriess;
+      return uniqueDatePromise;
+    }, function(err) {
+      winston.log('error', 'Error migrating user snapshots: %s', err.toString());
+      return cb(err);
+    }).then(function(times) {
+      var month, day, start, end;
+      return Q.all(times.map(function(time) {
+        month = time._id.month - 1;
+        day = time._id.day;
+        winston.log('info', 'Examining month %s and day %s', month, day);
+        start = new Date(2015, month, day);
+        end = new Date(2015, month, day+1);
+        return Q.all(categories.map(function(category) {
+          return updateAllRank(category.name, start, end).then(function() {}, function(err) {
+            if (err) {
+              winston.log('error', 'Error updating rank: %s', err.toString());
+            }
+          });
+        }));
+      }));
+    }).then(function(results) {
+      winston.log('info', 'Successfully updated user snapshots.');
+      cb(null);
+    }, function(err) {
+      winston.log('error', 'Error updating user snapshots: %s', err.toString());
+      cb(err);
+    });
+  },
 
   // Remove investors from categories for which they hold no investments
   // Necessary because of the change to automatically enter and leave an investor category

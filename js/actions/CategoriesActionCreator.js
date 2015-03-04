@@ -26,4 +26,22 @@ module.exports = {
 
     api.getTotalRepsTraded();
   },
+
+  getSizes: function(categories, expert) {
+    RepcoinAppDispatcher.handleViewAction({
+      type: ActionTypes.GET_CATEGORY_SIZES
+    });
+
+    api.getCategorySizes(categories, expert);
+  },
+
+  getHotCategoriesAndUsers: function(categories, expert) {
+    RepcoinAppDispatcher.handleViewAction({
+      type: ActionTypes.GET_HOT_CATEGORIES_AND_USERS,
+      categories: categories,
+      expert: expert,
+    });
+
+    api.getHotCategoriesAndUsers();
+  },
 };

@@ -2,12 +2,16 @@
 // Routes to manipulate categories
 
 var Category = require('../models/Category.js');
+var CategoryHandler = require('../handlers/category.js')
 var utils = require('./utils.js');
 var winston = require('winston');
 
 // Routes that end in /categories
 // -------------------------------------------------------------
 module.exports = function(router, isAuthenticated, acl, censor) {
+  router.get('/categories/hot', CategoryHandler.categories.getHot);
+  router.get('/categories/members/:expert', CategoryHandler.categories.getMembers);
+
   router.route('/categories')
     // Get all the categories
     .get(isAuthenticated, function(req, res) {
@@ -90,4 +94,3 @@ router.route('/categories/:categoryName')
        });
     });
 };
-

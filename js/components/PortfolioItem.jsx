@@ -13,12 +13,18 @@ var PortfolioItem = React.createClass({
     if (this.props.privateFields) {
       var investments = <td><InvestmentList investments={this.props.category.investments}/></td>;
     }
+
+    var rank = '';
+    if (this.props.size) {
+      rank = this.props.category.rank + ' / ' + this.props.size;
+    }
+
     return (
       <tr className="portfolioItem">
         <td>
           <Link to="category" params={{category: name}}>{name}</Link>
         </td>
-        <td>{this.props.category.rank}</td>
+        <td>{rank}</td>
         {investments}
       </tr>
     );
