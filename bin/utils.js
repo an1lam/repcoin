@@ -13,6 +13,56 @@ var DIVIDEND_PERCENTAGE = 0.1;
 // Utility functions for jobs
 var utils = {
 
+  // Migrate rank to all users
+  migrateRankToUsers: function(cb) {
+    var categories;
+
+    // Update rank for investors and experts for a given category name
+    var updateAllRank = function(categoryName, cb) {
+      // Updates all of the users' ranks for a given category name
+      // Set expert to true for categories, false for portfolio
+      var updateRank =  function(categoryName, expert) {
+        var query;
+        if (expert) {
+          query = User.findRankedExperts(categoryName);
+        } else {
+          query = User.findRankedInvestors(categoryName);
+        }
+
+        return query.then(function(results) {
+          var i = -1;
+          return Q.all(results.map(function(result) {
+            i++;
+            return User.updateRank(result._id, categoryName, i+1, expert).then(function() { });
+          }));
+        });
+      };
+
+      return updateRank(categoryName, true).then(function() {
+        return updateRank(categoryName, false).then(function() {
+          winston.log('info', 'Finished updating rank for category: %s', categoryName);
+        });
+      });
+    };
+
+    winston.log('info', 'Fetching categories...');
+    Category.find().exec().then(function(categories) {
+      return Q.all(categories.map(function(category) {
+        return updateAllRank(category.name).then(function() {}, function(err) {
+          if (err) {
+            winston.log('error', 'Error updating rank: %s', err.toString());
+          }
+        });
+      }));
+    }).then(function(results) {
+      winston.log('info', 'Successfully updated users.');
+      cb(null);
+    }, function(err) {
+      winston.log('error', 'Error updating users: %s', err.toString());
+      cb(err);
+    });
+  },
+
   // Migrate rank to all user snapshots
   migrateRankToUserSnapshots: function(cb) {
     var categories;

@@ -71,24 +71,23 @@ describe('CategoriesStore', function() {
 
   it('stores the total traded from the server', function() {
     callback(actionReceiveTotalTraded);
-
     expect(CategoriesStore.getTotalTraded()).toEqual('1,000');
   });
 
-  var actionReceiveHotCategoriesAndUsers = {
-    source: RepcoinConstants.PayloadSources.SERVER_ACTION,
-    action: {
-      type: RepcoinConstants.ActionTypes.HOT_CATEGORIES_AND_USERS,
-      categories: [{
-        name: 'testCat',
-        users: [{
-          name: 'testUser'
-        }]
-      }]
-    }
-  };
-
   it('stores the hot categories and users from the server', function() {
+    var actionReceiveHotCategoriesAndUsers = {
+      source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+      action: {
+        type: RepcoinConstants.ActionTypes.HOT_CATEGORIES_AND_USERS,
+        categories: [{
+          name: 'testCat',
+          users: [{
+            name: 'testUser'
+          }]
+        }]
+      }
+    };
+
     callback(actionReceiveHotCategoriesAndUsers);
 
     expect(CategoriesStore.getHot()).toEqual([{
@@ -96,6 +95,44 @@ describe('CategoriesStore', function() {
       users: [{
         name: 'testUser'
       }]
+    }]);
+  });
+
+  it('stores the category investor sizes sizes from the server', function() {
+    var actionReceiveCategoryInvestorSizes = {
+      source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+      action: {
+        type: RepcoinConstants.ActionTypes.CATEGORY_INVESTOR_SIZES,
+        categories: [{
+          name: 'testCat',
+          experts: 10,
+        }]
+      }
+    };
+
+    callback(actionReceiveCategoryInvestorSizes);
+    expect(CategoriesStore.getMembers(false)).toEqual([{
+      name: 'testCat',
+      investors: 10,
+    }]);
+  });
+
+  it('stores the category expert sizes sizes from the server', function() {
+    var actionReceiveCategoryExpertSizes = {
+      source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+      action: {
+        type: RepcoinConstants.ActionTypes.CATEGORY_EXPERT_SIZES,
+        categories: [{
+          name: 'testCat',
+          experts: 10,
+        }]
+      }
+    };
+
+    callback(actionReceiveCategoryExpertSizes);
+    expect(CategoriesStore.getMembers(true)).toEqual([{
+      name: 'testCat',
+      experts: 10,
     }]);
   });
 })
