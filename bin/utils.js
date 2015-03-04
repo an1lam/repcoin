@@ -1,9 +1,11 @@
 'use strict';
 
+var Q = require('q');
 var Category = require('../api/models/Category.js');
 var routeUtils = require('../api/routes/utils.js');
 var Transaction = require('../api/models/Transaction.js');
 var User = require('../api/models/User.js');
+var UserSnapshot = require('../api/models/UserSnapshot.js');
 var winston = require('winston');
 
 var DIVIDEND_PERCENTAGE = 0.1;

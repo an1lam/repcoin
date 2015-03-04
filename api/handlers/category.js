@@ -10,8 +10,22 @@ var User = require('../models/User.js');
 var utils = require('../routes/utils.js');
 
 var CategoryHandler = {
-  // Routes with the url /categoires
+  // Routes with the url /categories
   categories: {
+    getMembers: function(req, res) {
+      if (!req.query || !req.query.categories) {
+        return res.status(412).send('Invalid inputs');
+      }
+
+      var expert = req.params.expert == '1';
+      Category.getMembers(req.query.categories, expert).then(function(categories) {
+        return res.status(200).send(categories);
+      }, function(err) {
+        winston.log('error', 'Error fetching category members: %s', err.toString());
+        return res.status(503).send(err);
+      });
+    },
+
     getHot: function(req, res) {
       var hotCategoriesAndUsers = [];
       Transaction.getHotCategories().then(function(categories) {

@@ -59,6 +59,10 @@ var CategoriesItem = React.createClass({
       </div>;
     }
 
+    var rank = '';
+    if (this.props.size) {
+      rank = this.props.category.rank + ' / ' + this.props.size;
+    }
     return (
       <tr>
         <tr className="categoriesItem">
@@ -66,7 +70,7 @@ var CategoriesItem = React.createClass({
             <Link to="category" params={{category: this.props.category.name}}>{this.props.category.name}</Link>
             {deleteBtn}
           </td>
-          <td>{this.props.category.rank}</td>
+          <td>{rank}</td>
           <td>{this.props.category.reps}</td>
           <td>
             <InvestorList category={this.props.category} investors={this.state.investors} />
