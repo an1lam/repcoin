@@ -73,4 +73,46 @@ var UserSnapshotSchema = new Schema({
   timeStamp : {type: Date, default: Date.now, required: true },
 });
 
+// Get ranked user ids for a given expert category, decreasing
+// Ranking done by total dividends
+UserSnapshotSchema.statics.findRankedInvestors = function(category, start, end) {
+  return this.aggregate([
+    { $match: { "portfolio.category": category, "timeStamp": { $gte: start, $lt: end } }},
+    { $unwind: "$portfolio" },
+    { $unwind: "$portfolio.investments" },
+    { $match: { "portfolio.category": category } },
+    { $group: { _id: "$_id", dividends: { $sum: "$portfolio.investments.dividend" } }},
+    { $sort: { "dividends": -1 }},
+    { $project: { "_id": 1 } },
+  ]).exec();
+};
+
+// Get ranked user ids for a given expert category, descending
+// Ranking done by total reps
+// Only returns the IDs of the users in ranked order
+UserSnapshotSchema.statics.findRankedExperts = function(category, start, end) {
+  return this.aggregate([
+    { $match: { "categories.name": category, "timeStamp": { $gte: start, $lt: end } }},
+    { $unwind: "$categories" },
+    { $match: { "categories.name": category }},
+    { $sort: { "categories.reps": -1 }},
+    { $project: { _id: 1 }},
+  ]).exec();
+};
+
+// Update the rank for a given investor and category
+UserSnapshotSchema.statics.updateRank = function(userId, categoryName, rank, expert, cb) {
+  if (expert) {
+    return this.update(
+      { _id: mongoose.Types.ObjectId(userId), "categories.name": categoryName },
+      { $set: { "categories.$.rank": rank } }
+    ).exec();
+  } else {
+    return this.update(
+      { _id: mongoose.Types.ObjectId(userId), "portfolio.category": categoryName },
+      { $set: { "portfolio.$.rank": rank } }
+    ).exec();
+  }
+};
+
 module.exports = mongoose.model('UserSnapshot', UserSnapshotSchema);

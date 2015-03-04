@@ -9,8 +9,9 @@ var winston = require('winston');
 // Routes that end in /categories
 // -------------------------------------------------------------
 module.exports = function(router, isAuthenticated, acl, censor) {
-  router.get(
-    '/categories/hot', CategoryHandler.categories.getHot);
+  router.get('/categories/hot', CategoryHandler.categories.getHot);
+  router.get('/categories/members/:expert', CategoryHandler.categories.getMembers);
+
   router.route('/categories')
     // Get all the categories
     .get(isAuthenticated, function(req, res) {

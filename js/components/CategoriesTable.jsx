@@ -1,13 +1,19 @@
 'use strict';
 
 var $ = require('jquery');
+var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
 var CategoriesHeader = require('./CategoriesHeader');
 var CategoriesItem = require('./CategoriesItem');
+var CategoriesStore = require('../stores/CategoriesStore.js');
 var CategoryInput = require('./CategoryInput');
 var CategoryDelete = require('./CategoryDelete.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
 var strings = require('../lib/strings_utils.js');
+
+function getStateFromStores() {
+  return CategoriesStore.getSizes(true);
+}
 
 var CategoriesTable = React.createClass({
   getInitialState: function() {
@@ -19,6 +25,7 @@ var CategoriesTable = React.createClass({
       categoryToDelete: '',
       message: null,
       error: false,
+      sizes: getStateFromStores(),
     };
   },
 
@@ -31,7 +38,17 @@ var CategoriesTable = React.createClass({
       categoryToDelete: '',
       message: null,
       error: false,
+      sizes: [],
     });
+  },
+
+  componentDidMount: function() {
+    CategoriesStore.addChangeListener(this._onChange);
+    this.getCategoryExpertSizes(this.props.user.categories);
+  },
+
+  componentWillUnmount: function() {
+    CategoriesStore.removeChangeListener(this._onChange);
   },
 
   componentWillReceiveProps: function(newProps) {
@@ -110,11 +127,19 @@ var CategoriesTable = React.createClass({
   getCategoriesItems: function() {
     var categoriesItems = [];
     var length = this.props.user.categories.length;
-    var category;
+    var category, size;
     for (var i = 0; i < length; i++) {
       var category = this.props.user.categories[i];
+
+      // Go through all of the category members to find the size
+      for (var j = 0; j < this.state.sizes.length; j++) {
+        if (this.state.sizes[j].name === category.name) {
+          size = this.state.sizes[j].experts;
+          break;
+        }
+      }
       categoriesItems.push(
-        <CategoriesItem userId={this.props.user._id} category={category}
+        <CategoriesItem userId={this.props.user._id} category={category} size={size}
           deleteMode={this.state.deleteMode} showDeleteBox={this.showDeleteBox} />
       );
     }
@@ -198,6 +223,10 @@ var CategoriesTable = React.createClass({
         <p>{addCategoriesText}</p>
       </div>
     );
+  },
+
+  _onChange: function() {
+    this.setState({ sizes: getStateFromStores() });
   }
 });
 

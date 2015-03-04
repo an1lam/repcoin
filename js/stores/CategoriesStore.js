@@ -12,6 +12,8 @@ var TOTAL_TRADED_CHANGE_EVENT = 'total_traded_change';
 
 var _hotCategoriesAndUsers = [];
 var _categories = [];
+var _categoryExpertSizes = [];
+var _categoryInvestorSizes = [];
 var _totalTraded = null;
 
 /* This will be the canonical example of a store.
@@ -68,6 +70,14 @@ var CategoriesStore = assign({}, EventEmitter.prototype, {
 
   getHot: function() {
     return _hotCategoriesAndUsers;
+  },
+
+  getSizes: function(expert) {
+    if (expert) {
+      return _categoryExpertSizes;
+    } else {
+      return _categoryInvestorSizes;
+    }
   },
 
   /* Sorts our '_categories' variable which will then be used to update
@@ -165,6 +175,18 @@ CategoriesStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) 
     // Received categories from the server
     case ActionTypes.RECEIVE_CATEGORIES:
       _categories = action.categories;
+      CategoriesStore.emitChange();
+      break;
+
+    // Received category members from the server
+    case ActionTypes.CATEGORY_INVESTOR_SIZES:
+      _categoryInvestorSizes = action.categories;
+      CategoriesStore.emitChange();
+      break;
+
+    // Received category members from the server
+    case ActionTypes.CATEGORY_EXPERT_SIZES:
+      _categoryExpertSizes = action.categories;
       CategoriesStore.emitChange();
       break;
 

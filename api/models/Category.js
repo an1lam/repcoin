@@ -22,6 +22,18 @@ var CategorySchema = new Schema({
                   }]
 });
 
+// Get the members in this category
+// Set expert to true for experts, false for investors
+CategorySchema.statics.getMembers = function(categories, expert) {
+  var fields = { name: 1 };
+  if (expert) {
+    fields['experts'] = 1;
+  } else {
+    fields['investors'] = 1;
+  }
+  return this.find({ name: { $in: categories } }, fields).exec();
+};
+
 CategorySchema.statics.findByName = function(name) {
   return this.where( { "name": name }).findOne().exec();
 };
