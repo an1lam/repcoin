@@ -15,6 +15,7 @@ var Modal = React.createClass({
       error: false,
       nudged: false,
       message: '',
+      pending: false,
     };
   },
 
@@ -78,6 +79,7 @@ var Modal = React.createClass({
   createTransaction: function(toUser, fromUser, category, amount, anonymous, investmentId) {
     var to = { "name": toUser.username, "id": toUser._id };
     var from = { "name": fromUser.username, "anonymous": anonymous, "id": fromUser._id };
+    this.setState({ pending: true });
     $.ajax({
       url: '/api/transactions',
       type: 'POST',
@@ -98,17 +100,17 @@ var Modal = React.createClass({
             if (!this.state.give) {
               action = strings.SUCCESSFULLY_REVOKED(transaction.amount * -1, transaction.to.name);
             }
-            this.setState({ error: false, message: action });
+            this.setState({ error: false, message: action, pending: false });
             PubSub.publish('profileupdate');
           }.bind(this),
           error: function(xhr, status, err) {
-            this.setState({ error: true, message: strings.ERROR_CREATING_TRANSACTION });
+            this.setState({ error: true, message: strings.ERROR_CREATING_TRANSACTION, pending: false });
             console.error(status, err.toString());
           }.bind(this),
         });
       }.bind(this),
       error: function(xhr, status, err) {
-        this.setState({ error: true, message: strings.ERROR_CREATING_TRANSACTION });
+        this.setState({ error: true, message: strings.ERROR_CREATING_TRANSACTION, pending: false });
         console.error(status, err.toString());
       }.bind(this)
     });
@@ -246,6 +248,11 @@ var Modal = React.createClass({
         </div>
     } else {
       var action = this.state.give ? 'Give' : 'Revoke'; // The text for the action button
+      var actionBtn = <button type="submit" className="btn btn-lg btn-primary">{action}</button>;
+      if (this.state.pending) {
+        actionBtn = <div className="alert alert-info">Transaction pending...</div>;
+      }
+
       var clazz = this.state.error ? 'alert alert-danger modal-msg' : 'alert alert-info modal-msg';
       var message = '';
       if (this.state.message.trim().length !== 0) {
@@ -328,7 +335,7 @@ var Modal = React.createClass({
             </div>
             <div className="row">
               <div className="modal_submit">
-                <button type="submit" className="btn btn-lg btn-primary">{action}</button>
+                {actionBtn}
               </div>
             </div>
           </div>
