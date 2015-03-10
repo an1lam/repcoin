@@ -48,6 +48,32 @@ TransactionSchema.statics.findByUserIdFrom = function(userId) {
     return this.find( { "from.id" : userId }).sort({ "timeStamp": -1 }).exec();
 };
 
+// Get total volume of transactions for a given user and category over a time period
+// Calculated as number of gives - number of revokes
+TransactionSchema.statics.findVolume = function(userId, category, start, end) {
+  return this.aggregate([
+    { $match: { timeStamp: { $gte: start, $lt: end }, "to.id": mongoose.Types.ObjectId(userId), category: category }},
+    { $project: { volume: { $cond: [ { $lt: [ "$amount", 0] }, -1, 1 ] } } },
+    { $group: { _id: null, volume: { $sum: "$volume" } }},
+  ]).exec();
+};
+
+// Get the trending experts for this week
+// Trending is calculated as number of gives - number of revokes
+// Set high to -1 for most trending, 1 for least
+TransactionSchema.statics.findOverallTrendingExperts = function(high) {
+  var now = new Date();
+  now.setDate(now.getDate()-7);
+  var time = new Date(now);
+  return this.aggregate([
+    { $match: { timeStamp: { $gte: time }}},
+    { $project: { "to.id": 1, count: { $cond: [ { $lt: [ "$amount", 0] }, -1, 1 ] } } },
+    { $group: { _id: "$to.id", volume: { $sum: "$count" } } },
+    { $sort: { "volume": high } },
+    { $limit: 10 },
+  ]).exec();
+};
+
 // Get the trending experts for a given time period
 TransactionSchema.statics.findTrendingExperts = function(timeStamp, category) {
   return this.aggregate([
@@ -58,7 +84,7 @@ TransactionSchema.statics.findTrendingExperts = function(timeStamp, category) {
       },
     },
     { $project: { "to.id": 1 } },
-    { $group: { _id: "$to.id", count: {$sum: 1} }  },
+    { $group: { _id: "$to.id", count: { $sum: 1 } }  },
     { $sort: { "count": -1 } },
   ]).exec();
 };

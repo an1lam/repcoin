@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var AboutPage = require('./components/AboutPage.jsx');
 var auth = require('./auth.jsx');
+var PubSub = require('pubsub-js');
 var ContactUsPage = require('./components/ContactUsPage.jsx');
 var CategoriesPage = require('./components/CategoriesPage.jsx');
 var CategoryRequestPage = require('./components/CategoryRequestPage.jsx');
@@ -40,6 +41,8 @@ var RepsApp = React.createClass({
     } else {
       appId = strings.FACEBOOK_APP_ID_PRODUCTION;
     }
+
+    // Load the Facebook API
     window.fbAsyncInit = function() {
       FB.init({
         appId      : appId,
@@ -59,6 +62,22 @@ var RepsApp = React.createClass({
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
+    // Load the Google Charts API
+    window.googleLoaded = false;
+    var options = {
+      dataType: 'script',
+      cache: true,
+      url: 'https://www.google.com/jsapi',
+    };
+    $.ajax(options).done(function(){
+      google.load('visualization', '1.', {
+        packages:['corechart'],
+        callback: function() {
+          googleLoaded = true;
+          PubSub.publish('googlecharts');
+        }
+      });
+    });
   },
 
   componentWillMount: function() {
@@ -117,6 +136,7 @@ var routes = (
     <Route name="verificationWithInvite" path="/verify/:token/:inviterId/:hash" handler={VerificationPage} />
   </Route>
 );
+
 Router.run(routes, function (Handler, state) {
   React.render(<Handler params={state.params} query={state.query} />, document.getElementById('repsapp'));
  });

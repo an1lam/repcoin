@@ -19,6 +19,10 @@ var transporter = require('../../config/mailer.js').transporterFactory();
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
 module.exports = function(router, isAuthenticated, acl, censor) {
+  router.get('/users/leading/:datatype/:order', UserHandler.users.leading.get);
+  router.get('/users/trending/experts/:order', UserHandler.users.trending.experts.getOverall);
+  router.get('/users/:category/trending/experts/:date', UserHandler.users.trending.experts.get);
+
   // Add an expert category to a given user
   function addExpertCategory(req, res, category) {
     var userId = req.params.user_id;
@@ -60,7 +64,6 @@ module.exports = function(router, isAuthenticated, acl, censor) {
   }
 
   router.get('/users/list/byids', isAuthenticated, UserHandler.users.listByIds.get);
-  router.get('/users/:category/trending/experts/:date', isAuthenticated, UserHandler.users.trending.experts.get);
   router.get('/users', isAuthenticated, UserHandler.users.get);
   router.get('/users/share', isAuthenticated, UserHandler.users.share.get);
   router.post('/verify', UserHandler.verify.post);

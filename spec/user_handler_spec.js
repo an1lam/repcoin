@@ -151,21 +151,53 @@ describe('UserHandler: ', function() {
 
     describe('trending: ', function() {
       describe('experts: ', function() {
-        describe('get: ', function() {
-          var transactionPromise;
-          beforeEach(function() {
-            transactionPromise = {
-              userIds: [
-                { _id: '123' },
-                { _id: '456' },
-              ],
+        var transactionPromise;
+        beforeEach(function() {
+          transactionPromise = {
+            userIds: [
+              { _id: '456' },
+              { _id: '123' },
+            ],
 
-              then: function(cb) {
-                return cb(this.userIds);
-              }
-            };
+            then: function(cb) {
+              return cb(this.userIds);
+            }
+          };
+        });
+
+        describe('getOverall: ', function() {
+          it('handles error finding users ids', function() {
+            spyOn(Transaction, 'findOverallTrendingExperts').andReturn({
+              then: function(cbS, cbF) { return cbF('failure'); }
+            });
+            req.params = { order: 'high' };
+            UserHandler.users.trending.experts.getOverall(req, res);
+            expect(res.status).toHaveBeenCalledWith(503);
+            expect(res.send).toHaveBeenCalledWith('failure');
           });
 
+          it('finds trending users', function() {
+            var users = [
+              { _id: '123' },
+              { _id: '456' },
+            ]
+            var sortedUsers = [
+              { _id: '456' },
+              { _id: '123' },
+            ]
+
+            spyOn(Transaction, 'findOverallTrendingExperts').andReturn(transactionPromise);
+            spyOn(User, 'findPublic').andCallFake(function(query, cb) {
+              return cb(null, users);
+            });
+            req.params = { order: 'high' };
+            UserHandler.users.trending.experts.getOverall(req, res);
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.send).toHaveBeenCalledWith(sortedUsers);
+          });
+        });
+
+        describe('get: ', function() {
           it('handles error finding users ids', function() {
             spyOn(Transaction, 'findTrendingExperts').andReturn(transactionPromise);
             spyOn(User, 'findPublic').andCallFake(function(query, cb) {
@@ -259,6 +291,37 @@ describe('UserHandler: ', function() {
           UserHandler.users.listByIds.get(req, res);
           expect(res.status).toHaveBeenCalledWith(501);
           expect(res.send).toHaveBeenCalledWith('Error');
+        });
+      });
+    });
+
+    describe('leading: ', function() {
+      describe('get: ', function() {
+        it('returns leaders by the given metric', function() {
+          spyOn(User, 'getLeadersByTimeStamp').andReturn({
+            then: function(cbS, cbF) {
+              return cbS([]);
+            }
+          });
+          req.params = { order: 'high', datatype: 'timestamp' };
+          UserHandler.users.leading.get(req, res);
+          expect(User.getLeadersByTimeStamp.callCount).toEqual(1);
+          expect(User.getLeadersByTimeStamp).toHaveBeenCalledWith(-1);
+          expect(res.status).toHaveBeenCalledWith(200);
+          expect(res.send).toHaveBeenCalledWith([]);
+        });
+
+        it('handles error finding leaders', function() {
+          spyOn(User, 'getLeadersByTimeStamp').andReturn({
+            then: function(cbS, cbF) {
+                return cbF('Error!');
+            }
+          });
+          req.params = { order: 'high', datatype: 'timestamp' };
+          UserHandler.users.leading.get(req, res);
+          expect(User.getLeadersByTimeStamp.callCount).toEqual(1);
+          expect(res.status).toHaveBeenCalledWith(503);
+          expect(res.send).toHaveBeenCalledWith('Error!');
         });
       });
     });

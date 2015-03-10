@@ -1,4 +1,30 @@
 /* General ////////////////////////////////////// */
+
+/* New Feed ///////////////// */
+.left-panel {
+  margin-left:20px;
+}
+
+.panel-header {
+  margin-bottom:20px;
+}
+
+.user-table-filter {
+  margin-bottom:20px;
+}
+
+.user-table-select {
+  margin-left:5px;
+}
+
+.user-table-img {
+  float:right;
+  margin-right:5px;
+  border-radius:4px;
+  width:40px;
+  height:40px;
+}
+
 .label-as-badge {
   border-radius: 1em;
 }
@@ -28,8 +54,21 @@
 }
 
 /* Home Page //////////////////// */
-.profileQuickView {
-  margin-left:20px;
+.about-column {
+  width:60px;
+}
+
+.dashboard-buttons {
+  margin-bottom:20px;
+}
+
+.main-dashboard {
+  margin-right:50px;
+}
+
+.tutorial {
+  margin-top:5px;
+  margin-bottom:20px;
 }
 
 .quick-view-image {
@@ -430,6 +469,11 @@
   font-size: 12px;
   padding-top: 12px;
   padding-right: 15px;
+}
+
+.mini-investmentButton {
+  display:inline;
+  margin-right:8px;
 }
 
 .investment-button-info {

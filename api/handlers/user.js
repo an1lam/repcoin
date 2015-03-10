@@ -119,9 +119,35 @@ var UserHandler = {
           res.status(200).send(fullUrl);
         }
       },
+    },
 
+    // Various leading metrics for all users
+    leading: {
+      get: function(req, res) {
+        var high = req.params.order === 'high' ? -1 : 1
 
+        var query;
+        switch(req.params.datatype) {
+          case 'timestamp':
+            query = User.getLeadersByTimeStamp(high);
+            break;
 
+          case 'expertreps':
+            query = User.getLeadersByExpertReps(high);
+            break;
+
+          default:
+            query = User.getLeadersByExpertReps(high);
+            break;
+        }
+
+        query.then(function(users) {
+          return res.status(200).send(users);
+        }, function(err) {
+          winston.log('error', 'Error fetching users by leading reps: %s', err.toString());
+          return res.status(503).send(err);
+        });
+      },
     },
 
     // Route /users/list/byids/
@@ -143,6 +169,39 @@ var UserHandler = {
 
     trending: {
       experts: {
+        // Get overall trending experts
+        getOverall: function(req, res) {
+          var high = req.params.order === 'high' ? -1 : 1
+          Transaction.findOverallTrendingExperts(high).then(function(userIds) {
+            var idArray = [];
+            for (var i = 0; i < userIds.length; i++) {
+              idArray.push(userIds[i]._id);
+            }
+            User.findPublic({ '_id': { $in: idArray }}, function(err, users) {
+              if (err) {
+                winston.log('error', 'Error finding overall trending experts %s', err.toString());
+                return res.status(501).send(err);
+              } else {
+
+                // Mongo find cannot be ordered, so we need to manually sort
+                var sortedUsers = [];
+                for (var i = 0; i < idArray.length; i++) {
+                  for (var j = 0; j < users.length; j++) {
+                    if (users[j]._id.toString() === idArray[i].toString()) {
+                      sortedUsers.push(users[j]);
+                    }
+                  }
+                }
+                return res.status(200).send(sortedUsers);
+              }
+            });
+          }, function(err) {
+            winston.log('error', 'Error finding overall trending experts: %s', err.toString());
+            return res.status(503).send(err);
+          });
+        },
+
+        // Get trending experts since a given date for a given category
         get: function(req, res) {
           var date = req.params.date;
           var category = req.params.category;

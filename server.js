@@ -75,6 +75,8 @@ var transporter = nodemailer.createTransport({
   auth: mailerConfig.fromUser,
 });
 
+/////////// Router initialization
+
 // Authentication
 var authRouter = express.Router();
 var authRoutes = require('./api/routes/AuthRoutes.js')(authRouter, passport);
@@ -99,12 +101,16 @@ var uploadRoutes = require('./api/routes/UploadRoutes.js')(uploadsRouter, auth, 
 var userRouter = express.Router();
 var userRoutes = require('./api/routes/UserRoutes.js')(userRouter, auth, acl, censor);
 
+// UserSnapshots
+var userSnapshotRouter = express.Router();
+var userSnapshotRoutes = require('./api/routes/UserSnapshotRoutes.js')(userSnapshotRouter, auth, acl, censor);
+
 // Notifications
 var notificationRouter = express.Router();
 var notificationRoutes = require('./api/routes/NotificationRoutes.js')(notificationRouter, auth, acl);
 
 
-app.use('/api', [authRouter, categoryRouter, comboRouter, notificationRouter, userRouter, transactionRouter, uploadsRouter ]);
+app.use('/api', [authRouter, categoryRouter, comboRouter, notificationRouter, userRouter, userSnapshotRouter, transactionRouter, uploadsRouter ]);
 
 // Start the server unless we are running a test
 if (!module.parent) {

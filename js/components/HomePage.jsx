@@ -6,6 +6,7 @@ var AuthStore = require('../stores/AuthStore.js');
 var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
 var CategoriesCards = require('./CategoriesCards.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
+var Dashboard = require('./Dashboard.jsx');
 var FacebookInvite = require('./FacebookInvite.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
@@ -43,6 +44,7 @@ var HomePage = React.createClass({
   },
 
   render: function() {
+    var toShowTutorial = false;
     var categoriesCards = '';
 
     if (this.state.isNewby) {
@@ -58,22 +60,15 @@ var HomePage = React.createClass({
         </div>
         <div className="row">
           <div className="col-md-3">
-            <ProfileQuickView />
+            <div className="left-panel">
+              <FacebookInvite />
+              <ProfileQuickView />
+            </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-9">
             {categoriesCards}
-            <Feed parent="HomePage" />
-          </div>
-          <div className="col-md-2">
-            <FacebookInvite />
-            <div className="tutorial">
-              <button className="btn btn-default" onClick={this.startTutorial}>
-                Take a Tour of the Site
-              </button>
-              <TutorialPanel show={false} key="tutorial-panel-1"
-                title={strings.FEED_INFO_TITLE}
-                content={strings.FEED_INFO_CONTENT} ref="tutorial"
-                clazz={"feed-tutorial-panel"} className={"modal-open"} />
+            <div className="main-dashboard">
+              <Dashboard />
             </div>
           </div>
         </div>

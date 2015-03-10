@@ -10,9 +10,7 @@ var privateFields = {
   "facebookId": 0,
   "email": 0,
   "password": 0,
-  "reps": 0,
   "portfolio.investments": 0,
-  "timeStamp": 0
 };
 
 var passwordValidator = [
@@ -246,6 +244,22 @@ UserSchema.statics.findExpertByCategory = function(category, cb) {
 // Find all the users who are investors in a category
 UserSchema.statics.findInvestorByCategory= function(category, cb) {
   return this.find({ "portfolio.category": category }).exec(cb);
+};
+
+// Find the top 10 leaders by timestamp
+UserSchema.statics.getLeadersByTimeStamp = function(high) {
+  return this.find({}, privateFields)
+    .sort({ "timeStamp": high })
+    .limit(10)
+    .exec();
+};
+
+// Find the top 10 leaders by investor reps
+UserSchema.statics.getLeadersByExpertReps = function(high) {
+  return this.find({}, privateFields)
+    .sort({ "categories.reps": high })
+    .limit(10)
+    .exec();
 };
 
 // Get top ranked user ids for a given investor category, descending

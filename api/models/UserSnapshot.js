@@ -73,6 +73,81 @@ var UserSnapshotSchema = new Schema({
   timeStamp : {type: Date, default: Date.now, required: true },
 });
 
+// Get a user's expert reps over time
+// Returns { _id: timeStamp, reps: reps }
+UserSnapshotSchema.statics.getExpertReps = function(userId, category) {
+  return this.aggregate([
+    { $match: { 'id': mongoose.Types.ObjectId(userId) } },
+    { $unwind: "$categories" },
+    { $project: { "timeStamp": 1, "categories.name": 1, "categories.reps": 1 } },
+    { $match: { "categories.name": category }},
+    { $project: { "timeStamp": 1, "reps": "$categories.reps" }},
+    { $sort: { _id: 1 } }
+  ]).exec();
+};
+
+// Get a user's expert rank over time
+// Returns { _id: timeStamp, rank: rank }
+UserSnapshotSchema.statics.getExpertRanks = function(userId, category) {
+  return this.aggregate([
+    { $match: { 'id': mongoose.Types.ObjectId(userId) } },
+    { $unwind: "$categories" },
+    { $project: { "timeStamp": 1, "categories.name": 1, "categories.rank": 1 } },
+    { $match: { "categories.name": category }},
+    { $project: { "timeStamp": 1, "rank": "$categories.rank" }},
+    { $sort: { _id: 1 } },
+  ]).exec();
+};
+
+// Get a user's investor rank over time
+// Returns { _id: timeStamp, rank: rank }
+UserSnapshotSchema.statics.getInvestorRanks = function(userId, category) {
+  return this.aggregate([
+    { $match: { 'id': mongoose.Types.ObjectId(userId) } },
+    { $unwind: "$portfolio" },
+    { $project: { "timeStamp": 1, "portfolio.category": 1, "portfolio.rank": 1 } },
+    { $match: { "portfolio.category": category }},
+    { $project: { "timeStamp": 1, "rank": "$portfolio.rank" }},
+    { $sort: { _id: 1 } },
+  ]).exec();
+};
+
+// Get the total dividends over time
+// Returns { _id: timeStam, total: total_dividends }
+UserSnapshotSchema.statics.getTotalDividends = function(userId, category) {
+  return this.aggregate([
+    { $match: { 'id': mongoose.Types.ObjectId(userId) }},
+    { $unwind: "$portfolio" },
+    { $unwind: "$portfolio.investments" },
+    { $match: { "portfolio.category": category }},
+    { $group: { _id: "$timeStamp", total: { $sum: "$portfolio.investments.dividend" }}},
+    { $sort: { _id: 1 }}
+  ]).exec();
+};
+
+// Get the percent returns over time
+// Return { _id: timeStamp, return: percent_return }
+UserSnapshotSchema.statics.getPercentReturns = function(userId, category) {
+  return this.aggregate([
+    { $match: { 'id': mongoose.Types.ObjectId(userId) } },
+    { $unwind: "$portfolio" },
+    { $unwind: "$portfolio.investments" },
+    { $match: { "portfolio.category": category }},
+    { $project:
+      {
+        "timeStamp": 1,
+        "amount": "$portfolio.investments.amount",
+        "dividend": "$portfolio.investments.dividend"
+      }},
+    { $group:
+      {
+        _id: "$timeStamp",
+        ret: { $avg: { $divide: [ "$dividend", "$amount"] } }
+    }},
+    { $sort: { _id: 1 } }
+  ]).exec();
+};
+
 // Get ranked user ids for a given expert category, decreasing
 // Ranking done by total dividends
 UserSnapshotSchema.statics.findRankedInvestors = function(category, start, end) {
