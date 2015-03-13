@@ -263,6 +263,30 @@ describe('UserHandler: ', function() {
         expect(res.status).toHaveBeenCalledWith(501);
         expect(res.send).toHaveBeenCalledWith('Error');
       });
+
+      it('gets users as search items', function() {
+        spyOn(User, 'findForSearch').andCallFake(function(query) {
+          return {
+            then: function(cbS, cbF) { return cbS([{ username: 'Matt Ritter'}]); }
+          };
+        });
+        req.query = { searchItems: true };
+        UserHandler.users.get(req, res);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.send).toHaveBeenCalledWith([{ username: 'Matt Ritter'}]);
+      });
+
+      it('handles error getting users as search items', function() {
+        spyOn(User, 'findForSearch').andCallFake(function(query, cb) {
+          return {
+            then: function(cbS, cbF) { return cbF('Error') }
+          };
+        });
+        req.query = { searchItems: true };
+        UserHandler.users.get(req, res);
+        expect(res.status).toHaveBeenCalledWith(501);
+        expect(res.send).toHaveBeenCalledWith('Error');
+      });
     });
 
     describe('listByIds: ', function() {

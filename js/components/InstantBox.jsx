@@ -17,6 +17,7 @@ var InstantBox = React.createClass({
   componentDidMount: function() {
     $.ajax({
       url: '/api/users/',
+      data: { searchItems: true },
       success: function(users) {
         $.ajax({
           url: '/api/categories/',
@@ -41,7 +42,6 @@ var InstantBox = React.createClass({
       this.setState({ filteredData: [] });
       return;
     }
-
     this.getFilteredData(query);
   },
 
