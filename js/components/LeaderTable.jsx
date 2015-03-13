@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var MiniInvestButton = require('./MiniInvestButton.jsx');
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
@@ -48,9 +49,23 @@ var LeaderTable = React.createClass({
         rank = leader.portfolio.rank;
         size = this.props.category.investors;
       }
+
+      // If this is the expert table, then put investment buttons next to users names
+      // Do not provide the button if the user is yourself
+      var button = '';
+      if (this.props.expert && this.props.currentUser._id !== leader._id) {
+        button =
+          <div className="leader-table-invest">
+            <MiniInvestButton currentUser={this.props.currentUser} userId={leader._id} />
+          </div>;
+      }
+
       leaderRows.push(
         <tr key={leader._id}>
-          <td><Link to="profile" params={{userId: leader._id}}>{leader.username}</Link></td>
+          <td>
+            <Link to="profile" params={{userId: leader._id}}>{leader.username}</Link>
+            {button}
+          </td>
           <td>{rank} / {size}</td>
         </tr>
       );

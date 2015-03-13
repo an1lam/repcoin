@@ -46,6 +46,10 @@ var HomePage = React.createClass({
   render: function() {
     var toShowTutorial = false;
     var categoriesCards = '';
+    var dashboard = '';
+    if (this.state.currentUser) {
+      dashboard = <Dashboard currentUser={this.state.currentUser} />
+    }
 
     if (this.state.isNewby) {
       categoriesCards = (
@@ -68,7 +72,7 @@ var HomePage = React.createClass({
           <div className="col-md-9">
             {categoriesCards}
             <div className="main-dashboard">
-              <Dashboard />
+              {dashboard}
             </div>
           </div>
         </div>

@@ -145,6 +145,11 @@ AuthStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
       AuthStore.emitCurrentUserChange();
       break;
 
+    case ActionTypes.RECEIVE_CURRENT_USER:
+      _currentUser = action.user;
+      AuthStore.emitCurrentUserChange();
+      break;
+
     case ActionTypes.RECEIVE_CURRENT_USER_AND_LOGIN:
       _currentUser = action.user;
       _loggedIn = true;

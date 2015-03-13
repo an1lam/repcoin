@@ -67,10 +67,8 @@ var CategoryPage = React.createClass({
     var investorTable = '';
     if (this.state.category && this.state.currentUser) {
       categoryPageHeader = <CategoryPageHeader category={this.state.category} currentUser={this.state.currentUser} />;
-    }
-    if (this.state.category) {
-      trendingTable = <TrendingTable category={this.state.category} />
-      leaderTable = <LeaderTable category={this.state.category} expert={true}/>
+      trendingTable = <TrendingTable category={this.state.category} currentUser={this.state.currentUser} />
+      leaderTable = <LeaderTable category={this.state.category} expert={true} currentUser={this.state.currentUser} />
       investorTable = <LeaderTable category={this.state.category} expert={false}/>
     }
 
