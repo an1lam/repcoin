@@ -92,6 +92,16 @@ var UserHandler = {
         });
       }
 
+      // Check if we only need the users for search items
+      else if (req.query.searchItems) {
+        User.findForSearch().then(function(users) {
+          return res.status(200).send(users);
+        }, function(err) {
+          winston.log('error', 'Error finding search item users: %s', err.toString());
+          return res.status(501).send(err);
+        });
+      }
+
       // Get the users normally
       else {
         User.findPublic({}, function(err, users) {

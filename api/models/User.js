@@ -354,6 +354,12 @@ UserSchema.statics.findInvestments = function(userId, category) {
   ]).exec();
 };
 
+// Get an abbreviated version of user data for the search bar
+// Includes user picture, name, and id
+UserSchema.statics.findForSearch = function() {
+  return this.find({}, { "_id": 1, "picture": 1, "username": 1 }).exec();
+};
+
 UserSchema.statics.getUserPictureAboutCategories = function (userId) {
   return this.findById(userId, 'picture about categories').exec();
 };
