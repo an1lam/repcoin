@@ -300,10 +300,10 @@ describe('Job utils: ', function() {
       });
 
       utils.payDividends(cb);
-      expect(users[1].reps).toEqual(3.01);
-      expect(users[1].portfolio[0].investments[0].dividend).toEqual(2.01);
-      expect(users[2].reps).toEqual(4.51);
-      expect(users[2].portfolio[0].investments[0].dividend).toEqual(1.51);
+      expect(users[1].reps).toEqual(2.5);
+      expect(users[1].portfolio[0].investments[0].dividend).toEqual(1.51);
+      expect(users[2].reps).toEqual(3.38);
+      expect(users[2].portfolio[0].investments[0].dividend).toEqual(.38);
     });
   });
 
