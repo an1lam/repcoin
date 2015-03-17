@@ -585,18 +585,27 @@ var utils = {
     }
     expertReps = expert.categories[i].reps;
 
+    // Get investments in the expert for a specific category
     User.findInvestments(expert._id, categoryName).then(function(investmentList) {
       var investments, investment;
       for (var i = 0; i < investmentList.length; i++) {
         investments = investmentList[i].investments;
-        // Find the corresponding investment and reset the dividend
+        var investorRepsInvested = 0;
+
+        for (var j = 0; j < investments.length; j++) {
+          if (investments[j].userId.toString() === expert._id.toString()) {
+            investorRepsInvested += investments[j].amount
+          }
+        }
+
+        // Find the corresponding investment and reset the investor's dividend
         for (var j = 0; j < investments.length; j++) {
           investment = investments[j];
           if (investment.userId.toString() === expert._id.toString()) {
-            investment.dividend = Math.round(investment.percentage * expertReps * DIVIDEND_RATE * 100) / 100;
+            investment.dividend = Math.round(investment.percentage * (expertReps - investorRepsInvested) * DIVIDEND_RATE * 100) / 100;
           }
         }
-        // Update the current user with the new dividend
+        // Update the investor with the new dividend
         User.updateInvestments(investmentList[i]._id, categoryName, investments);
       }
       return cb(null);
