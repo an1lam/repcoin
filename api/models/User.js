@@ -254,12 +254,64 @@ UserSchema.statics.getLeadersByTimeStamp = function(high) {
     .exec();
 };
 
+// Find the top 10 leaders by timestamp for a given category
+UserSchema.statics.getLeadersByTimeStampForCategory = function(high, category) {
+  return this.aggregate([
+    { $match: { "categories.name": category }},
+    { $unwind: "$categories" },
+    { $match: { "categories.name": category }},
+    { $sort: { "timeStamp": high }},
+    { $project: { _id: 1, picture: 1, rank: "$categories.rank", reps: "$categories.reps", username: 1, about: 1 }},
+    { $limit: 10 },
+  ]).exec();
+};
+
+// Find a truncated list of users for a given category
+// This currently outputs just the top level user fields
+// as well as the rank and reps for the category
 // Find the top 10 leaders by investor reps
+UserSchema.statics.findTruncatedUsersByCategory = function(idArray, category) {
+  return this.aggregate([
+    { $match: { "_id": { $in: idArray } }},
+    { $unwind: "$categories" },
+    { $match: { "categories.name": category }},
+    { $project: { _id: 1, picture: 1, rank: "$categories.rank", reps: "$categories.reps", username: 1, about: 1 }},
+  ]).exec();
+};
+
 UserSchema.statics.getLeadersByExpertReps = function(high) {
   return this.find({}, privateFields)
     .sort({ "categories.reps": high })
     .limit(10)
     .exec();
+};
+
+// Get top ranked usersfor a given expert category
+// Ranking done by total reps
+// Only returns the username, picture, rank, and reps for the category
+UserSchema.statics.getLeadersByExpertRepsForCategory = function(high, category) {
+  return this.aggregate([
+    { $match: { "categories.name": category }},
+    { $unwind: "$categories" },
+    { $match: { "categories.name": category }},
+    { $sort: { "categories.reps": high }},
+    { $project: { _id: 1, picture: 1, rank: "$categories.rank", reps: "$categories.reps", username: 1, about: 1 }},
+    { $limit: 10 },
+  ]).exec();
+};
+
+// Get ranked investors for a given category
+// Ranking done by total dividends
+// Only returns the username, picture, rank, dividends, and average return for the category
+UserSchema.statics.getLeadersByTotalDividendsForCategory = function(high, category) {
+  return this.aggregate([
+    { $match: { "portfolio.category": category }},
+    { $unwind: "$portfolio" },
+    { $unwind: "$portfolio.investments" },
+    { $match: { "portfolio.category": category } },
+    { $project: { _id: 1, picture: 1, rank: "$portfolio.rank", dividends: { $sum: "$portfolio.investments.dividend" }, username: 1, about: 1 }},
+    { $sort: { "dividends": high }},
+  ]).exec();
 };
 
 // Get top ranked user ids for a given investor category, descending
@@ -362,98 +414,6 @@ UserSchema.statics.findForSearch = function() {
 
 UserSchema.statics.getUserPictureAboutCategories = function (userId) {
   return this.findById(userId, 'picture about categories').exec();
-};
-
-// Get top ranked user ids for a given investor category, descending
-// Ranking done by total reps
-// Only returns the username, picture, rank, and reps for the category
-UserSchema.statics.findTopRankedInvestors = function(category) {
-  return this.aggregate([
-    { $match: { "portfolio.category": category }},
-    { $unwind: "$portfolio" },
-    { $match: { "portfolio.category": category }},
-    { $sort: { "portfolio.rank": 1 }},
-    { $project: { _id: 1, picture: 1, "portfolio.rank": 1, username: 1 }},
-    { $limit: 10 },
-  ]).exec();
-};
-
-// Get top ranked user ids for a given expert category, descending
-// Ranking done by total reps
-// Only returns the username, picture, rank, and reps for the category
-UserSchema.statics.findTopRankedExperts = function(category) {
-  return this.aggregate([
-    { $match: { "categories.name": category }},
-    { $unwind: "$categories" },
-    { $match: { "categories.name": category }},
-    { $sort: { "categories.rank": 1 }},
-    { $project: { _id: 1, picture: 1, "categories.rank": 1, "categories.reps": 1, username: 1 }},
-    { $limit: 10 },
-  ]).exec();
-};
-
-// Get ranked user ids for a given expert category, descending
-// Ranking done by total reps
-// Only returns the IDs of the users in ranked order
-UserSchema.statics.findRankedExperts = function(category) {
-  return this.aggregate([
-    { $match: { "categories.name": category }},
-    { $unwind: "$categories" },
-    { $match: { "categories.name": category }},
-    { $sort: { "categories.reps": -1 }},
-    { $project: { _id: 1 }},
-  ]).exec();
-};
-
-// Get ranked user ids for a given expert category, decreasing
-// Ranking done by total dividends
-UserSchema.statics.findRankedInvestors = function(category) {
-  return this.aggregate([
-    { $match: { "portfolio.category": category }},
-    { $unwind: "$portfolio" },
-    { $unwind: "$portfolio.investments" },
-    { $match: { "portfolio.category": category } },
-    { $group: { _id: "$_id", dividends: { $sum: "$portfolio.investments.dividend" } }},
-    { $sort: { "dividends": -1 }},
-    { $project: { "_id": 1 } },
-  ]).exec();
-};
-
-// Update the rank for a given investor and category
-UserSchema.statics.updateRank = function(userId, categoryName, rank, expert, cb) {
-  if (expert) {
-    return this.update(
-      { _id: mongoose.Types.ObjectId(userId), "categories.name": categoryName },
-      { $set: { "categories.$.rank": rank } }
-    ).exec(cb);
-  } else {
-    return this.update(
-      { _id: mongoose.Types.ObjectId(userId), "portfolio.category": categoryName },
-      { $set: { "portfolio.$.rank": rank } }
-    ).exec(cb);
-  }
-};
-
-// Update the investments for a given investor and category
-// Used to update dividends upon a transaction occurring
-UserSchema.statics.updateInvestments = function(userId, categoryName, investments, cb) {
-  return this.update(
-    { _id: userId, "portfolio.category": categoryName },
-    { $set: { "portfolio.$.investments": investments } }
-  ).exec(cb);
-};
-
-// Get investments for a given category for investors who have invested in the given user
-// Used to update dividends for all investors who invested in this user for this category
-// We cannot say for sure that the investment made in the user is the one we want for this category
-// Since there could be many investments in this user
-UserSchema.statics.findInvestments = function(userId, category) {
-  return this.aggregate([
-    { $match: { "portfolio.category": category, "portfolio.investments.userId": mongoose.Types.ObjectId(userId) }},
-    { $unwind: "$portfolio" },
-    { $match: { "portfolio.category": category } },
-    { $project: { _id: 1, investments: "$portfolio.investments" } }
-  ]).exec();
 };
 
 module.exports = mongoose.model('User', UserSchema);

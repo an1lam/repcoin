@@ -74,6 +74,22 @@ TransactionSchema.statics.findOverallTrendingExperts = function(high) {
   ]).exec();
 };
 
+// Get the trending experts for this month for a given category
+// Trending is calculated as number of gives - number of revokes
+// Set high to -1 for most trending, 1 for least
+TransactionSchema.statics.findTrendingExpertsByCategory = function(high, category) {
+  var now = new Date();
+  now.setMonth(now.getMonth()-1);
+  var time = new Date(now);
+  return this.aggregate([
+    { $match: { timeStamp: { $gte: time }, category: category}},
+    { $project: { "to.id": 1, count: { $cond: [ { $lt: [ "$amount", 0] }, -1, 1 ] } } },
+    { $group: { _id: "$to.id", volume: { $sum: "$count" } } },
+    { $sort: { "volume": high } },
+    { $limit: 10 },
+  ]).exec();
+};
+
 // Get the trending experts for a given time period
 TransactionSchema.statics.findTrendingExperts = function(timeStamp, category) {
   return this.aggregate([

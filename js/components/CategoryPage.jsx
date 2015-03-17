@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var auth = require('../auth.jsx');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
+var CategoryDashboard = require('./CategoryDashboard.jsx');
 var CategoryPageHeader = require('./CategoryPageHeader.jsx');
 var ErrorPage = require('./ErrorPage.jsx');
 var Feed = require('./Feed.jsx');
@@ -92,7 +93,7 @@ var CategoryPage = React.createClass({
             </div>
             <div className="col-md-6">
               <div className="feed-table">
-                <Feed category={this.props.params.category} parent="CategoryPage" />
+                <CategoryDashboard category={this.props.params.category} />
               </div>
             </div>
             <div className="col-md-3">
