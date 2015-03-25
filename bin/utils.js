@@ -380,6 +380,12 @@ var utils = {
           for (var i = 0; i < user.portfolio.length; i++) {
             var category = user.portfolio[i];
             var categoryName = category.category;
+            var investorRepsInvested = 0;
+            for (var j = 0; j < category.investments.length; j++) {
+              var investment = category.investments[j]
+              investorRepsInvested += investment.amount;
+            }
+
             for (var j = 0; j < category.investments.length; j++) {
               var investment = category.investments[j];
               var percentage = investment.percentage;
@@ -391,7 +397,7 @@ var utils = {
                 if (!total) {
                   winston.log('error', 'Error finding expected expert category for user with id: %s');
                 } else {
-                  var dividend = Math.floor(investment.percentage * total * DIVIDEND_PERCENTAGE * 100)/100;
+                  var dividend = Math.floor(investment.percentage * (total - investorRepsInvested) * DIVIDEND_PERCENTAGE * 100)/100;
                   investment.dividend = dividend;
                   user.reps += dividend;
                   user.reps = Math.floor(user.reps * 100)/100;

@@ -475,7 +475,7 @@ describe('Utils: ', function() {
       var expectedInvestments = [
         { _id: '1', investments:
           [
-            { user: 'Matt', userId: '123', amount: 8, percentage: 0.20, dividend: 0.2 },
+            { user: 'Matt', userId: '123', amount: 8, percentage: 0.20, dividend: 0.04 },
             { user: 'Bob', userId: '456', amount: 10, percentage: 0.14, dividend: 1 },
           ]
         },
