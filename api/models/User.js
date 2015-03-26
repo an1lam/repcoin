@@ -254,13 +254,30 @@ UserSchema.statics.getLeadersByTimeStamp = function(high) {
     .exec();
 };
 
-// Find the top 10 experts by timestamp for a given category
-UserSchema.statics.getExpertsByTimeStampForCategory = function(high, category) {
+// Find the top 10 experts by metric for a given category
+// Metrics available are timeStamp and reps given
+// Returns truncated data for efficiency
+UserSchema.statics.getExpertsByMetricForCategory = function(high, category, metric) {
+  var sorter = {};
+  switch(metric) {
+    case 'timeStamp':
+      sorter[metric] = high;
+      break;
+
+    case 'reps':
+      sorter['categories.reps'] = high;
+      break;
+
+    default:
+      sorter['categories.reps'] = high;
+      break;
+  }
+
   return this.aggregate([
     { $match: { "categories.name": category }},
     { $unwind: "$categories" },
     { $match: { "categories.name": category }},
-    { $sort: { "timeStamp": high }},
+    { $sort: sorter},
     { $project: { _id: 1, picture: 1, rank: "$categories.rank", reps: "$categories.reps", username: 1, about: 1 }},
     { $limit: 10 },
   ]).exec();
@@ -270,9 +287,9 @@ UserSchema.statics.getExpertsByTimeStampForCategory = function(high, category) {
 // Metrics available are timeStamp, average return, total dividends, and rank
 // Currently used for the Investor Dashboard on the Category Page
 // Returns truncated data for efficiency
-UserSchema.statics.getInvestorsByMetricForCategory = function(high, category, datatype) {
+UserSchema.statics.getInvestorsByMetricForCategory = function(high, category, metric) {
   var sorter = {};
-  sorter[datatype] = high;
+  sorter[metric] = high;
   return this.aggregate([
     { $match: { "portfolio.category": category }},
     { $unwind: "$portfolio" },
@@ -334,20 +351,6 @@ UserSchema.statics.getLeadersByExpertReps = function(high) {
     .sort({ "categories.reps": high })
     .limit(10)
     .exec();
-};
-
-// Get top ranked usersfor a given expert category
-// Ranking done by total reps
-// Only returns the username, picture, rank, and reps for the category
-UserSchema.statics.getExpertsByRepsForCategory = function(high, category) {
-  return this.aggregate([
-    { $match: { "categories.name": category }},
-    { $unwind: "$categories" },
-    { $match: { "categories.name": category }},
-    { $sort: { "categories.reps": high }},
-    { $project: { _id: 1, picture: 1, rank: "$categories.rank", reps: "$categories.reps", username: 1, about: 1 }},
-    { $limit: 10 },
-  ]).exec();
 };
 
 // Get top ranked user ids for a given investor category, descending

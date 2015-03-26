@@ -12,12 +12,10 @@ var CategoryExpertTable = React.createClass({
   },
 
   componentDidMount: function() {
-    console.log(this.props.category);
     this.getUsers('/api/users/leading/experts/reps/high/' + this.props.category);
   },
 
   getUsers: function(url) {
-    console.log(url);
     $.ajax({
       url: url,
       success: function(users) {
@@ -59,11 +57,11 @@ var CategoryExpertTable = React.createClass({
         break;
 
       case 'Newest':
-        url = '/api/users/leading/experts/timestamp/high/' + name;
+        url = '/api/users/leading/experts/timeStamp/high/' + name;
         break;
 
       case 'Oldest':
-        url = '/api/users/leading/experts/timestamp/low/' + name;
+        url = '/api/users/leading/experts/timeStamp/low/' + name;
         break;
 
       default:
