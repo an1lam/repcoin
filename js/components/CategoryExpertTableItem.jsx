@@ -6,7 +6,7 @@ var Router = require('react-router');
 var Link = Router.Link;
 var strings = require('../lib/strings_utils.js');
 
-var CategoryUserTableItem = React.createClass({
+var CategoryExpertTableItem = React.createClass({
 
   render: function() {
     var user = this.props.user;
@@ -35,4 +35,4 @@ var CategoryUserTableItem = React.createClass({
   },
 });
 
-module.exports = CategoryUserTableItem;
+module.exports = CategoryExpertTableItem;

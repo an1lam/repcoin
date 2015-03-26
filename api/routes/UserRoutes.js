@@ -20,7 +20,8 @@ var transporter = require('../../config/mailer.js').transporterFactory();
 // ---------------------------------------------------------------------------
 module.exports = function(router, isAuthenticated, acl, censor) {
   router.get('/users/leading/:datatype/:order', UserHandler.users.leading.get);
-  router.get('/users/leading/:datatype/:order/:category', UserHandler.users.leading.getByCategory);
+  router.get('/users/leading/experts/:datatype/:order/:category', UserHandler.users.leading.getByCategory.experts);
+  router.get('/users/leading/investors/:datatype/:order/:category', UserHandler.users.leading.getByCategory.investors);
   router.get('/users/trending/experts/:order', UserHandler.users.trending.experts.getOverall);
   router.get('/users/trending/experts/:order/:category', UserHandler.users.trending.experts.getByCategory);
   router.get('/users/:category/trending/experts/:date', UserHandler.users.trending.experts.get);

@@ -1,18 +1,16 @@
 'use strict';
 
 var auth = require('../auth.jsx');
-var CategoryPanelAll = require('./CategoryPanelAll.jsx');
+var CategoryPanelExpert = require('./CategoryPanelExpert.jsx');
+var CategoryPanelInvestor = require('./CategoryPanelInvestor.jsx');
 var Feed = require('./Feed.jsx');
-var PanelAll = require('./PanelAll.jsx');
-var PanelExpert = require('./PanelExpert.jsx');
-var PanelInvestor = require('./PanelInvestor.jsx');
 var React = require('react');
 
 var CategoryDashboard = React.createClass({
   getInitialState: function() {
     return {
       currentUser: null,
-      panel: 'All'
+      panel: 'Expert'
     };
   },
 
@@ -37,31 +35,26 @@ var CategoryDashboard = React.createClass({
     if (this.state.currentUser) {
       var panel = '';
       switch(this.state.panel) {
-        case 'All':
-          panel =  <CategoryPanelAll category={this.props.category} user={this.state.currentUser}/>;
-          break;
-
         case 'Expert':
-          panel = <PanelExpert user={this.state.currentUser}/>;
+          panel =  <CategoryPanelExpert category={this.props.category} user={this.state.currentUser}/>;
           break;
 
         case 'Investor':
-          panel = <PanelInvestor user={this.state.currentUser}/>;
+          panel =  <CategoryPanelInvestor category={this.props.category} user={this.state.currentUser}/>;
           break;
 
         case 'Feed':
-          panel = <Feed category={this.props.category} parent="categoryPage"/>;
+          panel = <Feed category={this.props.category} parent="CategoryPage"/>;
           break;
 
         default:
-          panel = <PanelExpert user={this.state.currentUser}/>;
+          panel = <CategoryPanelExpert user={this.state.currentUser}/>;
           break;
       }
     }
     return (
       <div className="category-dashboard">
         <div className="dashboard-buttons">
-          <button className="btn btn-default" onClick={this.handleToggle} value="All">All</button>
           <button className="btn btn-default" onClick={this.handleToggle} value="Expert">Expert</button>
           <button className="btn btn-default" onClick={this.handleToggle} value="Investor">Investor</button>
           <button className="btn btn-default" onClick={this.handleToggle} value="Feed">Feed</button>

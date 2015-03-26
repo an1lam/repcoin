@@ -254,14 +254,64 @@ UserSchema.statics.getLeadersByTimeStamp = function(high) {
     .exec();
 };
 
-// Find the top 10 leaders by timestamp for a given category
-UserSchema.statics.getLeadersByTimeStampForCategory = function(high, category) {
+// Find the top 10 experts by timestamp for a given category
+UserSchema.statics.getExpertsByTimeStampForCategory = function(high, category) {
   return this.aggregate([
     { $match: { "categories.name": category }},
     { $unwind: "$categories" },
     { $match: { "categories.name": category }},
     { $sort: { "timeStamp": high }},
     { $project: { _id: 1, picture: 1, rank: "$categories.rank", reps: "$categories.reps", username: 1, about: 1 }},
+    { $limit: 10 },
+  ]).exec();
+};
+
+// Find the top 10 investors by metric for a given category
+// Metrics available are timeStamp, average return, total dividends, and rank
+// Currently used for the Investor Dashboard on the Category Page
+// Returns truncated data for efficiency
+UserSchema.statics.getInvestorsByMetricForCategory = function(high, category, datatype) {
+  var sorter = {};
+  sorter[datatype] = high;
+  return this.aggregate([
+    { $match: { "portfolio.category": category }},
+    { $unwind: "$portfolio" },
+    { $unwind: "$portfolio.investments" },
+    { $match: { "portfolio.category": category }},
+    { $group:
+      {
+        _id:
+          {
+            id: "$_id",
+            username: "$username",
+            picture: "$picture",
+            about: "$about",
+            rank: "$portfolio.rank",
+            timeStamp: "$timeStamp"
+          },
+        returns:
+          {
+            $avg: { $divide: [ "$portfolio.investments.dividend", "$portfolio.investments.amount" ] }
+          },
+        dividends:
+          {
+            $sum: "$portfolio.investments.dividend"
+          }
+      }
+    },
+    { $project:
+      {
+        _id: "$_id.id",
+        username: "$_id.username",
+        picture: "$_id.picture",
+        about: "$_id.about",
+        rank: "$_id.rank",
+        timeStamp: "$_id.timeStamp",
+        returns: 1,
+        dividends: 1
+      }
+    },
+    { $sort: sorter },
     { $limit: 10 },
   ]).exec();
 };
@@ -289,7 +339,7 @@ UserSchema.statics.getLeadersByExpertReps = function(high) {
 // Get top ranked usersfor a given expert category
 // Ranking done by total reps
 // Only returns the username, picture, rank, and reps for the category
-UserSchema.statics.getLeadersByExpertRepsForCategory = function(high, category) {
+UserSchema.statics.getExpertsByRepsForCategory = function(high, category) {
   return this.aggregate([
     { $match: { "categories.name": category }},
     { $unwind: "$categories" },
@@ -297,20 +347,6 @@ UserSchema.statics.getLeadersByExpertRepsForCategory = function(high, category) 
     { $sort: { "categories.reps": high }},
     { $project: { _id: 1, picture: 1, rank: "$categories.rank", reps: "$categories.reps", username: 1, about: 1 }},
     { $limit: 10 },
-  ]).exec();
-};
-
-// Get ranked investors for a given category
-// Ranking done by total dividends
-// Only returns the username, picture, rank, dividends, and average return for the category
-UserSchema.statics.getLeadersByTotalDividendsForCategory = function(high, category) {
-  return this.aggregate([
-    { $match: { "portfolio.category": category }},
-    { $unwind: "$portfolio" },
-    { $unwind: "$portfolio.investments" },
-    { $match: { "portfolio.category": category } },
-    { $project: { _id: 1, picture: 1, rank: "$portfolio.rank", dividends: { $sum: "$portfolio.investments.dividend" }, username: 1, about: 1 }},
-    { $sort: { "dividends": high }},
   ]).exec();
 };
 

@@ -2,9 +2,9 @@
 
 var $ = require('jquery');
 var React = require('react');
-var CategoryUserTableItem = require('./CategoryUserTableItem.jsx');
+var CategoryExpertTableItem = require('./CategoryExpertTableItem.jsx');
 
-var CategoryUserTable = React.createClass({
+var CategoryExpertTable = React.createClass({
   getInitialState: function() {
     return {
       users: [],
@@ -12,10 +12,12 @@ var CategoryUserTable = React.createClass({
   },
 
   componentDidMount: function() {
-    this.getUsers('/api/users/leading/timestamp/high/' + this.props.category);
+    console.log(this.props.category);
+    this.getUsers('/api/users/leading/experts/reps/high/' + this.props.category);
   },
 
   getUsers: function(url) {
+    console.log(url);
     $.ajax({
       url: url,
       success: function(users) {
@@ -27,10 +29,10 @@ var CategoryUserTable = React.createClass({
     });
   },
 
-  getCategoryUserTableRows: function() {
+  getCategoryExpertTableRows: function() {
     var userTableRows = [];
     for (var i = 0; i < this.state.users.length; i++) {
-      userTableRows.push(<CategoryUserTableItem key={i} user={this.state.users[i]} currentUser={this.props.user} />);
+      userTableRows.push(<CategoryExpertTableItem key={i} user={this.state.users[i]} currentUser={this.props.user} />);
     }
     return userTableRows;
   },
@@ -41,11 +43,11 @@ var CategoryUserTable = React.createClass({
     var url;
     switch(selected) {
       case 'Reps Given (High to Low)':
-        url = '/api/users/leading/expertreps/high/' + name;
+        url = '/api/users/leading/experts/reps/high/' + name;
         break;
 
       case 'Reps Given (Low to High)':
-        url = '/api/users/leading/expertreps/low/' + name;
+        url = '/api/users/leading/experts/reps/low/' + name;
         break;
 
       case 'Trending (High to Low)':
@@ -57,15 +59,15 @@ var CategoryUserTable = React.createClass({
         break;
 
       case 'Newest':
-        url = '/api/users/leading/timestamp/high/' + name;
+        url = '/api/users/leading/experts/timestamp/high/' + name;
         break;
 
       case 'Oldest':
-        url = '/api/users/leading/timestamp/low/' + name;
+        url = '/api/users/leading/experts/timestamp/low/' + name;
         break;
 
       default:
-        url = '/api/users/leading/expertreps/high/' + name;
+        url = '/api/users/leading/experts/reps/high/' + name;
         break;
     }
 
@@ -73,9 +75,9 @@ var CategoryUserTable = React.createClass({
   },
 
   render: function() {
-    var userTableRows = this.getCategoryUserTableRows();
+    var userTableRows = this.getCategoryExpertTableRows();
     return (
-      <div className="categoryUserTable">
+      <div className="categoryExpertTable">
         <div className="user-table-filter">Sort by:
           <select className="user-table-select" onChange={this.onFilter}>
             <option>Reps Given (High to Low)</option>
@@ -104,4 +106,4 @@ var CategoryUserTable = React.createClass({
   }
 });
 
-module.exports = CategoryUserTable;
+module.exports = CategoryExpertTable;

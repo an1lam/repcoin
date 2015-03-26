@@ -160,31 +160,44 @@ var UserHandler = {
       },
 
       // Get leading experts for a specific catery
-      getByCategory: function(req, res) {
-        var high = req.params.order === 'high' ? -1 : 1
-        var category = req.params.category;
+      getByCategory: {
+        investors: function(req, res) {
+          var high = req.params.order === 'high' ? -1 : 1
+          var category = req.params.category;
+          User.getInvestorsByMetricForCategory(high, category, req.params.datatype).then(
+            function(users) {
+              return res.status(200).send(users);
+            }, function(err) {
+              winston.log('error', 'Error fetching leading investors by category: %s', err.toString());
+              return res.status(503).send(err);
+          });
+        },
 
-        var query;
-        switch(req.params.datatype) {
-          case 'timestamp':
-            query = User.getLeadersByTimeStampForCategory(high, category);
-            break;
+        experts: function(req, res) {
+          var high = req.params.order === 'high' ? -1 : 1
+          var category = req.params.category;
+          var query;
+          switch(req.params.datatype) {
+            case 'timestamp':
+              query = User.getExpertsByTimeStampForCategory(high, category);
+              break;
 
-          case 'expertreps':
-            query = User.getLeadersByExpertRepsForCategory(high, category);
-            break;
+            case 'reps':
+              query = User.getExpertsByRepsForCategory(high, category);
+              break;
 
-          default:
-            query = User.getLeadersByExpertRepsForCategory(high, category);
-            break;
-        }
+            default:
+              query = User.getExpertsByRepsForCategory(high, category);
+              break;
+          }
 
-        query.then(function(users) {
-          return res.status(200).send(users);
-        }, function(err) {
-          winston.log('error', 'Error fetching leading users: %s', err.toString());
-          return res.status(503).send(err);
-        });
+          query.then(function(users) {
+            return res.status(200).send(users);
+          }, function(err) {
+            winston.log('error', 'Error fetching leading experts by category: %s', err.toString());
+            return res.status(503).send(err);
+          });
+        },
       },
     },
 
