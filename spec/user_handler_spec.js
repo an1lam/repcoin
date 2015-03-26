@@ -165,6 +165,38 @@ describe('UserHandler: ', function() {
           };
         });
 
+        describe('getByCategory: ', function() {
+          it('handles error finding users ids', function() {
+            spyOn(Transaction, 'findTrendingExpertsByCategory').andReturn({
+              then: function(cbS, cbF) { return cbF('failure'); }
+            });
+            req.params = { order: 'high' };
+            UserHandler.users.trending.experts.getByCategory(req, res);
+            expect(res.status).toHaveBeenCalledWith(503);
+            expect(res.send).toHaveBeenCalledWith('failure');
+          });
+
+          it('finds trending users', function() {
+            var users = [
+              { _id: '123' },
+              { _id: '456' },
+            ]
+            var sortedUsers = [
+              { _id: '456' },
+              { _id: '123' },
+            ]
+
+            spyOn(Transaction, 'findTrendingExpertsByCategory').andReturn(transactionPromise);
+            spyOn(User, 'findTruncatedUsersByCategory').andReturn({
+              then: function(cbS, cbF) { return cbS(users); }
+            });
+            req.params = { order: 'high' };
+            UserHandler.users.trending.experts.getByCategory(req, res);
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.send).toHaveBeenCalledWith(sortedUsers);
+          });
+        });
+
         describe('getOverall: ', function() {
           it('handles error finding users ids', function() {
             spyOn(Transaction, 'findOverallTrendingExperts').andReturn({
@@ -320,6 +352,66 @@ describe('UserHandler: ', function() {
     });
 
     describe('leading: ', function() {
+      describe('getByCategory: ', function() {
+        describe('experts: ', function() {
+          it('returns experts by the given metric', function() {
+            spyOn(User, 'getExpertsByMetricForCategory').andReturn({
+              then: function(cbS, cbF) {
+                return cbS([]);
+              }
+            });
+            req.params = { order: 'high', datatype: 'timestamp', category: 'foo' };
+            UserHandler.users.leading.getByCategory.experts(req, res);
+            expect(User.getExpertsByMetricForCategory.callCount).toEqual(1);
+            expect(User.getExpertsByMetricForCategory).toHaveBeenCalledWith(-1, 'foo', 'timestamp');
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.send).toHaveBeenCalledWith([]);
+          });
+
+          it('handles error finding experts', function() {
+            spyOn(User, 'getExpertsByMetricForCategory').andReturn({
+              then: function(cbS, cbF) {
+                  return cbF('Error!');
+              }
+            });
+            req.params = { order: 'high', datatype: 'timestamp', category: 'foo' };
+            UserHandler.users.leading.getByCategory.experts(req, res);
+            expect(User.getExpertsByMetricForCategory.callCount).toEqual(1);
+            expect(res.status).toHaveBeenCalledWith(503);
+            expect(res.send).toHaveBeenCalledWith('Error!');
+          });
+        });
+
+        describe('investors: ', function() {
+          it('returns investors by the given metric', function() {
+            spyOn(User, 'getInvestorsByMetricForCategory').andReturn({
+              then: function(cbS, cbF) {
+                return cbS([]);
+              }
+            });
+            req.params = { order: 'high', datatype: 'timestamp', category: 'foo' };
+            UserHandler.users.leading.getByCategory.investors(req, res);
+            expect(User.getInvestorsByMetricForCategory.callCount).toEqual(1);
+            expect(User.getInvestorsByMetricForCategory).toHaveBeenCalledWith(-1, 'foo', 'timestamp');
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.send).toHaveBeenCalledWith([]);
+          });
+
+          it('handles error finding investors', function() {
+            spyOn(User, 'getInvestorsByMetricForCategory').andReturn({
+              then: function(cbS, cbF) {
+                  return cbF('Error!');
+              }
+            });
+            req.params = { order: 'high', datatype: 'timestamp', category: 'foo' };
+            UserHandler.users.leading.getByCategory.investors(req, res);
+            expect(User.getInvestorsByMetricForCategory.callCount).toEqual(1);
+            expect(res.status).toHaveBeenCalledWith(503);
+            expect(res.send).toHaveBeenCalledWith('Error!');
+          });
+        });
+      });
+
       describe('get: ', function() {
         it('returns leaders by the given metric', function() {
           spyOn(User, 'getLeadersByTimeStamp').andReturn({

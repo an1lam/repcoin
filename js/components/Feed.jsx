@@ -64,7 +64,7 @@ var Feed = React.createClass({
 
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        console.error(this.props.url, xhr.responseText, status, err.toString());
       }.bind(this)
     });
   },
