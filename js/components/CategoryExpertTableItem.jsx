@@ -27,7 +27,7 @@ var CategoryExpertTableItem = React.createClass({
           <Link to="profile" params={{userId: user._id}}>{user.username}</Link>
           {img}
         </td>
-        <td>{user.about}</td>
+        <td><div className="about-column">{user.about}</div></td>
         <td>{user.rank}</td>
         <td>{user.reps}</td>
       </tr>

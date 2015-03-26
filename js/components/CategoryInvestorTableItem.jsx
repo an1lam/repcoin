@@ -26,7 +26,7 @@ var CategoryInvestorTableItem = React.createClass({
           <Link to="profile" params={{userId: user._id}}>{user.username}</Link>
           {img}
         </td>
-        <td>{user.about}</td>
+        <td><div className="about-column">{user.about}</div></td>
         <td>{user.rank}</td>
         <td>{Math.floor(user.dividends * 100/100)}</td>
         <td>{Math.floor(user.returns * 10000/100)}%</td>

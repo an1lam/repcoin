@@ -8,7 +8,6 @@ var CategoryPageHeader = require('./CategoryPageHeader.jsx');
 var ErrorPage = require('./ErrorPage.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
-var LeaderTable = require('./LeaderTable.jsx');
 var TrendingTable = require('./TrendingTable.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
@@ -63,16 +62,12 @@ var CategoryPage = React.createClass({
 
   render: function() {
     var categoryPageHeader = '';
-    var leaderTable = '';
     var trendingTable = '';
-    var investorTable = '';
     if (this.state.category && this.state.currentUser) {
       categoryPageHeader = <CategoryPageHeader category={this.state.category} currentUser={this.state.currentUser} />;
     }
     if (this.state.category) {
       trendingTable = <TrendingTable category={this.state.category} />
-      leaderTable = <LeaderTable category={this.state.category} expert={true}/>
-      investorTable = <LeaderTable category={this.state.category} expert={false}/>
     }
 
     if (this.state.error) {
@@ -88,17 +83,11 @@ var CategoryPage = React.createClass({
             <div className="col-md-3">
               <div className="expert-table">
                 {trendingTable}
-                {leaderTable}
               </div>
             </div>
-            <div className="col-md-6">
-              <div className="feed-table">
+            <div className="col-md-8">
+              <div className="feed-table" key={this.props.params.category}>
                 <CategoryDashboard category={this.props.params.category} />
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="investor-table">
-                {investorTable}
               </div>
             </div>
           </div>
