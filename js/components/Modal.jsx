@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var AuthActionCreator = require('../actions/AuthActionCreator.js');
 var ModalMixin = require('../mixins/BootstrapModalMixin.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
@@ -101,7 +102,9 @@ var Modal = React.createClass({
               action = strings.SUCCESSFULLY_REVOKED(transaction.amount * -1, transaction.to.name);
             }
             this.setState({ error: false, message: action, pending: false });
+            AuthActionCreator.getCurrentUser();
             PubSub.publish('profileupdate');
+            PubSub.publish('userupdate');
           }.bind(this),
           error: function(xhr, status, err) {
             this.setState({ error: true, message: strings.ERROR_CREATING_TRANSACTION, pending: false });

@@ -1,6 +1,5 @@
 'use strict';
 
-var auth = require('../auth.jsx');
 var Feed = require('./Feed.jsx');
 var PanelAll = require('./PanelAll.jsx');
 var PanelExpert = require('./PanelExpert.jsx');
@@ -10,21 +9,8 @@ var React = require('react');
 var Dashboard = React.createClass({
   getInitialState: function() {
     return {
-      currentUser: null,
       panel: 'All'
     };
-  },
-
-  componentDidMount: function() {
-    this.resetCurrentUser();
-  },
-
-  resetCurrentUser: function() {
-    auth.getCurrentUser.call(this, this.setCurrentUser);
-  },
-
-  setCurrentUser: function(currentUser) {
-    this.setState({ currentUser: currentUser });
   },
 
   handleToggle: function(e) {
@@ -33,29 +19,27 @@ var Dashboard = React.createClass({
   },
 
   render: function() {
-    if (this.state.currentUser) {
-      var panel = '';
-      switch(this.state.panel) {
-        case 'All':
-          panel =  <PanelAll user={this.state.currentUser}/>;
-          break;
+    var panel = '';
+    switch(this.state.panel) {
+      case 'All':
+        panel =  <PanelAll user={this.props.currentUser}/>;
+        break;
 
-        case 'Expert':
-          panel = <PanelExpert user={this.state.currentUser}/>;
-          break;
+      case 'Expert':
+        panel = <PanelExpert user={this.props.currentUser}/>;
+        break;
 
-        case 'Investor':
-          panel = <PanelInvestor user={this.state.currentUser}/>;
-          break;
+      case 'Investor':
+        panel = <PanelInvestor user={this.props.currentUser}/>;
+        break;
 
-        case 'Feed':
-          panel = <Feed parent="HomePage"/>;
-          break;
+      case 'Feed':
+        panel = <Feed parent="HomePage"/>;
+        break;
 
-        default:
-          panel = <PanelExpert user={this.state.currentUser}/>;
-          break;
-      }
+      default:
+        panel = <PanelExpert user={this.props.currentUser}/>;
+        break;
     }
     return (
       <div className="dashboard">
