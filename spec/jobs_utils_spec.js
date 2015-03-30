@@ -305,6 +305,37 @@ describe('Job utils: ', function() {
       expect(users[2].reps).toEqual(3.38);
       expect(users[2].portfolio[0].investments[0].dividend).toEqual(.38);
     });
+
+    it('sets reps to 0 if dividends make the investors reps fall below 0', function() {
+      investor2 = {
+        _id: '789',
+        reps: 3,
+        portfolio: [
+          {
+            category: 'Coding',
+            investments: [ { userId: '123', percentage: 0.75, amount: 15 } ]
+          }
+        ],
+        save: jasmine.createSpy().andReturn()
+      };
+
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
+      });
+      spyOn(routeUtils, 'saveAll').andCallFake(function(users, callback) {
+        return callback([]);
+      });
+
+      // Set up the investor reps low to prove that it will be corrected to 0
+      users[2].reps = -100;
+
+      utils.payDividends(cb);
+      expect(users[1].reps).toEqual(2.5);
+      expect(users[1].portfolio[0].investments[0].dividend).toEqual(1.51);
+      expect(users[2].reps).toEqual(0);
+      expect(users[2].portfolio[0].investments[0].dividend).toEqual(.38);
+    });
+
   });
 
   describe('incrementInvestorReps: ', function() {
