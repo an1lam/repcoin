@@ -425,4 +425,37 @@ describe('Job utils: ', function() {
       expect(categories[0].name).toEqual('foo');
     });
   });
+
+  describe('removeInvestorsWithRankZero: ', function() {
+    var users;
+    beforeEach(function() {
+      users = [
+        { portfolio: [{ rank: 1, category: 'Coding', investments: [] }, { rank: 0, category: 'Ballet', investments: [ { amount: 5 } ] } ] },
+        { portfolio: [ { rank: 0, category: 'Coding', investments: [] } ] },
+      ];
+    });
+
+    it('handles error finding users', function() {
+      spyOn(User, 'find').andCallFake(function(query, callback) {
+        return callback('Error', []);
+      });
+      utils.removeInvestorsWithRankZero(cb);
+      expect(winston.log).toHaveBeenCalledWith('error', 'Error removing investors with rank zero: %s', 'Error');
+    });
+
+    it('it removes investors from categories in which they have rank zero', function() {
+      spyOn(User, 'find').andCallFake(function(callback) {
+        return callback(null, users);
+      });
+      spyOn(routeUtils, 'saveAll').andCallFake(function(users, callback) {
+        return callback([]);
+      });
+      utils.removeInvestorsWithNoInvestments(cb);
+      var expectedUsers = [
+        { portfolio: [ { rank: 0, category: 'Ballet', investments: [ { amount: 5 } ] } ] },
+        { portfolio: [] },
+      ];
+      expect(users).toEqual(expectedUsers);
+    });
+  });
 });
