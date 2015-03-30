@@ -165,6 +165,39 @@ var utils = {
     });
   },
 
+  removeInvestorsWithRankZero: function(cb) {
+    User.find({'portfolio.rank' : 0}, function(err, users) {
+      if (err) {
+        winston.log('error', 'Error removing investors with rank zero: %s', err.toString());
+        cb(null);
+      } else if (users.length === 0) {
+        cb(null);
+      } else {
+        var user;
+        for (var i = 0; i < users.length; i++) {
+          user = users[i];
+          var newPortfolio = [];
+          for (var j = 0; j < user.portfolio.length; j++) {
+            if (user.portfolio[j].rank !== 0) {
+              newPortfolio.push(user.portfolio[j]);
+            }
+            user.portfolio = newPortfolio;
+          }
+        }
+
+        routeUtils.saveAll(users, function(errs) {
+          if (errs.length > 0) {
+            winston.log('error', 'Error removing investors with rank zero: %s', errs.toString());
+            cb(errs);
+          } else {
+            winston.log('info', 'Successfully removed investors with rank zero.');
+            cb(null);
+          }
+        });
+      }
+    });
+  },
+
   incrementInvestorReps: function(cb) {
     var i = 0;
     User.find(function(err, users) {
