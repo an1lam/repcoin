@@ -252,7 +252,16 @@ var UserHandler = {
                 winston.log('error', 'Error finding trending experts %s', err.toString());
                 return res.status(501).send(err);
               } else {
-                return res.status(200).send(users.slice(0,10));
+                // Mongo find cannot be ordered, so we need to manually sort
+                var sortedUsers = [];
+                for (var i = 0; i < idArray.length; i++) {
+                  for (var j = 0; j < users.length; j++) {
+                    if (users[j]._id.toString() === idArray[i].toString()) {
+                      sortedUsers.push(users[j]);
+                    }
+                  }
+                }
+                return res.status(200).send(sortedUsers);
               }
             });
           }, function(err) {
