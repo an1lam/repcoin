@@ -15,6 +15,7 @@ var MiniInvestButton = React.createClass({
   handleShowModal: function() {
     // In some cases, we may not be given a user.
     // We will need to fetch the user ourselves
+    // In this case, we will have to have a userId prop
     if (this.props.user) {
       this.refs.modal.show();
     } else {

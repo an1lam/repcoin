@@ -3,11 +3,11 @@
 var $ = require('jquery');
 var auth = require('../auth.jsx');
 var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
+var CategoryDashboard = require('./CategoryDashboard.jsx');
 var CategoryPageHeader = require('./CategoryPageHeader.jsx');
 var ErrorPage = require('./ErrorPage.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
-var LeaderTable = require('./LeaderTable.jsx');
 var TrendingTable = require('./TrendingTable.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
@@ -39,6 +39,7 @@ var CategoryPage = React.createClass({
   },
 
   resetCurrentUser: function() {
+    console.log('getting new current user');
     auth.getCurrentUser.call(this, this.setCurrentUser);
   },
 
@@ -62,14 +63,12 @@ var CategoryPage = React.createClass({
 
   render: function() {
     var categoryPageHeader = '';
-    var leaderTable = '';
     var trendingTable = '';
-    var investorTable = '';
+    var categoryDashboard = '';
     if (this.state.category && this.state.currentUser) {
       categoryPageHeader = <CategoryPageHeader category={this.state.category} currentUser={this.state.currentUser} />;
       trendingTable = <TrendingTable category={this.state.category} currentUser={this.state.currentUser} />
-      leaderTable = <LeaderTable category={this.state.category} expert={true} currentUser={this.state.currentUser} />
-      investorTable = <LeaderTable category={this.state.category} expert={false}/>
+      categoryDashboard = <CategoryDashboard category={this.props.params.category} currentUser={this.state.currentUser} />;
     }
 
     if (this.state.error) {
@@ -85,17 +84,11 @@ var CategoryPage = React.createClass({
             <div className="col-md-3">
               <div className="expert-table">
                 {trendingTable}
-                {leaderTable}
               </div>
             </div>
-            <div className="col-md-6">
-              <div className="feed-table">
-                <Feed category={this.props.params.category} parent="CategoryPage" />
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="investor-table">
-                {investorTable}
+            <div className="col-md-8">
+              <div className="feed-table" key={this.props.params.category}>
+                {categoryDashboard}
               </div>
             </div>
           </div>

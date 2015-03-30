@@ -154,9 +154,36 @@ var UserHandler = {
         query.then(function(users) {
           return res.status(200).send(users);
         }, function(err) {
-          winston.log('error', 'Error fetching users by leading reps: %s', err.toString());
+          winston.log('error', 'Error fetching leading users: %s', err.toString());
           return res.status(503).send(err);
         });
+      },
+
+      // Get leading experts for a specific catery
+      getByCategory: {
+        investors: function(req, res) {
+          var high = req.params.order === 'high' ? -1 : 1
+          var category = req.params.category;
+          User.getInvestorsByMetricForCategory(high, category, req.params.datatype).then(
+            function(users) {
+              return res.status(200).send(users);
+            }, function(err) {
+              winston.log('error', 'Error fetching leading investors by category: %s', err.toString());
+              return res.status(503).send(err);
+          });
+        },
+
+        experts: function(req, res) {
+          var high = req.params.order === 'high' ? -1 : 1
+          var category = req.params.category;
+          User.getExpertsByMetricForCategory(high, category, req.params.datatype).then(
+            function(users) {
+              return res.status(200).send(users);
+            }, function(err) {
+              winston.log('error', 'Error fetching leading experts by category: %s', err.toString());
+              return res.status(503).send(err);
+          });
+        },
       },
     },
 
@@ -230,6 +257,35 @@ var UserHandler = {
             });
           }, function(err) {
             winston.log('error', 'Error finding trending experts: %s', err.toString());
+            return res.status(503).send(err);
+          });
+        },
+
+        // Get trending experts for a given category
+        // Users the last week as the trending time
+        getByCategory: function(req, res) {
+          var high = req.params.order === 'high' ? -1 : 1
+          var category = req.params.category;
+
+          Transaction.findTrendingExpertsByCategory(high, category).then(function(userIds) {
+            var idArray = [];
+            for (var i = 0; i < userIds.length; i++) {
+              idArray.push(userIds[i]._id);
+            }
+            User.findTruncatedUsersByCategory(idArray, category).then(function(users) {
+              // Mongo find cannot be ordered, so we need to manually sort
+              var sortedUsers = [];
+              for (var i = 0; i < idArray.length; i++) {
+                for (var j = 0; j < users.length; j++) {
+                  if (users[j]._id.toString() === idArray[i].toString()) {
+                    sortedUsers.push(users[j]);
+                  }
+                }
+              }
+              return res.status(200).send(sortedUsers);
+            });
+          }, function(err) {
+            winston.log('error', 'Error finding trending experts by category: %s', err.toString());
             return res.status(503).send(err);
           });
         },

@@ -61,7 +61,8 @@
 
 /* Home Page //////////////////// */
 .about-column {
-  width:60px;
+  min-width:100px;
+  max-width:250px;
 }
 
 .dashboard-buttons {
