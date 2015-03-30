@@ -213,13 +213,18 @@ describe('UserHandler: ', function() {
               { _id: '123' },
               { _id: '456' },
             ]
+            var sortedUsers = [
+              { _id: '456' },
+              { _id: '123' },
+            ]
+
             spyOn(Transaction, 'findTrendingExperts').andReturn(transactionPromise);
             spyOn(User, 'findPublic').andCallFake(function(query, cb) {
               return cb(null, users);
             });
             UserHandler.users.trending.experts.get(req, res);
             expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.send).toHaveBeenCalledWith(users);
+            expect(res.send).toHaveBeenCalledWith(sortedUsers);
           });
         });
       });
