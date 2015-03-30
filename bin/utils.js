@@ -413,6 +413,8 @@ var utils = {
           for (var i = 0; i < user.portfolio.length; i++) {
             var category = user.portfolio[i];
             var categoryName = category.category;
+
+            // Get the total number of reps the user has invested for this category
             var investorRepsInvested = 0;
             for (var j = 0; j < category.investments.length; j++) {
               var investment = category.investments[j]
@@ -430,10 +432,17 @@ var utils = {
                 if (!total) {
                   winston.log('error', 'Error finding expected expert category for user with id: %s');
                 } else {
+
+                  // Reset the dividend and pay the dividend
                   var dividend = Math.floor(investment.percentage * (total - investorRepsInvested) * DIVIDEND_PERCENTAGE * 100)/100;
                   investment.dividend = dividend;
                   user.reps += dividend;
                   user.reps = Math.floor(user.reps * 100)/100;
+
+                  // If the user now has negative reps, make their reps 0
+                  if (user.reps < 0) {
+                    user.reps = 0;
+                  }
                 }
               }
             };
