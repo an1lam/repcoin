@@ -1,5 +1,11 @@
 /* General ////////////////////////////////////// */
 
+/* Leader Table ////////// */
+.leader-table-invest {
+  display:inline-block;
+  float:right;
+}
+
 /* New Feed ///////////////// */
 .left-panel {
   margin-left:20px;
@@ -56,7 +62,7 @@
 /* Home Page //////////////////// */
 .about-column {
   min-width:100px;
-  max-width:400px;
+  max-width:250px;
 }
 
 .dashboard-buttons {

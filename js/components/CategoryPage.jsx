@@ -39,6 +39,7 @@ var CategoryPage = React.createClass({
   },
 
   resetCurrentUser: function() {
+    console.log('getting new current user');
     auth.getCurrentUser.call(this, this.setCurrentUser);
   },
 
@@ -63,11 +64,11 @@ var CategoryPage = React.createClass({
   render: function() {
     var categoryPageHeader = '';
     var trendingTable = '';
+    var categoryDashboard = '';
     if (this.state.category && this.state.currentUser) {
       categoryPageHeader = <CategoryPageHeader category={this.state.category} currentUser={this.state.currentUser} />;
-    }
-    if (this.state.category) {
-      trendingTable = <TrendingTable category={this.state.category} />
+      trendingTable = <TrendingTable category={this.state.category} currentUser={this.state.currentUser} />
+      categoryDashboard = <CategoryDashboard category={this.props.params.category} currentUser={this.state.currentUser} />;
     }
 
     if (this.state.error) {
@@ -87,7 +88,7 @@ var CategoryPage = React.createClass({
             </div>
             <div className="col-md-8">
               <div className="feed-table" key={this.props.params.category}>
-                <CategoryDashboard category={this.props.params.category} />
+                {categoryDashboard}
               </div>
             </div>
           </div>
