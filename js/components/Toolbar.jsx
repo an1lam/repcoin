@@ -89,20 +89,18 @@ var Toolbar = React.createClass({
     return (
       <div className="toolbar navbar navbar-default" role="navigation">
         <div className="navbar-header">
-          <div className="homelink navbar-brand">
+          <div className="homelink navbar-brand col-md-1">
             <Link to="home">{strings.REPCOIN}</Link>
           </div>
         </div>
-        <div className="col-md-3 col-md-offset-1 toolbar-search ">
+        <div className="col-md-3 toolbar-search ">
           {instantBox}
         </div>
         <div className="toolbar-nav-right">
-        <ul className="nav navbar-nav toolbar-nav-right">
+        <ul className="nav navbar-nav">
           <li>{profileLink}</li>
           <li>{categories}</li>
-          <li>
-            {notifications}
-          </li>
+          <li>{notifications}</li>
           <li>{logout}</li>
         </ul>
           {notificationDisplay}
