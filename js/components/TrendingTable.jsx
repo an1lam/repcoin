@@ -58,12 +58,27 @@ var TrendingTable = React.createClass({
     $.ajax({
       url: url,
       success: function(leaders) {
-        this.setState({ leaders: leaders });
+        var sortedLeaders = leaders.sort(this.getLeadersComparator(leaders));
+        this.setState({ leaders: sortedLeaders });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(xhr.responseText, status, err.toString());
       }.bind(this)
     });
+  },
+
+  getLeadersComparator: function() {
+    return function(a, b) {
+      console.log(a);
+
+      if (a.rank > b.rank) {
+        return -1;
+      }
+      if (a.rank < b.rank) {
+        return 1;
+      }
+      return 0;
+    }
   },
 
   getLeaderRows: function() {
