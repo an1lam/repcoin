@@ -9,3 +9,4 @@ bower_components
 /*.env
 tags
 newrelic_agent.log
+backups/**/*
