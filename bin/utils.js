@@ -181,8 +181,8 @@ var utils = {
             if (user.portfolio[j].rank !== 0) {
               newPortfolio.push(user.portfolio[j]);
             }
-            user.portfolio = newPortfolio;
           }
+          user.portfolio = newPortfolio;
         }
 
         routeUtils.saveAll(users, function(errs) {
