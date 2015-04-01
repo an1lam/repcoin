@@ -18,11 +18,13 @@ var CategoryCard = React.createClass({
       }
 
       return (
-        <li>
-          <Link to="profile" params={{userId: user.id}}>
-            {user.name}
-          </Link>
-          {img}
+        <li className="list-group-item">
+          <div>
+            <Link to="profile" params={{userId: user.id}}>
+              {user.name}
+            </Link>
+            {img}
+          </div>
           <MiniInvestButton user={user}
             currentUser={this.props.currentUser} />
 
@@ -37,7 +39,7 @@ var CategoryCard = React.createClass({
           <h2><Link to="category" params={{category: this.props.name}}>
             {this.props.name}
           </Link></h2>
-          <ul>
+          <ul className="list-group">
             {users}
           </ul>
         </div>
