@@ -25,8 +25,6 @@ var CategoryCard = React.createClass({
             </Link>
             {img}
           </div>
-          <MiniInvestButton user={user}
-            currentUser={this.props.currentUser} />
 
         </li>
       );
