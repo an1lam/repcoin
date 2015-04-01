@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 mongoose.connect(mongoURL);
 mongoose.connection.on('connected', function() {
-  utils.removeInappropriateCategories(function(errs) {
+  utils.resetCategoriesAndInvestments(function(errs) {
     if (errs) {
       winston.log('info', 'Remove inappropriate categories finished with errors.');
       winston.log(errs);

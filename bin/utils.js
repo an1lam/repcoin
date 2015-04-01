@@ -254,7 +254,8 @@ var utils = {
 
   // CAREFUL
   // NOT TO BE USED MORE THAN ONCE
-  removeInappropriateCategories: function(cb) {
+  // SETS ALL PERCENTILES TO 50, REPS TO 10, and DELETES INVESTMENTS!
+  resetCategoriesAndInvestments: function(cb) {
     // The list of names that need to be removed
     var inappropriateNames = [
       'aftereffects',
@@ -381,6 +382,62 @@ var utils = {
             winston.log('info', 'Successfully migrated ranks.');
             cb(null);
           }
+        });
+      }
+    });
+  },
+
+  resetBetaMarket: function(cb) {
+    User.find(function(err, users) {
+      if (err) {
+        winston.log('error', 'Error resetting beta market: %s', err.toString());
+        cb();
+      } else {
+        for (var j = 0; j < users.length; j++)  {
+          var user = users[j];
+
+          // Every user starts with 5 reps regardless
+          user.reps = 5;
+
+          for (var i = 0; i < user.portfolio.length; i++) {
+
+            // Give 5 reps for every category for which the investor was number 1
+            if (user.portfolio[i].rank === 1) {
+              user.reps += 5;
+            }
+          }
+
+          // Set the portfolio to empty
+          user.portfolio = [];
+
+          for (var i = 0; i < user.categories.length; i++) {
+            user.categories[i].reps = 5;
+            user.categories[i].rank = 1;
+            user.categories[i].investors = [];
+          }
+        }
+        Category.find(function(err, categories) {
+          if (err) {
+            winston.log('error', 'Error resetting beta market: %s', err.toString());
+            cb();
+          } else {
+            var category;
+            for (var i = 0; i < categories.length; i++) {
+              category = categories[i];
+              category.reps = category.experts * 5;
+              category.investors = 0;
+            }
+          }
+          var docs = users.concat(categories);
+          routeUtils.saveAll(docs, function(errs) {
+            if (errs.length > 0) {
+              winston.log('error', 'Error resetting beta market: %s', errs);
+              cb(errs);
+            } else {
+              winston.log('info', 'Successfully reset beta market.');
+              cb(null);
+            }
+          });
         });
       }
     });

@@ -45,7 +45,6 @@ var LoginPage = React.createClass({
 
   render: function() {
     var login = this.state.showLogin ? <Login /> : '';
-    var message = this.state.totalTraded ? <h1>{this.state.totalTraded} reps traded and counting.</h1> : '';
     var signUp;
     if (this.props.params.hash && this.props.params.id) {
       signUp = <Signup id={this.props.params.id}
@@ -67,7 +66,7 @@ var LoginPage = React.createClass({
             <div className="logo"><img src="http://res.cloudinary.com/repcoin/image/upload/v1423513285/2RepCoinHeader_mwyh9z.png"></img></div>
           </div>
           <span className="slogan">
-            {message}
+            <h1>The only market-based approach to reputation</h1>
           </span>
           <div className="signup-form">
             {signUp}
