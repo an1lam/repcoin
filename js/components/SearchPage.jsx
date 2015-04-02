@@ -1,6 +1,5 @@
 'use strict';
 var $ = require('jquery');
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var Footer = require('./Footer.jsx');
 var React = require('react');
 var SearchPageCategory = require('./SearchPageCategory.jsx');
@@ -10,8 +9,6 @@ var strings = require('../lib/strings_utils.js');
 var Toolbar = require('./Toolbar.jsx');
 
 var SearchPage = React.createClass({
-  mixins: [AuthenticatedRoute],
-
   getInitialState: function() {
     return {
       totalResults: null,

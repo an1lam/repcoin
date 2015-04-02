@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var CategoriesList = require('./CategoriesList.jsx');
 var CategoriesPageFilter = require('./CategoriesPageFilter.jsx');
 var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
@@ -18,8 +17,6 @@ function getStateFromStores() {
 }
 
 var CategoriesPage = React.createClass({
-  mixins: [AuthenticatedRoute],
-
   /* This is the typical pattern for retrieving state in a Flux app.
       We ask different stores for different bags of data
   */

@@ -1,6 +1,5 @@
 'use strict';
 
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var AuthActionCreator = require('../actions/AuthActionCreator.js');
 var AuthStore = require('../stores/AuthStore.js');
 var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
@@ -24,7 +23,6 @@ function getStateFromStores() {
 }
 
 var HomePage = React.createClass({
-  mixins: [AuthenticatedRoute],
   componentDidMount: function() {
     AuthStore.addCurrentUserListener(this._onChange);
     AuthActionCreator.getCurrentUser();

@@ -2,7 +2,6 @@
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
@@ -13,8 +12,6 @@ var React = require('react');
 var Toolbar = require('./Toolbar.jsx');
 
 var ProfilePage = React.createClass({
-  mixins: [AuthenticatedRoute],
-
   getInitialState: function() {
     return {};
   },
