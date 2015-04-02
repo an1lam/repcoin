@@ -344,6 +344,9 @@ describe('TransactionHandler: ', function() {
           from: { name: 'Stephen', id: '456' },
         };
 
+        spyOn(Transaction, 'remove').andCallFake(function(args, cb) {
+          cb(null);
+        });
         spyOn(Transaction, 'create').andReturn(transactionPromise);
         spyOn(User, 'findById').andCallFake(function(userId) {
           if (userId === '123' ) {
