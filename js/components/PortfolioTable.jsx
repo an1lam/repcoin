@@ -93,7 +93,7 @@ var PortfolioTable = React.createClass({
   },
 
   render: function() {
-    var isSelf = this.props.currentUser._id === this.props.user._id;
+    var isSelf = this.props.currentUser && this.props.currentUser._id === this.props.user._id;
 
     // Determine whether to display private or public rows
     var privateFields = false;

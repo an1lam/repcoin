@@ -19,36 +19,60 @@ var Dashboard = React.createClass({
   },
 
   render: function() {
-    var panel = '';
-    switch(this.state.panel) {
-      case 'All':
-        panel =  <PanelAll user={this.props.currentUser}/>;
-        break;
-
-      case 'Expert':
-        panel = <PanelExpert user={this.props.currentUser}/>;
-        break;
-
-      case 'Investor':
-        panel = <PanelInvestor user={this.props.currentUser}/>;
-        break;
-
-      case 'Feed':
-        panel = <Feed parent="HomePage"/>;
-        break;
-
-      default:
-        panel = <PanelExpert user={this.props.currentUser}/>;
-        break;
-    }
-    return (
-      <div className="dashboard">
+    var panel;
+    var dashboardButtons;
+    if (this.props.currentUser) {
+      dashboardButtons = (
         <div className="dashboard-buttons">
           <button className="btn btn-default" onClick={this.handleToggle} value="All">All</button>
           <button className="btn btn-default" onClick={this.handleToggle} value="Expert">Expert</button>
           <button className="btn btn-default" onClick={this.handleToggle} value="Investor">Investor</button>
           <button className="btn btn-default" onClick={this.handleToggle} value="Feed">Feed</button>
         </div>
+      );
+
+      switch (this.state.panel) {
+        case 'All':
+          panel =  <PanelAll user={this.props.currentUser}/>;
+          break;
+
+        case 'Expert':
+          panel = <PanelExpert user={this.props.currentUser}/>;
+          break;
+
+        case 'Investor':
+          panel = <PanelInvestor user={this.props.currentUser}/>;
+          break;
+
+        case 'Feed':
+          panel = <Feed parent="HomePage"/>;
+          break;
+
+        default:
+          panel = <PanelExpert user={this.props.currentUser}/>;
+          break;
+      }
+    } else {
+      dashboardButtons = (
+        <div className="dashboard-buttons">
+          <button className="btn btn-default" onClick={this.handleToggle} value="All">All</button>
+          <button className="btn btn-default" onClick={this.handleToggle} value="Feed">Feed</button>
+        </div>
+      );
+
+      switch (this.state.panel) {
+        case 'Feed':
+          panel = <Feed parent="HomePage"/>;
+          break;
+        default:
+          panel =  <PanelAll user={this.props.currentUser}/>;
+          break;
+      }
+    }
+
+    return (
+      <div className="dashboard">
+        {dashboardButtons}
         {panel}
       </div>
     )

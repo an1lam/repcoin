@@ -55,16 +55,24 @@ var Toolbar = React.createClass({
   },
 
   render: function() {
-    var logout = this.state.loggedIn ? <div className="logoutbtn"><Logout /></div> : '';
-    var instantBox = this.state.loggedIn ? <InstantBox /> : '';
+    var logoutOrSignup;
+    if (this.state.loggedIn) {
+      logoutOrSignup = <div className="logoutbtn"><Logout /></div>;
+    } else {
+      logoutOrSignup = <div><Link className="sign-up-link" to="login">Sign Up</Link></div>;
+    }
+
+    var instantBox = <InstantBox />;
     var profileLink = '';
     var notifications = '';
     var categories = '';
     if (this.state.currentUser) {
-      profileLink =
-        <div className="profilelink ">
-          <Link to="profile" params={{userId: this.state.currentUser._id}}>{this.state.currentUser.firstname}</Link>
-        </div>;
+      profileLink = <div className="profilelink">
+        <Link to="profile" params={{userId: this.state.currentUser._id}}>
+          {this.state.currentUser.firstname}
+        </Link>
+      </div>
+
       var notificationTotal = '';
 
       if (this.state.notifications) {
@@ -72,6 +80,7 @@ var Toolbar = React.createClass({
         if (notificationLen !== 0) {
           notificationTotal = <span className="label label-primary label-as-badge">{notificationLen}</span>;
         }
+
         notifications =
           <a className="toolbar-notification" href="#" onClick={this.toggleNotifications}>
             <span className="glyphicon glyphicon-envelope" aria-hidden="true"></span>
@@ -79,13 +88,8 @@ var Toolbar = React.createClass({
           </a>;
         var notificationDisplay = this.state.showNotifications ? <NotificationDisplay notifications={this.state.notifications}/> : '';
       }
-
-      var categories = (
-        <div className="categories-link">
-          <Link to="categories">Categories</Link>
-        </div>
-      );
     }
+
     return (
       <div className="toolbar navbar navbar-default" role="navigation">
         <div className="navbar-header">
@@ -99,9 +103,13 @@ var Toolbar = React.createClass({
         <div className="toolbar-nav-right">
         <ul className="nav navbar-nav">
           <li>{profileLink}</li>
-          <li>{categories}</li>
+          <li>
+            <div className="categories-link">
+              <Link to="categories">Categories</Link>
+            </div>
+          </li>
           <li>{notifications}</li>
-          <li>{logout}</li>
+          <li>{logoutOrSignup}</li>
         </ul>
           {notificationDisplay}
         </div>

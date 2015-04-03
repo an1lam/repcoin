@@ -406,6 +406,11 @@
   margin-right: 25px;
 }
 
+.sign-up-link {
+  font-size: 22px;
+  color: grey;
+}
+
 /* Profile Page Items ////////////////////////////// */
 .reps-available-info {
   margin-left:5px;

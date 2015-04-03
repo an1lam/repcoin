@@ -147,7 +147,7 @@ var CategoriesTable = React.createClass({
   },
 
   render: function() {
-    var isSelf = this.props.currentUser._id === this.props.user._id;
+    var isSelf = this.props.currentUser && this.props.currentUser._id === this.props.user._id;
     var message = '';
     if (this.state.message) {
       if (this.state.error) {

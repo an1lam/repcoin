@@ -19,12 +19,18 @@ var transporter = require('../../config/mailer.js').transporterFactory();
 // Routes that begin with /users
 // ---------------------------------------------------------------------------
 module.exports = function(router, isAuthenticated, acl, censor) {
-  router.get('/users/leading/:datatype/:order', UserHandler.users.leading.get);
-  router.get('/users/leading/experts/:datatype/:order/:category', UserHandler.users.leading.getByCategory.experts);
-  router.get('/users/leading/investors/:datatype/:order/:category', UserHandler.users.leading.getByCategory.investors);
-  router.get('/users/trending/experts/:order', UserHandler.users.trending.experts.getOverall);
-  router.get('/users/trending/experts/:order/:category', UserHandler.users.trending.experts.getByCategory);
-  router.get('/users/:category/trending/experts/:date', UserHandler.users.trending.experts.get);
+  router.get('/users/leading/:datatype/:order',
+    UserHandler.users.leading.get);
+  router.get('/users/leading/experts/:datatype/:order/:category',
+    UserHandler.users.leading.getByCategory.experts);
+  router.get('/users/leading/investors/:datatype/:order/:category',
+    UserHandler.users.leading.getByCategory.investors);
+  router.get('/users/trending/experts/:order',
+    UserHandler.users.trending.experts.getOverall);
+  router.get('/users/trending/experts/:order/:category',
+    UserHandler.users.trending.experts.getByCategory);
+  router.get('/users/:category/trending/experts/:date',
+    UserHandler.users.trending.experts.get);
 
   // Add an expert category to a given user
   function addExpertCategory(req, res, category) {
@@ -63,15 +69,18 @@ module.exports = function(router, isAuthenticated, acl, censor) {
             }
           });
         }
-    });
+      }
+
+    );
   }
 
-  router.get('/users/list/byids', isAuthenticated, UserHandler.users.listByIds.get);
-  router.get('/users', isAuthenticated, UserHandler.users.get);
+  router.get('/users/list/byids', UserHandler.users.listByIds.get);
+  router.get('/users', UserHandler.users.get);
   router.get('/users/share', isAuthenticated, UserHandler.users.share.get);
   router.post('/verify', UserHandler.verify.post);
 
   router.route('/users')
+
     // Create a new user
     .post(censor.isNaughty, censor.hasSpamEmail, function(req, res) {
 
@@ -80,13 +89,13 @@ module.exports = function(router, isAuthenticated, acl, censor) {
       }
 
       var user = new User({
-          firstname   : req.body.firstname,
-          lastname    : req.body.lastname,
-          username    : req.body.firstname + ' ' + req.body.lastname,
-          password    : req.body.password,
-          email       : req.body.email,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        username: req.body.firstname + ' ' + req.body.lastname,
+        password: req.body.password,
+        email: req.body.email
       });
-      user.save( function(err) {
+      user.save(function(err) {
         if (err) {
           var msg = '';
 
@@ -97,6 +106,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
             } else {
               msg = 'Fields cannot be blank';
             }
+
             winston.log('error', 'Error creating user: %s', msg);
             return res.status(501).send(msg);
 
@@ -107,14 +117,15 @@ module.exports = function(router, isAuthenticated, acl, censor) {
             // Otherwise, send back generic 'Error' message
             msg = 'Error';
           }
+
           winston.log('error', 'Error creating user: %s', msg);
           return res.status(501).send(msg);
         } else {
           var verificationString = utils.getRandomString();
 
           var verificationToken = new VerificationToken({
-              user: user.email,
-              string: verificationString,
+            user: user.email,
+            string: verificationString
           });
 
           verificationToken.save(function(err) {
@@ -122,6 +133,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
               winston.log('error', 'Error saving verification token: %s', err);
               return res.status(501).send('Unable to save new verificationToken');
             }
+
             var mailOptions = utils.getVerificationEmailOptions(
               user.email, verificationString, req.body.inviterId, req.body.hash);
 
@@ -139,13 +151,13 @@ module.exports = function(router, isAuthenticated, acl, censor) {
       });
     });
 
-  router.get('/users/:user_id', isAuthenticated, UserHandler.users.userId.get);
+  router.get('/users/:user_id', UserHandler.users.userId.get);
   router.delete('/users/:user_id', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.delete);
   router.put('/users/:user_id', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.put);
   router.post('/users/:user_id/nudge/:user_id2', isAuthenticated, acl.isAdminOrSelf, UserHandler.users.userId.nudge.post);
 
   // Get experts for a given category. Set expert to '1' for expert category, '0' for investor
-  router.get('/users/:categoryName/leaders', isAuthenticated, UserHandler.users.leaders.get);
+  router.get('/users/:categoryName/leaders', UserHandler.users.leaders.get);
 
   // Handle a requested category
   // Triggered by an administrator

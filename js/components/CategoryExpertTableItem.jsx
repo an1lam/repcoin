@@ -15,16 +15,18 @@ var CategoryExpertTableItem = React.createClass({
     // Each TableItem really has a fake user that is truncated
     // The MiniInvestmentButton will fetch the full one based on the id
     var investmentButton = '';
-    if (this.props.currentUser._id !== this.props.user._id) {
+    if (this.props.currentUser && this.props.currentUser._id !== this.props.user._id) {
       console.log('redoing investment button for expert table');
       investmentButton = <MiniInvestButton userId={this.props.user._id} currentUser={this.props.currentUser}/>;
     }
+
     var img = '';
     if (user.picture && user.picture.url) {
       img = <img className="user-table-img" src={user.picture.url}></img>;
     } else {
       img = <img className="user-table-img" src={strings.DEFAULT_USER_PIC}></img>;
     }
+
     return (
       <tr>
         <td>

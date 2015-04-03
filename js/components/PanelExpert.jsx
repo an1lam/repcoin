@@ -8,7 +8,7 @@ var PanelExpert = React.createClass({
     return {
       selectedCategory: null,
       sortedCategories: [],
-      newBy: false,
+      newby: false
     };
   },
 
@@ -19,10 +19,10 @@ var PanelExpert = React.createClass({
 
       this.setState({
         selectedCategory: sortedCategories[0].name,
-        sortedCategories: sortedCategories,
+        sortedCategories: sortedCategories
       });
     } else {
-      this.setState({ newBy: true });
+      this.setState({ newby: true });
     }
   },
 
@@ -31,9 +31,11 @@ var PanelExpert = React.createClass({
       if (a.rank > b.rank) {
         return -1;
       }
+
       if (a.rank < b.rank) {
         return 1;
       }
+
       return 0;
     }
   },
@@ -61,7 +63,7 @@ var PanelExpert = React.createClass({
     var selectBox = '';
 
     // Show a special message for newbies
-    if (this.state.newBy) {
+    if (this.state.newby) {
       content =
         <div className="alert alert-info content">
           This panel will track progress on your expert categories. Join some categories to start seeing results!
@@ -89,6 +91,7 @@ var PanelExpert = React.createClass({
           </div>
         </div>;
     }
+
     return (
       <div className="panel-all">
         <div className="row panel-header">

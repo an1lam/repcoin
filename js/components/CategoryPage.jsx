@@ -24,7 +24,7 @@ var CategoryPage = React.createClass({
     this.resetCurrentUser();
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount: function() {
     PubSub.unsubscribe('userupdate', this.resetCurrentUser);
   },
 
@@ -63,7 +63,7 @@ var CategoryPage = React.createClass({
     var categoryPageHeader = '';
     var trendingTable = '';
     var categoryDashboard = '';
-    if (this.state.category && this.state.currentUser) {
+    if (this.state.category) {
       categoryPageHeader = <CategoryPageHeader category={this.state.category} currentUser={this.state.currentUser} />;
       trendingTable = <TrendingTable category={this.state.category} currentUser={this.state.currentUser} />
       categoryDashboard = <CategoryDashboard category={this.props.params.category} currentUser={this.state.currentUser} />;

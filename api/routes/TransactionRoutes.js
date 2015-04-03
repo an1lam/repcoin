@@ -1,10 +1,6 @@
 'use strict';
-var Category = require('../models/Category.js');
-var Notification = require('../models/Notification.js');
 var Transaction = require('../models/Transaction.js');
 var TransactionHandler = require('../handlers/transaction.js');
-var User = require('../models/User.js');
-var utils = require('./utils.js');
 var winston = require('winston');
 
 // Routes that end in /transactions
@@ -15,9 +11,12 @@ module.exports = function(router, isAuthenticated, acl) {
   router.get('/transactions/totaltraded', TransactionHandler.transactions.total.get);
 
   // Get most recent transactios by general, category, or userId
-  router.get('/transactions/:timeStamp', isAuthenticated, TransactionHandler.transactions.findMostRecent);
-  router.get('/transactions/categories/:category/:timeStamp', isAuthenticated, TransactionHandler.transactions.category.findMostRecent);
-  router.get('/transactions/users/:user_id/:filter/public/:timeStamp', isAuthenticated, TransactionHandler.transactions.userId.findMostRecent);
+  router.get('/transactions/:timeStamp',
+    TransactionHandler.transactions.findMostRecent);
+  router.get('/transactions/categories/:category/:timeStamp',
+    TransactionHandler.transactions.category.findMostRecent);
+  router.get('/transactions/users/:user_id/:filter/public/:timeStamp',
+    TransactionHandler.transactions.userId.findMostRecent);
 
 ///////// Routes that have /transcations/:transaction_id ////////
   router.route('/transactions/:transaction_id')

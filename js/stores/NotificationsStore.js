@@ -14,7 +14,6 @@ var CHANGE_EVENT = 'change';
 var _notifications = [];
 var _display = false;
 
-
 var NotificationsStore = assign({}, EventEmitter.prototype, {
   emitChange: function() {
     this.emit(CHANGE_EVENT);
@@ -32,7 +31,6 @@ var NotificationsStore = assign({}, EventEmitter.prototype, {
     return _notifications;
   },
 
-  
   getAllIds: function() {
     var notificationIds = [];
     for (var i = 0; i < _notifications.length; i++) {
@@ -48,14 +46,14 @@ var NotificationsStore = assign({}, EventEmitter.prototype, {
 
   setAllRead: function() {
     _notifications = [];
-  },
+  }
 });
 
 NotificationsStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
   var action = payload.action;
   RepcoinAppDispatcher.waitFor([AuthStore.dispatchToken]);
 
-  switch(action.type) {
+  switch (action.type) {
     case ActionTypes.RECEIVE_CURRENT_USER_AND_NOTIFICATIONS:
       _notifications = action.notifications;
       NotificationsStore.emitChange();
@@ -71,9 +69,15 @@ NotificationsStore.dispatchToken = RepcoinAppDispatcher.register(function(payloa
       NotificationsStore.emitChange();
       break;
 
-    default:
-      // do nothing
+    case ActionTypes.RECEIVE_CURRENT_USER:
+      if (!action.user) {
+        _notifications = [];
+        NotificationsStore.emitChange();
+      }
 
+    // do nothing
+    default:
+      break;
   }
 });
 

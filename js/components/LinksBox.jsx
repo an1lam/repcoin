@@ -51,6 +51,7 @@ var LinksBox = React.createClass({
     for (var i = 0; i < len; i++) {
       linkItems.push(this.makeLinkItem(i, links[i]));
     }
+
     return linkItems;
   },
 
@@ -59,7 +60,7 @@ var LinksBox = React.createClass({
   },
 
   render: function() {
-    var isSelf = this.props.currentUser._id === this.props.user._id;
+    var isSelf = this.props.currentUser && this.props.currentUser._id === this.props.user._id;
     var edit = '';
     var linkInput = '';
     if (isSelf) {

@@ -18,7 +18,7 @@ var FeedHeader = React.createClass({
 
   render: function() {
     var feedInfoContent = '';
-    switch(this.props.parent) {
+    switch (this.props.parent) {
       case 'ProfilePage':
         feedInfoContent = strings.FEED_PROFILE_INFO_CONTENT;
         break;
@@ -35,7 +35,7 @@ var FeedHeader = React.createClass({
 
     var buttons = '';
     if (this.props.parent === 'ProfilePage') {
-      if (this.props.isSelf) {
+      if (this.props.isSelf || this.props.isPublicUser) {
         buttons = <div className="btn-group">
           <button type="button" ref="All" value="all"  onClick={this.propagateClick.bind(this, "all")} className="btn btn-default">All</button>
           <button type="button" ref="To" value="to" onClick={this.propagateClick.bind(this, "to")} className="btn btn-default">To</button>
@@ -66,4 +66,3 @@ var FeedHeader = React.createClass({
 });
 
 module.exports = FeedHeader;
-

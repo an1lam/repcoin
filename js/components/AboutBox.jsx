@@ -47,7 +47,7 @@ var AboutBox = React.createClass({
     var aboutBox = this.props.user.about ? <p>{this.props.user.about}</p> : '';
     var edit = '';
 
-    if (this.props.currentUser._id === this.props.user._id) {
+    if (this.props.currentUser && this.props.currentUser._id === this.props.user._id) {
       if (this.state.showInput) {
         aboutBox = <AboutInput currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeInputBox} text={this.props.about} />
       } else {

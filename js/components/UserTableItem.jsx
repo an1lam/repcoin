@@ -14,7 +14,8 @@ var UserTableItem = React.createClass({
     var categories = expert ? this.props.user.categories : this.props.user.portfolio;
     var sortedCategories = categories.concat().sort(this.getCategoriesComparator());
 
-    var name, perc;
+    var name;
+    var perc;
     for (var i = 0; i < sortedCategories.length && i < 3; i++) {
       name = expert ? sortedCategories[i].name : sortedCategories[i].category;
       perc = sortedCategories[i].rank;
@@ -25,6 +26,7 @@ var UserTableItem = React.createClass({
         </div>
       );
     }
+
     return <div className="list-group">{categoriesItems}</div>;
   },
 
@@ -33,9 +35,11 @@ var UserTableItem = React.createClass({
       if (a.rank < b.rank) {
         return -1;
       }
+
       if (a.rank > b.rank) {
         return 1;
       }
+
       return 0;
     }
   },
@@ -43,15 +47,22 @@ var UserTableItem = React.createClass({
   render: function() {
     var user = this.props.user;
     var investmentButton = '';
-    if (this.props.currentUser._id !== this.props.user._id) {
-      investmentButton = <MiniInvestButton user={this.props.user} currentUser={this.props.currentUser}/>;
+    if (
+      this.props.currentUser &&
+      this.props.currentUser._id !== this.props.user._id) {
+      investmentButton = (
+        <MiniInvestButton user={this.props.user}
+          currentUser={this.props.currentUser}/>
+      );
     }
+
     var img = '';
     if (user.picture && user.picture.url) {
       img = <img className="user-table-img" src={user.picture.url}></img>;
     } else {
       img = <img className="user-table-img" src={strings.DEFAULT_USER_PIC}></img>;
     }
+
     return (
       <tr>
         <td>
@@ -64,7 +75,7 @@ var UserTableItem = React.createClass({
         <td>{this.getTopCategories(false)}</td>
       </tr>
     );
-  },
+  }
 });
 
 module.exports = UserTableItem;
