@@ -112,8 +112,8 @@ var TransactionHandler = {
       toUserPromise = User.findById(to.id).exec();
       categoryPromise = Category.findByName(categoryName);
 
-      // The callback for failure on any promise error
-      var cbF = function(err, transaction) {
+      // The callback for failure on any error in the promise chain
+      var handleError = function(err, transaction) {
         winston.log('error', 'Error creating transaction: %s', err.toString());
         if (transaction) {
           Transaction.remove({ _id: transaction._id }, function(error) {
@@ -121,79 +121,73 @@ var TransactionHandler = {
             return res.status(503).send(err);
           });
         } else {
-          throw err;
+          return res.status(503).send(err);
         }
       };
 
-      try {
-        var promise = transactionPromise.then(function(transactionP) {
-          transaction = transactionP;
-          return toUserPromise;
-        }, cbF).then(function(touser) {
-          toUser = touser;
-          return fromUserPromise;
-        }, cbF).then(function(fromuser) {
-          fromUser = fromuser;
-          return categoryPromise;
-        }, cbF).then(function(categoryP) {
-          category = categoryP;
+      var promise = transactionPromise.then(function(transactionP) {
+        transaction = transactionP;
+        return toUserPromise;
+      }).then(function(touser) {
+        toUser = touser;
+        return fromUserPromise;
+      }).then(function(fromuser) {
+        fromUser = fromuser;
+        return categoryPromise;
+      }).then(function(categoryP) {
+        category = categoryP;
 
-          // Update fields for all of the documents as they should be for the transaction
-          var err = utils.processTransaction(toUser, fromUser, category, transaction, investmentId);
-          if (err) {
-            return cbF(err, transaction);
-          } else {
+        // Update fields for all of the documents as they should be for the transaction
+        var err = utils.processTransaction(toUser, fromUser, category, transaction, investmentId);
+        if (err) {
+          return handleError(err, transaction);
+        }
 
-            // Save all of the users in updates
-            toUserObj = toUser.toObject();
-            delete toUserObj._id;
-            fromUserObj = fromUser.toObject();
-            delete fromUserObj._id;
-            categoryObj = category.toObject();
-            delete categoryObj._id;
+        // Save all of the users in updates
+        toUserObj = toUser.toObject();
+        delete toUserObj._id;
+        fromUserObj = fromUser.toObject();
+        delete fromUserObj._id;
+        categoryObj = category.toObject();
+        delete categoryObj._id;
 
-            toUserSave = User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(toUser._id) }, toUserObj).exec();
-            fromUserSave = User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(fromUser._id) }, fromUserObj).exec();
-            categorySave = Category.findOneAndUpdate({ _id: mongoose.Types.ObjectId(category._id) }, categoryObj).exec();
+        toUserSave = User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(toUser._id) }, toUserObj).exec();
+        fromUserSave = User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(fromUser._id) }, fromUserObj).exec();
+        categorySave = Category.findOneAndUpdate({ _id: mongoose.Types.ObjectId(category._id) }, categoryObj).exec();
 
-            var savePromise = toUserSave.then(function(toUser) {
-              return fromUserSave;
-            }, cbF).then(function(fromUser) {
-              return categorySave;
-            }, cbF).then(function(category) {
-              utils.updateDividends(toUser, category.name, function(err) {
-                if (err) {
-                  winston.log('error', 'Error updating dividends: %s', err.toString());
-                  throw err;
-                }
-                utils.updateAllRank(category.name, function(err) {
-                  if (err) {
-                    winston.log('error', 'Error updating rank: %s', err.toString());
-                    throw err;
-                  }
+        var savePromise = toUserSave.then(function(toUser) {
+          return fromUserSave;
+        }).then(function(fromUser) {
+          return categorySave;
+        }).then(function(category) {
+          utils.updateDividends(toUser, category.name, function(err) {
+            if (err) {
+              winston.log('error', 'Error updating dividends: %s', err.toString());
+              return handleError(err);
+            }
+            utils.updateAllRank(category.name, function(err) {
+              if (err) {
+                winston.log('error', 'Error updating rank: %s', err.toString());
+                return handleError(err);
+              }
 
-                  // Notify the to user of the transaction
-                  var action;
-                  if (amount < 0) {
-                    action = ' revoked ' + amount * -1 + ' reps from you for ' + transaction.category;
-                  } else {
-                    action = ' gave ' + amount + ' reps to you for ' + transaction.category;
-                  }
-                  var fromText = transaction.from.anonymous ? 'Someone' : transaction.from.name;
-                  Notification.create({
-                    user    : { id: transaction.to.id, name: transaction.to.name },
-                    message : fromText + action,
-                  });
-                  return res.status(200).send(transaction);
-                });
+              // Notify the to user of the transaction
+              var action;
+              if (amount < 0) {
+                action = ' revoked ' + amount * -1 + ' reps from you for ' + transaction.category;
+              } else {
+                action = ' gave ' + amount + ' reps to you for ' + transaction.category;
+              }
+              var fromText = transaction.from.anonymous ? 'Someone' : transaction.from.name;
+              Notification.create({
+                user    : { id: transaction.to.id, name: transaction.to.name },
+                message : fromText + action,
               });
-            }, cbF);
-          }
-        }, cbF);
-      }
-      catch(err) {
-        return res.status(503).send(err);
-      }
+              return res.status(200).send(transaction);
+            });
+          });
+        }, handleError);
+      }, handleError);
     },
   },
 };

@@ -310,35 +310,27 @@ var UserHandler = {
           var nudgeUserId = req.params.user_id;
           var receiverId = req.params.user_id2;
           var asker;
-          try {
-            User.findById(nudgeUserId).exec().then(function(askerr) {
-              if (!askerr) {
-                throw new Error('No asker found');
-              }
-              asker = askerr;
-              return User.findById(receiverId).exec();
-            }, function(err) {
-              winston.log('error', 'Error nudging user: %s', err.toString());
-              throw err;
-            }).then(function(receiver) {
-              if (!receiver) {
-                throw new Error('No receiver found');
-              }
-              // Create a notification for the prompt
-              var notification = new Notification({
-                user    : { id: receiver._id, name: receiver.username },
-                message : asker.username + ' wants you to add more expert categories. Enhance your profile and get more investments!',
-              });
-              notification.save();
-              return res.status(200).send('Sent request to ' + receiver.username + '!');
-            }, function(err) {
-              winston.log('error', 'Error nudging user: %s', err);
-              throw err;
+          User.findById(nudgeUserId).exec().then(function(askerr) {
+            if (!askerr) {
+              throw 'No asker found';
+            }
+            asker = askerr;
+            return User.findById(receiverId).exec();
+          }).then(function(receiver) {
+            if (!receiver) {
+              return res.status(501).send('No receiver found');
+            }
+            // Create a notification for the prompt
+            var notification = new Notification({
+              user    : { id: receiver._id, name: receiver.username },
+              message : asker.username + ' wants you to add more expert categories. Enhance your profile and get more investments!',
             });
-          }
-          catch(err) {
+            notification.save();
+            return res.status(200).send('Sent request to ' + receiver.username + '!');
+          }, function(err) {
+            winston.log('error', 'Error nudging user: %s', err.toString());
             return res.status(501).send(err);
-          }
+          });
         },
       },
 
