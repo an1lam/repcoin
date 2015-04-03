@@ -104,44 +104,6 @@ describe('ComboHandler: ', function() {
         ]);
       });
 
-      it('should log an error when the transaction findMostRecent fails', function() {
-        req.params = { timeStamp: new Date() };
-        spyOn(Transaction, 'findMostRecent').andReturn({
-          then: function(cbS, cbF) { return cbF('failure!'); }
-        });
-        ComboHandler.feedItems.get(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(503);
-        expect(res.send).toHaveBeenCalledWith('failure!');
-      });
-
-      it('should log an error when the join event findMostRecent fails', function() {
-        req.params = { timeStamp: new Date() };
-        spyOn(Transaction, 'findMostRecent').andReturn(transactionPromise);
-        spyOn(JoinEvent, 'findMostRecent').andReturn({
-          then: function(cbS, cbF) { return cbF('failure!'); }
-        });
-        ComboHandler.feedItems.get(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(503);
-        expect(res.send).toHaveBeenCalledWith('failure!');
-      });
-
-      it('should log an error when the newcategory event findMostRecent fails', function() {
-        req.params = { timeStamp: new Date() };
-        spyOn(Transaction, 'findMostRecent').andReturn(transactionPromise);
-        spyOn(JoinEvent, 'findMostRecent').andReturn({
-          then: function(cbS, cbF) { return cbS(joinEventPromise); }
-        });
-        spyOn(NewCategoryEvent, 'findMostRecent').andReturn({
-          then: function(cbS, cbF) { return cbF('failure!'); }
-        });
-        ComboHandler.feedItems.get(req, res);
-
-        expect(res.status).toHaveBeenCalledWith(503);
-        expect(res.send).toHaveBeenCalledWith('failure!');
-      });
-
       it('should log an error when the addexpert event findMostRecent fails', function() {
         req.params = { timeStamp: new Date() };
         spyOn(Transaction, 'findMostRecent').andReturn(transactionPromise);
