@@ -63,6 +63,8 @@ var CategoryPage = React.createClass({
     var categoryPageHeader = '';
     var trendingTable = '';
     var categoryDashboard = '';
+    
+    // We check for the currentUser in each of these components
     if (this.state.category) {
       categoryPageHeader = <CategoryPageHeader category={this.state.category} currentUser={this.state.currentUser} />;
       trendingTable = <TrendingTable category={this.state.category} currentUser={this.state.currentUser} />
