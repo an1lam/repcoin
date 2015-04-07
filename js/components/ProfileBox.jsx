@@ -12,9 +12,10 @@ var React = require('react');
 var ProfileBox = React.createClass({
   render: function() {
     var investmentButton = '';
-    if (this.props.currentUser._id !== this.props.user._id) {
+    if (this.props.currentUser && this.props.currentUser._id !== this.props.user._id) {
       investmentButton = <InvestmentButton user={this.props.user} currentUser={this.props.currentUser}/>;
     }
+
     return (
       <div className="profileBox">
         <div className="col-md-2">

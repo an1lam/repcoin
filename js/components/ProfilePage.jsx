@@ -2,7 +2,6 @@
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var CategoriesTable = require('./CategoriesTable.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
@@ -13,8 +12,6 @@ var React = require('react');
 var Toolbar = require('./Toolbar.jsx');
 
 var ProfilePage = React.createClass({
-  mixins: [AuthenticatedRoute],
-
   getInitialState: function() {
     return {};
   },
@@ -42,7 +39,7 @@ var ProfilePage = React.createClass({
     this.updateUser();
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount: function() {
     PubSub.unsubscribe('profileupdate', this.updateUser);
     PubSub.unsubscribe('profileupdate', this.resetCurrentUser);
   },
@@ -54,7 +51,7 @@ var ProfilePage = React.createClass({
         if (this.isMounted()) {
           this.setState({ user: user });
         } else {
-          console.log("ProfilePage not mounted.");
+          console.log('ProfilePage not mounted.');
         }
       }.bind(this),
       error: function(xhr, status, err) {
@@ -69,11 +66,11 @@ var ProfilePage = React.createClass({
     var portfolio = '' ;
     var profileBox = '';
 
-    if (this.state.user && this.state.currentUser) {
-      var isSelf = this.state.currentUser._id === this.props.params.userId;
-
+    if (this.state.user) {
+      var isSelf = this.state.currentUser && this.state.currentUser._id === this.props.params.userId;
       categoriesTable = <CategoriesTable currentUser={this.state.currentUser} user={this.state.user} />;
-      feed = <Feed parent="ProfilePage" userId={this.props.params.userId} filter={"all"} isSelf={isSelf}/>;
+      feed = <Feed parent='ProfilePage' userId={this.props.params.userId}
+        filter={'all'} isSelf={isSelf} isPublicUser={!this.state.currentUser}/>;
       profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
       portfolio = <PortfolioTable user={this.state.user} currentUser={this.state.currentUser}/>;
     }

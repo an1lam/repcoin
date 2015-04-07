@@ -1,6 +1,5 @@
 'use strict';
 
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var AuthActionCreator = require('../actions/AuthActionCreator.js');
 var AuthStore = require('../stores/AuthStore.js');
 var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
@@ -19,12 +18,11 @@ var TutorialPanel = require('./TutorialPanel.jsx');
 function getStateFromStores() {
   return {
     isNewby: AuthStore.isNewby(),
-    currentUser: AuthStore.getCurrentUser(),
+    currentUser: AuthStore.getCurrentUser()
   }
 }
 
 var HomePage = React.createClass({
-  mixins: [AuthenticatedRoute],
   componentDidMount: function() {
     AuthStore.addCurrentUserListener(this._onChange);
     AuthActionCreator.getCurrentUser();
@@ -47,8 +45,13 @@ var HomePage = React.createClass({
     var toShowTutorial = false;
     var categoriesCards = '';
     var dashboard = '';
+    var facebookInvite = '';
+    var profileQuickView = '';
     if (this.state.currentUser) {
-      dashboard = <Dashboard currentUser={this.state.currentUser} />
+      dashboard =
+      facebookInvite = <FacebookInvite />;
+      profileQuickView = <ProfileQuickView />
+
     }
 
     if (this.state.isNewby) {
@@ -65,14 +68,14 @@ var HomePage = React.createClass({
         <div className="row">
           <div className="col-md-3">
             <div className="left-panel">
-              <FacebookInvite />
-              <ProfileQuickView />
+              {facebookInvite}
+              {profileQuickView}
             </div>
           </div>
           <div className="col-md-9">
             {categoriesCards}
             <div className="main-dashboard">
-              {dashboard}
+              <Dashboard        currentUser={this.state.currentUser} />;
             </div>
           </div>
         </div>
@@ -85,7 +88,7 @@ var HomePage = React.createClass({
 
   _onChange: function() {
     this.setState(getStateFromStores());
-  },
+  }
 });
 
 module.exports = HomePage;

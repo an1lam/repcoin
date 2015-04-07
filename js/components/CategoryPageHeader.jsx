@@ -34,13 +34,20 @@ var CategoryPageHeader = React.createClass({
         return true;
       }
     }
+
     return false;
   },
 
   render: function() {
-    var expertBtn = <button onClick={this.setExpertCategory} className="btn btn-default">Become a {this.props.category.name} expert!</button>;
-    if (this.isExpert(this.props.currentUser)) {
+    var expertBtn = '';
+    if (this.props.currentUser && this.isExpert(this.props.currentUser)) {
       expertBtn = <div className="alert alert-success" role="alert">{strings.YOU_ARE_AN_EXPERT(this.props.category.name)}</div>
+    } else if (this.props.currentUser) {
+      expertBtn = (
+        <button onClick={this.setExpertCategory}
+        className='btn btn-default'>
+        Become a {this.props.category.name} expert!</button>
+      );
     }
 
     return (

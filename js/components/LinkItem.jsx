@@ -93,6 +93,7 @@ var LinkItem = React.createClass({
     if ((url.lastIndexOf('http://', 0) !== 0) && (url.lastIndexOf('https://', 0) !== 0)) {
       return 'http://' + url;
     }
+
     return url;
   },
 
@@ -104,7 +105,7 @@ var LinkItem = React.createClass({
           <strong>{this.props.link.title}</strong>: <a href={this.getUrl(this.props.link.url)}>{this.props.link.url}</a>
         </div>;
 
-    if (this.props.currentUser._id == this.props.user._id) {
+    if (this.props.currentUser && this.props.currentUser._id == this.props.user._id) {
       if (this.state.showEdit) {
         edit = <div className="edit">
           <a onClick={this.handleEditClick}><span className="pencil glyphicon glyphicon-pencil"></span></a>

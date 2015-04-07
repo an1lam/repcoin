@@ -9,8 +9,8 @@ module.exports = {
       success: ServerActionCreator.receiveCategories,
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
-      },
-    })
+      }
+    });
   },
 
   getCurrentUserAndNotifications: function() {

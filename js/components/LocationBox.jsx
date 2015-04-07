@@ -47,7 +47,7 @@ var LocationBox = React.createClass({
     var locationBox = this.props.user.location ? <em>Lives in {this.props.user.location}</em> : '';
     var edit = '';
 
-    if (this.props.currentUser._id === this.props.user._id) {
+    if (this.props.currentUser && this.props.currentUser._id === this.props.user._id) {
       if (this.state.showInput) {
         locationBox = <LocationInput currentUser={this.props.currentUser} user={this.props.user} onReset={this.closeInputBox} />
       } else {

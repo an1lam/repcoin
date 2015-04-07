@@ -18,8 +18,8 @@ var Feed = React.createClass({
       transactions: [],
       filter: 'all',
       pagination: 0,
-      finalPaginationIndex: Number.POSITIVE_INFINITY,
-     };
+      finalPaginationIndex: Number.POSITIVE_INFINITY
+    };
   },
 
   componentDidMount: function() {
@@ -28,14 +28,14 @@ var Feed = React.createClass({
 
   generateUrl: function(filter, timeStamp, category) {
     var url;
-    switch(this.props.parent) {
-      case "ProfilePage":
+    switch (this.props.parent) {
+      case 'ProfilePage':
         url = '/api/transactions/users/' + this.props.userId + '/' + filter + '/public/' + timeStamp;
         break;
-      case "CategoryPage":
+      case 'CategoryPage':
         url = '/api/transactions/categories/' + category  + '/' + timeStamp;
         break;
-      case "HomePage":
+      case 'HomePage':
         url = '/api/feedItems/' + timeStamp;
         break;
       default:
@@ -52,7 +52,8 @@ var Feed = React.createClass({
       url: url,
       dataType: 'json',
       success: function(transactions) {
-        this.setState({ transactions : transactions.slice(0,15), pagination: 0 });
+        this.setState({ transactions: transactions.slice(0, 15),
+          pagination: 0 });
 
         // If we have less than the pagination size + 1, then there are no more pages to fetch
         // If there are no more pages to fetch, then 0 is the final pagination index
@@ -76,7 +77,7 @@ var Feed = React.createClass({
       dataType: 'json',
       success: function(transactions) {
         // Concatenate the new transactions with the old ones found
-        this.setState({ transactions : this.state.transactions.concat(transactions.slice(0,15)) });
+        this.setState({ transactions: this.state.transactions.concat(transactions.slice(0, 15))});
 
         // If we have less than the pagination size + 1, then there are no more pages to fetch
         if (transactions.length < PAGINATION_SIZE + 1) {
@@ -190,15 +191,18 @@ var Feed = React.createClass({
     // Determine whether or not to show the next btn
     var nextBtn = '';
     if (this.state.pagination - PAGINATION_SIZE > -1) {
-      nextBtn =
+      nextBtn = (
         <li className="next">
             <a href="#" onClick={this.showNewer}>Newer <span aria-hidden="true">&rarr;</span></a>
-        </li>;
-
+        </li>
+      );
     }
+
     return (
       <div key={this.props.userId} className="feed panel panel-default">
-        <FeedHeader onClick={this.handleClick} isSelf={this.props.isSelf} parent={this.props.parent}/>
+        <FeedHeader onClick={this.handleClick}
+          isPublicUser={this.props.isPublicUser} isSelf={this.props.isSelf}
+          parent={this.props.parent}/>
         <ul className="list-group">
           {feedItems}
         </ul>

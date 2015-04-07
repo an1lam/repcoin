@@ -10,7 +10,7 @@ var strings = require('../lib/strings_utils.js');
 var TrendingTable = React.createClass({
   getInitialState: function() {
     return {
-      leaders: [],
+      leaders: []
     };
   },
 
@@ -29,7 +29,7 @@ var TrendingTable = React.createClass({
 
   getDate: function(timeframe) {
     var date = new Date();
-    switch(timeframe) {
+    switch (timeframe) {
       case strings.THIS_YEAR:
         date.setYear(date.getYear()-1);
         break;
@@ -68,7 +68,8 @@ var TrendingTable = React.createClass({
 
   getLeaderRows: function() {
     var leaderRows = [];
-    var rank, leader;
+    var rank;
+    var leader;
     var length = this.state.leaders.length;
     for (var i = 0; i < length; i++) {
       leader = this.state.leaders[i];
@@ -81,7 +82,7 @@ var TrendingTable = React.createClass({
 
       // Provide the investment button unless the user is yourself
       var button = '';
-      if (this.props.currentUser._id !== leader._id) {
+      if (this.props.currentUser && this.props.currentUser._id !== leader._id) {
         console.log('redoing investment button for trending');
         button =
           <div className="leader-table-invest">

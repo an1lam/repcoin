@@ -18,7 +18,7 @@ var CategoryDashboard = React.createClass({
 
   render: function() {
     var panel = '';
-    switch(this.state.panel) {
+    switch (this.state.panel) {
       case 'Expert':
         panel =  <CategoryPanelExpert category={this.props.category} user={this.props.currentUser}/>;
         break;
@@ -35,6 +35,7 @@ var CategoryDashboard = React.createClass({
         panel = <CategoryPanelExpert user={this.props.currentUser}/>;
         break;
     }
+
     return (
       <div className="category-dashboard">
         <div className="dashboard-buttons">

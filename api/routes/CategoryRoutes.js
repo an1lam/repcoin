@@ -14,7 +14,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
 
   router.route('/categories')
     // Get all the categories
-    .get(isAuthenticated, function(req, res) {
+    .get(function(req, res) {
       if (req.query.searchTerm) {
         Category.findBySearchTerm(req.query.searchTerm).then(function(categories) {
           return res.status(200).send(categories);
@@ -57,7 +57,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
 ///////// Routes that have /categories/:categoryName ///////
 router.route('/categories/:categoryName')
   // Get the category with this name
-  .get(isAuthenticated, function(req, res) {
+  .get(function(req, res) {
     var categoryName = req.params.categoryName;
     Category.findByName(categoryName).then(function(category) {
       return res.status(200).send(category);
@@ -69,7 +69,7 @@ router.route('/categories/:categoryName')
 
   router.route('/categories/:category_id')
     // Get the category with this id
-    .get(isAuthenticated, function(req, res) {
+    .get(function(req, res) {
       var categoryId = req.params.category_id;
       Category.findById(categoryId, function(err, category) {
         if (err) {

@@ -2,7 +2,6 @@
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
-var AuthenticatedRoute = require('../mixins/AuthenticatedRoute.jsx');
 var CategoryDashboard = require('./CategoryDashboard.jsx');
 var CategoryPageHeader = require('./CategoryPageHeader.jsx');
 var ErrorPage = require('./ErrorPage.jsx');
@@ -14,7 +13,6 @@ var React = require('react');
 var Toolbar = require('./Toolbar.jsx');
 
 var CategoryPage = React.createClass({
-  mixins: [AuthenticatedRoute],
 
   getInitialState: function() {
     return {};
@@ -26,7 +24,7 @@ var CategoryPage = React.createClass({
     this.resetCurrentUser();
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount: function() {
     PubSub.unsubscribe('userupdate', this.resetCurrentUser);
   },
 
@@ -65,7 +63,9 @@ var CategoryPage = React.createClass({
     var categoryPageHeader = '';
     var trendingTable = '';
     var categoryDashboard = '';
-    if (this.state.category && this.state.currentUser) {
+    
+    // We check for the currentUser in each of these components
+    if (this.state.category) {
       categoryPageHeader = <CategoryPageHeader category={this.state.category} currentUser={this.state.currentUser} />;
       trendingTable = <TrendingTable category={this.state.category} currentUser={this.state.currentUser} />
       categoryDashboard = <CategoryDashboard category={this.props.params.category} currentUser={this.state.currentUser} />;

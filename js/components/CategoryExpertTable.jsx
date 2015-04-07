@@ -7,7 +7,7 @@ var CategoryExpertTableItem = require('./CategoryExpertTableItem.jsx');
 var CategoryExpertTable = React.createClass({
   getInitialState: function() {
     return {
-      users: [],
+      users: []
     };
   },
 
@@ -32,6 +32,7 @@ var CategoryExpertTable = React.createClass({
     for (var i = 0; i < this.state.users.length; i++) {
       userTableRows.push(<CategoryExpertTableItem key={i} user={this.state.users[i]} currentUser={this.props.user} />);
     }
+
     return userTableRows;
   },
 
@@ -39,7 +40,7 @@ var CategoryExpertTable = React.createClass({
     var selected = e.target.value;
     var name = this.props.category;
     var url;
-    switch(selected) {
+    switch (selected) {
       case 'Reps Given (High to Low)':
         url = '/api/users/leading/experts/reps/high/' + name;
         break;

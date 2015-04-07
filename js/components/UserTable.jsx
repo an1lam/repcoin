@@ -32,13 +32,14 @@ var UserTable = React.createClass({
     for (var i = 0; i < this.state.users.length; i++) {
       userTableRows.push(<UserTableItem key={i} user={this.state.users[i]} currentUser={this.props.user} />);
     }
+
     return userTableRows;
   },
 
   onFilter: function(e) {
     var selected = e.target.value;
     var url;
-    switch(selected) {
+    switch (selected) {
       case 'Reps Given (High to Low)':
         url = '/api/users/leading/expertreps/high';
         break;
@@ -104,5 +105,3 @@ var UserTable = React.createClass({
 });
 
 module.exports = UserTable;
-
-

@@ -42,7 +42,7 @@ var PictureBox = React.createClass({
     }
 
     var edit = '';
-    if (this.props.currentUser._id == this.props.user._id) {
+    if (this.props.currentUser && this.props.currentUser._id == this.props.user._id) {
       if (this.state.showEdit) {
         edit = <div className="editPhoto" onClick={this.handleClick}>
                    <span className="glyphicon glyphicon-camera"></span>
@@ -55,6 +55,7 @@ var PictureBox = React.createClass({
     if (this.props.user.picture && this.props.user.picture.url) {
       imgUrl = this.props.user.picture.url;
     }
+
     return (
       <div className="pictureBox" onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave}>
         <img className="img-thumbnail" src={imgUrl} onError={this.handleImgError} ></img>

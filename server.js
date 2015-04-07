@@ -4,9 +4,9 @@ require('newrelic');
 var bodyParser = require('body-parser');
 var cookieSession = require('cookie-session');
 var express = require('express');
+var livereload = require('express-livereload');
 var mongoose = require('mongoose');
 var nodemailer = require('nodemailer');
-var session = require('express-session');
 var passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy,
   FacebookTokenStrategy = require('passport-facebook-token').Strategy;
@@ -28,7 +28,7 @@ if (!module.parent) {
   var auth = require('./config/auth.js');
 } else {
   winston.info('Test environment found; using mock auth');
-  var auth = function(req, res, next) { res.status(200).end(); };
+  var auth = function(req, res) { res.status(200).end(); };
 }
 
 var app = express();
@@ -70,7 +70,7 @@ var acl = require('./config/acl.js');
 var censor = require('./config/censor.js');
 
 // Nodemailer Setup
-var transporter = nodemailer.createTransport({
+nodemailer.createTransport({
   service: process.env.REPCOIN_EMAIL_SERVICE,
   auth: mailerConfig.fromUser,
 });
@@ -87,7 +87,7 @@ var categoryRoutes = require('./api/routes/CategoryRoutes.js')(categoryRouter, a
 
 // Non-model associated
 var comboRouter = express.Router();
-var comboRoutes = require('./api/routes/ComboRoutes.js')(comboRouter, auth, acl);
+var comboRoutes = require('./api/routes/ComboRoutes.js')(comboRouter);
 
 // Transactions
 var transactionRouter = express.Router();
