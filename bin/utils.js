@@ -13,7 +13,9 @@ var DIVIDEND_PERCENTAGE = 0.1;
 // Utility functions for jobs
 var utils = {
 
+  // DEPRECATED
   // Migrate rank to all users
+  // Does not handle rank properly
   migrateRankToUsers: function(cb) {
     var categories;
 
