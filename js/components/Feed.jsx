@@ -115,7 +115,8 @@ var Feed = React.createClass({
       // Transaction
       if (curr.amount) {
         feedItems.push(
-          <li key={curr._id} className="list-group-item"><FeedItem transaction={curr} /></li>
+          <li key={curr._id} className="list-group-item">
+            <FeedItem transaction={curr} /></li>
         );
 
       // If the event is a transaction without a type, ignore it
@@ -125,18 +126,22 @@ var Feed = React.createClass({
       // Join event
       } else if (curr.type === 'join') {
         feedItems.push(
-          <li key={curr._id} className="list-group-item"><JoinFeedItem event={curr} /></li>
+          <li key={curr._id}
+            className="list-group-item"><JoinFeedItem event={curr} /></li>
         );
       } else if (curr.type === 'newcategory') {
         feedItems.push(
-          <li key={curr._id} className="list-group-item"><NewCategoryFeedItem event={curr} /></li>
+          <li key={curr._id} className="list-group-item">
+            <NewCategoryFeedItem event={curr} /></li>
         );
       } else if (curr.type === 'addexpert') {
         feedItems.push(
-          <li key={curr._id} className="list-group-item"><AddExpertEventFeedItem event={curr} /></li>
+          <li key={curr._id} className="list-group-item">
+            <AddExpertEventFeedItem event={curr} /></li>
         );
       }
     }
+
     return feedItems;
   },
 
@@ -163,7 +168,7 @@ var Feed = React.createClass({
     if (newPagination >= this.state.transactions.length) {
       // Get the date of the last transaction in the list
       // Set the new timestamp to one millisecond earlier than that
-      var newTimeStamp = new Date(new Date(this.state.transactions[this.state.transactions.length-1].timeStamp)-1);
+      var newTimeStamp = new Date(new Date(this.state.transactions[this.state.transactions.length - 1].timeStamp) - 1);
       this.getTransactions(this.state.filter, newTimeStamp, this.props.category);
     }
 
@@ -172,12 +177,15 @@ var Feed = React.createClass({
   },
 
   render: function() {
+    console.log('CurrentUser ? ' + this.props.isPublicUser);
     var feedText = '';
+    var feedItems = [];
     if (this.state.transactions.length === 0) {
       var text = strings.NO_TRANSACTIONS_FOUND;
       feedText = <div className="alert alert-warning no-transactions-warning">{text}</div>;
+    } else {
+      feedItems = this.getFeedItems();
     }
-    var feedItems = this.getFeedItems();
 
     // Determine whether or not to show the previous btn
     var previousBtn = '';
@@ -193,7 +201,7 @@ var Feed = React.createClass({
     if (this.state.pagination - PAGINATION_SIZE > -1) {
       nextBtn = (
         <li className="next">
-            <a href="#" onClick={this.showNewer}>Newer <span aria-hidden="true">&rarr;</span></a>
+          <a href="#" onClick={this.showNewer}>Newer <span aria-hidden="true">&rarr;</span></a>
         </li>
       );
     }

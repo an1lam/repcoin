@@ -115,7 +115,7 @@ var AuthStore = assign({}, EventEmitter.prototype, {
 AuthStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
   var action = payload.action;
 
-  switch(action.type) {
+  switch (action.type) {
     case ActionTypes.FORGOT_PASSWORD:
       _forgotPassword = true;
       AuthStore.emitStatusChange();

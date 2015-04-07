@@ -10,7 +10,7 @@ var strings = require('../lib/strings_utils.js');
 var AddExpertEventFeedItem = React.createClass({
   getInitialState: function() {
     return {
-      img: strings.DEFAULT_USER_PIC,
+      img: strings.DEFAULT_USER_PIC
     };
   },
 
@@ -36,12 +36,13 @@ var AddExpertEventFeedItem = React.createClass({
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
-      }.bind(this),
+      }.bind(this)
     });
   },
 
   render: function() {
-    var event, img;
+    var event;
+    var img;
     var imgClass = 'event-item-img 0' + this.props.event._id;
     var date = new Date(this.props.event.timeStamp);
     var month = date.getMonth() + 1;
@@ -60,7 +61,8 @@ var AddExpertEventFeedItem = React.createClass({
         <span className="timestamp-badge badge">{dateFormat}</span>
       </div>
     )
-   },
+  }
+
 });
 
 module.exports = AddExpertEventFeedItem;

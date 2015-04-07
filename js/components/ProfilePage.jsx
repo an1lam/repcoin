@@ -68,9 +68,11 @@ var ProfilePage = React.createClass({
 
     if (this.state.user) {
       var isSelf = this.state.currentUser && this.state.currentUser._id === this.props.params.userId;
+      var isPublicUser = this.state.currentUser ? true : false;
       categoriesTable = <CategoriesTable currentUser={this.state.currentUser} user={this.state.user} />;
       feed = <Feed parent='ProfilePage' userId={this.props.params.userId}
-        filter={'all'} isSelf={isSelf} isPublicUser={!this.state.currentUser}/>;
+        filter={'all'} isSelf={isSelf} isPublicUser={isPublicUser}/>;
+
       profileBox = <ProfileBox currentUser={this.state.currentUser} user={this.state.user} />;
       portfolio = <PortfolioTable user={this.state.user} currentUser={this.state.currentUser}/>;
     }
