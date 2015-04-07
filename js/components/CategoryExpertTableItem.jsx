@@ -16,7 +16,6 @@ var CategoryExpertTableItem = React.createClass({
     // The MiniInvestmentButton will fetch the full one based on the id
     var investmentButton = '';
     if (this.props.currentUser && this.props.currentUser._id !== this.props.user._id) {
-      console.log('redoing investment button for expert table');
       investmentButton = <MiniInvestButton userId={this.props.user._id} currentUser={this.props.currentUser}/>;
     }
 
