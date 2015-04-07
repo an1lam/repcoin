@@ -4,7 +4,6 @@ require('newrelic');
 var bodyParser = require('body-parser');
 var cookieSession = require('cookie-session');
 var express = require('express');
-var livereload = require('express-livereload');
 var mongoose = require('mongoose');
 var nodemailer = require('nodemailer');
 var passport = require('passport'),
