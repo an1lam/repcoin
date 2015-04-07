@@ -89,7 +89,6 @@ module.exports = function(router, isAuthenticated, acl, censor) {
       user.save( function(err) {
         if (err) {
           var msg = '';
-
           // Mongoose validation errors are put in err.errors
           if (err.errors) {
             if (err.errors.password) {
@@ -131,7 +130,7 @@ module.exports = function(router, isAuthenticated, acl, censor) {
                 return res.status(554).send('Error sending email');
               } else {
                 winston.log('info', 'Sent email to: %s', user.email);
-                return res.status(200).end();
+                return res.status(200).send('Sent email');
               }
             });
           });
