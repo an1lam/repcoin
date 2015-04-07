@@ -75,7 +75,7 @@ var HomePage = React.createClass({
           <div className="col-md-9">
             {categoriesCards}
             <div className="main-dashboard">
-              <Dashboard        currentUser={this.state.currentUser} />;
+              <Dashboard currentUser={this.state.currentUser} />
             </div>
           </div>
         </div>
