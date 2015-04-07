@@ -641,9 +641,20 @@ var utils = {
     }
 
     query.then(function(results) {
-      var length = results.length;
-      for (var i = 0; i < results.length; i++) {
-        User.updateRank(results[i]._id, categoryName, i+1, expert, function() {});
+      // Update the rank for the first user, who is always number 1
+      var rank = 1;
+      User.updateRank(results[0]._id, categoryName, rank, expert, function() {});
+      for (var i = 1; i < results.length; i++) {
+        // If we are evaluating experts and the current expert has
+        // less reps than the past one, increment the rank
+        // If we are evaluating investors and the current investor
+        // has less dividends than previous increment the rank
+        if (expert && results[i].reps < results[i-1].reps) {
+          rank++;
+        } else if (!expert && results[i].dividends < results[i-1].dividends) {
+          rank++;
+        }
+        User.updateRank(results[i]._id, categoryName, rank, expert, function() {});
       }
       cb(null);
     }, function(err) {

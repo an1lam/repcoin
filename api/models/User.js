@@ -390,7 +390,7 @@ UserSchema.statics.findRankedExperts = function(category) {
     { $unwind: "$categories" },
     { $match: { "categories.name": category }},
     { $sort: { "categories.reps": -1 }},
-    { $project: { _id: 1 }},
+    { $project: { _id: 1, reps: "$categories.reps" }},
   ]).exec();
 };
 
@@ -404,7 +404,7 @@ UserSchema.statics.findRankedInvestors = function(category) {
     { $match: { "portfolio.category": category } },
     { $group: { _id: "$_id", dividends: { $sum: "$portfolio.investments.dividend" } }},
     { $sort: { "dividends": -1 }},
-    { $project: { "_id": 1 } },
+    { $project: { "_id": 1, dividends: 1 } },
   ]).exec();
 };
 

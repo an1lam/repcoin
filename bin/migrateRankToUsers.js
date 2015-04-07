@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// DEPECRECATED
+// A migration to give all users rank
+// This migration does not handle ties properly
 var mongoose = require('mongoose');
 var utils = require('./utils.js');
 var winston = require('winston');
