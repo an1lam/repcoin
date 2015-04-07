@@ -1,6 +1,6 @@
 // api/routes/AuthRoutes.js
 // Routes to login, logout, and signup
-
+var winston = require('winston');
 module.exports = function(router, passport) {
   /*
   Passportjs automatically stores a user's session.
@@ -12,7 +12,7 @@ module.exports = function(router, passport) {
   */
 
   router.post('/login/facebook',
-    passport.authenticate('facebook-token'), function (req, res) {
+    passport.authenticate('facebook-token'), function(req, res) {
       var user = req.user || {};
       return res.status(200).send(user);
     });
@@ -32,9 +32,22 @@ module.exports = function(router, passport) {
   router.route('/login')
     .post(function(req, res, next) {
       passport.authenticate('local', function(err, user, info) {
-        if (!user || err) { return res.status(412).send(err.message); }
+        if (!user || err) {
+          var message;
+          if (!err || !err.message) {
+            message = 'Authentication failed';
+          } else {
+            message = err.message;
+          }
+
+          return res.status(412).send(message);
+        }
+
         req.logIn(user, function(err) {
-          if (err) { return res.status(412).send(err.message); }
+          if (err) {
+            return res.status(412).send(err.message);
+          }
+
           return res.status(200).send(user);
         });
       })(req, res, next);

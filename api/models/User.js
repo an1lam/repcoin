@@ -209,7 +209,11 @@ UserSchema.pre('save', function(next) {
 });
 
 UserSchema.methods.comparePassword = function(candidatePassword) {
-  return bcrypt.compareSync(candidatePassword, this.password);
+  if (!candidatePassword || !this.password) {
+    return false;
+  } else {
+    return bcrypt.compareSync(candidatePassword, this.password);
+  }
 };
 
 // Get all the users, obscuring private fields
