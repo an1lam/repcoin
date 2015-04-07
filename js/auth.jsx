@@ -36,12 +36,6 @@ var auth = {
       }
     });
   },
-
-  loggedInWithPromise: function(cb) {
-    return $.ajax({
-      url:  '/api/loggedin',
-    });
-  },
 };
 
 module.exports = auth;

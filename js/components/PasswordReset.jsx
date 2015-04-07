@@ -1,5 +1,4 @@
 'use strict';
-var auth = require('../auth.jsx');
 var AuthActionCreator = require('../actions/AuthActionCreator.js');
 var AuthStore = require('../stores/AuthStore.js');
 var React = require('react');

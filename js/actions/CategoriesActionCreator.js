@@ -4,6 +4,14 @@ var RepcoinConstants = require('../constants/RepcoinConstants.js');
 var ActionTypes = RepcoinConstants.ActionTypes;
 
 module.exports = {
+  getCurrentCategory: function(category) {
+    RepcoinAppDispatcher.handleViewAction({
+      type: ActionTypes.GET_CURRENT_CATEGORY
+    });
+
+    api.getCurrentCategory(category);
+  },
+
   getCategories: function() {
     RepcoinAppDispatcher.handleViewAction({
       type: ActionTypes.GET_CATEGORIES

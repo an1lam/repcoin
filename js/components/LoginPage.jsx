@@ -9,7 +9,6 @@ var AuthStore = require('../stores/AuthStore.js');
 var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
 var CategoriesStore = require('../stores/CategoriesStore.js');
 var Footer = require('./Footer.jsx');
-var LoggedInRoute = require('../mixins/LoggedInRoute.jsx');
 var Login = require('./Login.jsx');
 var Signup = require('./Signup.jsx');
 var strings = require('../lib/strings_utils.js');
@@ -89,7 +88,7 @@ var LoginPage = React.createClass({
 
   _onChange: function() {
     this.setState(getStateFromStores());
-  },
+  }
 });
 
 module.exports = LoginPage;

@@ -3,6 +3,9 @@ var keyMirror = require('keymirror');
 module.exports = {
   ActionTypes: keyMirror({
     GET_CATEGORIES: null,
+    GET_CURRENT_CATEGORY: null,
+    RECEIVE_CURRENT_CATEGORY: null,
+    RECEIVE_CURRENTCATEGORY_ERROR: null,
     RECEIVE_CATEGORIES: null,
     GET_CURRENT_USER: null,
     RECEIVE_CURRENT_USER: null,
