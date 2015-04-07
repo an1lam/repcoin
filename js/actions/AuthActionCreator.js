@@ -79,6 +79,10 @@ module.exports = {
     api.loginUser(email, password);
   },
 
+  logoutUser: function() {
+    api.logoutUser();
+  },
+
   loginWithFacebook: function(hash, id) {
     api.facebook.authorize(hash, id);
   },
@@ -86,5 +90,4 @@ module.exports = {
   sendPasswordResetEmail: function(email) {
     api.sendPasswordResetEmail(email);
   },
-
 };

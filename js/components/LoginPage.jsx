@@ -18,6 +18,7 @@ function getStateFromStores() {
   return {
     totalTraded: CategoriesStore.getTotalTraded(),
     showLogin: AuthStore.getShowLogin(),
+    loggedIn: AuthStore.getLoggedIn(),
   }
 }
 
@@ -30,13 +31,20 @@ var LoginPage = React.createClass({
 
   componentDidMount: function() {
     CategoriesStore.addTotalTradedChangeListener(this._onChange);
-    AuthStore.addStatusListener(this._onChange);
+    AuthStore.addLoggedInListener(this._onChange);
     CategoriesActionCreator.getTotalTraded();
+    AuthActionCreator.getLoggedIn();
   },
 
   componentWillUnmount: function() {
     CategoriesStore.removeTotalTradedChangeListener(this._onChange);
-    AuthStore.removeStatusListener(this._onChange);
+    AuthStore.removeLoggedInListener(this._onChange);
+  },
+
+  componentWillUpdate: function() {
+    if (this.state.loggedIn) {
+      this.transitionTo('/home');
+    }
   },
 
   handleLoginClick: function() {

@@ -85,6 +85,19 @@ module.exports = {
     })
   },
 
+  logoutUser: function() {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.LOGOUT_USER
+    })
+  },
+
+  logoutFailed: function(msg) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.LOGOUT_FAILED,
+      error: msg
+    })
+  },
+
   passwordResetEmailSent: function(email) {
     RepcoinAppDispatcher.handleServerAction({
       type: ActionTypes.PASSWORD_RESET_EMAIL_SENT,

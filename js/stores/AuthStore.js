@@ -17,6 +17,7 @@ var _passwordResetStatus = {error: false, msg: ''};
 var _showLogin = false;
 var _signUpStatus = {error: false, msg: ''};
 var _loginStatus = {error: false, msg: ''};
+var _logoutStatus = {error: false, msg: ''};
 var _forgotPassword = false;
 
 var AuthStore = assign({}, EventEmitter.prototype, {
@@ -127,6 +128,12 @@ AuthStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
       AuthStore.emitStatusChange();
       break;
 
+    case ActionTypes.LOGOUT_FAILED:
+      _logoutStatus.msg = action.error;
+      _logoutStatus.error = true;
+      AuthStore.emitStatusChange();
+      break;
+
     case ActionTypes.PASSWORD_RESET_EMAIL_SENT:
       _passwordResetStatus.msg = strings.EMAIL_SENT(action.email);
       _passwordResetStatus.error = false;
@@ -143,6 +150,14 @@ AuthStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
     case ActionTypes.RECEIVE_CURRENT_USER_AND_NOTIFICATIONS:
       _currentUser = action.user;
       AuthStore.emitCurrentUserChange();
+      break;
+
+    case ActionTypes.LOGOUT_USER:
+      _currentUser = null;
+      _loggedIn = false;
+      _logoutStatus.msg = action.error;
+      _logoutStatus.error = true;
+      AuthStore.emitLoggedInChange();
       break;
 
     case ActionTypes.RECEIVE_CURRENT_USER:

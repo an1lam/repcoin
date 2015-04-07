@@ -123,6 +123,17 @@ module.exports = {
     });
   },
 
+  logoutUser: function() {
+    $.ajax({
+      url: 'api/logout',
+      type: 'POST',
+      success: ServerActionCreator.logoutUser,
+      error: function(xhr, status, err) {
+        ServerActionCreator.logoutFailed(xhr.responseText);
+      }.bind(this),
+    });
+  },
+
   sendPasswordResetEmail: function(email) {
     $.ajax({
       type: 'POST',
