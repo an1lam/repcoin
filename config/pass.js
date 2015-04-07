@@ -6,19 +6,25 @@ var winston = require('winston');
 module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
   passport.use(new LocalStrategy({
       usernameField: 'email',
-      passwordField: 'password',
+      passwordField: 'password'
     },
     function(username, password, next) {
       User.findOne({ email: username }, function(err, user) {
+
         if (err) {
           return next(err, false);
         }
-        if (!user) {
-          return next({ message: 'Unrecognized email address' }, false, {});
+
+        if (!user || !password) {
+          return next(
+            { message: 'Unrecognized email address or no password given' },
+            false, {});
         }
+
         if (!user.comparePassword(password)) {
           return next({ message: 'Incorrect email and password combination' }, false, {});
         }
+
         if (!user.verified) {
           return next({ message: 'User needs to verify their account before log in'}, false, {});
         }
@@ -26,6 +32,7 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
         return next(null, user);
       });
     }
+
   ));
 
   // Determine if using production URL or localhost
@@ -40,7 +47,7 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
   passport.use(new FacebookTokenStrategy({
       clientID: clientID,
       clientSecret: clientSecret,
-      passReqToCallback: true,
+      passReqToCallback: true
     },
     function(req, accessToken, refreshToken, profile, done) {
       User.findOne({ facebookId: profile.id }, function(err, user) {
@@ -73,6 +80,7 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
               verified: true
             });
           }
+
           user.save(function(err, user) {
             if (err) {
               return done(err);
@@ -80,8 +88,8 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
 
             // Create a welcome notification
             var notification = new Notification({
-              user    : { id: user._id, name: user.username },
-              message : 'Welcome to Repcoin!',
+              user: { id: user._id, name: user.username },
+              message: 'Welcome to Repcoin!'
             });
             notification.save();
 
@@ -99,6 +107,7 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
             if (err) {
               return done(err);
             }
+
             return done(null, user);
           });
         }
@@ -106,6 +115,7 @@ module.exports = function(passport, LocalStrategy, FacebookTokenStrategy) {
         return done(null, user);
       });
     }
+
   ));
 
   passport.serializeUser(function(user, done) {
