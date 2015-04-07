@@ -15,14 +15,13 @@ var UserTableItem = React.createClass({
     var sortedCategories = categories.concat().sort(this.getCategoriesComparator());
 
     var name;
-    var perc;
+    var rank;
     for (var i = 0; i < sortedCategories.length && i < 3; i++) {
       name = expert ? sortedCategories[i].name : sortedCategories[i].category;
-      perc = sortedCategories[i].rank;
+      rank = sortedCategories[i].rank;
       categoriesItems.push(
         <div className="list-group-item" key={i}>
-          <Link to="category" params={{category: name}}>{name}</Link>
-          , ({perc})
+          <Link to="category" params={{category: name}}>{name}</Link> ({rank})
         </div>
       );
     }
