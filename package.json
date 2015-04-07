@@ -20,6 +20,7 @@
     "ejs": "^2.2.4",
     "events": "^1.0.2",
     "express": "~4.9.4",
+    "express-livereload": "0.0.24",
     "express-session": "~1.8.2",
     "flux": "^2.0.1",
     "jade": "~1.7.0",
