@@ -92,6 +92,14 @@ var AuthStore = assign({}, EventEmitter.prototype, {
     return _loginStatus.error;
   },
 
+  getLogoutStatus: function() {
+    return _loginStatus.msg;
+  },
+
+  getLogoutError: function() {
+    return _logoutStatus.error;
+  },
+
   getPasswordResetStatus: function() {
     return _passwordResetStatus.msg;
   },

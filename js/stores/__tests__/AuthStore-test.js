@@ -88,6 +88,35 @@ describe('CategoriesStore', function() {
     }
   };
 
+  it('logs out the user', function() {
+    var logout = {
+      source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+      action: {
+        type: RepcoinConstants.ActionTypes.LOGOUT_USER,
+      }
+    };
+
+    callback(logout);
+    expect(AuthStore.getLogoutStatus()).toEqual(null);
+    expect(AuthStore.getLogoutStatusError()).toEqual(false);
+    expect(AuthStore.getLoggedIn()).toEqual(false);
+    expect(AuthStore.getCurrentUser()).toEqual(null);
+  });
+
+  it('handles error logging out the user', function() {
+    var logoutFailed = {
+      source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+      action: {
+        type: RepcoinConstants.ActionTypes.LOGOUT_FAILED,
+        error: 'Error!'
+      }
+    };
+
+    callback(logoutFailed);
+    expect(AuthStore.getLogoutStatus()).toEqual('Error!');
+    expect(AuthStore.getLogoutStatusError()).toEqual(true);
+  });
+
   it('handles errors from the server when logging in', function() {
     callback(actionLoginFailed);
     var error = AuthStore.getLoginError();
@@ -191,5 +220,4 @@ describe('CategoriesStore', function() {
       'An email has been sent to a@b.com with a link to reset your password.');
     expect(AuthStore.getPasswordResetError()).toEqual(false);
   });
-
 });

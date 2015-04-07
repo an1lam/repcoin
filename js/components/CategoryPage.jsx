@@ -56,8 +56,8 @@ var CategoryPage = React.createClass({
       categoryDashboard = <CategoryDashboard category={this.props.params.category} currentUser={this.state.currentUser} />;
     }
 
-    if (this.state.error) {
-      var mainBody = <ErrorPage type={this.state.error} />
+    if (this.state.currentCategoryError) {
+      var mainBody = <ErrorPage type={this.state.currentCategoryError} />
 
     } else {
       var mainBody = (
