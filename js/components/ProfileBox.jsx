@@ -2,7 +2,6 @@
 
 var $ = require('jquery');
 var AboutBox = require('./AboutBox.jsx');
-var auth = require('../auth.jsx');
 var InvestmentButton = require('./InvestmentButton.jsx');
 var LinksBox = require('./LinksBox.jsx');
 var LocationBox = require('./LocationBox.jsx');

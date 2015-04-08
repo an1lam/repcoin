@@ -6,6 +6,22 @@ var ActionTypes = RepcoinConstants.ActionTypes;
 /* File for handling any actions created by 'api' */
 module.exports = {
 
+  // Receive the current category without an error
+  receiveCurrentCategory: function(category) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_CURRENT_CATEGORY,
+      currentCategory: category
+    });
+  },
+
+  // Receive the current category with an error
+  receiveCurrentCategoryError: function(error) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_CURRENT_CATEGORY_ERROR,
+      error: error
+    });
+  },
+
   /* Receive categories from our 'api' request and signal the Dispatcher
      to emit a RECEIVE_CATEGORIES event
   */
@@ -81,6 +97,19 @@ module.exports = {
   loginFailed: function(msg) {
     RepcoinAppDispatcher.handleServerAction({
       type: ActionTypes.LOGIN_FAILED,
+      error: msg
+    })
+  },
+
+  logoutUser: function() {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.LOGOUT_USER
+    })
+  },
+
+  logoutFailed: function(msg) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.LOGOUT_FAILED,
       error: msg
     })
   },

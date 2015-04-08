@@ -22,11 +22,59 @@ describe('CategoriesStore', function() {
     expect(AppDispatcher.register.mock.calls.length).toBe(1);
   });
 
+  describe('currentCategory', function() {
+    it('should initialize with no category and no error', function() {
+      expect(CategoriesStore.getCurrentCategory()).toEqual(null);
+      expect(CategoriesStore.getCurrentCategoryError()).toEqual(null);
+    });
+
+    it('gets the current category returned from the server', function() {
+      var actionReceiveCurrentCategory = {
+        source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+        action: {
+          type: RepcoinConstants.ActionTypes.RECEIVE_CURRENT_CATEGORY,
+          currentCategory: {'name': 'foo'}
+        }
+      };
+
+      callback(actionReceiveCurrentCategory);
+      expect(CategoriesStore.getCurrentCategory()).toEqual({ 'name': 'foo' });
+      expect(CategoriesStore.getCurrentCategoryError()).toEqual(null);
+    });
+
+    it('sets a 404 error if no category is found from the server', function() {
+      var actionReceiveCurrentCategory = {
+        source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+        action: {
+          type: RepcoinConstants.ActionTypes.RECEIVE_CURRENT_CATEGORY,
+          currentCategory: null
+        }
+      };
+
+      callback(actionReceiveCurrentCategory);
+      expect(CategoriesStore.getCurrentCategory()).toEqual(null);
+      expect(CategoriesStore.getCurrentCategoryError()).toEqual(404);
+    });
+
+    it('receives error getting a current category', function() {
+      var actionReceiveCurrentCategory = {
+        source: RepcoinConstants.PayloadSources.SERVER_ACTION,
+        action: {
+          type: RepcoinConstants.ActionTypes.RECEIVE_CURRENT_CATEGORY_ERROR,
+          error: 'ERROR!'
+        }
+      };
+
+      callback(actionReceiveCurrentCategory);
+      expect(CategoriesStore.getCurrentCategory()).toEqual(null);
+      expect(CategoriesStore.getCurrentCategoryError()).toEqual('ERROR!');
+    });
+  });
+
   it('should initialize with no categories', function() {
     var all = CategoriesStore.getAll();
     expect(all).toEqual([]);
   });
-
 
   var actionReceiveCategories = {
     source: RepcoinConstants.PayloadSources.SERVER_ACTION,
@@ -58,7 +106,7 @@ describe('CategoriesStore', function() {
 
     var all = CategoriesStore.getAll();
     expect(all.length).toBe(2);
-    expect(all[0]).toEqual({ name: 'bar' });
+    expect(all[0]).toEqual({ name: 'foo' });
   });
 
   var actionReceiveTotalTraded = {

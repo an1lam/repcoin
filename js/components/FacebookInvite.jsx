@@ -3,8 +3,6 @@
 var $ = require('jquery');
 var React = require('react');
 
-var auth = require('../auth.jsx')
-
 var FacebookInvite = React.createClass({
   getInitialState: function() {
     return {

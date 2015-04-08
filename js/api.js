@@ -3,6 +3,17 @@ var $ = require('jquery');
 var ServerActionCreator = require('./actions/RepcoinServerActionCreator.js');
 
 module.exports = {
+  getCurrentCategory: function(category) {
+    $.ajax({
+      url: '/api/categories/' + category ,
+      success: ServerActionCreator.receiveCurrentCategory,
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+        ServerActionCreator.receiveCurrentCategoryError(xhr.reponseText);
+      }
+    });
+  },
+
   getCategories: function() {
     $.ajax({
       url: '/api/categories',
@@ -120,6 +131,17 @@ module.exports = {
       error: function(xhr, status, err) {
         ServerActionCreator.loginFailed(xhr.responseText);
       }.bind(this)
+    });
+  },
+
+  logoutUser: function() {
+    $.ajax({
+      url: 'api/logout',
+      type: 'POST',
+      success: ServerActionCreator.logoutUser,
+      error: function(xhr, status, err) {
+        ServerActionCreator.logoutFailed(xhr.responseText);
+      }.bind(this),
     });
   },
 

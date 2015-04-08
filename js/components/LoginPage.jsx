@@ -9,7 +9,6 @@ var AuthStore = require('../stores/AuthStore.js');
 var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
 var CategoriesStore = require('../stores/CategoriesStore.js');
 var Footer = require('./Footer.jsx');
-var LoggedInRoute = require('../mixins/LoggedInRoute.jsx');
 var Login = require('./Login.jsx');
 var Signup = require('./Signup.jsx');
 var strings = require('../lib/strings_utils.js');
@@ -18,6 +17,7 @@ function getStateFromStores() {
   return {
     totalTraded: CategoriesStore.getTotalTraded(),
     showLogin: AuthStore.getShowLogin(),
+    loggedIn: AuthStore.getLoggedIn(),
   }
 }
 
@@ -30,13 +30,20 @@ var LoginPage = React.createClass({
 
   componentDidMount: function() {
     CategoriesStore.addTotalTradedChangeListener(this._onChange);
-    AuthStore.addStatusListener(this._onChange);
+    AuthStore.addLoggedInListener(this._onChange);
     CategoriesActionCreator.getTotalTraded();
+    AuthActionCreator.getLoggedIn();
   },
 
   componentWillUnmount: function() {
     CategoriesStore.removeTotalTradedChangeListener(this._onChange);
-    AuthStore.removeStatusListener(this._onChange);
+    AuthStore.removeLoggedInListener(this._onChange);
+  },
+
+  componentWillUpdate: function() {
+    if (this.state.loggedIn) {
+      this.transitionTo('/home');
+    }
   },
 
   handleLoginClick: function() {
@@ -81,7 +88,7 @@ var LoginPage = React.createClass({
 
   _onChange: function() {
     this.setState(getStateFromStores());
-  },
+  }
 });
 
 module.exports = LoginPage;

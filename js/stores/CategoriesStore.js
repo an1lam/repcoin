@@ -10,6 +10,8 @@ var ActionTypes = RepcoinConstants.ActionTypes;
 var CHANGE_EVENT = 'change';
 var TOTAL_TRADED_CHANGE_EVENT = 'total_traded_change';
 
+var _currentCategory = null
+var _currentCategoryError = null;
 var _hotCategoriesAndUsers = [];
 var _categories = [];
 var _categoryExpertSizes = [];
@@ -58,6 +60,14 @@ var CategoriesStore = assign({}, EventEmitter.prototype, {
   */
   getAll: function() {
     return _categories;
+  },
+
+  getCurrentCategory: function() {
+    return _currentCategory;
+  },
+
+  getCurrentCategoryError: function() {
+    return _currentCategoryError;
   },
 
   getTotalTraded: function() {
@@ -169,6 +179,27 @@ CategoriesStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) 
 
     case ActionTypes.HOT_CATEGORIES_AND_USERS:
       _hotCategoriesAndUsers = action.categories;
+      CategoriesStore.emitChange();
+      break;
+
+    // Received the current category from the server
+    case ActionTypes.RECEIVE_CURRENT_CATEGORY:
+      _currentCategory = action.currentCategory;
+
+      // Check if we got a null category or not
+      if (!_currentCategory) {
+        _currentCategoryError = 404;
+      } else {
+        _currentCategoryError = null;
+      }
+
+      CategoriesStore.emitChange();
+      break;
+
+    // Error receiving current category
+    case ActionTypes.RECEIVE_CURRENT_CATEGORY_ERROR:
+      _currentCategory = null;
+      _currentCategoryError = action.error;
       CategoriesStore.emitChange();
       break;
 

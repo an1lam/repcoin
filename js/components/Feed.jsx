@@ -177,7 +177,6 @@ var Feed = React.createClass({
   },
 
   render: function() {
-    console.log('CurrentUser ? ' + this.props.isPublicUser);
     var feedText = '';
     var feedItems = [];
     if (this.state.transactions.length === 0) {
