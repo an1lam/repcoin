@@ -71,7 +71,8 @@
   },
   "jest": {
     "unmockedModulePathPatterns": [
-      "react"
+      "react",
+      "through2"
     ],
     "modulePathIgnorePatterns": [
       "/newrelic/",

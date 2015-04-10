@@ -50,7 +50,7 @@ var HomePage = React.createClass({
     if (this.state.currentUser) {
       dashboard = <Dashboard currentUser={this.state.currentUser} />;
       facebookInvite = <FacebookInvite />;
-      profileQuickView = <ProfileQuickView />
+      profileQuickView = <ProfileQuickView currentUser={this.state.currentUser} />
 
     }
 

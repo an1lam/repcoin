@@ -29,9 +29,6 @@ var DefaultRoute = Router.DefaultRoute;
 
 var RepsApp = React.createClass({
   mixins: [State],
-  getInitialState: function() {
-    return { loggedIn: false };
-  },
 
   componentDidMount: function() {
     // Configure to work with localhost or repcoin.com
@@ -81,11 +78,6 @@ var RepsApp = React.createClass({
   },
 
   componentWillMount: function() {
-    // Set the state as loggedIn or not
-    auth.loggedIn(function(loggedIn) {
-      this.setState({ loggedIn: loggedIn });
-    }.bind(this));
-
     // Make sure search results are only shown if actively searching
     $(document).click(function() {
       // Start by hiding everything

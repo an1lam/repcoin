@@ -83,7 +83,6 @@ var TrendingTable = React.createClass({
       // Provide the investment button unless the user is yourself
       var button = '';
       if (this.props.currentUser && this.props.currentUser._id !== leader._id) {
-        console.log('redoing investment button for trending');
         button =
           <div className="leader-table-invest">
             <MiniInvestButton currentUser={this.props.currentUser} userId={leader._id} />

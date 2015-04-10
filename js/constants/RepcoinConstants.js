@@ -3,6 +3,9 @@ var keyMirror = require('keymirror');
 module.exports = {
   ActionTypes: keyMirror({
     GET_CATEGORIES: null,
+    GET_CURRENT_CATEGORY: null,
+    RECEIVE_CURRENT_CATEGORY: null,
+    RECEIVE_CURRENTCATEGORY_ERROR: null,
     RECEIVE_CATEGORIES: null,
     GET_CURRENT_USER: null,
     RECEIVE_CURRENT_USER: null,
@@ -20,6 +23,8 @@ module.exports = {
     VERIFICATION_EMAIL_SENT: null,
     FORGOT_PASSWORD: null,
     LOGIN_FAILED: null,
+    LOGOUT_FAILED: null,
+    LOGOUT_USER: null,
     RECEIVE_CURRENT_USER_AND_LOGIN: null,
     RECEIVE_CURRENT_USER_AND_NOTIFICATIONS: null,
     SEND_PASSWORD_RESET_EMAIL: null,

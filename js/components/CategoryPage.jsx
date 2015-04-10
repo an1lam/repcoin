@@ -1,7 +1,10 @@
 'use strict';
 
 var $ = require('jquery');
-var auth = require('../auth.jsx');
+var AuthActionCreator = require('../actions/AuthActionCreator.js');
+var AuthStore = require('../stores/AuthStore.js');
+var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
+var CategoriesStore = require('../stores/CategoriesStore.js');
 var CategoryDashboard = require('./CategoryDashboard.jsx');
 var CategoryPageHeader = require('./CategoryPageHeader.jsx');
 var ErrorPage = require('./ErrorPage.jsx');
@@ -12,58 +15,40 @@ var PubSub = require('pubsub-js');
 var React = require('react');
 var Toolbar = require('./Toolbar.jsx');
 
-var CategoryPage = React.createClass({
+function getStateFromStores() {
+  return {
+    category: CategoriesStore.getCurrentCategory(),
+    currentCategoryError: CategoriesStore.getCurrentCategoryError(),
+    currentUser: AuthStore.getCurrentUser(),
+  }
+}
 
+var CategoryPage = React.createClass({
   getInitialState: function() {
-    return {};
+    return getStateFromStores();
   },
 
   componentDidMount: function() {
-    PubSub.subscribe('userupdate', this.resetCurrentUser);
-    this.setCategory(this.props.params.category);
-    this.resetCurrentUser();
+    AuthStore.addCurrentUserListener(this._onChange);
+    AuthActionCreator.getCurrentUser();
+    CategoriesStore.addChangeListener(this._onChange);
+    CategoriesActionCreator.getCurrentCategory(this.props.params.category);
   },
 
   componentWillUnmount: function() {
-    PubSub.unsubscribe('userupdate', this.resetCurrentUser);
+    AuthStore.removeCurrentUserListener(this._onChange);
+    CategoriesStore.removeChangeListener(this._onChange);
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setCategory(newProps.params.category);
-  },
-
-  setCurrentUser: function(currentUser) {
-    this.setState({ currentUser: currentUser });
-  },
-
-  resetCurrentUser: function() {
-    console.log('getting new current user');
-    auth.getCurrentUser.call(this, this.setCurrentUser);
-  },
-
-  setCategory: function(category) {
-    var url = 'api/categories/' + category;
-    $.ajax({
-      url: url,
-      success: function(category) {
-        if (category) {
-          this.setState({ category: category, error: null });
-        } else {
-          this.setState({ error: 404 });
-        }
-      }.bind(this),
-      error: function(xhr, status, err) {
-        this.setState({ error: status });
-        console.error(this.props.params.category, status, err.toString());
-      }.bind(this)
-    });
+    CategoriesActionCreator.getCurrentCategory(newProps.params.category);
   },
 
   render: function() {
     var categoryPageHeader = '';
     var trendingTable = '';
     var categoryDashboard = '';
-    
+
     // We check for the currentUser in each of these components
     if (this.state.category) {
       categoryPageHeader = <CategoryPageHeader category={this.state.category} currentUser={this.state.currentUser} />;
@@ -71,8 +56,8 @@ var CategoryPage = React.createClass({
       categoryDashboard = <CategoryDashboard category={this.props.params.category} currentUser={this.state.currentUser} />;
     }
 
-    if (this.state.error) {
-      var mainBody = <ErrorPage type={this.state.error} />
+    if (this.state.currentCategoryError) {
+      var mainBody = <ErrorPage type={this.state.currentCategoryError} />
 
     } else {
       var mainBody = (
@@ -107,6 +92,10 @@ var CategoryPage = React.createClass({
         </div>
       </div>
     );
+  },
+
+  _onChange: function() {
+    this.setState(getStateFromStores());
   }
 });
 

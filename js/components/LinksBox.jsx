@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var auth = require('../auth.jsx');
 var LinkInput = require('./LinkInput.jsx');
 var LinkItem = require('./LinkItem.jsx');
 var React = require('react');

@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var auth = require('../auth.jsx');
 var AuthStore = require('../stores/AuthStore.js');
 var AuthActionCreator = require('../actions/AuthActionCreator.js');
 var InstantBox = require('./InstantBox.jsx');
@@ -59,7 +58,7 @@ var Toolbar = React.createClass({
     if (this.state.loggedIn) {
       logoutOrSignup = <div className="logoutbtn"><Logout /></div>;
     } else {
-      logoutOrSignup = <div><Link className="sign-up-link" to="login">Sign Up</Link></div>;
+      logoutOrSignup = <button className="btn btn-default"><Link className="sign-up-link" to="login">Sign Up</Link></button>;
     }
 
     var instantBox = <InstantBox />;
