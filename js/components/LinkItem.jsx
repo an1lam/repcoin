@@ -10,7 +10,7 @@ var strings = require('../lib/strings_utils.js');
 var LinkItem = React.createClass({
   getInitialState: function() {
     return {
-      showEdit: false,
+      showEdit: true,
       showInput: false,
       showDelete: false
     };
@@ -18,7 +18,7 @@ var LinkItem = React.createClass({
 
   resetState: function() {
     this.setState({
-      showEdit: false,
+      showEdit: true,
       showInput: false,
       showDelete: false
     });
@@ -38,22 +38,12 @@ var LinkItem = React.createClass({
     this.setState({ showEdit: false, showInput: false, showDelete: true });
   },
 
-  handleMouseOver: function() {
-    if (!this.state.showDelete && !this.state.showInput) {
-      this.setState({ showEdit: true });
-    }
-  },
-
-  handleMouseLeave: function() {
-    this.setState({ showEdit: false });
-  },
-
   closeInputBox: function() {
-    this.setState({ showInput: false });
+    this.setState({ showEdit: true, showInput: false });
   },
 
   closeDeleteBox: function() {
-    this.setState({ showDelete: false });
+    this.setState({ showEdit: true, showDelete: false });
   },
 
   deleteLinkItem: function() {

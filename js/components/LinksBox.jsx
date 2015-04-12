@@ -8,7 +8,9 @@ var strings = require('../lib/strings_utils.js');
 
 var LinksBox = React.createClass({
   getInitialState: function() {
-    return { showEdit: false, showInput : false };
+    return {
+      showInput: false
+    };
   },
 
   componentDidMount: function() {
@@ -16,23 +18,13 @@ var LinksBox = React.createClass({
   },
 
   resetState: function() {
-    this.setState({ showEdit: false, showInput: false });
+    this.setState({ showInput: false });
   },
 
   componentWillReceiveProps: function(newProps) {
     if (this.props.user._id !== newProps.user._id) {
       this.resetState();
     }
-  },
-
-  handleMouseOver: function() {
-    if (!this.state.showInput) {
-      this.setState({ showEdit: true });
-    }
-  },
-
-  handleMouseLeave: function() {
-    this.setState({ showEdit: false });
   },
 
   handleClick: function() {
@@ -63,13 +55,11 @@ var LinksBox = React.createClass({
     var edit = '';
     var linkInput = '';
     if (isSelf) {
-      if (this.state.showEdit) {
-        edit = <div className="editBox" onClick={this.handleClick}>
-                 <button className="btn btn-default btn-small">
-                   <span className="glyphicon glyphicon-plus"></span>
-                 </button>
-               </div>;
-      }
+      edit = <div className="editBox" onClick={this.handleClick}>
+               <button className="btn btn-default btn-small">
+                 <span className="glyphicon glyphicon-plus"></span>
+               </button>
+             </div>;
 
       if (this.state.showInput) {
         linkInput = <LinkInput user={this.props.user} reset={this.closeInputBox}/>;
