@@ -1,6 +1,7 @@
 var $ = require('jquery');
 
 var ServerActionCreator = require('./actions/RepcoinServerActionCreator.js');
+var strings = require('./lib/strings_utils.js');
 
 module.exports = {
   getCurrentCategory: function(category) {
@@ -158,31 +159,7 @@ module.exports = {
       }.bind(this),
       error: function(xhr, status, err) {
         ServerActionCreator.passwordResetEmailFailed(xhr.responseText);
-      }.bind(this),
-    });
-  },
-
-  getCategorySizes: function(categories, expert) {
-    var e = expert ? '1' : '0';
-    $.ajax({
-      url: '/api/categories/members/' + e,
-      data: { categories: categories },
-      success: function(categories) {
-        if (expert) {
-          ServerActionCreator.receiveCategoryExpertSizes(categories);
-        } else {
-          ServerActionCreator.receiveCategoryInvestorSizes(categories);
-        }
-      }.bind(this),
-      error: function(xhr, status, err) {
-        if (expert) {
-          ServerActionCreator.receiveCategoryExpertSizesError(
-            xhr.responseText);
-        } else {
-          ServerActionCreator.receiveCategoryInvestorSizesError(
-            xhr.responseText);
-        }
-      }.bind(this),
+      }.bind(this)
     });
   },
 
@@ -197,12 +174,112 @@ module.exports = {
     });
   },
 
+  setViewedUser: function(userId) {
+    $.ajax({
+      url: '/api/users/' + userId,
+      success: ServerActionCreator.receiveViewedUser,
+      error: function(xhr, status, err) {
+        console.error(userId, status, err.toString());
+      }.bind(this)
+    });
+  },
+
+  deleteExpertCategory: function(userId, categoryName) {
+    var url = '/api/users/' + userId + '/' + categoryName + '/expert/delete';
+    $.ajax({
+      url: url,
+      type: 'PUT',
+      success: ServerActionCreator.categoryDeleted,
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }.bind(this)
+    });
+  },
+
+  addExpertCategory: function(userId, name, context) {
+    $.ajax({
+      url: '/api/users/' + userId + '/addexpert/' + name,
+      type: 'PUT',
+      success: function(user) {
+        var msg;
+
+        // If the user was not returned, the category is waiting approval
+        if (!user) {
+          context.setMessage(strings.EXPERT_CATEGORY_PENDING(name), true);
+          context.onReset();
+        } else {
+          context.setMessage(strings.NOW_AN_EXPERT(name), true);
+          context.onReset();
+          ServerActionCreator.receiveViewedUser(user);
+
+        }
+
+      }.bind(this),
+      error: function(xhr, status, err) {
+        if (xhr.responseText === 'Already an expert') {
+          context.setMessage(strings.ALREADY_AN_EXPERT(name), true);
+        } else if (xhr.responseText === 'Inappropriate content detected.') {
+          context.setMessage(strings.INAPPROPRIATE_CATEGORY, true);
+        }
+
+        console.error(status, err.toString());
+        this.props.onReset();
+      }.bind(this)
+    });
+  },
+
+  addInvestorCategory: function(userId, name, context) {
+    $.ajax({
+      url: '/api/users/' + userId + '/addinvestor/' + name,
+      type: 'PUT',
+      success: function(user) {
+        // If the user was not returned, the category is waiting approval
+        if (!user) {
+          context.setMessage(strings.INVESTOR_CATEGORY_PENDING(name), false);
+          context.onReset();
+        } else {
+          context.setMessage(strings.NOW_AN_INVESTOR(name), false);
+          context.onReset();
+          ServerActionCreator.receiveViewedUser(user);
+        }
+
+        // this.props.setMessage(msg, false);
+        // this.props.onReset();
+      }.bind(this),
+      error: function(xhr, status, err) {
+        if (xhr.responseText === 'Already an investor') {
+          context.setMessage(strings.ALREADY_AN_INVESTOR(name), false);
+        } else if (xhr.responseText === 'Inappropriate content detected.') {
+          context.setMessage(strings.INAPPROPRIATE_CATEGORY, false);
+        }
+
+        console.error(status, err.toString());
+        context.onReset();
+      }.bind(this)
+    });
+  },
+
+  getInvestors: function(idList, categoryName) {
+    var url = '/api/users/list/byids';
+    var data = { idList: idList };
+    $.ajax({
+      url: url,
+      data: data,
+      success: function(investors) {
+        ServerActionCreator.receiveInvestors(categoryName, investors);
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(xhr.responseText, err.toString());
+      }.bind(this)
+    });
+  },
+
   facebook: {
     authorize: function(hash, id) {
       function responseHandler(res) {
         if (res.status === 'connected') {
           this.loginUser(res.authResponse.accessToken, hash, id);
-          } else if (res.status === 'not_authorized') {
+        } else if (res.status === 'not_authorized') {
           ServerActionCreator.signUpFailed(
             strings.FACEBOOK_UNAUTHORIZED_CREDENTIALS);
         } else {
@@ -210,6 +287,7 @@ module.exports = {
             strings.ERROR_LOGGING_INTO_FACEBOOK);
         }
       }
+
       FB.login(
         responseHandler.bind(this), { scope: 'email', return_scopes: true });
     },

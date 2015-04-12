@@ -125,6 +125,11 @@ AuthStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
   var action = payload.action;
 
   switch (action.type) {
+    case ActionTypes.CATEGORY_DELETED:
+      _currentUser = action.user;
+      AuthStore.emitCurrentUserChange();
+      break;
+
     case ActionTypes.FORGOT_PASSWORD:
       _forgotPassword = true;
       AuthStore.emitStatusChange();
@@ -208,8 +213,9 @@ AuthStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
       AuthStore.emitStatusChange();
       break;
 
+    // do nothing
     default:
-      // do nothing
+      break;
 
   }
 });

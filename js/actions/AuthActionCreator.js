@@ -1,8 +1,9 @@
 var api = require('../api.js');
 var RepcoinAppDispatcher = require('../dispatcher/RepcoinAppDispatcher.js');
-var RepcoinConstants = require('../constants/RepcoinConstants.js'),
-    ActionTypes = RepcoinConstants.ActionTypes;
+var RepcoinConstants = require('../constants/RepcoinConstants.js');
 var strings = require('../lib/strings_utils.js');
+
+var ActionTypes = RepcoinConstants.ActionTypes;
 
 module.exports = {
   forgotPassword: function() {
@@ -46,6 +47,7 @@ module.exports = {
     if (email !== email2) {
       error = strings.EMAILS_DO_NOT_MATCH;
     }
+
     if (password !== password2) {
       error = strings.PASSWORDS_DO_NOT_MATCH;
     }
@@ -90,4 +92,17 @@ module.exports = {
   sendPasswordResetEmail: function(email) {
     api.sendPasswordResetEmail(email);
   },
+
+  deleteExpertCategory: function(userId, categoryName) {
+    api.deleteExpertCategory(userId, categoryName);
+  },
+
+  addExpertCategory: function(userId, name, context) {
+    api.addExpertCategory(userId, name, context);
+  },
+
+  addInvestorCategory: function(userId, name, context) {
+    api.addInvestorCategory(userId, name, context);
+  }
+
 };

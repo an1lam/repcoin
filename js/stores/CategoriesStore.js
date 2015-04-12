@@ -72,7 +72,7 @@ var CategoriesStore = assign({}, EventEmitter.prototype, {
 
   getTotalTraded: function() {
     if (_totalTraded) {
-      return _totalTraded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return _totalTraded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     } else {
       return '';
     }
@@ -82,12 +82,14 @@ var CategoriesStore = assign({}, EventEmitter.prototype, {
     return _hotCategoriesAndUsers;
   },
 
-  getSizes: function(expert) {
-    if (expert) {
-      return _categoryExpertSizes;
-    } else {
-      return _categoryInvestorSizes;
-    }
+  getSizes: function() {
+    return _categories.map(function(category) {
+      return {
+        name: category.name,
+        investors: category.investors,
+        experts: category.experts
+      };
+    });
   },
 
   /* Sorts our '_categories' variable which will then be used to update
@@ -95,7 +97,7 @@ var CategoriesStore = assign({}, EventEmitter.prototype, {
   */
   sortCategories: function(selected) {
     var comparator;
-    switch(selected) {
+    switch (selected) {
       case strings.ALPHABETICAL:
         comparator = _getAlphabeticalComparator();
         break;
@@ -127,11 +129,13 @@ function _getExpertComparator() {
     if (a.experts > b.experts) {
       return -1;
     }
+
     if (a.experts < b.experts) {
       return 1;
     }
+
     return 0;
-  }
+  };
 }
 
 function _getInvestorComparator() {
@@ -139,9 +143,11 @@ function _getInvestorComparator() {
     if (a.investors > b.investors) {
       return -1;
     }
+
     if (a.investors < b.investors) {
       return 1;
     }
+
     return 0;
   }
 }
@@ -175,7 +181,7 @@ function _getMarketComparator(high) {
 */
 CategoriesStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) {
   var action = payload.action;
-  switch(action.type) {
+  switch (action.type) {
 
     case ActionTypes.HOT_CATEGORIES_AND_USERS:
       _hotCategoriesAndUsers = action.categories;
@@ -209,18 +215,6 @@ CategoriesStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) 
       CategoriesStore.emitChange();
       break;
 
-    // Received category members from the server
-    case ActionTypes.CATEGORY_INVESTOR_SIZES:
-      _categoryInvestorSizes = action.categories;
-      CategoriesStore.emitChange();
-      break;
-
-    // Received category members from the server
-    case ActionTypes.CATEGORY_EXPERT_SIZES:
-      _categoryExpertSizes = action.categories;
-      CategoriesStore.emitChange();
-      break;
-
     // 'CategoriesPage' wants the categories sorted
     case ActionTypes.SORT_CATEGORIES:
       CategoriesStore.sortCategories(action.selected);
@@ -229,8 +223,10 @@ CategoriesStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) 
     case ActionTypes.RECEIVE_TOTAL_TRADED:
       _totalTraded = action.totalTraded;
       CategoriesStore.emitTotalTradedChange();
+
+    // do nothing
     default:
-      // do nothing
+      break;
   }
 });
 

@@ -108,37 +108,37 @@ var Feed = React.createClass({
     var end = start + PAGINATION_SIZE;
     var transactions = this.state.transactions;
     var curr;
+    if (this.isMounted()) {
+      for (var i = start; i < end && i < transactions.length; i++) {
+        curr = transactions[i];
+        // Transaction
+        if (curr.amount) {
+          feedItems.push(
+            <li key={curr._id} className="list-group-item">
+              <FeedItem transaction={curr} /></li>
+          );
 
-    for (var i = start; i < end && i < transactions.length; i++) {
-      curr = transactions[i];
+        // If the event is a transaction without a type, ignore it
+        } else if (!curr.type) {
+          continue;
 
-      // Transaction
-      if (curr.amount) {
-        feedItems.push(
-          <li key={curr._id} className="list-group-item">
-            <FeedItem transaction={curr} /></li>
-        );
-
-      // If the event is a transaction without a type, ignore it
-      } else if (!curr.type) {
-        continue;
-
-      // Join event
-      } else if (curr.type === 'join') {
-        feedItems.push(
-          <li key={curr._id}
-            className="list-group-item"><JoinFeedItem event={curr} /></li>
-        );
-      } else if (curr.type === 'newcategory') {
-        feedItems.push(
-          <li key={curr._id} className="list-group-item">
-            <NewCategoryFeedItem event={curr} /></li>
-        );
-      } else if (curr.type === 'addexpert') {
-        feedItems.push(
-          <li key={curr._id} className="list-group-item">
-            <AddExpertEventFeedItem event={curr} /></li>
-        );
+        // Join event
+        } else if (curr.type === 'join') {
+          feedItems.push(
+            <li key={curr._id}
+              className="list-group-item"><JoinFeedItem event={curr} /></li>
+          );
+        } else if (curr.type === 'newcategory') {
+          feedItems.push(
+            <li key={curr._id} className="list-group-item">
+              <NewCategoryFeedItem event={curr} /></li>
+          );
+        } else if (curr.type === 'addexpert') {
+          feedItems.push(
+            <li key={curr._id} className="list-group-item">
+              <AddExpertEventFeedItem event={curr} /></li>
+          );
+        }
       }
     }
 
@@ -179,6 +179,7 @@ var Feed = React.createClass({
   render: function() {
     var feedText = '';
     var feedItems = [];
+
     if (this.state.transactions.length === 0) {
       var text = strings.NO_TRANSACTIONS_FOUND;
       feedText = <div className="alert alert-warning no-transactions-warning">{text}</div>;

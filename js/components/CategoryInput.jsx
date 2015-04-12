@@ -1,5 +1,8 @@
 'use strict';
 
+var AuthActionCreator = require('../actions/AuthActionCreator.js');
+var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
+var CategoriesStore = require('../stores/CategoriesStore.js');
 var CategorySearch = require('./CategorySearch.jsx');
 var CategorySearchDisplayTable = require('./CategorySearchDisplayTable.jsx');
 var InputMixin = require('../mixins/InputMixin.jsx');
@@ -11,23 +14,22 @@ var CategoryInput = React.createClass({
   mixins: [InputMixin],
   getInitialState: function() {
     return {
+      context: {
+        msg: ''
+      },
       query: '',
       filteredCategories: [],
-      totalCategories: []
+      totalCategories: CategoriesStore.getAll()
     }
   },
 
   componentDidMount: function() {
-    var url = '/api/categories/';
-    $.ajax({
-      url: url,
-      success: function(totalCategories) {
-        this.setState({ totalCategories: totalCategories });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(status, err.toString());
-      }.bind(this)
-    });
+    CategoriesStore.addChangeListener(this._onChange);
+    CategoriesActionCreator.getCategories();
+  },
+
+  componentWillUnmount: function() {
+    CategoriesStore.removeChangeListener(this._onChange);
   },
 
   handleClick: function(event) {
@@ -43,63 +45,13 @@ var CategoryInput = React.createClass({
   setInvestorCategory: function(name) {
     name = this.sanitizeInput(name);
 
-    $.ajax({
-      url: '/api/users/' + this.props.user._id + '/addinvestor/' + name,
-      type: 'PUT',
-      success: function(user) {
-        var msg;
-        // If the user was not returned, the category is waiting approval
-        if (!user) {
-          msg = strings.INVESTOR_CATEGORY_PENDING(name);
-        } else {
-          msg = strings.NOW_AN_INVESTOR(name);
-          PubSub.publish('profileupdate');
-        }
-        this.props.setMessage(msg, false);
-        this.props.onReset();
-        return user;
-      }.bind(this),
-      error: function(xhr, status, err) {
-        if (xhr.responseText === 'Already an investor') {
-          this.props.setMessage(strings.ALREADY_AN_INVESTOR(name), true);
-        } else if (xhr.responseText === 'Inappropriate content detected.') {
-          this.props.setMessage(strings.INAPPROPRIATE_CATEGORY, true);
-        }
-        console.error(status, err.toString());
-        this.props.onReset();
-      }.bind(this)
-    });
+    AuthActionCreator.addInvestorCategory(this.props.user._id, name, this.props);
   },
 
   setExpertCategory: function(name) {
     name = this.sanitizeInput(name);
 
-    $.ajax({
-      url: '/api/users/' + this.props.user._id + '/addexpert/' + name,
-      type: 'PUT',
-      success: function(user) {
-        var msg;
-        // If the user was not returned, the category is waiting approval
-        if (!user) {
-          msg = strings.EXPERT_CATEGORY_PENDING(name);
-        } else {
-          msg = strings.NOW_AN_EXPERT(name);
-          PubSub.publish('profileupdate');
-        }
-        this.props.setMessage(msg, false);
-        this.props.onReset();
-        return user;
-      }.bind(this),
-      error: function(xhr, status, err) {
-        if (xhr.responseText === 'Already an expert') {
-          this.props.setMessage(strings.ALREADY_AN_EXPERT(name), true);
-        } else if (xhr.responseText === 'Inappropriate content detected.') {
-          this.props.setMessage(strings.INAPPROPRIATE_CATEGORY, true);
-        }
-        console.error(status, err.toString());
-        this.props.onReset();
-      }.bind(this)
-    });
+    AuthActionCreator.addExpertCategory(this.props.user._id, name, this.props)
   },
 
   search: function(query) {
@@ -123,6 +75,7 @@ var CategoryInput = React.createClass({
         filteredCategories.push(totalCategories[i]);
       }
     }
+
     this.setState({ filteredCategories: filteredCategories });
   },
 
@@ -134,6 +87,12 @@ var CategoryInput = React.createClass({
         <CategorySearchDisplayTable onReset={this.props.onReset} user={this.props.user} data={this.state.filteredCategories} handleClick={this.handleClick} type={type} />
       </div>
     );
+  },
+
+  _onChange: function() {
+    this.setState({
+      totalCategories: CategoriesStore.getAll()
+    });
   }
 });
 

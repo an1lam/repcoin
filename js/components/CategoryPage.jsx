@@ -42,6 +42,33 @@ var CategoryPage = React.createClass({
 
   componentWillReceiveProps: function(newProps) {
     CategoriesActionCreator.getCurrentCategory(newProps.params.category);
+    this.setCategory(newProps.params.category);
+  },
+
+  setCurrentUser: function(currentUser) {
+    this.setState({ currentUser: currentUser });
+  },
+
+  resetCurrentUser: function() {
+      this.setCurrentUser(AuthStore.getCurrentUser());
+  },
+
+  setCategory: function(category) {
+    var url = 'api/categories/' + category;
+    $.ajax({
+      url: url,
+      success: function(category) {
+        if (category) {
+          this.setState({ category: category, error: null });
+        } else {
+          this.setState({ error: 404 });
+        }
+      }.bind(this),
+      error: function(xhr, status, err) {
+        this.setState({ error: status });
+        console.error(this.props.params.category, status, err.toString());
+      }.bind(this)
+    });
   },
 
   render: function() {

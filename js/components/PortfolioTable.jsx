@@ -1,7 +1,6 @@
 'use strict';
 
 var $ = require('jquery');
-var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
 var CategoryDelete = require('./CategoryDelete.jsx');
 var CategoryInput = require('./CategoryInput');
 var CategoriesStore = require('../stores/CategoriesStore.js');
@@ -13,7 +12,7 @@ var strings = require('../lib/strings_utils.js');
 
 function getStateFromStores() {
   return {
-    sizes: CategoriesStore.getSizes(false)
+    sizes: CategoriesStore.getSizes()
   }
 }
 
@@ -25,19 +24,10 @@ var PortfolioTable = React.createClass({
   componentDidMount: function() {
     $('.dividend-info').popover({ trigger: 'hover focus' });
     CategoriesStore.addChangeListener(this._onChange);
-    this.getCategoryInvestorSizes(this.props.user.portfolio);
   },
 
   componentWillUnmount: function() {
     CategoriesStore.removeChangeListener(this._onChange);
-  },
-
-  getCategoryInvestorSizes: function(categories) {
-    var list = [];
-    for (var i = 0; i < categories.length; i++) {
-      list.push(categories[i].category);
-    }
-    CategoriesActionCreator.getSizes(list, false);
   },
 
   getPortfolioItems: function(privateFields) {
@@ -48,6 +38,7 @@ var PortfolioTable = React.createClass({
       var category = sortedPortfolio[i];
 
       var size;
+
       // Go through all of the category members to find the size
       for (var j = 0; j < this.state.sizes.length; j++) {
         if (this.state.sizes[j].name === category.category) {
@@ -57,9 +48,10 @@ var PortfolioTable = React.createClass({
       }
 
       portfolioItems.push(
-        <PortfolioItem key={category.category} size={size} category={category} privateFields={privateFields} />
+        <PortfolioItem size={size} category={category} privateFields={privateFields} />
       );
     }
+
     return portfolioItems;
   },
 
@@ -68,9 +60,11 @@ var PortfolioTable = React.createClass({
       if (a.rank > b.rank) {
         return -1;
       }
+
       if (a.rank < b.rank) {
         return 1;
       }
+
       return 0;
     }
   },
@@ -88,7 +82,8 @@ var PortfolioTable = React.createClass({
         totalDividends += category.investments[j].dividend;
       }
     }
-    totalDividends = Math.floor(totalDividends * 100)/100;
+
+    totalDividends = Math.floor(totalDividends * 100) / 100;
     return totalDividends;
   },
 
@@ -101,14 +96,6 @@ var PortfolioTable = React.createClass({
     var repsAvailable = -1;
     if (isSelf) {
       repsAvailable = this.props.user.reps;
-      privateFields = true;
-      investmentHeader =
-        <th>
-          <div>{strings.INVESTMENTS}</div>
-          <div className="subtitle">{strings.USER_AMOUNT_DIVIDEND}
-            <span className="dividend-info glyphicon glyphicon-info-sign" data-toggle="popover" data-placement="top" title={strings.DIVIDEND_INFO_TITLE} data-content={strings.DIVIDEND_INFO_CONTENT}></span>
-          </div>
-        </th>;
     }
 
     var portfolioRows = this.getPortfolioItems(privateFields);
@@ -129,11 +116,13 @@ var PortfolioTable = React.createClass({
         <PortfolioHeader name={this.props.user.username} reps={repsAvailable}
           dividends={totalDividends} />
         <table className="table table-bordered table-striped">
+          <thead>
           <tr className="PortfolioHeader">
             <th>Category</th>
             <th>Rank</th>
             {investmentHeader}
           </tr>
+          </thead>
           <tbody>
             {portfolioRows}
           </tbody>

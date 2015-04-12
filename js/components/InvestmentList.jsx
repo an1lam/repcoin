@@ -26,13 +26,11 @@ var InvestmentList = React.createClass({
   render: function() {
     var investmentList = this.getOrderedInvestments()
     return (
-      <table className="investmentList table table-bordered">
-        <tbody>
+        <ul>
           {investmentList.map(function(investment) {
             return <InvestmentItem key={investment.timeStamp} investment={investment} />;
          })}
-        </tbody>
-      </table>
+      </ul>
     );
   }
 });
