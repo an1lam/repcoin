@@ -8,14 +8,14 @@ var AboutBox = React.createClass({
   getInitialState: function() {
     return {
       showInput: false,
-      showEdit: false
+      showEdit: true
     };
   },
 
   resetState: function() {
     this.setState({
       showInput: false,
-      showEdit: false
+      showEdit: true
     });
   },
 
@@ -29,18 +29,8 @@ var AboutBox = React.createClass({
     this.setState({ showEdit: false, showInput: true });
   },
 
-  handleMouseOver: function() {
-    if (!this.state.showInput) {
-      this.setState({ showEdit: true });
-    }
-  },
-
-  handleMouseLeave: function() {
-    this.setState({ showEdit: false });
-  },
-
   closeInputBox: function() {
-    this.setState({ showInput: false });
+    this.setState({ showEdit: true, showInput: false });
   },
 
   render: function() {

@@ -67,9 +67,7 @@ var Toolbar = React.createClass({
     var categories = '';
     if (this.state.currentUser) {
       profileLink = <div className="profilelink">
-        <Link to="profile" params={{userId: this.state.currentUser._id}}>
-          {this.state.currentUser.firstname}
-        </Link>
+        <Link to="profile" params={{userId: this.state.currentUser._id}}>Profile</Link>
       </div>
 
       var notificationTotal = '';

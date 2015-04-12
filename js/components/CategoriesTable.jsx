@@ -19,7 +19,7 @@ var CategoriesTable = React.createClass({
   getInitialState: function() {
     return {
       addMode: false,
-      editHover: false,
+      showEdit: true,
       deleteMode: false,
       showDeleteBox: false,
       categoryToDelete: '',
@@ -32,7 +32,7 @@ var CategoriesTable = React.createClass({
   resetState: function() {
     this.setState({
       addMode: false,
-      editHover: false,
+      showEdit: true,
       deleteMode: false,
       showDeleteBox: false,
       categoryToDelete: '',
@@ -66,26 +66,16 @@ var CategoriesTable = React.createClass({
     CategoriesActionCreator.getSizes(list, true);
   },
 
-  handleMouseOver: function() {
-    if (!this.state.showDeleteBox && !this.state.addMode && !this.state.deleteMode) {
-      this.setState({ editHover: true });
-    }
-  },
-
-  handleMouseLeave: function() {
-    this.setState({ editHover: false });
-  },
-
   handleAddClick: function() {
-    this.setState({ addMode: true, editHover: false, deleteMode: false, showDeleteBox: false, message: null });
+    this.setState({ addMode: true, showEdit: false, deleteMode: false, showDeleteBox: false, message: null });
   },
 
   handleDeleteClick: function() {
-    this.setState({ deleteMode: true, editHover: false, addMode: false, showDeleteBox: false, message: null });
+    this.setState({ deleteMode: true, showEdit: false, addMode: false, showDeleteBox: false, message: null });
   },
 
   handleCancelClick: function() {
-    this.setState({ deleteMode: false, addMode: false, showDeleteBox: false, message: null });
+    this.setState({ deleteMode: false, showEdit: true, addMode: false, showDeleteBox: false, message: null });
   },
 
   showDeleteBox: function(categoryToDelete) {
@@ -95,11 +85,11 @@ var CategoriesTable = React.createClass({
   },
 
   closeInputBox: function() {
-    this.setState({ addMode: false });
+    this.setState({ showEdit: true, addMode: false });
   },
 
   closeDeleteBox: function() {
-    this.setState({ showDeleteBox: false, deleteMode: false });
+    this.setState({ showEdit: true, showDeleteBox: false, deleteMode: false });
   },
 
   deleteExpertCategory: function(e) {
@@ -161,7 +151,7 @@ var CategoriesTable = React.createClass({
     var deleteCategory= '';
 
     if (isSelf) {
-      if (this.state.editHover) {
+      if (this.state.showEdit) {
         edit = <div className="editCategoriesBtn">
           <a onClick={this.handleAddClick}><span className="pencil glyphicon glyphicon-plus"></span></a>
           <p className="divider"> | </p>
