@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var AuthActionCreator = require('../actions/AuthActionCreator.js');
 var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
 var CategoriesHeader = require('./CategoriesHeader');
 var CategoriesItem = require('./CategoriesItem');
@@ -10,10 +11,6 @@ var CategoryDelete = require('./CategoryDelete.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
 var strings = require('../lib/strings_utils.js');
-
-function getStateFromStores() {
-  return CategoriesStore.getSizes(true);
-}
 
 var CategoriesTable = React.createClass({
   getInitialState: function() {
@@ -25,7 +22,7 @@ var CategoriesTable = React.createClass({
       categoryToDelete: '',
       message: null,
       error: false,
-      sizes: getStateFromStores(),
+      sizes: CategoriesStore.getSizes()
     };
   },
 
@@ -38,13 +35,12 @@ var CategoriesTable = React.createClass({
       categoryToDelete: '',
       message: null,
       error: false,
-      sizes: [],
+      sizes: []
     });
   },
 
   componentDidMount: function() {
     CategoriesStore.addChangeListener(this._onChange);
-    this.getCategoryExpertSizes(this.props.user.categories);
   },
 
   componentWillUnmount: function() {
@@ -54,16 +50,7 @@ var CategoriesTable = React.createClass({
   componentWillReceiveProps: function(newProps) {
     if (newProps.user._id !== this.props.user._id) {
       this.resetState();
-      this.getCategoryExpertSizes(newProps.user.categories);
     }
-  },
-
-  getCategoryExpertSizes: function(categories) {
-    var list = [];
-    for (var i = 0; i < categories.length; i++) {
-      list.push(categories[i].name);
-    }
-    CategoriesActionCreator.getSizes(list, true);
   },
 
   handleAddClick: function() {
@@ -79,9 +66,7 @@ var CategoriesTable = React.createClass({
   },
 
   showDeleteBox: function(categoryToDelete) {
-    this.setState({ categoryToDelete: categoryToDelete,
-                    showDeleteBox: true,
-                    message: null });
+    this.setState({ categoryToDelete: categoryToDelete, showDeleteBox: true, message: null });
   },
 
   closeInputBox: function() {
@@ -94,30 +79,23 @@ var CategoriesTable = React.createClass({
 
   deleteExpertCategory: function(e) {
     e.preventDefault();
-    var url = '/api/users/' + this.props.currentUser._id + '/'
-      + this.state.categoryToDelete.name + '/expert/delete';
-    $.ajax({
-      url: url,
-      type: 'PUT',
-      success: function(user) {
-        PubSub.publish('profileupdate');
-        this.setState({ deleteMode: false, showDeleteBox: false });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(status, err.toString());
-      }.bind(this)
-    });
+    AuthActionCreator.deleteExpertCategory(this.props.currentUser._id, this.state.categoryToDelete.name);
+    this.closeDeleteBox();
   },
 
   setMessage: function(message, error) {
-    this.setState({ message: message, error: error, addMode: false });
+    if (this.isMounted()) {
+      this.setState({ message: message, error: error, addMode: false });
+    }
   },
 
   // Get the categories rows for the table
   getCategoriesItems: function() {
     var categoriesItems = [];
     var length = this.props.user.categories.length;
-    var category, size;
+    var category;
+    var size;
+
     for (var i = 0; i < length; i++) {
       var category = this.props.user.categories[i];
 
@@ -128,11 +106,15 @@ var CategoriesTable = React.createClass({
           break;
         }
       }
+
+
       categoriesItems.push(
-        <CategoriesItem userId={this.props.user._id} category={category} size={size}
-          deleteMode={this.state.deleteMode} showDeleteBox={this.showDeleteBox} />
+        <CategoriesItem userId={this.props.user._id} category={category}
+          size={size} deleteMode={this.state.deleteMode}
+          showDeleteBox={this.showDeleteBox} />
       );
     }
+
     return categoriesItems;
   },
 
@@ -146,9 +128,10 @@ var CategoriesTable = React.createClass({
         message = <div className="alert alert-info added-cat-msg" role="alert">{this.state.message}</div>;
       }
     }
+
     var edit = '';
     var addCategory = '';
-    var deleteCategory= '';
+    var deleteCategory = '';
 
     if (isSelf) {
       if (this.state.showEdit) {
@@ -181,11 +164,11 @@ var CategoriesTable = React.createClass({
     if (length === 0) {
       if (isSelf) {
         var text = strings.YOU_ARE_NOT_EXPERT_IN_ANY_CATEGORIES;
-          addCategoriesText =
-            <div className="add-category-text">
-              {text}
-              <button className="no-cat-btn btn btn-primary" onClick={this.handleAddClick}>Add Categories</button>
-            </div>;
+        addCategoriesText =
+          <div className="add-category-text">
+            {text}
+            <button className="no-cat-btn btn btn-primary" onClick={this.handleAddClick}>Add Categories</button>
+          </div>;
       } else {
         var text = strings.USER_IS_NOT_EXPERT_IN_ANY_CATEGORIES(this.props.user.username);
         addCategoriesText = <div className="add-category-text">{text}</div>;
@@ -216,7 +199,7 @@ var CategoriesTable = React.createClass({
   },
 
   _onChange: function() {
-    this.setState({ sizes: getStateFromStores() });
+    this.setState({ sizes: CategoriesStore.getSizes() });
   }
 });
 

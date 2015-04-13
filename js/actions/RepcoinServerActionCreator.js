@@ -152,7 +152,7 @@ module.exports = {
   receiveCategoryInvestorSizesError: function(msg) {
     RepcoinAppDispatcher.handleServerAction({
       type: ActionTypes.CATEGORY_INVESTOR_SIZES_ERROR,
-      msg: msg,
+      msg: msg
     });
   },
 
@@ -168,5 +168,27 @@ module.exports = {
       type: ActionTypes.HOT_CATEGORIES_AND_USERS_ERROR,
       msg: msg
     });
+  },
+
+  receiveViewedUser: function(user) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_VIEWED_USER,
+      user: user,
+    });
+  },
+
+  categoryDeleted: function(user) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.CATEGORY_DELETED,
+      user: user
+    });
+  },
+
+  receiveInvestors: function(investors, category) {
+    RepcoinAppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_INVESTORS,
+      investors: investors,
+      category: category
+    })
   }
 };

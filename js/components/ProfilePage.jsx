@@ -2,6 +2,9 @@
 
 var $ = require('jquery');
 var auth = require('../auth.jsx');
+var AuthActionCreator = require('../actions/AuthActionCreator.js');
+var AuthStore = require('../stores/AuthStore.js');
+var CategoriesActionCreator = require('../actions/CategoriesActionCreator.js');
 var CategoriesTable = require('./CategoriesTable.jsx');
 var Feed = require('./Feed.jsx');
 var Footer = require('./Footer.jsx');
@@ -10,54 +13,48 @@ var ProfileBox = require('./ProfileBox.jsx');
 var PubSub = require('pubsub-js');
 var React = require('react');
 var Toolbar = require('./Toolbar.jsx');
+var UserActionCreator = require('../actions/UserActionCreator.js');
+var UserStore = require('../stores/UserStore.js');
+
+function getStateFromStores() {
+  return {
+    currentUser: AuthStore.getCurrentUser(),
+    user: UserStore.getViewedUser()
+  }
+}
 
 var ProfilePage = React.createClass({
   getInitialState: function() {
-    return {};
+    return getStateFromStores();
   },
 
   updateUser: function() {
-    this.setUser('/api/users/' + this.props.params.userId);
-  },
-
-  setCurrentUser: function(currentUser) {
-    this.setState({ currentUser: currentUser });
+    UserActionCreator.setViewedUser(this.props.params.userId);
   },
 
   resetCurrentUser: function() {
-    auth.getCurrentUser.call(this, this.setCurrentUser);
+    AuthActionCreator.getCurrentUser();
   },
 
   componentWillReceiveProps: function(newProps) {
-    this.setUser('/api/users/' + newProps.params.userId);
+    UserActionCreator.setViewedUser(newProps.params.userId);
   },
 
   componentDidMount: function() {
+    AuthStore.addCurrentUserListener(this._onChange);
+    UserStore.addChangeListener(this._onChange);
+    AuthActionCreator.getCurrentUser();
+    UserActionCreator.setViewedUser(this.props.params.userId);
+    CategoriesActionCreator.getCategories();
     PubSub.subscribe('profileupdate', this.updateUser);
     PubSub.subscribe('profileupdate', this.resetCurrentUser);
-    this.resetCurrentUser();
-    this.updateUser();
   },
 
   componentWillUnmount: function() {
     PubSub.unsubscribe('profileupdate', this.updateUser);
     PubSub.unsubscribe('profileupdate', this.resetCurrentUser);
-  },
-
-  setUser: function(url) {
-    $.ajax({
-      url: url,
-      success: function(user) {
-        if (this.isMounted()) {
-          this.setState({ user: user });
-        } else {
-          console.log('ProfilePage not mounted.');
-        }
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.userId, status, err.toString());
-      }.bind(this)
-    });
+    AuthStore.removeCurrentUserListener(this._onChange);
+    UserStore.removeChangeListener(this._onChange);
   },
 
   render: function() {
@@ -101,6 +98,10 @@ var ProfilePage = React.createClass({
         </div>
       </div>
     );
+  },
+
+  _onChange: function() {
+    this.setState(getStateFromStores());
   }
 });
 

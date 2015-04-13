@@ -39,6 +39,10 @@ module.exports = {
     GET_CATEGORY_INVESTOR_SIZES: null,
     CATEGORY_INVESTOR_SIZES: null,
     CATEGORY_INVESTOR_SIZES_ERROR: null,
+    RECEIVE_VIEWED_USER: null,
+    CATEGORY_DELETED: null,
+    CATEGORY_ADDED: null,
+    RECEIVE_INVESTORS: null
   }),
 
   PayloadSources: keyMirror({

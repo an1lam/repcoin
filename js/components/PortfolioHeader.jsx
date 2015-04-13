@@ -27,6 +27,7 @@ var PortfolioHeader = React.createClass({
         </div>
       );
     }
+
     return (
       <div className="portfolioHeader">
         <strong>{strings.PORTFOLIO_TABLE_TITLE(this.props.name)}</strong>
