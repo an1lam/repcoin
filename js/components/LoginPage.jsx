@@ -31,6 +31,7 @@ var LoginPage = React.createClass({
   componentDidMount: function() {
     CategoriesStore.addTotalTradedChangeListener(this._onChange);
     AuthStore.addLoggedInListener(this._onChange);
+    AuthStore.addStatusListener(this._onChange);
     CategoriesActionCreator.getTotalTraded();
     AuthActionCreator.getLoggedIn();
   },
@@ -38,6 +39,8 @@ var LoginPage = React.createClass({
   componentWillUnmount: function() {
     CategoriesStore.removeTotalTradedChangeListener(this._onChange);
     AuthStore.removeLoggedInListener(this._onChange);
+    AuthStore.removeStatusListener(this._onChange);
+
   },
 
   componentWillUpdate: function() {
