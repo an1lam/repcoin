@@ -219,6 +219,7 @@ CategoriesStore.dispatchToken = RepcoinAppDispatcher.register(function(payload) 
     case ActionTypes.SORT_CATEGORIES:
       CategoriesStore.sortCategories(action.selected);
       CategoriesStore.emitChange();
+      break;
 
     case ActionTypes.RECEIVE_TOTAL_TRADED:
       _totalTraded = action.totalTraded;
