@@ -42,7 +42,8 @@ module.exports = {
     RECEIVE_VIEWED_USER: null,
     CATEGORY_DELETED: null,
     CATEGORY_ADDED: null,
-    RECEIVE_INVESTORS: null
+    RECEIVE_INVESTORS: null,
+    SORT_CATEGORIES: null
   }),
 
   PayloadSources: keyMirror({
